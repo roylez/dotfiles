@@ -1,0 +1,78 @@
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# Use this line if you want instant charset mapping from gbk to
+# unicode. Conflict with mutt's unicode setting.
+#defencoding gbk
+
+# hardstatus line
+hardstatus alwayslastline
+hardstatus string "%{= R}[%{=b B}%-w%{=rb db}%>%n %t%{-}%+w%{-b}%< %=%{R}][%{G}%c %{M}%m-%d %D%{R}]"
+#caption always "%{= mW} %= %H %="
+#caption always "%{= gk}%-Lw%{= rW}%50> %n%f* %t %{-}%+Lw%< %= %{= Gk} %H %{= rW} %l %{= Gk} %0c:%s %d/%m %{-}"
+#new version from vermaden
+#hardstatus string '%{= M} %H%{= G} %l %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%c '
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+##    Some general options    ##
+
+# Make the xterm scroller work in screen, also works
+# with mouse scrollwheel(does not work...)
+termcapinfo xterm*|rxvt ti@:te@
+#dynamic title
+termcapinfo xterm* 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+# bind Shift+PgUp/PgDn(does not work...)
+#bindkey -m -k kN stuff ^D
+#bindkey -m -k kP stuff ^U
+#bindkey -m "^[[5;2~" stuff ^b
+#bindkey -m "^[[6;2~" stuff ^f
+ 
+#term screen-bce
+
+# Automatically detach on hangup, or the screen will keep eating your memory after the terminal emulator has been terminated.
+autodetach on		# default: on
+
+# Refresh the display when exiting programs like vim, nano, irssi and etc.
+altscreen on
+
+#define a large scrollback buffer
+defscrollback 1000
+
+# Set messages timeout to one second: 
+msgwait 1
+pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+#version
+# start message:
+startup_message off	# default: on
+
+# use audio bell
+vbell off
+vbell_msg "   Wuff  ----  Wuff!!  "
+
+#nethack style messages
+nethack on
+
+#utf-8 handling
+defutf8 on
+
+#use zshell as default shell
+#shell zsh
+shell /bin/zsh
+
+# =-=-=-=-=-=-=-=-=-=-=Key bindings-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+# bind F1  to select 1
+# bind F7  to detach screen session from this terminal
+# bind F8  to kill current screen window.
+# bind F9  to create a new screen
+# bind F10 to rename current screen window
+# bind F11 to move to previous window
+# bind F12 to move to next window
+#bindkey -k k1 select 1
+#bindkey -k k7 detach
+#bindkey -k k8 kill
+#bindkey -k k9 screen
+#bindkey -k k; title
+bindkey -k F1 prev
+bindkey -k F2 next
+# =-=-=-=-=-=-=-=-=-=-=-Sessions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
+screen
+screen
+screen
+#screen

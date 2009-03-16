@@ -1,0 +1,57 @@
+! vim:ft=fluxkeys textwidth=255
+
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Mouse2 :StartTabbing
+
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Double Mouse1 :Shade
+OnTitlebar Mouse3 :WindowMenu
+
+!mouse actions added by fluxbox-update_configs
+OnWindow Mod1 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+OnWindow Mod1 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing BottomRight}
+
+!mouse actions added by fluxbox-update_configs
+OnDesktop Mouse1 :hideMenus
+OnDesktop Mouse2 :workspaceMenu
+OnDesktop Mouse3 :ToggleCmd {rootMenu} {hideMenus}
+
+Mod1 Tab            :NextWindow
+Mod1 Shift Tab      :PrevWindow
+Mod1 F4             :Close
+Control Right       :NextWorkspace
+Control Left        :PrevWorkspace
+Mod1 Right          :NextTab
+Mod1 Left           :PrevTab
+Mod1 space          :Shade
+#None F8             :ExecCommand wmctrl -r "Terminal" -b toggle,hidden
+
+#Control Mod1 Delete :ExecCommand kill `xprop|awk '/PID/{print $3}'`
+Control Mod1 Delete :ExecCommand xkill
+
+None F8             :ForEach {ToggleCmd {iconify}{deiconify}}{matches (Title=Terminal)}
+None Print          :ExecCommand import ~/down/shot`date +%Y%m%d%H%M`.png && notify-send -t 5000 -i ~/.icons/hamster_128.png '主人：' '截图成功!'
+Mod1 F2             :ExecCommand gmrun
+Mod1 s              :ExecCommand ${HOME}/bin/shotNpaste.py
+Mod1 k              :ExecCommand xterm -e /usr/share/vim/macros/less.sh $HOME/.fluxbox/keys
+Mod1 r              :MacroCmd {ExecCommand echo 'Reconfiguring ...'| osd_cat -d 2 -p bottom -A center -s 1 -c cyan -f "-*-lucidabright-demibold-i-*-*-25-*-*-*-*-*-*-*" &} {Reconfigure}
+Mod1 m              :MacroCmd {ExecCommand echo 'Regenerating menu ...'| osd_cat -d 2 -p bottom -A center -s 1 -c cyan -f "-*-lucidabright-demibold-i-*-*-25-*-*-*-*-*-*-*" &} {ExecCommand /usr/bin/xdg_menu --format fluxbox  --root-menu /etc/xdg/menus/arch-applications.menu >~/.fluxbox/my-menu} 
+
+Mod4 r              :ExecCommand python ~/bin/meow.py
+
+Mod1 e None o       :ExecCommand export QT_IM_MODULE=SCIM && opera
+Mod1 e None f       :ExecCommand ${HOME}/soft/firefox/firefox
+Mod1 e None s       :ExecCommand xterm -title Terminal -e screen -d -RR
+Mod1 e None p       :ExecCommand pcmanx
+Mod1 e None x       :ExecCommand xterm
+Mod1 e None u       :ExecCommand urxvtc
+Mod1 e None g       :ExecCommand pidgin
+Mod1 e None r       :ExecCommand rox
+Mod1 e None a       :ExecCommand arandr
+Mod1 e None y       :ExecCommand lyx
+Mod1 e None k       :ExecCommand skype
+
+Mod1 e Control h    :ExecCommand sudo halt
+Mod1 e Control r    :ExecCommand sudo reboot
+Mod1 e Control a    :ExecCommand xrandr --output VGA-0 --mode 1280x1024 --output LVDS --off && eval `cat ~/.fehbg`
+#Mod1 e None j       :ExecCommand java -jar ${HOME}/soft/jap.jar &

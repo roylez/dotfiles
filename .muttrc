@@ -1,0 +1,308 @@
+# Order to display the headers in
+#Author: Roy L Zuo (roylzuo at gmail dot come)
+#Last Change: Fri Feb 27 23:48:00 2009 EST
+#Description: mutt main configuration file
+
+ignore *
+unignore From Subject Lines
+hdr_order From Subject Lines
+
+set index_format="%(%m-%d-%y) %S %-18.18L [%4c] %s"
+set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]----%>-(%P)---"
+set status_on_top
+
+#set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s" 
+set editor="vim" 
+
+#set smtp agent
+set sendmail="/home/roylez/bin/filtersend"
+
+#set print_command="enscript -Email -2 -r -G"
+set print_command="enscript -Email -G --word-wrap -f Palatino-Roman@11"
+
+# Use Maildir instead of mbox
+set mbox_type=Maildir
+set folder="~/.mail"
+set mask="!^\\.[^.]"
+set mbox="+inbox"
+set record="+inbox"
+#set postponed="+drafts"
+set postponed="+inbox"
+set spoolfile="~/.mail/inbox"
+
+# Use as from the address mail was sent to
+# You'd have to define $alternates for this
+# set reverse_name
+
+# get notified if new mail arrived in inbox
+mailboxes ! =inbox
+
+set quit=yes
+#move mail from spool to mailbox when quiting ?
+set move=no
+set beep_new
+#do not resume postponed mail
+set recall=no
+
+#preferred file type order when viewing multipart/alternative emails
+unalternative_order *
+#alternative_order text/enriched text/plain text/html
+alternative_order text/*
+
+auto_view text/html application/pdf application/msword text/enriched text/rtf
+
+# 回信时是否包含原文。
+set include=yes
+# 回信的引文之前插入那个符号？
+set indent_str="> "
+#To character
+# 1. not directly adressed to me    # 2. addressed exclusively to me
+# 3. addressed to me and others     # 4. CC to me
+# 5. sent from me                   # 6. addressed to a mailinglist I am reading
+#set to_chars=" >=+<!"
+
+# don't forget to include the attachments in forward emails
+set mime_forward
+set mime_forward_rest
+
+# traditional Fwd: subject
+set forw_format="Fwd: %s"
+
+# Show tildes at the end of mail
+set tilde=yes
+
+# text width
+set wrap=-3
+
+# 当你按"r"回信时，不提示你输入回信地址和主题，直接进入编辑模式
+set fast_reply
+#no reply to myself
+unset metoo
+unset reply_self
+# default regexp cacthes everything and is too much for me
+set quote_regexp="^([ \t]*[>])+"
+
+# 设置你自己的邮件头。
+#my_hdr From: Zuo Le<lzuo@graduate.hku.hk>
+#set hdrs
+#my_hdr Reply-To: Zuo Le<lzuo@hkusua.hku.hk>
+set from='Roy Zuo <z.le@uq.edu.au>'
+#set different from information when replying according to accounts
+set use_from
+set envelope_from=yes       #add -f <from> to sendmail command line
+set realname='Roy Zuo'
+set reverse_name=yes
+set reverse_realname=yes
+alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
+
+#mailing list
+#subscribe china@lists.uq.edu.au
+subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au
+subscribe -group lst moleculardynamics@lists.uq.edu.au xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com
+
+#score "~s believe" -10
+
+set sort=reverse-threads
+set sort_aux=last-date-received
+#set sort_aux=score
+set ascii_chars=no
+
+# 当你按 "t" 或者 "D" 之类的标记操作时，是否自动把光标移动到下一封信件。
+set resolve=yes
+# 地址簿
+source ~/.mutt.alias
+# 当你在 index 里按 "a" 为来信者取别名时，使用哪一个别名文件保存这个别名。
+set alias_file=~/.mutt.alias
+
+# charset settings
+set allow_8bit
+set charset="utf-8"        # terminal
+#set locale='zh_CN.utf-8'
+set locale='utf-8'
+#charset-hook ^us-ascii$ utf-8
+#charset-hook ^iso-8859-1$ utf-8
+#charset-hook ^UTF-8$ utf-8
+#charset-hook !gb2312 utf-8
+#charset-hook ^gb2312$ utf-8                                        
+#set strict_mime=no  #這個要設成no, assumed_charset才會有用
+set assumed_charset="gb2312:utf-8:big5"
+set send_charset="utf-8:us-ascii:iso-8859-1:big5:gb2312:x-unknown"
+#solve the chinese attachment name issue
+set rfc2047_parameters=yes
+
+# 外部程序退出时，是否要求用户按一个键才返回。
+# 这在察看某些shell命令输出时是比要的，
+# 否则它们一下就消失了。
+set wait_key=yes
+# 当你要把信件存到另一个信箱，而这个信箱已经存在时，是否提示附加？
+set noconfirmappend
+# 是否把邮件头也放在编辑器里可以修改？
+set edit_headers=no
+# 当你在用 pager 看信件时，在 index 留出多少行显示邮件列表？
+set pager_index_lines=4
+# 如果翻到最后，再按往下翻也不会翻到下一封信件
+set pager_stop
+#set pager=vim
+# 保留列表头
+set header_cache=~/.mutt-headercache
+set maildir_header_cache_verify=no
+
+#headers:
+my_hdr X-PGP-Key-ID:3038867F
+#backup everything sent to gmail's sent box
+my_hdr Bcc: roylzuo+sent@gmail.com
+# ---------------------color theme-----------------------------------
+color normal    white default
+color attachment magenta default
+color hdrdefault cyan default
+color indicator brightblack white
+color markers   blue default
+color signature cyan default
+color status    brightcyan black 
+color tilde     blue default
+color tree      red default
+color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
+
+color body red default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # email
+color body yellow default "(http|ftp)://[\-\.\,/+=&%~_:?\#a-zA-Z0-9]+" # URL
+color body green default "(^| |[-.[:alnum:]]+:+)~?\(/[-_.'[:alnum:]]+\)+/?" # Unix file path
+color body green default "(^| +)[[:alpha:]]:[-_.[:alnum:]\]+" # DOS file path
+color body magenta default "(^|[ '\"]+)\\$[[:alpha:]][-_[:alpha:]]+" # variable
+color body brightred default "(^| )[*_]+[-&[:alnum:]]+[*_]( |$)" # bold/underline
+color body red default "[!?]{3,}" # exclamation
+color body green default "^ *[-+*o] +" # list item
+color body cyan default "[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?"
+color body cyan default "(\(19|20\)?[0-9]{2}/[01]?[0-9]/[0123]?[0-9]|[0123]?[0-9][/.][01]?[0-9][/.]\(19|20\)?[0-9]{2})(( at)? +[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
+color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)[ .]+[0-9]{1,2}(st|nd|rd|th)?,?( +(19|20)[0-9]{2}(,?( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?)?"
+color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?[0-9]{1,2}(st|nd|rd|th)?[ .]+(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?),?( +(19|20)?[0-9]{2})?(( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
+            
+color quoted  green default
+color quoted1 yellow default
+color quoted2 red default
+color hdrdefault cyan default
+color header  default magenta .*
+#color header   brightred blue ^Subject:
+color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
+color signature cyan default
+
+color index green default ~p                 # To me
+color index blue default ~P                # From me 
+color index brightwhite default ~N          # New
+color index brightgreen default "~N ~p"     # New to me
+color index brightcyan default ~T               # Tagged
+color index magenta default ~D              # Deleted
+color index brightyellow blue ~F               # flaged
+
+#address book related
+set query_command = "lbdbq '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
+macro generic,index,pager A "<shell-escape>abook<return>"
+macro index,pager a "|abook --add-email<return>"
+
+#bogofilter
+macro index S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
+macro pager S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
+macro index H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham and save"
+macro pager H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham and save"
+
+#urlview
+macro pager \cu "|urlview \n" 
+
+#identity selection
+#alias identity_1        Roy Zuo     <roylzuo@gmail.com>
+#alias identity_2        Roy Zuo     <z.le@uq.edu.au>
+#alias identity_3        Le Zuo      <lzuo@graduate.hku.hk>
+#macro compose v "<edit-from>^Uidentity_<tab>" "Select from"
+# ---------------------key bindings----------------------------------
+bind    index   gg      first-entry
+bind    index   G       last-entry
+bind    index   \cf     next-page
+bind    index   \cb     previous-page
+bind    index   ,g      group-reply
+bind    pager   j       next-line
+bind    pager   k       previous-line
+
+#macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
+# ---------------------GnuPG stuff-----------------------------------
+# %p    The empty string when no passphrase is needed,
+#       the string "PGPPASSFD=0" if one is needed.
+#       This is mostly used in conditional % sequences.
+# %f    Most PGP commands operate on a single file or a file
+#       containing a message.  %f expands to this file's name.
+# %s    When verifying signatures, there is another temporary file
+#       containing the detached signature.  %s expands to this
+#       file's name.
+# %a    In "signing" contexts, this expands to the value of the
+#       configuration variable $pgp_sign_as.  You probably need to
+#       use this within a conditional % sequence.
+# %r    In many contexts, mutt passes key IDs to pgp.  %r expands to
+#       a list of key IDs.
+#
+# Signature every outgoing mail by pgp
+set pgp_autosign=no
+set pgp_sign_as="3038867F"
+#During these time you will not needed to enter passparse again
+set pgp_timeout=1800
+# Let you see pgp signature infomation
+set pgp_verify_sig=yes 
+set pgp_replyencrypt=yes
+
+# decode application/pgp
+set pgp_decode_command="gpg --status-fd=2 %?p?--passphrase-fd 0? --no-verbose --quiet --batch --output - %f"
+
+# verify a pgp/mime signature
+set pgp_verify_command="gpg --status-fd=2 --no-verbose --quiet --batch --output - --verify %s %f"
+
+# decrypt a pgp/mime attachment
+set pgp_decrypt_command="gpg --status-fd=2 %?p?--passphrase-fd 0? --no-verbose --quiet --batch --output - %f"
+
+# create a pgp/mime signed attachment
+# set pgp_sign_command="gpg-2comp --comment '' --no-verbose --batch --output - %?p?--passphrase-fd 0? --armor --detach-sign --textmode %?a?-u %a? %f"
+set pgp_sign_command="gpg --no-verbose --batch --quiet --output - %?p?--passphrase-fd 0? --armor --detach-sign --textmode %?a?-u %a? %f"
+
+# create a application/pgp signed (old-style) message
+# set pgp_clearsign_command="gpg-2comp --comment '' --no-verbose --batch --output - %?p?--passphrase-fd 0? --armor --textmode --clearsign %?a?-u %a? %f"
+set pgp_clearsign_command="gpg --no-verbose --batch --quiet --output - %?p?--passphrase-fd 0? --armor --textmode --clearsign %?a?-u %a? %f"
+
+# create a pgp/mime encrypted attachment
+# set pgp_encrypt_only_command="pgpewrap gpg-2comp -v --batch --output - --encrypt --textmode --armor --always-trust -- -r %r -- %f"
+set pgp_encrypt_only_command="pgpewrap gpg --encrypt-to 3038867F --charset utf8 --batch --quiet --no-verbose --output - --encrypt --textmode --armor --always-trust -- -r %r -- %f"
+
+# create a pgp/mime encrypted and signed attachment
+# set pgp_encrypt_sign_command="pgpewrap gpg-2comp %?p?--passphrase-fd 0? -v --batch --output - --encrypt --sign %?a?-u %a? --armor --always-trust -- -r %r -- %f"
+set pgp_encrypt_sign_command="pgpewrap gpg %?p?--passphrase-fd 0? --encrypt-to 3038867F --charset utf8 --batch --quiet --no-verbose --textmode --output - --encrypt --sign %?a?-u %a? --armor --always-trust -- -r %r -- %f"
+
+# import a key into the public key ring
+set pgp_import_command="gpg --no-verbose --import %f"
+
+# export a key from the public key ring
+set pgp_export_command="gpg --no-verbose --export --armor %r"
+
+# verify a key
+set pgp_verify_key_command="gpg --verbose --batch --fingerprint --check-sigs %r"
+
+# read in the public key ring
+set pgp_list_pubring_command="gpg --no-verbose --batch --quiet --with-colons --list-keys %r" 
+
+# read in the secret key ring
+set pgp_list_secring_command="gpg --no-verbose --batch --quiet --with-colons --list-secret-keys %r" 
+
+# fetch keys
+# set pgp_getkeys_command="pkspxycwrap %r"
+set pgp_getkeys_command="gpg --recv-keys %r > /dev/null 2>&1"
+
+# pattern for good signature - may need to be adapted to locale!
+# OK, here's a version which uses gnupg's message catalog:
+# set pgp_good_sign="`gettext -d gnupg -s 'Good signature from "' | tr -d '"'`"
+# This version uses --status-fd messages
+set pgp_good_sign="^\\[GNUPG:\\] GOODSIG"
+
+# ---------------------hooks-----------------------------------------
+# set official signature
+# cannot be used with set signature=..., which overwrites the hook
+# setting.
+send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
+send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>'"
+send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|'"
+send-hook "~f z.le@uq.edu.au" "set signature=~/.mutt.sign"
+
+#send-hook . "my_hdr Bcc:roylzuo+Sent@gmail.com"

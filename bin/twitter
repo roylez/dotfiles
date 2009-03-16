@@ -1,0 +1,4 @@
+#!/bin/bash
+curl --basic --user "roylez:oldbig" --data-ascii "status=`echo $@|tr ' ' '+'`" "http://twitter.com/statuses/update.json" -o /dev/null
+echo Message Sent!
+

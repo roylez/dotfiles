@@ -1,0 +1,225 @@
+Xcursor.theme:          ComixCursors-Green-Regular
+
+!-- Tango color scheme
+!black
+!*color0: #2e3436
+*color0: #1e1e1e
+*color8: #555753
+!red
+*color1: #cc0000
+*color9: #ef2929
+!green
+*color2: #4e9a06
+*color10: #8ae234
+!yellow
+*color3: #c4a000
+*color11: #fce94f
+!blue
+*color4: #3465a4
+*color12: #729fcf
+!magenta
+*color5: #75507b
+*color13: #ad7fa8
+!cyan
+*color6: #0b939b
+*color14: #00f5e9
+!white
+*color7: #d3d7cf
+*color15: #eeeeec
+
+! ---| thayer bright |--- {{{
+!black
+!*color0:                  #181c18
+!*color8:                  #555555
+!!red
+!*color1:                  #ff3300
+!*color9:                  #ff6655
+!!green
+!*color2:                  #75cc2b
+!*color10:                 #95ff58
+!!yellow
+!*color3:                  #ffe975
+!*color11:                 #ffef9c
+!!blue -> violet
+!*color4:                  #285577
+!*color12:                 #6677ff
+!!magenta -> pink
+!*color5:                  #ce5c00
+!*color13:                 #f57900
+!!cyan -> blue
+!*color6:                  #3399ff
+!*color14:                 #99ccff
+!!white
+!*color7:                  #c4c4c4
+!*color15:                 #ffffff
+!}}}
+
+! ---| Colorful Obsolescence |--- {{{
+!*color0:				#000000
+!*color8:				#555555
+!*color1:				#EE3C3C
+!*color9:				#FF5555
+!*color2:				#00BB00
+!*color10:				#55FF55
+!*color3:				#FFD955
+!*color11:				#FFFF55
+!*color4:				#5555FF
+!*color12:				#008ED1
+!*color5:				#992299
+!*color13:				#FF55FF
+!*color6:				#00AAAA
+!*color14:				#00FFFF
+!*color7:				#BBBBBB
+!*color15:				#FFFFFF
+!!=============================================================================
+!! 设置 Xftp.dpi(字体分辨率）
+!!=============================================================================
+Xft.dpi:                96 
+Xft.hinting:            1
+Xft.hintstyle:          hintslight
+Xft.antialias:          1
+Xft.rgba:               rgb
+!!========================NETHACK==============================================
+! Lines beginning with ! are comments and are ignored.
+NetHack*font:                   vga
+NetHack*autofocus:              true
+NetHack*background:             black
+NetHack*foreground:             grey
+NetHack*map*background:         black
+NetHack*map*black:              grey25
+NetHack*map*red:                red3
+NetHack*map*green:              green3
+NetHack*map*brown:              DarkOrange3
+NetHack*map*blue:               blue3
+NetHack*map*magenta:            magenta3
+NetHack*map*cyan:               cyan3
+NetHack*map*gray:               gray70
+NetHack*map*orange:             yellow
+NetHack*map*bright_green:       green
+NetHack*map*yellow:             yellow
+NetHack*map*bright_blue:        blue
+NetHack*map*bright_magenta:     magenta
+NetHack*map*bright_cyan:        cyan
+NetHack*map*white:              white
+!!=============================================================================
+!! RXVT-unicode setting
+!!=============================================================================
+!urxvt setting
+URxvt*geometry:		85x30
+
+URxvt.scrollBar:	False
+URxvt.scrollstyle:	next
+!URxvt.scrollBar_right:	True
+! Use shift+pageup/down to scroll in screen
+URxvt.secondaryScroll:  True
+URxvt.scrollTtyOutput: False
+URxvt.scrollTtyKeypress: True
+URxvt.scrollWithBuffer: True
+
+!set the artificial transparency of the v.t.
+URxvt.inheritPixmap:	True
+!URxvt.backgroundPixmap:     /home/roylez/pic/wallpaper/crest.xpm
+URxvt.background:	black
+URxvt.foreground:	gray
+
+URxvt.tintColor:	#999
+URxvt.fadeColor:        honeydew3
+!URxvt.troughColor:      sienna
+!URxvt.borderLess:       True
+URxvt.cursorBlink:      False
+!URxvt.cursorUnderline:  True
+URxvt.cursorColor:      green
+URxvt.colorBD:		yellow
+URxvt.colorUL:		white
+URxvt.shading:		60
+URxvt.fading:		30
+URxvt*underlineURLs:    true
+
+URxvt.saveLines:	1500
+!allow double click to select URL
+URxvt*cutchars:         `"()'*<>[]{|}
+!this makes urxvt to start faster??
+URxvt.preeditType:	Root
+
+!URxvt.keysym.M-v:       command:paste
+URxvt.keysym.Delete:       \033[3~
+
+!italicFont and boldItalicFont undefined
+!URxvt.font:             xft:Luxi Mono:regular:antialias=True:pixelsize=15, 
+URxvt.font:             xft:Monaco:medium:antialias=True:pixelsize=15, \
+                xft:DejaVu Sans Mono:book:antialias=True:pixelsize=15, \
+                xft:wenquanyi bitmap song:medium:pixelsize=16:antialias=True
+!URxvt.boldFont:         xft:Luxi Mono:bold:antialias=True:pixelsize=15, 
+URxvt.boldFont:         xft:Monaco:bold:antialias=True:pixelsize=15, \
+                xft:DejaVu Sans Mono:bold:antialias=True:pixelsize=15, \
+                xft:wenquanyi bitmap song:bold:pixelsize=16:antialias=True
+!!--------------------xterm settings------------------------------------ 
+!look and feel
+xterm.termName: xterm-256color
+xterm.title:    xterm
+xterm*geometry: 105x33
+!xterm*geometry: 100x33
+xterm*scrollBar: false
+xterm*rightScrollBar: true
+xterm*loginshell: true
+xterm*cursorBlink: true
+xterm*background: black
+xterm*foreground: grey
+xterm*borderLess: true
+xterm*colorUL: yellow
+xterm*colorBD: green
+xterm*cursorColor: green
+!xterm*cursorColor: OliveDrab1
+!xterm*cursorColor: RoyalBlue1
+
+!saved scrollback
+xterm*saveLines: 1000
+
+!highlight selected area
+xterm*highlightSelection: true
+
+!fix alt and del key input 
+xterm*eightBitInput: false
+xterm*altSendsEscape: true
+xterm*metaSendsEscape: true
+xterm*deleteIsDEL: true
+
+!print color and bold/underline attributes
+xterm*printAttributes: 2
+xterm*printerCommand: cat > ~/xtermdump
+!xterm*printerCommand: cat |urlview
+
+!copy&paste related
+!set SELECT to CLIPBOARD
+!xterm*selectToClipBoard: true   
+xterm*trimSelection: true
+!mouse selecting to copy, alt-v to paste,
+!Ctrl p to print screen content to file
+!~Shift~Ctrl<Btn2Up> define middle click!!
+XTerm*VT100.Translations: #override \
+    Mod1 <KeyPress> V: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER1) \n\
+    ~Shift ~Ctrl<Btn2Up>: insert-selection(CLIPBOARD,PRIMARY,CUT_BUFFER1) \n\
+    ~Shift <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER1) \n\
+    Ctrl <KeyPress> F9: print() \n
+
+!use mouse wheel to scroll back in GNU Screen, use win key
+XTerm*VT100.translations: #override\
+    Mod4 <Btn5Down>,<Btn5Up>: string(0x5)\n\
+    Mod4 <Btn4Down>,<Btn4Up>: string(0x19) 
+
+!font and locale
+xterm*locale: true
+xterm.utf8: true
+xterm*utf8Title: true
+xterm*fontMenu*fontdefault*Label: Default
+xterm*faceName: Monaco:antialias=True:pixelsize=14
+!xterm*faceName: monofur:antialias=True:pixelsize=20
+!xterm*faceName: DejaVu Sans Mono:antialias=True:pixelsize=15
+xterm*faceNameDoublesize: wenquanyi bitmap song:pixelsize=15:antialias=True
+!xterm*faceNameDoublesize: YaHei Consolas Hybrid:pixelsize=16:antialias=True
+xterm*xftAntialias: true
+!xterm*jkWidth:false 
+!xterm*mkWidth:false
+
+!allow selecting email/url by double click
+XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
