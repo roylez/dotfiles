@@ -1,0 +1,5 @@
+keycode 234 = XF86Back
+keycode 233 = XF86Forward
+!keycode 227 = Super_L
+!keycode 113 = Alt_R
+!add mod4 = Super_L

@@ -1,4 +1,4 @@
-Xcursor.theme:          ComixCursors-Green-Regular
+Xcursor.theme:          ComixCursors-Blue-Regular
 
 !-- Tango color scheme
 !black
@@ -146,13 +146,13 @@ URxvt.keysym.Delete:       \033[3~
 
 !italicFont and boldItalicFont undefined
 !URxvt.font:             xft:Luxi Mono:regular:antialias=True:pixelsize=15, 
-URxvt.font:             xft:Monaco:medium:antialias=True:pixelsize=15, \
-                xft:DejaVu Sans Mono:book:antialias=True:pixelsize=15, \
-                xft:wenquanyi bitmap song:medium:pixelsize=16:antialias=True
+URxvt.font:             xft:Monaco:medium:antialias=True:pixelsize=14, \
+                xft:DejaVu Sans Mono:book:antialias=True:pixelsize=14, \
+                xft:wenquanyi bitmap song:medium:pixelsize=15:antialias=True
 !URxvt.boldFont:         xft:Luxi Mono:bold:antialias=True:pixelsize=15, 
-URxvt.boldFont:         xft:Monaco:bold:antialias=True:pixelsize=15, \
-                xft:DejaVu Sans Mono:bold:antialias=True:pixelsize=15, \
-                xft:wenquanyi bitmap song:bold:pixelsize=16:antialias=True
+URxvt.boldFont:         xft:Monaco:bold:antialias=True:pixelsize=14, \
+                xft:DejaVu Sans Mono:bold:antialias=True:pixelsize=14, \
+                xft:wenquanyi bitmap song:bold:pixelsize=15:antialias=True
 !!--------------------xterm settings------------------------------------ 
 !look and feel
 xterm.termName: xterm-256color

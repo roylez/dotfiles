@@ -5,7 +5,7 @@
 # Follow GNU LS_COLORS for completion menus
 zmodload -i zsh/complist
 
-if [[ "$TERM" = "xterm" ]] || [[ "$TERM" = "screen" ]]; then
+if [[ "$TERM" == xterm* ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
 else
@@ -79,15 +79,16 @@ else
 fi
 user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
 symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
-export PROMPT=$user"%F{yellow}@%f"$host$symbol
+job="%1(j,%F{red}:%F{blue}%j,)%f%b"
+export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
 export RPROMPT="%F{magenta}%~%f"
 
 # history
 # number of lines kept in history
-export HISTSIZE=3000
+export HISTSIZE=10000
 # number of lines saved in the history after logout
-export SAVEHIST=3000
+export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
@@ -95,11 +96,11 @@ export HISTFILE=$HOME/.zsh_history
 if [ "$TERM" != "dumb" ]; then
     #enable ls and grep color and sort by extension
     #alias vi='vim'
-    export GREP_COLOR='31'
+    export GREP_COLOR='31;1'
     alias grep='grep -I --color=always'
     alias egrep='egrep -I --color=always'
     alias cal='cal -3m'
-    alias ls='ls -h --file-type --color=auto -X --time-style="+[33m[[32m%y-%m-%d [35m%k:%M[33m][m"'
+    alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%y-%m-%d [35m%k:%M[33m][m"'
     alias vi='vim'
     alias ll='ls -l'
     alias df='df -Th'
@@ -121,7 +122,7 @@ if [ "$TERM" != "dumb" ]; then
     #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
     alias tt="vim +'set spell' ~/doc/TODO.otl"
     alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
-    alias rtm="twitter d rtm"
+    #alias rtm="twitter d rtm"
     alias rtorrent="screen rtorrent"
     alias pal="pal --color"
     256tab() 
@@ -232,7 +233,7 @@ key[PageDown]=${terminfo[knp]}
 bindkey "p" history-beginning-search-backward
 bindkey "n" history-beginning-search-forward
 
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim
 export VISUAL=vim
 

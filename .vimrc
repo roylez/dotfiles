@@ -1,7 +1,8 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Fri Mar 13 11:00:03 2009 EST
+"Last Change: Thu Apr 23 09:56:27 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
+" vim: ft=vim
 
 set nocompatible	" not vi compatible
 set mouse=""            " disable mouse
@@ -37,7 +38,7 @@ set smarttab
 map Q gq
 set wrap
 set whichwrap=b,s,<,>,[,],h,l
-set linebreak		" no breakline in the middle of a word
+set linebreak           " no breakline in the middle of a word
 
 set formatprg=fmt
 set formatoptions=tcqmM     " default tcq, mM to help wrap chinese
@@ -45,7 +46,7 @@ set formatoptions=tcqmM     " default tcq, mM to help wrap chinese
 set backup
 set backupdir=$HOME/.backup
 
-set commentstring=#%s	" default comment style
+set commentstring=#%s       " default comment style
 
 " 输入:set list命令是应该显示些啥？
 set listchars=tab:>-,eol:<
@@ -56,7 +57,7 @@ set scrolloff=3
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^xterm' || $TERM =~ '^screen'
     set t_Co=256
-    colorscheme inkpot
+    colorscheme inkroy
 else
     colorscheme tango
 endif
@@ -69,10 +70,9 @@ if &term =~ "xterm"
     autocmd VimLeave * :!echo -ne "\033]12;green\007"
 endif
 
-" 用浅色高亮当前行
+" 高亮当前行
 "set cursorline
 "set cursorcolumn
-highlight CursorLine term=NONE cterm=NONE ctermbg=7
 autocmd InsertLeave * set nocursorline
 autocmd InsertEnter * set cursorline 
 
@@ -136,8 +136,8 @@ nmap <F9>   ,c<SPACE>
 vmap <F9>   ,c<SPACE>
 
 " tab navigation
-nmap tp :tabprevious<cr>
-nmap tn :tabnext<cr>
+nmap tp :tabprevious<cr> 
+nmap tn :tabnext<cr>    
 nmap to :tabnew<cr>
 nmap tc :tabclose<cr>
 nmap gf <C-W>gf
@@ -169,6 +169,10 @@ autocmd BufNewFile *.py
             \|call AutoHead()
 "\|4put=\"#import sys\<nl>#reload(sys)\<nl>#sys.setdefaultencoding('utf8')\"|$
 
+"ruby
+autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\" |call AutoHead()
+"au FileType ruby set omnifunc=rubycomplete#Complete
+
 "C/C++
 autocmd FileType cpp setlocal nofoldenable
             \|nmap ,a :A<CR>      
@@ -188,34 +192,32 @@ autocmd FileType tex,plaintex,context
             \|nmap <buffer> <F8> gwap	
 
 " shell script
-autocmd BufNewFile *.sh 
-            \0put='#!/bin/bash' 
-            \|call AutoHead()
+autocmd BufNewFile *.sh \0put='#!/bin/bash' |call AutoHead()
 
 "Gnuplot
-autocmd BufNewFile *.gpi 
-            \0put='#!/usr/bin/gnuplot -persist'
-            \|call AutoHead()
+autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 
 "emails, 
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail 
-            \|:set spell
-            \|:0put=''
-            \|:0put=''
-            \|:g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
-            \|:1
+            \|:silent set spell
+            \|:silent 0put=''
+            \|:silent 0put=''
+            \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
+            "\|:silent %s/^\s*>\s*--\_.\{-\}\_^\s*\_$//ge
+            \|:silent 1
 
 "openGL shading language (glsl)
 au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 
 "cuda
-au BufNewFile,BufRead *.cu 
-            \|:set ft=cuda
-            \|:setlocal cindent
+au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
-"ruby
-"au FileType ruby set omnifunc=rubycomplete#Complete
+"markdown
+autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:> nu spell
+
+"RestructuredText 
+autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
 "-------------------special settings------------------------------------
 "big files?
 let g:LargeFile = 1	"in megabyte

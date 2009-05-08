@@ -1,13 +1,13 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Fri Feb 27 23:48:00 2009 EST
+#Last Change: Fri May 08 16:10:30 2009 EST
 #Description: mutt main configuration file
 
 ignore *
 unignore From Subject Lines
 hdr_order From Subject Lines
 
-set index_format="%(%m-%d-%y) %S %-18.18L [%4c] %s"
+set index_format="%S %(%m-%d) %-18.18L [%4c] %s"
 set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]----%>-(%P)---"
 set status_on_top
 
@@ -15,7 +15,9 @@ set status_on_top
 set editor="vim" 
 
 #set smtp agent
-set sendmail="/home/roylez/bin/filtersend"
+set sendmail="~/bin/filtersend"
+#set sendmail='echo "~/bin/filtersend -a uq"|'
+#set sendmail='[ "$(ifconfig eth0 | grep inet\ addr|cut -d: -f2|cut -d' ' -f1)" = "152.98.195.159" ] &&  echo "~/bin/filtersend -a uq" || echo "~/bin/filtersend"'
 
 #set print_command="enscript -Email -2 -r -G"
 set print_command="enscript -Email -G --word-wrap -f Palatino-Roman@11"
@@ -80,7 +82,11 @@ set fast_reply
 unset metoo
 unset reply_self
 # default regexp cacthes everything and is too much for me
-set quote_regexp="^([ \t]*[>])+"
+#set quote_regexp="^([ \t]*[>])+"
+# *sigh* this catches raster too. why can't people just use a standard,
+# recognisable quote delimeter? Is is *so* hard? Is the extra dash *that*
+# important?
+set quote_regexp="^( {0,4}-?[>|:]| {0,4}[a-z0-9]+[>|]+)+"
 
 # 设置你自己的邮件头。
 #my_hdr From: Zuo Le<lzuo@graduate.hku.hk>
@@ -97,7 +103,7 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 
 #mailing list
 #subscribe china@lists.uq.edu.au
-subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au
+subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au
 subscribe -group lst moleculardynamics@lists.uq.edu.au xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com
 
 #score "~s believe" -10
@@ -127,7 +133,7 @@ set locale='utf-8'
 #set strict_mime=no  #這個要設成no, assumed_charset才會有用
 set assumed_charset="gb2312:utf-8:big5"
 set send_charset="utf-8:us-ascii:iso-8859-1:big5:gb2312:x-unknown"
-#solve the chinese attachment name issue
+#use rfc2047 standard instead of rfc2231, solve the chinese attachment name issue
 set rfc2047_parameters=yes
 
 # 外部程序退出时，是否要求用户按一个键才返回。
@@ -151,47 +157,6 @@ set maildir_header_cache_verify=no
 my_hdr X-PGP-Key-ID:3038867F
 #backup everything sent to gmail's sent box
 my_hdr Bcc: roylzuo+sent@gmail.com
-# ---------------------color theme-----------------------------------
-color normal    white default
-color attachment magenta default
-color hdrdefault cyan default
-color indicator brightblack white
-color markers   blue default
-color signature cyan default
-color status    brightcyan black 
-color tilde     blue default
-color tree      red default
-color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
-
-color body red default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # email
-color body yellow default "(http|ftp)://[\-\.\,/+=&%~_:?\#a-zA-Z0-9]+" # URL
-color body green default "(^| |[-.[:alnum:]]+:+)~?\(/[-_.'[:alnum:]]+\)+/?" # Unix file path
-color body green default "(^| +)[[:alpha:]]:[-_.[:alnum:]\]+" # DOS file path
-color body magenta default "(^|[ '\"]+)\\$[[:alpha:]][-_[:alpha:]]+" # variable
-color body brightred default "(^| )[*_]+[-&[:alnum:]]+[*_]( |$)" # bold/underline
-color body red default "[!?]{3,}" # exclamation
-color body green default "^ *[-+*o] +" # list item
-color body cyan default "[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?"
-color body cyan default "(\(19|20\)?[0-9]{2}/[01]?[0-9]/[0123]?[0-9]|[0123]?[0-9][/.][01]?[0-9][/.]\(19|20\)?[0-9]{2})(( at)? +[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
-color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)[ .]+[0-9]{1,2}(st|nd|rd|th)?,?( +(19|20)[0-9]{2}(,?( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?)?"
-color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?[0-9]{1,2}(st|nd|rd|th)?[ .]+(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?),?( +(19|20)?[0-9]{2})?(( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
-            
-color quoted  green default
-color quoted1 yellow default
-color quoted2 red default
-color hdrdefault cyan default
-color header  default magenta .*
-#color header   brightred blue ^Subject:
-color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
-color signature cyan default
-
-color index green default ~p                 # To me
-color index blue default ~P                # From me 
-color index brightwhite default ~N          # New
-color index brightgreen default "~N ~p"     # New to me
-color index brightcyan default ~T               # Tagged
-color index magenta default ~D              # Deleted
-color index brightyellow blue ~F               # flaged
 
 #address book related
 set query_command = "lbdbq '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
@@ -220,6 +185,8 @@ bind    index   \cb     previous-page
 bind    index   ,g      group-reply
 bind    pager   j       next-line
 bind    pager   k       previous-line
+bind    pager   gg      top
+bind    pager   G       bottom
 
 #macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
 # ---------------------GnuPG stuff-----------------------------------
@@ -302,7 +269,50 @@ set pgp_good_sign="^\\[GNUPG:\\] GOODSIG"
 # setting.
 send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
 send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>'"
-send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|'"
+send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small|'"
 send-hook "~f z.le@uq.edu.au" "set signature=~/.mutt.sign"
 
 #send-hook . "my_hdr Bcc:roylzuo+Sent@gmail.com"
+#
+# ---------------------color theme-----------------------------------
+color normal    white default
+color attachment magenta default
+color hdrdefault cyan default
+color indicator brightblack white
+color markers   blue default
+color signature cyan default
+color status    brightcyan black 
+color tilde     blue default
+color tree      red default
+color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
+
+color body red default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # email
+color body yellow default "(http|ftp)://[\-\.\,/+=&%~_:?\#a-zA-Z0-9]+" # URL
+color body green default "(^| |[-.[:alnum:]]+:+)~?\(/[-_.'[:alnum:]]+\)+/?" # Unix file path
+color body green default "(^| +)[[:alpha:]]:[-_.[:alnum:]\]+" # DOS file path
+color body magenta default "(^|[ '\"]+)\\$[[:alpha:]][-_[:alpha:]]+" # variable
+color body brightred default "(^| )[*_]+[-&[:alnum:]]+[*_]( |$)" # bold/underline
+color body red default "[!?]{3,}" # exclamation
+color body green default "^ *[-+*o] +" # list item
+color body cyan default "[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?"
+color body cyan default "(\(19|20\)?[0-9]{2}/[01]?[0-9]/[0123]?[0-9]|[0123]?[0-9][/.][01]?[0-9][/.]\(19|20\)?[0-9]{2})(( at)? +[0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
+color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)[ .]+[0-9]{1,2}(st|nd|rd|th)?,?( +(19|20)[0-9]{2}(,?( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?)?"
+color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)?|Fri(day)?|Sat(urday)?),? +)?[0-9]{1,2}(st|nd|rd|th)?[ .]+(Jan(uary)?|Feb(rary)?|Mar(ch)?|Apr(il)?|May|June?|July?|Aug(ust)?|Sep(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?),?( +(19|20)?[0-9]{2})?(( at)? [0-9]{1,2}:[0-9]{2}(:[0-9]{2})?( ?(AM|PM|am|pm))?( +[+-][0-9]{4})?)?"
+            
+color quoted  green default
+color quoted1 yellow default
+color quoted2 red default
+color hdrdefault cyan default
+color header  default magenta .*
+#color header   brightred blue ^Subject:
+color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
+color signature cyan default
+
+color index green default ~p                 # To me
+color index blue default ~P                # From me 
+color index brightwhite default ~N          # New
+color index brightgreen default "~N ~p"     # New to me
+color index brightcyan default ~T               # Tagged
+color index magenta default ~D              # Deleted
+color index brightyellow blue ~F               # flaged
+

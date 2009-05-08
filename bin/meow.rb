@@ -56,16 +56,21 @@ def pasteSelection(string)
     agent.user_agent_alias= 'Windows IE 7'
     begin
         page = agent.get("http://paste.ubuntu.org.cn/")
-    rescue
-        puts 'bye bye connection'
+    rescue Timeout::Error
+        text = %Q{<span size="14000" color="red" weight="bold">\n\n无法连接paste.ubuntu.org.cn</span>}
+        system "#{$notifyargs} 'Ooops...'  '#{text}'"
+        exit
     end
-    input = page.search('input')[3]
-    input['value']= 'roylez'
-    text = page.search('textarea')
-    text.inner_text = string
-    agent.submit
+    form = page.form('editor')
+    form.field('poster').value = 'roylez'
+    form.field('code2').value = string
+    npage = form.submit( form.button('paste') )
+    nurl = npage.uri.to_s
+    system "echo '#{nurl}'|xsel -i -b"
+    system "echo '#{nurl}'|xsel -i -p"
+    text = %Q{<span size="14000" color="green" weight="bold">\n\n请直接粘贴URL</span>} 
+    system "#{$notifyargs} '上传成功：'  '#{text}'"
 end
-
 
 if __FILE__==$0
     string = `xsel -o`
@@ -80,13 +85,12 @@ if __FILE__==$0
     elsif string =~ /^1(\d){10}$/
         #手机号查询
         phoneLookup( string )
-    elsif string =~ /^(https?|ftp):\/\/[\-\.\,\/%~_:?\#a-zA-Z0-9=&\;]+$/
+    elsif string.strip =~ /^(https?|ftp):\/\/[\-\.\,\/%~_:?\#a-zA-Z0-9=&\;]+$/
         #打开网页
-        system("$HOME/bin/firefox '%s' &" %string)
+        system("$HOME/bin/firefox '%s' &" %string.strip)
     elsif string =~ /^((.*?)\n)+.*$/
         ##上传选中内容
-        #puts string
-        #pasteSelection( string )
+        pasteSelection( string )
     else
         text = %Q{<span size="13000" color="red" weight="bold">%s</span>} \
             % "\nThou must give me a command!"

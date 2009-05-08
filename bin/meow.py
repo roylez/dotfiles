@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Fri Feb 27 23:05:58 2009 EST
+#Last Change: Thu Apr 16 08:11:47 2009 EST
 #Description: various actions to perform on selected text
 
 import os, re, urllib, urllib2, sys, random

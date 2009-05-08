@@ -52,13 +52,15 @@ fbpid=$!
 
 sleep 1
 {
+    #nm-applet --sm-disable &
+    wicd-client &
     root-tail -g 1000x150+20+590 -fn fixed /var/log/messages,yellow --justify --cont '> ' &
     #autocutsel &
     aplay ~/.fluxbox/fanqiejiayuan-start.wav &
     launchy &
     #xterm -e screen &
     #urxvtc -e screen &
-    scim -d &
+    #scim -d &
 } &
 
 wait $fbpid

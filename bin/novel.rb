@@ -8,10 +8,11 @@ require 'iconv'
 
 dbfile = File.join(ENV['HOME'],'.backup','latest.yml')
 bookid = {'6507'=>'卡徒',
+        '8823'=>'仙道求索',
         '4191'=>'盘龙', 
-        '150'=>'恶魔法则',
+        #'150'=>'恶魔法则',
         '10975'=>'天王',
-        '6530'=>'蔚蓝轨迹',
+        #'6530'=>'蔚蓝轨迹',
         '10072'=>'斗罗大陆',
         '405'=>'超级骷髅兵'}
 
@@ -29,10 +30,14 @@ if __FILE__==$0
     url0 = "http://www.3jzw.com/files/article/html/%d/%s/"
     bookid.each_key do |key|
         threads << Thread.new { 
-            url =  url0 % [key.to_i/1000, key] + "index.html"
             begin
+                url =  url0 % [key.to_i/1000, key] + "index.html"
                 alist[key] = getLatestNovel(url) 
-            rescue
+            rescue Timeout::Error, Errno::ECONNRESET
+                $stderr.puts "Connection timed out!"
+                exit
+            rescue SocketError
+                $stderr.puts "Connection problem, check you internet connection!"
                 exit
             end
         }
@@ -53,6 +58,8 @@ if __FILE__==$0
                 }
             elsif oldi == nil 
                 puts "\e[34;1m#{bookid[key]}\e[m has been updated!"
+                puts "\t#{alist[key][-1][1]}"
+                puts "\t%s" % (url0 % [key.to_i/1000,key] + alist[key][-1][0]) 
             end
         end
         #初始化数据库
