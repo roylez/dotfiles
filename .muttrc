@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Fri May 08 16:10:30 2009 EST
+#Last Change: Fri May 08 22:33:53 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -269,7 +269,7 @@ set pgp_good_sign="^\\[GNUPG:\\] GOODSIG"
 # setting.
 send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
 send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>'"
-send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small|'"
+send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 send-hook "~f z.le@uq.edu.au" "set signature=~/.mutt.sign"
 
 #send-hook . "my_hdr Bcc:roylzuo+Sent@gmail.com"
