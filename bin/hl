@@ -1,16 +1,20 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Sun Apr 12 07:42:01 2009 EST
+#Last Change: Sat May 16 15:45:24 2009 EST
 #Description: get exchange rate from yahoo
 require 'net/http'
 require 'uri'
 
 if __FILE__ == $0:
-    begin
+    if ARGV.length == 3
         f = ARGV[0].upcase
         t = ARGV[1].upcase
         m = ARGV[2]
-    rescue
+    elsif ARGV.length == 2
+        f = ARGV[0].upcase
+        t = ARGV[1].upcase
+        m = 1
+    else
         puts "Usage:    #{$0} <from> <to> <amount>"
         exit
     end

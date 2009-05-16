@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Fri May 08 22:33:53 2009 EST
+#Last Change: Fri May 15 10:48:19 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -92,7 +92,7 @@ set quote_regexp="^( {0,4}-?[>|:]| {0,4}[a-z0-9]+[>|]+)+"
 #my_hdr From: Zuo Le<lzuo@graduate.hku.hk>
 #set hdrs
 #my_hdr Reply-To: Zuo Le<lzuo@hkusua.hku.hk>
-set from='Roy Zuo <z.le@uq.edu.au>'
+set from='Roy Zuo <roylzuo@gmail.com>'
 #set different from information when replying according to accounts
 set use_from
 set envelope_from=yes       #add -f <from> to sendmail command line
@@ -103,8 +103,8 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 
 #mailing list
 #subscribe china@lists.uq.edu.au
-subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au
-subscribe -group lst moleculardynamics@lists.uq.edu.au xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com
+subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au 
+subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com
 
 #score "~s believe" -10
 
@@ -267,10 +267,12 @@ set pgp_good_sign="^\\[GNUPG:\\] GOODSIG"
 # set official signature
 # cannot be used with set signature=..., which overwrites the hook
 # setting.
-send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
-send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>'"
-send-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
-send-hook "~f z.le@uq.edu.au" "set signature=~/.mutt.sign"
+send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
+#send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
+send-hook "~t ^.*edu\.au" "set from='Roy Zuo <z.le@uq.edu.au>';set signature=~/.mutt.sign"
+send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.com>;set signature=~/.mutt.sign'"
+send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>';set signature="
+#send2-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 
 #send-hook . "my_hdr Bcc:roylzuo+Sent@gmail.com"
 #
