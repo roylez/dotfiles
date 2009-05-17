@@ -20,9 +20,13 @@ zstyle ':completion:*' ignore-parents parent pwd directory
 zstyle ':completion:*' menu select=1
 #correction in completion
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match
+zstyle ':completion:*' completer _complete _match 
 zstyle ':completion:*:match:*' original only 
 zstyle ':completion:*:approximate:*' max-errors 1 numeric 
+## case-insensitive (uppercase from lowercase) completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+### case-insensitive (all) completion
+#zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 #kill completion
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:*:*:*:processes' force-list always
@@ -233,6 +237,22 @@ key[PageDown]=${terminfo[knp]}
 bindkey "p" history-beginning-search-backward
 bindkey "n" history-beginning-search-forward
 
+#-----------------user defined widgets---------------------------------
+#from linuxtoy.org: 
+#   pressing TAB in an empty command makes a cd command with completion list
+dumb-cd(){
+    if [[ -n $BUFFER ]] ; then # 如果该行有内容
+        zle expand-or-complete # 执行 TAB 原来的功能
+    else # 如果没有
+        BUFFER="cd " # 填入 cd（空格）
+        zle end-of-line # 这时光标在行首，移动到行末
+        zle expand-or-complete # 执行 TAB 原来的功能
+    fi 
+}
+zle -N dumb-cd
+bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+
+#----------------------exports-----------------------------------------
 export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim
 export VISUAL=vim
