@@ -70,6 +70,7 @@ setopt hist_verify       # reload full command when runing from history
 setopt hist_expire_dups_first  #remove dups when max size reached
 setopt interactive_comments # why not?
 setopt list_types           # show ls -F style marks in file completion
+setopt long_list_jobs       # show pid in bg job list
 setopt numeric_glob_sort    # when globbing numbered files, use real counting
 setopt inc_append_history   # append to history once executed
 
@@ -237,7 +238,7 @@ key[PageDown]=${terminfo[knp]}
 bindkey "p" history-beginning-search-backward
 bindkey "n" history-beginning-search-forward
 
-#-----------------user defined widgets---------------------------------
+#-----------------user defined widgets & binds-----------------------
 #from linuxtoy.org: 
 #   pressing TAB in an empty command makes a cd command with completion list
 dumb-cd(){
@@ -252,6 +253,8 @@ dumb-cd(){
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
+#c-z to continue as well
+bindkey -s "" "fg\n"
 #----------------------exports-----------------------------------------
 export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim
