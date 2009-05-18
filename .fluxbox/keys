@@ -42,7 +42,7 @@ Mod1 e None f       :ExecCommand ${HOME}/soft/firefox/firefox
 Mod1 e None s       :ExecCommand xterm -title XTerm -e screen -d -RR
 Mod1 e None p       :ExecCommand pcmanx
 Mod1 e None x       :ExecCommand xterm
-Mod1 e None u       :ExecCommand urxvtc
+Mod1 e None u       :ExecCommand urxvt
 Mod1 e None g       :ExecCommand pidgin
 Mod1 e None r       :ExecCommand rox
 Mod1 e None a       :ExecCommand arandr

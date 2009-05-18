@@ -66,16 +66,17 @@ def pasteSelection(string)
     form.field('code2').value = string
     npage = form.submit( form.button('paste') )
     nurl = npage.uri.to_s
-    system "echo '#{nurl}'|xsel -i -b"
-    system "echo '#{nurl}'|xsel -i -p"
+    system "echo '#{nurl}'|xclip -i -selection primary"
+    system "echo '#{nurl}'|xclip -i -selection clipboard"
     text = %Q{<span size="14000" color="green" weight="bold">\n\n请直接粘贴URL</span>} 
     system "#{$notifyargs} '上传成功：'  '#{text}'"
 end
 
 if __FILE__==$0
-    string = `xsel -o`
+    string = `xclip -o`
     string = ARGV[0] if ARGV.length == 1
 
+    puts string
     if string =~ /^[a-zA-Z]+$/
         #单词查询
         translate( string)

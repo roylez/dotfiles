@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Fri Mar 20 12:55:38 2009 EST
+#Last Change: Sun May 17 13:15:32 2009 EST
 #Description: 
 import os, time
 
@@ -11,7 +11,7 @@ os.system("import %s" %img)
 msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()
 print msg
 notifyargs = "notify-send -t 5000 -i ~/.icons/png-1009.png"
-os.system("echo '%s'|xsel -i -b" %msg)
-os.system("echo '%s'|xsel -i -p" %msg)
+os.system("echo '%s'|xclip -i -selection primary" %msg)
+os.system("echo '%s'|xclip -i -selection clipboard" %msg)
 text = '<span size="14000" color="green" weight="bold">请直接粘贴到所需处</span>' 
 os.system("%s 'Meoww~~, 贴图成功: ' '\n\n%s'" %(notifyargs,text))

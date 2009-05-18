@@ -20,7 +20,7 @@ zstyle ':completion:*' ignore-parents parent pwd directory
 zstyle ':completion:*' menu select=1
 #correction in completion
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match 
+zstyle ':completion:*' completer _complete _match
 zstyle ':completion:*:match:*' original only 
 zstyle ':completion:*:approximate:*' max-errors 1 numeric 
 ## case-insensitive (uppercase from lowercase) completion
@@ -130,8 +130,7 @@ if [ "$TERM" != "dumb" ]; then
     #alias rtm="twitter d rtm"
     alias rtorrent="screen rtorrent"
     alias pal="pal --color"
-    256tab() 
-    {
+    256tab() {
         for k in `seq 0 1`;do 
             for j in `seq $((16+k*18)) 36 $((196+k*18))`;do 
                 for i in `seq $j $((j+17))`; do 
@@ -256,7 +255,7 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 #c-z to continue as well
 bindkey -s "" "fg\n"
 #----------------------exports-----------------------------------------
-export PATH=$HOME/bin:$PATH:$HOME/.gem/ruby/1.8/bin
+export PATH=$PATH:$HOME/bin:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim
 export VISUAL=vim
 
