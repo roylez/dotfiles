@@ -57,6 +57,7 @@ sleep 1
     root-tail -g 1000x150+20+570 -fn fixed /var/log/messages,yellow --justify --cont '> ' &
     #autocutsel &
     aplay ~/.fluxbox/fanqiejiayuan-start.wav &
+    fetchmail &
     #launchy &
     #xterm -e screen &
     #urxvtc -e screen &

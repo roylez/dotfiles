@@ -34,10 +34,10 @@ if __FILE__==$0
                 url =  url0 % [key.to_i/1000, key] + "index.html"
                 alist[key] = getLatestNovel(url) 
             rescue Timeout::Error, Errno::ECONNRESET
-                $stderr.puts "Connection timed out!"
+                #$stderr.puts "Connection timed out!"
                 exit
             rescue SocketError
-                $stderr.puts "Connection problem, check you internet connection!"
+                #$stderr.puts "Connection problem, check you internet connection!"
                 exit
             end
         }
