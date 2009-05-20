@@ -1,4 +1,3 @@
-# mod by uel
 #avoid flicker
 double_buffer yes
 #no_buffers yes
@@ -8,27 +7,27 @@ update_interval 1
 
 #own window to run simultanious 2 or more conkys
 own_window yes
-own_window_transparent yes
-own_window_type desktop
+own_window_type override
+own_window_transparent no
 #to prevent window from moving
-#use_spacer no
+use_spacer left
 #when using only the horizontal bar
-#minimum_size 900 0      
-minimum_size 1024 0
+minimum_size 900 0      
+#minimum_size 1024 0
 #borders
 draw_borders no
 border_margin 1
 
 #shades
-draw_shades no
-#draw_graph_borders yes
-#draw_borders yes
+draw_shades yes
+draw_graph_borders yes
 
 #position
 #gap_x 1
 #gap_y 788
-gap_x 0
-#gap_x 42 #use with window width 900
+#gap_x 0
+#use with window width 900
+gap_x 42        
 gap_y 5
 #alignment bottom_left
 alignment top_left
@@ -37,8 +36,8 @@ alignment top_left
 #default_color D6D6D6
 default_color  9f907d
 #default_shade_color 000000
-#own_window_colour 202020
-own_window_colour 3d352a
+own_window_colour 202020
+#own_window_colour 3d352a
 #draw_borders_colour 000000
 #draw_graph_borders_colour 000000
 
@@ -47,6 +46,7 @@ use_xft yes
 font -*-terminus-*-r-*-*-14-*-*-*-*-*-*-*
 #xftfont Comic Sans MS:pixelsize=11
 xftfont HandelGotD:pixelsize=10
+#xftfont monofur:pixelsize=10
 
 #mpd
 #mpd_host localhost
@@ -54,8 +54,6 @@ xftfont HandelGotD:pixelsize=10
 #${offset 660}${voffset 5}${font 321impact:pixelsize=72}${color #000000}${time %I}:${font 321impact:pixelsize=140}${time %M}
 #${offset 700}${voffset 2}${font Cantebriggia:pixelsize=72}${color #000000}${time %I}:${voffset -10}${font Cantebriggia:pixelsize=140}${time %M}
 #${offset 720}${voffset -30}${font Endor:pixelsize=80}${color #000000}${time %I}:${voffset -55}${font Endor:pixelsize=160}${time %M}
-
+#${offset 700}${voffset -10}${font Polo Brush MF:pixelsize=80}${color #000000}${time %H}:${voffset -30}${font Polo Brush MF:pixelsize=160}${time %M}
 TEXT
 ${alignc}${color FFFFFF}CPU: ${color AD7FA8}${cpu cpu}% ${acpitemp}°C ${color FFFFFF}Mem: ${color 95956B}${mem} ${color C4A000}${memperc}% ${color FFFFFF}Power: ${color 95956B}${battery} ${color 000000}| ${color FFFFFF}Net: ${color 95956B}${if_existing /proc/net/route eth0}${downspeed eth0}${else}${if_existing /proc/net/route eth1}${downspeed eth1}${endif}${endif}${color 4E9A06}down ${color FFFFFF}${color 95956B}${if_existing /proc/net/route eth0}${upspeed eth0}${else}${if_existing /proc/net/route eth1}${upspeed eth1}${endif}${endif}${color CC0000}up ${color 000000}| ${color FFFFFF}Mail: ${color FCE94F}${new_mails /home/roylez/.mail/inbox/} ${color 95956B}new ${color 000000}| ${color FFFFFF}/: ${color 95956B}${fs_free /} free ${color FFFFFF}/home: ${color 95956B}${fs_free /home} free ${color 000000}| ${color FFFFFF}Music: ${color 95956B}${execi 3 /home/roylez/bin/mocptitle.sh}
-
-${offset 700}${voffset -10}${font Polo Brush MF:pixelsize=80}${color #000000}${time %H}:${voffset -30}${font Polo Brush MF:pixelsize=160}${time %M}
