@@ -1,0 +1,7 @@
+[user]
+    name  = Roy Zuo
+    email = roylzuo@gmail.com, z.le@uq.edu.au
+[color]  # Ensure we get color
+    diff   = auto
+    branch = auto
+    status = auto
