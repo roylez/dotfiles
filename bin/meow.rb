@@ -7,9 +7,9 @@ require 'iconv'
 require 'rubygems'
 require 'mechanize'
 
-icons = ['png-0901.png', 'png-0902.png', 'png-0903.png', 'png-0904.png', 'png-0905.png', 'png-0906.png', 'png-0907.png', 'png-0908.png', 'png-1009.png']
+icons = Dir.glob(File.join(ENV['HOME'],'.icons','servants','*.png'))
 iconno = rand(icons.length)
-$notifyargs = "notify-send -t 5000 -i ~/.icons/%s" %icons[iconno]
+$notifyargs = "notify-send -t 5000 -i %s" %icons[iconno]
 
 def translate(string)
     translation = IO.popen(%Q{sdcv -u 朗道英汉字典5.0 -n "%s"} % string).readlines
