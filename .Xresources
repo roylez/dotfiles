@@ -1,5 +1,35 @@
 Xcursor.theme:          ComixCursors-Blue-Regular
 
+*background: #121212
+*foreground: #F6F6F6
+*cursorColor: #ACEA5C
+
+!! husio colors
+!black text
+!*color0: #0d0d0d
+!*color8: #0d0d0d
+!!red text
+!*color1: #B73F23
+!*color9: #C74B2E
+!!green text
+!*color2: #82B94A
+!*color10: #82B94A
+!!yellow text
+!*color3: #C5CF43
+!*color11: #C5CF43
+!!blue text
+!*color4: #6C89B1
+!*color12: #6C89B1
+!!magenta text
+!*color5: #AA6F90
+!*color13: #AA6F90
+!!cyan text
+!*color6: #A673BE
+!*color14: #A673BE
+!!white
+!*color7: #EDEDED
+!*color15: #EDEDED
+
 !-- Tango color scheme
 !black
 !*color0: #2e3436
@@ -119,7 +149,7 @@ URxvt.scrollWithBuffer: True
 !set the artificial transparency of the v.t.
 URxvt.inheritPixmap:	True
 !URxvt.backgroundPixmap:     /home/roylez/pic/wallpaper/crest.xpm
-URxvt.background:	black
+!URxvt.background:	black
 URxvt.foreground:	gray
 
 URxvt.tintColor:	#999
@@ -128,7 +158,7 @@ URxvt.fadeColor:        honeydew3
 !URxvt.borderLess:       True
 URxvt.cursorBlink:      False
 !URxvt.cursorUnderline:  True
-URxvt.cursorColor:      green
+!URxvt.cursorColor:      green
 URxvt.colorBD:		yellow
 URxvt.colorUL:		white
 URxvt.shading:		60
@@ -162,7 +192,7 @@ xterm*geometry: 105x33
 xterm*scrollBar: false
 xterm*rightScrollBar: true
 xterm*loginshell: true
-xterm*background: black
+!xterm*background: black
 xterm*foreground: grey
 xterm*borderLess: true
 xterm*colorUL: yellow
@@ -171,7 +201,7 @@ xterm*cursorBlink: true
 !xterm*cursorColor: green
 !xterm*cursorColor: OliveDrab1
 !xterm*cursorColor: RoyalBlue1
-XTerm*cursorColor:DarkSeaGreen3
+!XTerm*cursorColor:DarkSeaGreen3
 XTerm*cursorColorBackground:DimGray
 XTerm*highlight:LemonChiffon
 XTerm*borderColor:SlateGrey

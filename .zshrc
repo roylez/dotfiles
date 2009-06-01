@@ -234,8 +234,8 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
-bindkey "p" history-beginning-search-backward
-bindkey "n" history-beginning-search-forward
+bindkey "" history-beginning-search-backward
+bindkey "" history-beginning-search-forward
 
 #-----------------user defined widgets & binds-----------------------
 #from linuxtoy.org: 

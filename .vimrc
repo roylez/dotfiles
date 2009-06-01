@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Thu Apr 23 09:56:27 2009 EST
+"Last Change: Sat May 30 22:16:13 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -22,7 +22,7 @@ set laststatus=2        " always display a nicer status bar
 set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
 set wildmenu		" show possible command when pressing <TAB>
 set notitle             " do not set xterm dynamic title
-"set number
+set number
 
 set matchtime=5		
 
@@ -54,6 +54,7 @@ set listchars=tab:>-,eol:<
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
 
+set background=dark
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^xterm' || $TERM =~ '^screen'
     set t_Co=256
@@ -113,8 +114,11 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-inoremap <expr> <c-n> pumvisible() ? "\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
-inoremap <expr> <m-;> pumvisible() ? "\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
+inoremap <expr> <c-n> pumvisible() ? 
+            \"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
+inoremap <expr> <m-;> pumvisible() ? 
+            \"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 
+            \\"\\<down>\" : \"\\<cr>\""
 "---------------------keyboard mappings---------------------------------
 "ascii art escape sequence for /etc/motd, ssh banner and etc
 imap ,e   <C-V><C-[>[
@@ -192,7 +196,7 @@ autocmd FileType tex,plaintex,context
             \|nmap <buffer> <F8> gwap	
 
 " shell script
-autocmd BufNewFile *.sh \0put='#!/bin/bash' |call AutoHead()
+autocmd BufNewFile *.sh 0put='#!/bin/bash' |call AutoHead()
 
 "Gnuplot
 autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
@@ -218,6 +222,9 @@ autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:> nu spell
 
 "RestructuredText 
 autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
+
+"fcron
+autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 "-------------------special settings------------------------------------
 "big files?
 let g:LargeFile = 1	"in megabyte
@@ -250,3 +257,6 @@ autocmd BufReadPost *
     \if line("'\"") > 0 && line("'\"") <= line("$") 
         \|exe "normal g`\"" 
     \|endif
+
+"warn long lines
+"au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)

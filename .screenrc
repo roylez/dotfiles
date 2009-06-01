@@ -5,7 +5,7 @@
 
 # hardstatus line
 hardstatus alwayslastline
-hardstatus string "%{= R}[%{=b B}%-w%{=rb db}%>%n %t%{-}%+w%{-b}%< %=%{R}][%{G}%c %{M}%D %m-%d%{R}]"
+hardstatus string "%{= R}[%{y}%l%{r}][ %{b}%-w%{=rb db}%>%n %t%{-}%+w%{-b}%< %=%{R}][%{G}%c %{M}%D %m-%d%{R}]"
 #caption always "%{= mW} %= %H %="
 #caption always "%{= gk}%-Lw%{= rW}%50> %n%f* %t %{-}%+Lw%< %= %{= Gk} %H %{= rW} %l %{= Gk} %0c:%s %d/%m %{-}"
 #new version from vermaden
