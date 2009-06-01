@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Thu Mar 26 16:17:47 2009 EST
+#Last Change: Mon Jun 01 16:01:20 2009 EST
 #Description: 
 require "rubygems"
 require "mechanize"
@@ -17,8 +17,8 @@ if __file__=$0
         page = agent.get(host)
         form = page.forms[0]
         form.file_upload('file[]').file_name=img
-        form.button('submit').value='true'
-        newpage = form.submit( form.button('submit') )
+        form.field('submit').value='true'
+        newpage = form.submit
         #puts newpage.body
         puts newpage.links[5].href
     end
