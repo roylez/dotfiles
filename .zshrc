@@ -130,15 +130,6 @@ if [ "$TERM" != "dumb" ]; then
     #alias rtm="twitter d rtm"
     alias rtorrent="screen rtorrent"
     alias pal="pal --color"
-    256tab() {
-        for k in `seq 0 1`;do 
-            for j in `seq $((16+k*18)) 36 $((196+k*18))`;do 
-                for i in `seq $j $((j+17))`; do 
-                    printf "\e[01;$1;38;5;%sm%4s" $i $i;
-                done;echo;
-            done;
-        done
-    }
     if [ '$HOSTNAME' != 'lychee' ]; then
         for i in showq qstat qdel qnodes showstart; do 
             alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
@@ -159,7 +150,22 @@ if [ "$TERM" != "dumb" ]; then
     alias -g X="|xargs"
     alias -g C="|wc"
 fi
+#-----------------user defined functions--------------------------------
+#show 256 color tab
+256tab() {
+    for k in `seq 0 1`;do 
+        for j in `seq $((16+k*18)) 36 $((196+k*18))`;do 
+            for i in `seq $j $((j+17))`; do 
+                printf "\e[01;$1;38;5;%sm%4s" $i $i;
+            done;echo;
+        done;
+    done
+}
 
+alarm() { 
+    echo "msg ${*#*1}" | at now + $1 min
+}
+#-----------------functions to set gnu screen title----------------------
 # active command as title in terminals
 case $TERM in
     xterm*|rxvt*)
@@ -207,6 +213,7 @@ function preexec {
 }
 #fi 
 
+#-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo

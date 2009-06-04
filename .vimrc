@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sat May 30 22:16:13 2009 EST
+"Last Change: Wed Jun 03 15:10:13 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -182,8 +182,8 @@ autocmd FileType cpp setlocal nofoldenable
             \|nmap ,a :A<CR>      
 autocmd FileType c setlocal cindent
 
-"Fortran, use ifort to compile
-autocmd FileType fortran let b:fortran_free_source = 1
+"Fortran
+"autocmd FileType fortran let b:fortran_free_source = 1
 
 "Txt, set syntax file and spell check
 "autocmd BufRead,BufNewFile *.txt set filetype=txt 
@@ -227,7 +227,7 @@ autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 "-------------------special settings------------------------------------
 "big files?
-let g:LargeFile = 1	"in megabyte
+let g:LargeFile = 0.3	"in megabyte
 augroup LargeFile
     au!
     au BufReadPre *
