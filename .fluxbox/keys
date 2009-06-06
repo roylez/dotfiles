@@ -57,3 +57,14 @@ Mod1 e Control a    :ExecCommand xrandr --output VGA-0 --mode 1280x1024 --output
 #when there is a windows key
 Mod4 r              :ExecCommand ~/bin/meow.rb
 
+Mod4 w              :KeyMode ResizeMode
+ResizeMode: None Up             :ResizeVertical -2
+ResizeMode: None Down           :ResizeVertical +2
+ResizeMode: None Left           :ResizeHorizontal -2
+ResizeMode: None Right          :ResizeHorizontal +2
+
+Mod4 m              :KeyMode MoveMode
+MoveMode: None h    :MoveLeft 2
+MoveMode: None k    :MoveUp 2
+MoveMode: None j    :MoveDown 2
+MoveMode: None l    :MoveRight 2

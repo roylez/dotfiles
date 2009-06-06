@@ -18,7 +18,7 @@ bookid = {'6507'=>'卡徒',
 
 def getLatestNovel(url)
     page = Net::HTTP.get(URI.parse(url))
-    page = Iconv.iconv('utf8','gbk',page).join
+    page = Iconv.conv('utf8//ignore','gbk//ignore',page)
     matches = page.scan(/<a href="(\d+\.html)">(.*?)<\/a>/)
     return matches
 end
