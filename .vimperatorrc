@@ -4,6 +4,8 @@ imap <F12> <esc>gt
 map <F11> gT
 map <F12> gt
 set complete=ls
+set nextpattern=s*下一页|下一张|下一篇|下页|后页s*,^bnextb,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b
+set previouspattern=s*上一页|上一张|上一篇|上页|前页s*,^bprev|previousb,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$
 set runtimepath=/home/roylez/.vimperator
 set titlestring=火狐浏览器
 set wildoptions=auto
