@@ -135,7 +135,7 @@ NetHack*map*white:              white
 !! RXVT-unicode setting
 !!=============================================================================
 !urxvt setting
-URxvt*geometry:		85x30
+URxvt.geometry:		85x30
 
 URxvt.scrollBar:	False
 URxvt.scrollstyle:	next
