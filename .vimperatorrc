@@ -1,0 +1,13 @@
+"2.0 (created: 2009/03/29 00:04:47)
+imap <F11> <esc>gT
+imap <F12> <esc>gt
+map <F11> gT
+map <F12> gt
+set complete=ls
+set runtimepath=/home/roylez/.vimperator
+set titlestring=火狐浏览器
+set wildoptions=auto
+
+source! ~/.vimperatorrc.local
+
+" vim: set ft=vimperator:
