@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Wed Jun 03 15:10:13 2009 EST
+"Last Change: Sat Jun 13 12:09:51 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -12,8 +12,11 @@ set history=50		" keep 50 lines of command line history
 " keep record of editing information for cursor restore and more
 set viminfo='10,\"100,:20,%,n~/.viminfo 
 
-set incsearch		" do incremental searching
-set hlsearch
+" do incremental searching
+set incsearch hlsearch
+
+set ignorecase smartcase
+
 set showmatch		" show the matching brackets when typing
 
 set showcmd		" display incomplete commands
