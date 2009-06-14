@@ -1,0 +1,78 @@
+#---------------------------------------------
+# TINT2 CONFIG FILE
+#---------------------------------------------
+
+#---------------------------------------------
+# BACKGROUND AND BORDER
+#---------------------------------------------
+rounded = 7
+border_width = 2
+background_color = #000000 60
+border_color = #ffffff 18
+
+rounded = 5
+border_width = 0
+background_color = #ffffff 40
+border_color = #ffffff 50
+
+rounded = 5
+border_width = 0
+background_color = #ffffff 18
+border_color = #ffffff 70
+
+#---------------------------------------------
+# PANEL
+#---------------------------------------------
+panel_monitor = all
+panel_position = bottom center
+panel_size = 92% 30
+panel_margin = 0 0
+panel_padding = 7 0
+font_shadow = 0
+panel_background_id = 1
+
+#---------------------------------------------
+# TASKBAR
+#---------------------------------------------
+taskbar_mode = single_monitor
+taskbar_padding = 2 3 2
+taskbar_background_id = 0
+
+#---------------------------------------------
+# TASKS
+#---------------------------------------------
+task_icon = 1
+task_text = 1
+task_width = 0
+task_centered = 1
+task_padding = 6 3
+task_font = WenQuanYi Bitmap Song bold 9
+task_font_color = #ffffff 70
+task_active_font_color = #ffffff 85
+task_background_id = 3
+task_active_background_id = 2
+
+#---------------------------------------------
+# SYSTRAYBAR
+#---------------------------------------------
+systray_padding = 0 4 5
+systray_background_id = 0
+
+#---------------------------------------------
+# CLOCK
+#---------------------------------------------
+time1_format = %H:%M
+time1_font = Droid Sans 10
+time2_format = %A %d %B
+time2_font = Droid Sans 7
+clock_font_color = #ffffff 76
+clock_padding = 1 0
+clock_background_id = 0
+
+#---------------------------------------------
+# MOUSE ACTION ON TASK
+#---------------------------------------------
+mouse_middle = none
+mouse_right = close
+mouse_scroll_up = toggle
+mouse_scroll_down = iconify
