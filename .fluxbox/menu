@@ -58,6 +58,6 @@
 [endencoding]
 [submenu] (Exit)#</usr/share/icons/Tango/48x48/actions/gnome-logout.png>
     [exit] (Logout) 
-    [exec] (Reboot) {aplay ~/.fluxbox/fanqiejiayuan-close.wav;sudo reboot}
-    [exec] (Shutdown) {aplay ~/.fluxbox/fanqiejiayuan-close.wav;sudo halt}
+    [exec] (Reboot) {aplay ~/.sounds/fanqiejiayuan-close.wav;sudo reboot}
+    [exec] (Shutdown) {aplay ~/.sounds/fanqiejiayuan-close.wav;sudo halt}
 [end]

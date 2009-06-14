@@ -163,7 +163,7 @@ fi
 }
 
 alarm() { 
-    echo "msg ${argv[2,-1]}" | at now + $1 min
+    echo "msg ${argv[2,-1]} && aplay -q ~/.sounds/MACSound/System\ Notifi.wav" | at now + $1 min
 }
 #-----------------functions to set gnu screen title----------------------
 # active command as title in terminals
