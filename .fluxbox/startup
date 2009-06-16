@@ -58,7 +58,7 @@ sleep 1
     #autocutsel &
     aplay ~/.sounds/fanqiejiayuan-start.wav &
     fetchmail &
-    tint2 &
+    #tint2 &
     #launchy &
     #xterm -e screen &
     #urxvtc -e screen &

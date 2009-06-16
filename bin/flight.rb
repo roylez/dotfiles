@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Fri Apr 24 12:43:25 2009 EST
+#Last Change: Mon Jun 15 13:09:25 2009 EST
 #Description: 
 require 'net/http'
 require 'uri'
@@ -12,4 +12,4 @@ url = "http://www.digitaltravel.com.au/chinese/promotion.asp?sel=%A5%AC%A8%BD%B4
 page = Net::HTTP.get(URI.parse(url))
 #p page
 match = page.scan(/top>\s+<TD align=middle>(.*?)(<\/TD>\s+<TD align=middle>)(.*?)\2(.*?)\2(?:.*?)\2(.*?)\2(.*?)<\/TD>\s+<TD align=left>/m)
-match.each { |m| puts Iconv.iconv('utf8', 'big5', m.values_at(0,2..-1).join("\t  ") )}
+match.each { |m| puts Iconv.iconv('utf8//ignore', 'big5//ignore', m.values_at(0,2..-1).join("\t  ") )}
