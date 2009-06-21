@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Mon Jun 01 16:23:30 2009 EST
+#Last Change: Sat Jun 20 19:42:42 2009 EST
 #Description: 
 
 icon_path = File.join( ENV['HOME'], '.icons')
@@ -22,4 +22,4 @@ else
     text  = '参数无效'
 end
 text = %Q{<span size="14000" weight="bold">\n#{text}</span>}
-system %Q{notify-send -i #{icon} '#{title}' '#{text}'}
+system(%Q{notify-send -i #{icon} '#{title}' '#{text}'})

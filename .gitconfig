@@ -6,4 +6,4 @@
     branch = auto
     status = auto
 [push]
-	default = matching
+    default = matching
