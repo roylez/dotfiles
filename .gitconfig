@@ -1,6 +1,6 @@
 [user]
-    name  = Roy Zuo
-    email = roylzuo@gmail.com, z.le@uq.edu.au
+    name  = roylez
+    email = roylzuo@gmail.com
 [color]  # Ensure we get color
     diff   = auto
     branch = auto
