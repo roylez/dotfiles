@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Mon Jun 22 16:36:35 2009 EST
+"Last Change: Sat Jun 27 15:54:13 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -46,7 +46,7 @@ set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 
 set formatprg=fmt
-set formatoptions=tcqmM     " default tcq, mM to help wrap chinese
+set formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
 set backupdir=$HOME/.backup
@@ -225,7 +225,7 @@ au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufRead *.mkd  set formatoptions=tcroqn2 comments=n:> nu spell
+autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu spell
 
 "RestructuredText 
 autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
