@@ -18,6 +18,8 @@ hardstatus string "%{= R}[%{y}%l%{r}][ %{=b b}%-w%{=rb db}%>%n %t%{-}%+w%{-b}%< 
 termcapinfo xterm*|rxvt ti@:te@
 #dynamic title
 termcapinfo xterm* 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+#fix rxvt-unicode 256 color problem
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 # bind Shift+PgUp/PgDn(does not work...)
 #bindkey -m -k kN stuff ^D
 #bindkey -m -k kP stuff ^U

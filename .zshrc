@@ -20,11 +20,12 @@ zstyle ':completion:*' ignore-parents parent pwd directory
 zstyle ':completion:*' menu select=1
 #correction in completion
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match
+zstyle ':completion:*' completer _complete _match _user_expand
 zstyle ':completion:*:match:*' original only 
+zstyle ':completion:*' user-expand _pinyin
 zstyle ':completion:*:approximate:*' max-errors 1 numeric 
 ## case-insensitive (uppercase from lowercase) completion
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 ### case-insensitive (all) completion
 #zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 #kill completion
@@ -258,6 +259,9 @@ dumb-cd(){
 }
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+
+#拼音补全
+function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
 #c-z to continue as well
 bindkey -s "" "fg\n"

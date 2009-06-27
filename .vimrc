@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sat Jun 13 12:09:51 2009 EST
+"Last Change: Mon Jun 22 16:36:35 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -29,9 +29,11 @@ set number
 
 set matchtime=5		
 
-set guifont=Monospace\ 12
+set lazyredraw          " faster for macros
 
-set smartindent 
+set guifont=Monaco\ 10
+
+set smartindent autoindent
 set expandtab
 set shiftwidth=4
 set softtabstop=4 	" replace <tab> with 4 blank space.
@@ -56,15 +58,6 @@ set listchars=tab:>-,eol:<
 
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
-
-set background=dark
-"if has 256 colour, use a 256 colour theme
-if $TERM =~ '^xterm' || $TERM =~ '^screen'
-    set t_Co=256
-    colorscheme inkroy
-else
-    colorscheme tango
-endif
 
 "dynamic cursor color for xterm
 if &term =~ "xterm"
@@ -92,6 +85,17 @@ let fortran_fold=1
 set foldmethod=syntax
 "set foldcolumn=1
 set foldnestmax=1
+
+set background=dark
+"if has 256 colour, use a 256 colour theme
+if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
+    if !has("gui_running")
+        set t_Co=256
+    endif
+    colorscheme inkroy
+else
+    colorscheme tango
+endif
 
 "---------------------encoding detection--------------------------------
 "set encoding&		    " terminal charset: follows current locale
@@ -221,7 +225,7 @@ au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:> nu spell
+autocmd BufRead *.mkd  set formatoptions=tcroqn2 comments=n:> nu spell
 
 "RestructuredText 
 autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
