@@ -1,10 +1,6 @@
 #!/bin/zsh
 
-# completion
-#
-# Follow GNU LS_COLORS for completion menus
-zmodload -i zsh/complist
-
+#------------------------listing color----------------------------------
 if [[ "$TERM" == xterm* ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
@@ -12,6 +8,8 @@ else
     eval $(dircolors -b $HOME/.lscolor)
 fi
 
+#-------------------------completion system-----------------------------
+zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
 #ignore list in completion
@@ -48,11 +46,8 @@ zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
 autoload -Uz compinit
 compinit
 
-#remove / and . from WORDCHARS to allow alt-backspace to delete word
-local WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
-#autoload -U tetris
-
+#---------------------------options-------------------------------------
 setopt complete_aliases     #do not expand aliases _before_ completion has finished
 setopt auto_cd              # if not a command, try to cd to it.
 setopt auto_pushd            # automatically pushd directories on dirstack
@@ -75,9 +70,12 @@ setopt long_list_jobs       # show pid in bg job list
 setopt numeric_glob_sort    # when globbing numbered files, use real counting
 setopt inc_append_history   # append to history once executed
 
-# prompt
+#remove / and . from WORDCHARS to allow alt-backspace to delete word
+local WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+#---------------------------prompt--------------------------------------
 autoload -U promptinit zmv
 promptinit
+
 if [ "$SSH_TTY" = "" ]; then
     host="%B%F{magenta}%m%f%b"
 else
@@ -90,7 +88,7 @@ export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
 export RPROMPT="%F{magenta}%~%f"
 
-# history
+#---------------------------history-------------------------------------
 # number of lines kept in history
 export HISTSIZE=10000
 # number of lines saved in the history after logout
@@ -98,59 +96,59 @@ export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
+#---------------------------alias---------------------------------------
 # alias and listing colors
-if [ "$TERM" != "dumb" ]; then
-    #enable ls and grep color and sort by extension
-    #alias vi='vim'
-    export GREP_COLOR='31;1'
-    alias grep='grep -I --color=always'
-    alias egrep='egrep -I --color=always'
-    alias cal='cal -3m'
-    alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%y-%m-%d [35m%k:%M[33m][m"'
-    alias vi='vim'
-    alias ll='ls -l'
-    alias df='df -Th'
-    alias du='du -h'
-    #show directories size
-    alias dud='du -s *(/)'
-    #alias which='alias | /usr/bin/which --read-alias'
-    alias pyprof='python -m cProfile'
-    alias history='history 1'       #zsh specific
-    #alias mplayer='mplayer -cache 512'
-    alias zhcon='zhcon --utf8'
-    alias vless="/usr/share/vim/macros/less.sh"
-    del() {mv -vif -- $* ~/.Trash}
-    alias m='mutt'
-    alias port='netstat -ntlp'      #opening ports
-    alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
-    alias tree="tree --dirsfirst"
-    alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-    #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-    alias tt="vim +'set spell' ~/doc/TODO.otl"
-    alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
-    #alias rtm="twitter d rtm"
-    alias rtorrent="screen rtorrent"
-    alias pal="pal --color"
-    if [ '$HOSTNAME' != 'lychee' ]; then
-        for i in showq qstat qdel qnodes showstart; do 
-            alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
-        done
-        function qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
-    fi
-    if [ -x /usr/bin/grc ]; then
-        alias cl="/usr/bin/grc -es --colour=auto"
-        for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
-            alias $i="cl $i"
-        done
-    fi
-    alias -g A="|awk"
-    alias -g E="|sed"
-    alias -g G="|grep"
-    alias -g L="|less"
-    alias -g S="|sort"
-    alias -g X="|xargs"
-    alias -g C="|wc"
+#alias vi='vim'
+export GREP_COLOR='31;1'
+alias grep='grep -I --color=always'
+alias egrep='egrep -I --color=always'
+alias cal='cal -3m'
+alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%y-%m-%d [35m%k:%M[33m][m"'
+alias vi='vim'
+alias ll='ls -l'
+alias df='df -Th'
+alias du='du -h'
+#show directories size
+alias dud='du -s *(/)'
+#alias which='alias | /usr/bin/which --read-alias'
+alias pyprof='python -m cProfile'
+alias ri='ri -f ansi'
+alias history='history 1'       #zsh specific
+#alias mplayer='mplayer -cache 512'
+alias zhcon='zhcon --utf8'
+alias vless="/usr/share/vim/macros/less.sh"
+del() {mv -vif -- $* ~/.Trash}
+alias m='mutt'
+alias port='netstat -ntlp'      #opening ports
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+alias tree="tree --dirsfirst"
+alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
+#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias tt="vim +'set spell' ~/doc/TODO.otl"
+alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
+#alias rtm="twitter d rtm"
+alias rtorrent="screen rtorrent"
+alias pal="pal --color"
+if [ '$HOSTNAME' != 'lychee' ]; then
+    for i in showq qstat qdel qnodes showstart; do 
+        alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
+    done
+    function qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
 fi
+if [ -x /usr/bin/grc ]; then
+    alias cl="/usr/bin/grc -es --colour=auto"
+    for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
+        alias $i="cl $i"
+    done
+fi
+alias -g A="|awk"
+alias -g E="|sed"
+alias -g G="|grep"
+alias -g L="|less"
+alias -g S="|sort"
+alias -g X="|xargs"
+alias -g C="|wc"
+
 #-----------------user defined functions--------------------------------
 #show 256 color tab
 256tab() {
@@ -242,6 +240,7 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
+
 bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
 
@@ -265,7 +264,8 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
 #c-z to continue as well
 bindkey -s "" "fg\n"
-#----------------------exports-----------------------------------------
+
+#----------------------variables---------------------------------------
 export PATH=$PATH:$HOME/bin:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim
 export VISUAL=vim
