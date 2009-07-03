@@ -121,7 +121,7 @@ del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
 alias port='netstat -ntlp'      #opening ports
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
-alias tree="tree --dirsfirst"
+#alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias tt="vim +'set spell' ~/doc/TODO.otl"
@@ -142,12 +142,14 @@ if [ -x /usr/bin/grc ]; then
     done
 fi
 alias -g A="|awk"
+alias -g C="|wc"
 alias -g E="|sed"
 alias -g G="|grep"
+alias -g H="|head"
 alias -g L="|less"
 alias -g S="|sort"
+alias -g T="|tail"
 alias -g X="|xargs"
-alias -g C="|wc"
 
 #-----------------user defined functions--------------------------------
 #show 256 color tab
@@ -264,7 +266,13 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
 #c-z to continue as well
 bindkey -s "" "fg\n"
-
+#----------------------distro specific stuff---------------------------
+if `cat /etc/issue |grep Arch >/dev/null`; then
+    function command_not_found_handler() {
+        echo "Man, you really need some coffee. \nA clear-headed man would not type things like \"$1\"."|cowsay -f small -W 50
+        return 0
+    }
+fi
 #----------------------variables---------------------------------------
 export PATH=$PATH:$HOME/bin:$HOME/.gem/ruby/1.8/bin
 export EDITOR=vim

@@ -5,5 +5,17 @@
     diff   = auto
     branch = auto
     status = auto
+    grep   = auto
 [push]
     default = matching
+[alias]
+	c  = commit
+	a  = add
+	pu = push
+	pl = pull
+	co = checkout
+	l  = log
+	m  = merge
+	b  = branch
+	s  = status
+	d  = diff
