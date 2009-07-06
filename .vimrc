@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sat Jun 27 15:54:13 2009 EST
+"Last Change: Sun Jul 05 16:05:29 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -212,8 +212,8 @@ autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail 
             \|:silent set spell
-            \|:silent 0put=''
-            \|:silent 0put=''
+            "\|:silent 0put=''
+            "\|:silent 0put=''
             \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
             "\|:silent %s/^\s*>\s*--\_.\{-\}\_^\s*\_$//ge
             \|:silent 1

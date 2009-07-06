@@ -103,7 +103,7 @@ export GREP_COLOR='31;1'
 alias grep='grep -I --color=always'
 alias egrep='egrep -I --color=always'
 alias cal='cal -3m'
-alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%y-%m-%d [35m%k:%M[33m][m"'
+alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
 alias vi='vim'
 alias ll='ls -l'
 alias df='df -Th'
@@ -124,10 +124,10 @@ alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-alias tt="vim +'set spell' ~/doc/TODO.otl"
+#alias tt="vim +'set spell' ~/doc/TODO.otl"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
 #alias rtm="twitter d rtm"
-alias rtorrent="screen rtorrent"
+#alias rtorrent="screen rtorrent"
 alias pal="pal --color"
 if [ '$HOSTNAME' != 'lychee' ]; then
     for i in showq qstat qdel qnodes showstart; do 
