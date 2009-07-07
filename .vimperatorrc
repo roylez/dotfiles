@@ -13,8 +13,14 @@ set previouspattern=s*上一页|上一张|上一篇|上页|前页s*,^bprev|previ
 set runtimepath=/home/roylez/.vimperator
 set titlestring=火狐浏览器
 set wildoptions=auto
+style! -name statusbar chrome://* <<EOF
+#status-bar statusbarpanel { padding: 0 1px !important; }
+statusbarpanel > * { margin: 0 !important; padding: 0 !important; }
+EOF
 vmap <F11> gT
 vmap <F12> gt
+colorscheme ot_sweets
+let g:hintsio="io"
 source! /home/roylez/.vimperatorrc.local
 
 " vim: set ft=vimperator:

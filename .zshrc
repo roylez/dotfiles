@@ -269,7 +269,7 @@ bindkey -s "" "fg\n"
 #----------------------distro specific stuff---------------------------
 if `cat /etc/issue |grep Arch >/dev/null`; then
     function command_not_found_handler() {
-        echo "Man, you really need some coffee. \nA clear-headed man would not type things like \"$1\"."|cowsay -f small -W 50
+        echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
         return 0
     }
 fi

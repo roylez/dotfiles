@@ -1,7 +1,7 @@
 " ==Vimperator_Color_Scheme==
 " name: Sweets
 " ==Sweets_Color_Scheme==
-hi Hint			font-family: monospace; font-size: 15px; font-weight: normal; color: lightyellow; background-color: black; border-color: ButtonShadow; border-width: 0px; border-style: solid; padding: 0px 5px;
+hi Hint			font-family: monospace; font-size: 13px; font-weight: normal; color: lightyellow; background-color: black; border-color: ButtonShadow; border-width: 0px; border-style: solid; padding: 0px 5px;
 
 hi HintElem		background-color: pink;		color: black;
 hi HintActive		background-color: hotpink;	color: white;
