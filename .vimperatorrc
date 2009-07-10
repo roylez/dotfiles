@@ -6,7 +6,7 @@ map <F11> gT
 map <F12> gt
 nmap <F11> gT
 nmap <F12> gt
-set complete=ls
+set complete=sl
 set "editor=xterm -e vim -c ':colorscheme inkroy' -f"
 set nextpattern=s*下一页|下一张|下一篇|下页|后页s*,^bnextb,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b
 set previouspattern=s*上一页|上一张|上一篇|上页|前页s*,^bprev|previousb,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$

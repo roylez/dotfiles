@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Fri May 15 10:48:19 2009 EST
+#Last Change: Fri Jul 10 11:07:53 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -12,7 +12,7 @@ set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del
 set status_on_top
 
 #set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s" 
-set editor="vim" 
+set editor="vim"
 
 #set smtp agent
 set sendmail="~/bin/filtersend"

@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sun Jul 05 16:05:29 2009 EST
+"Last Change: Thu Jul 09 12:39:55 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
