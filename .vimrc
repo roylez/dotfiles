@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Thu Jul 09 12:39:55 2009 EST
+"Last Change: Sun Jul 12 14:15:02 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -25,7 +25,7 @@ set laststatus=2        " always display a nicer status bar
 set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
 set wildmenu		" show possible command when pressing <TAB>
 set notitle             " do not set xterm dynamic title
-set number
+"set number
 
 set matchtime=5		
 
@@ -83,7 +83,6 @@ syntax on
 set foldenable
 let fortran_fold=1
 set foldmethod=syntax
-"set foldcolumn=1
 set foldnestmax=1
 
 set background=dark
@@ -178,10 +177,11 @@ set tags=tags;
 autocmd BufNewFile *.py 
             \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\" 
             \|call AutoHead()
-"\|4put=\"#import sys\<nl>#reload(sys)\<nl>#sys.setdefaultencoding('utf8')\"|$
+autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\" |call AutoHead()
+autocmd FileType ruby set omnifunc=rubycomplete#Complete
 "au FileType ruby set omnifunc=rubycomplete#Complete
 
 "C/C++

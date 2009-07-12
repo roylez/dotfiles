@@ -8,45 +8,6 @@ else
     eval $(dircolors -b $HOME/.lscolor)
 fi
 
-#-------------------------completion system-----------------------------
-zmodload -i zsh/complist
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
-#ignore list in completion
-zstyle ':completion:*' ignore-parents parent pwd directory
-#menu selection in completion
-zstyle ':completion:*' menu select=1
-#correction in completion
-#zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match _user_expand
-zstyle ':completion:*:match:*' original only 
-zstyle ':completion:*' user-expand _pinyin
-zstyle ':completion:*:approximate:*' max-errors 1 numeric 
-## case-insensitive (uppercase from lowercase) completion
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
-### case-insensitive (all) completion
-#zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-#kill completion
-zstyle ':completion:*:*:kill:*' menu yes select
-zstyle ':completion:*:*:*:*:processes' force-list always
-zstyle ':completion:*:processes' command 'ps -au$USER' 
-#use cache to speed up pacman completion
-zstyle ':completion::complete:*' use-cache on
-#zstyle ':completion::complete:*' cache-path .zcache 
-#group matches and descriptions
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m' 
-zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m' 
-
-#autoload -U compinit
-autoload -Uz compinit
-compinit
-
-
 #---------------------------options-------------------------------------
 setopt complete_aliases     #do not expand aliases _before_ completion has finished
 setopt auto_cd              # if not a command, try to cd to it.
@@ -72,10 +33,47 @@ setopt inc_append_history   # append to history once executed
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 local WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
-#---------------------------prompt--------------------------------------
-autoload -U promptinit zmv
-promptinit
+#-------------------------completion system-----------------------------
+zmodload -i zsh/complist
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
+#ignore list in completion
+zstyle ':completion:*' ignore-parents parent pwd directory
+#menu selection in completion
+zstyle ':completion:*' menu select=1
+#zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' completer _complete _match _user_expand
+zstyle ':completion:*:match:*' original only 
+zstyle ':completion:*' user-expand _pinyin
+zstyle ':completion:*:approximate:*' max-errors 1 numeric 
+## case-insensitive (uppercase from lowercase) completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
+### case-insensitive (all) completion
+#zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+#kill completion
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:*:*:processes' force-list always
+zstyle ':completion:*:processes' command 'ps -au$USER' 
+#use cache to speed up pacman completion
+zstyle ':completion::complete:*' use-cache on
+#zstyle ':completion::complete:*' cache-path .zcache 
+#group matches and descriptions
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m' 
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found :( --\e[0m' 
+zstyle ':completion:*:corrections' format $'\e[0;31m -- %d (errors: %e) --\e[0m'
 
+#autoload -U compinit
+autoload -Uz compinit
+compinit
+
+#---------------------------prompt--------------------------------------
+#autoload -U promptinit zmv
+#promptinit
 if [ "$SSH_TTY" = "" ]; then
     host="%B%F{magenta}%m%f%b"
 else
@@ -88,6 +86,9 @@ export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
 export RPROMPT="%F{magenta}%~%f"
 
+# SPROMPT - the spelling prompt
+export SPROMPT="zsh: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+
 #---------------------------history-------------------------------------
 # number of lines kept in history
 export HISTSIZE=10000
@@ -98,7 +99,6 @@ export HISTFILE=$HOME/.zsh_history
 
 #---------------------------alias---------------------------------------
 # alias and listing colors
-#alias vi='vim'
 export GREP_COLOR='31;1'
 alias grep='grep -I --color=always'
 alias egrep='egrep -I --color=always'
@@ -108,6 +108,7 @@ alias vi='vim'
 alias ll='ls -l'
 alias df='df -Th'
 alias du='du -h'
+alias mkdir='nocorrect mkdir'
 #show directories size
 alias dud='du -s *(/)'
 #alias which='alias | /usr/bin/which --read-alias'
@@ -212,7 +213,6 @@ function preexec {
         title $cmd[1]:t "$TERM $cmd[2,-1]"
     fi 
 }
-#fi 
 
 #-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
@@ -272,7 +272,7 @@ if `cat /etc/issue |grep Arch >/dev/null`; then
         echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
         if grep Arch /etc/issue >/dev/null; then
             echo 
-            pacfile /$1$|awk '{split($1,a,"/");print a[1] "/\033[31m" a[2] "\033[m\t\t/" $2}'
+            pacfile /bin/$1$|awk '{split($1,a,"/");print a[1] "/\033[31m" a[2] "\033[m\t\t\t/" $2}'
         fi
         return 0
     }
@@ -291,13 +291,15 @@ export LESS_TERMCAP_se=$'\E[m'
 export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
 export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
+export LESSCHARSET=utf-8
 #export LESSOPEN="|lesspipe.sh %s"       #lesspipe
 
 #for ConTeX
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex
 
-#for gnuplot
-export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
+#for gnuplot, avoid locate!!!
+#export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
+[[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
 
 #for intel fortran compiler
 #source $HOME/soft/intel/ifort/bin/ifortvars.sh
