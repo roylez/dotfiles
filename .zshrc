@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 #------------------------listing color----------------------------------
-if [[ "$TERM" == xterm* ]] || [[ "$TERM" = screen ]]; then
+if [[ "$TERM" == *256color ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
 else
@@ -32,7 +32,10 @@ setopt numeric_glob_sort    # when globbing numbered files, use real counting
 setopt inc_append_history   # append to history once executed
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
-local WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+
+#replace the default beep with a message
+ZBEEP="\e[?5h\e[?5l"
 #-------------------------completion system-----------------------------
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -75,13 +78,13 @@ compinit
 #autoload -U promptinit zmv
 #promptinit
 if [ "$SSH_TTY" = "" ]; then
-    host="%B%F{magenta}%m%f%b"
+    local host="%B%F{magenta}%m%f%b"
 else
-    host="%B%F{red}%m%f%b"
+    local host="%B%F{red}%m%f%b"
 fi
-user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
-symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
-job="%1(j,%F{red}:%F{blue}%j,)%f%b"
+local user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
+local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
+local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
 export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
 export RPROMPT="%F{magenta}%~%f"
@@ -127,15 +130,17 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias tt="vim +'set spell' ~/doc/TODO.otl"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
+alias gfw="ssh -CNfg -D 7777 -l roy lychee"
 #alias rtm="twitter d rtm"
 #alias rtorrent="screen rtorrent"
-alias pal="pal --color"
 if [ "$HOSTNAME" != 'lychee' ]; then
     for i in showq qstat qdel qnodes showstart; do 
         alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
     done
     function qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
 fi
+[ -x /usr/bin/pal ] && alias pal="pal -r 0-7 --color"
+[ -x /usr/bin/cdf ] && alias df="cdf -h"
 if [ -x /usr/bin/grc ]; then
     alias cl="/usr/bin/grc -es --colour=auto"
     for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do

@@ -49,7 +49,7 @@ Mod1 e None a       :ExecCommand arandr
 Mod1 e None y       :ExecCommand lyx
 Mod1 e None k       :ExecCommand skype
 
-Mod1 e Control h    :ExecCommand sudo halt
+Mod1 e Control h    :ExecCommand sudo poweroff
 Mod1 e Control r    :ExecCommand sudo reboot
 Mod1 e Control a    :ExecCommand xrandr --output VGA-0 --mode 1280x1024 --output LVDS --off && nitrogen --restore
 #Mod1 e None j       :ExecCommand java -jar ${HOME}/soft/jap.jar &

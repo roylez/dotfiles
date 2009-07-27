@@ -19,3 +19,5 @@
 	b  = branch
 	s  = status
 	d  = diff
+[merge]
+	tool = vimdiff
