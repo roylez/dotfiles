@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Fri Jul 10 11:07:53 2009 EST
+#Last Change: Sat Aug 01 18:55:21 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -114,7 +114,7 @@ set sort_aux=last-date-received
 set ascii_chars=no
 
 # 当你按 "t" 或者 "D" 之类的标记操作时，是否自动把光标移动到下一封信件。
-set resolve=yes
+set resolve=no
 # 地址簿
 source ~/.mutt.alias
 # 当你在 index 里按 "a" 为来信者取别名时，使用哪一个别名文件保存这个别名。
@@ -132,7 +132,7 @@ set locale='utf-8'
 #charset-hook ^gb2312$ utf-8                                        
 #set strict_mime=no  #這個要設成no, assumed_charset才會有用
 set assumed_charset="gb2312:utf-8:big5"
-set send_charset="utf-8:us-ascii:iso-8859-1:big5:gb2312:x-unknown"
+set send_charset="utf-8:us-ascii:iso-8859-1:big5:gb2312"
 #use rfc2047 standard instead of rfc2231, solve the chinese attachment name issue
 set rfc2047_parameters=yes
 
@@ -312,7 +312,7 @@ color signature cyan default
 
 color index green default ~p                 # To me
 color index blue default ~P                # From me 
-color index brightwhite default ~N          # New
+color index brightyellow default ~N          # New
 color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
 color index magenta default ~D              # Deleted
