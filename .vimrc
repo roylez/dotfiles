@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sun Jul 12 14:15:02 2009 EST
+"Last Change: Fri Aug 14 16:24:02 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -52,6 +52,8 @@ set backup
 set backupdir=$HOME/.backup
 
 set commentstring=#%s       " default comment style
+
+set magic
 
 " 输入:set list命令是应该显示些啥？
 set listchars=tab:>-,eol:<

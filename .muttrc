@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Sat Aug 01 18:55:21 2009 EST
+#Last Change: Mon Aug 10 17:13:01 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -185,6 +185,8 @@ bind    index   \cb     previous-page
 bind    index   ,g      group-reply
 bind    pager   j       next-line
 bind    pager   k       previous-line
+bind    pager   <Up>    previous-line
+bind    pager   <Down>  next-line
 bind    pager   gg      top
 bind    pager   G       bottom
 
