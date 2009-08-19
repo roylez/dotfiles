@@ -35,7 +35,7 @@ setopt inc_append_history   # append to history once executed
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
 #replace the default beep with a message
-ZBEEP="\e[?5h\e[?5l"
+ZBEEP="\e[?5h\e[?5l"        # visual beep
 #-------------------------completion system-----------------------------
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -65,10 +65,10 @@ zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m' 
-zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found :( --\e[0m' 
-zstyle ':completion:*:corrections' format $'\e[0;31m -- %d (errors: %e) --\e[0m'
+zstyle ':completion:*:descriptions' format $'\e[33m == \e[1;46;33m %d \e[m\e[33m ==\e[m' 
+zstyle ':completion:*:messages' format $'\e[33m == \e[1;33m%d\e[0;33m ==\e[m'
+zstyle ':completion:*:warnings' format $'\e[33m == \e[1;31mNo Matches Found\e[0;33m ==\e[m' 
+zstyle ':completion:*:corrections' format $'\e[33m == \e[1;31m%d (errors: %e)\e[0;33m ==\e[m'
 
 #autoload -U compinit
 autoload -Uz compinit

@@ -34,6 +34,7 @@ None Print          :ExecCommand import ~/down/shot`date +%Y%m%d%H%M`.png && not
 Mod1 F2             :ExecCommand gmrun
 Mod1 s              :ExecCommand ${HOME}/bin/shotNpaste.py
 Mod1 k              :ExecCommand xterm -e /usr/share/vim/macros/less.sh $HOME/.fluxbox/keys
+Mod1 t              :If {Matches (Layer=Top)} {SetLayer Normal} {SetLayer Top}
 Mod1 r              :MacroCmd {ExecCommand echo 'Reconfiguring ...'| osd_cat -d 2 -p bottom -A center -s 1 -c cyan -f "-*-lucidabright-demibold-i-*-*-25-*-*-*-*-*-*-*" &} {Reconfigure}
 Mod1 m              :MacroCmd {ExecCommand echo 'Regenerating menu ...'| osd_cat -d 2 -p bottom -A center -s 1 -c cyan -f "-*-lucidabright-demibold-i-*-*-25-*-*-*-*-*-*-*" &} {ExecCommand /usr/bin/xdg_menu --format fluxbox  --root-menu /etc/xdg/menus/arch-applications.menu >~/.fluxbox/my-menu} 
 
