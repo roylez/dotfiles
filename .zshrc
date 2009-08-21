@@ -66,9 +66,9 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 zstyle ':completion:*:descriptions' format $'\e[33m == \e[1;46;33m %d \e[m\e[33m ==\e[m' 
-zstyle ':completion:*:messages' format $'\e[33m == \e[1;33m%d\e[0;33m ==\e[m'
-zstyle ':completion:*:warnings' format $'\e[33m == \e[1;31mNo Matches Found\e[0;33m ==\e[m' 
-zstyle ':completion:*:corrections' format $'\e[33m == \e[1;31m%d (errors: %e)\e[0;33m ==\e[m'
+zstyle ':completion:*:messages' format $'\e[33m == \e[1;46;33m %d \e[m\e[0;33m ==\e[m'
+zstyle ':completion:*:warnings' format $'\e[33m == \e[1;47;31m No Matches Found \e[m\e[0;33m ==\e[m' 
+zstyle ':completion:*:corrections' format $'\e[33m == \e[1;47;31m %d (errors: %e) \e[m\e[0;33m ==\e[m'
 
 #autoload -U compinit
 autoload -Uz compinit
@@ -90,7 +90,7 @@ export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 export RPROMPT="%F{magenta}%~%f"
 
 # SPROMPT - the spelling prompt
-export SPROMPT="zsh: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([Y]es/[N]o/[E]dit/[A]bort) "
+export SPROMPT="zsh: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
 #---------------------------history-------------------------------------
 # number of lines kept in history
@@ -238,6 +238,15 @@ key[Right]=${terminfo[kcuf1]}
 key[PageUp]=${terminfo[kpp]}
 key[PageDown]=${terminfo[knp]}
 
+for k in ${(k)key} ; do
+    # $terminfo[] entries are weird in ncurses application mode...
+    [[ ${key[$k]} == $'\eO'* ]] && key[$k]=${key[$k]/O/[}
+done
+unset k
+
+#if zkbd definition exists, use defined keys instead
+[[ -f ~/.zkbd/${TERM}-${DISPLAY:-$VENDOR-$OSTYPE} ]] && source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+
 # setup key accordingly
 [[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
 [[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
@@ -297,6 +306,8 @@ export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
 export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
+[ -x /usr/bin/src-hilite-lesspipe.sh ] && export LESSOPEN="| src-hilite-lesspipe.sh %s"
+
 #export LESSOPEN="|lesspipe.sh %s"       #lesspipe
 
 #for ConTeX

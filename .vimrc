@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Fri Aug 14 16:24:02 2009 EST
+"Last Change: Thu Aug 20 12:33:34 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -198,10 +198,10 @@ autocmd FileType c setlocal cindent
 "autocmd BufRead,BufNewFile *.txt set filetype=txt 
 "autocmd BufRead *.txt setlocal spell spelllang=en_gb
 
-"Tex
+"Tex ''spelllang=en_gb 
 "let g:tex_flavor="context"
 autocmd FileType tex,plaintex,context
-            \setlocal spell spelllang=en_gb 
+            \|silent set spell
             \|nmap <buffer> <F8> gwap	
 
 " shell script
