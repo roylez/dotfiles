@@ -1,4 +1,5 @@
-Xcursor.theme:          ComixCursors-Blue-Regular
+!Xcursor.theme:          ComixCursors-Blue-Regular
+Xcursor.theme:          Obsidian
 
 *background: #121212
 *foreground: #F6F6F6
@@ -198,7 +199,7 @@ xterm*borderLess: true
 xterm*colorUL: yellow
 xterm*colorBD: green
 xterm*cursorBlink: true
-!xterm*cursorColor: green
+xterm*cursorColor: green
 !xterm*cursorColor: OliveDrab1
 !xterm*cursorColor: RoyalBlue1
 !XTerm*cursorColor:DarkSeaGreen3

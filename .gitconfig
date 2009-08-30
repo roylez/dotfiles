@@ -9,15 +9,16 @@
 [push]
     default = matching
 [alias]
-	c  = commit
 	a  = add
-	pu = push
-	pl = pull
+	b  = branch
+	c  = commit
 	co = checkout
+	d  = diff
 	l  = log
 	m  = merge
-	b  = branch
+	pl = pull
+	pu = push
 	s  = status
-	d  = diff
+	t  = tag
 [merge]
-	tool = vimdiff
+	tool = gvimdiff

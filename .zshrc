@@ -116,6 +116,7 @@ alias mkdir='nocorrect mkdir'
 alias dud='du -s *(/)'
 #alias which='alias | /usr/bin/which --read-alias'
 alias pyprof='python -m cProfile'
+alias python='nice python'
 alias ri='ri -f ansi'
 alias history='history 1'       #zsh specific
 #alias mplayer='mplayer -cache 512'
@@ -127,7 +128,7 @@ alias port='netstat -ntlp'      #opening ports
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias tt="vim +'set spell' ~/doc/TODO.otl"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
 alias gfw="ssh -CNfg -D 7777 -l roy lychee &>/dev/null &"
@@ -137,7 +138,7 @@ if [ "$HOSTNAME" != 'lychee' ]; then
     for i in showq qstat qdel qnodes showstart; do 
         alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
     done
-    function qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
+    qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
 fi
 [ -x /usr/bin/pal ] && alias pal="pal -r 0-7 --color"
 [ -x /usr/bin/cdf ] && alias df="cdf -h"
@@ -227,25 +228,25 @@ autoload -U zkbd
 bindkey -e      #use emacs style keybindings :(
 typeset -A key  #define an array
 
-key[Home]=${terminfo[khome]}
-key[End]=${terminfo[kend]}
-key[Insert]=${terminfo[kich1]}
-key[Delete]=${terminfo[kdch1]}
-key[Up]=${terminfo[kcuu1]}
-key[Down]=${terminfo[kcud1]}
-key[Left]=${terminfo[kcub1]}
-key[Right]=${terminfo[kcuf1]}
-key[PageUp]=${terminfo[kpp]}
-key[PageDown]=${terminfo[knp]}
-
-for k in ${(k)key} ; do
-    # $terminfo[] entries are weird in ncurses application mode...
-    [[ ${key[$k]} == $'\eO'* ]] && key[$k]=${key[$k]/O/[}
-done
-unset k
-
 #if zkbd definition exists, use defined keys instead
-[[ -f ~/.zkbd/${TERM}-${DISPLAY:-$VENDOR-$OSTYPE} ]] && source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+if [[ -f ~/.zkbd/${TERM}-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then
+    source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+else
+    key[Home]=${terminfo[khome]}
+    key[End]=${terminfo[kend]}
+    key[Insert]=${terminfo[kich1]}
+    key[Delete]=${terminfo[kdch1]}
+    key[Up]=${terminfo[kcuu1]}
+    key[Down]=${terminfo[kcud1]}
+    key[Left]=${terminfo[kcub1]}
+    key[Right]=${terminfo[kcuf1]}
+    key[PageUp]=${terminfo[kpp]}
+    key[PageDown]=${terminfo[knp]}
+    for k in ${(k)key} ; do
+        # $terminfo[] entries are weird in ncurses application mode...
+        [[ ${key[$k]} == $'\eO'* ]] && key[$k]=${key[$k]/O/[}
+    done
+fi
 
 # setup key accordingly
 [[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
@@ -307,8 +308,6 @@ export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
 [ -x /usr/bin/src-hilite-lesspipe.sh ] && export LESSOPEN="| src-hilite-lesspipe.sh %s"
-
-#export LESSOPEN="|lesspipe.sh %s"       #lesspipe
 
 #for ConTeX
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex

@@ -70,3 +70,6 @@ MoveMode: None h    :MoveLeft 2
 MoveMode: None k    :MoveUp 2
 MoveMode: None j    :MoveDown 2
 MoveMode: None l    :MoveRight 2
+
+Control XF86Forward      :ExecCommand amixer set Master 2dB+
+Control XF86Back         :ExecCommand amixer set Master 2dB-

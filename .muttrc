@@ -1,6 +1,6 @@
 # Order to display the headers in
-#Author: Roy L Zuo (roylzuo at gmail dot come)
-#Last Change: Mon Aug 10 17:13:01 2009 EST
+#Author: Roy L Zuo (roylzuo at gmail dot com)
+#Last Change: Tue Aug 25 17:11:18 2009 EST
 #Description: mutt main configuration file
 
 ignore *
