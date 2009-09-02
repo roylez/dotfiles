@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Thu Aug 20 12:33:34 2009 EST
+"Last Change: Sun Aug 30 22:10:27 2009 EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -93,7 +93,7 @@ if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme inkroy
+    colorscheme inkpot
 else
     colorscheme tango
 endif

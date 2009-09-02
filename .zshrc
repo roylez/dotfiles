@@ -1,6 +1,8 @@
 #!/bin/zsh
 
 #------------------------listing color----------------------------------
+autoload colors 
+[[ $terminfo[colors] -ge 8 ]] && colors
 if [[ "$TERM" == *256color ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
@@ -102,6 +104,16 @@ export HISTFILE=$HOME/.zsh_history
 
 #---------------------------alias---------------------------------------
 # alias and listing colors
+alias -g A="|awk"
+alias -g C="|wc"
+alias -g E="|sed"
+alias -g G="|grep"
+alias -g H="|head"
+alias -g L="|less"
+alias -g S="|sort"
+alias -g T="|tail"
+alias -g X="|xargs"
+
 export GREP_COLOR='31;1'
 alias grep='grep -I --color=always'
 alias egrep='egrep -I --color=always'
@@ -148,16 +160,9 @@ if [ -x /usr/bin/grc ]; then
         alias $i="cl $i"
     done
 fi
-alias -g A="|awk"
-alias -g C="|wc"
-alias -g E="|sed"
-alias -g G="|grep"
-alias -g H="|head"
-alias -g L="|less"
-alias -g S="|sort"
-alias -g T="|tail"
-alias -g X="|xargs"
 
+alias tnethack='telnet nethack.alt.org'
+alias tslashem='telnet slashem.crash-override.net'
 #-----------------user defined functions--------------------------------
 #show 256 color tab
 256tab() {

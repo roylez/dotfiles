@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Tue Aug 25 17:11:18 2009 EST
+#Last Change: Mon Aug 31 10:06:46 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -42,7 +42,7 @@ mailboxes ! =inbox
 set quit=yes
 #move mail from spool to mailbox when quiting ?
 set move=no
-set beep_new
+set beep_new=yes
 #do not resume postponed mail
 set recall=no
 
@@ -114,7 +114,7 @@ set sort_aux=last-date-received
 set ascii_chars=no
 
 # 当你按 "t" 或者 "D" 之类的标记操作时，是否自动把光标移动到下一封信件。
-set resolve=no
+set resolve=yes
 # 地址簿
 source ~/.mutt.alias
 # 当你在 index 里按 "a" 为来信者取别名时，使用哪一个别名文件保存这个别名。
