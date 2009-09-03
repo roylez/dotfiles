@@ -92,7 +92,7 @@ export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
 export RPROMPT="%F{magenta}%~%f"
 
 # SPROMPT - the spelling prompt
-export SPROMPT="zsh: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
+export SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
 #---------------------------history-------------------------------------
 # number of lines kept in history
@@ -203,6 +203,8 @@ esac
 #set screen title if not connected remotely
 #if [ "$STY" != "" ]; then
 function precmd {
+    #urgent notification trigger
+    echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
     title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1...:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
     echo -ne '\033[?17;0;127c'

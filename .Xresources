@@ -171,6 +171,8 @@ URxvt.saveLines:	1500
 URxvt*cutchars:         `"()'*<>[]{|}
 !this makes urxvt to start faster??
 URxvt.preeditType:	Root
+!urgent notification
+URxvt.urgentOnBell:     True
 
 !URxvt.keysym.M-v:       command:paste
 URxvt.keysym.Delete:       \033[3~

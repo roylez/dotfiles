@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Mon Jun 01 16:01:20 2009 EST
+#Last Change: Thu Sep 03 12:01:31 2009 EST
 #Description: 
 require "rubygems"
 require "mechanize"
 
-host = "http://petaimg.com"
+#host = "http://petaimg.com"
+host = 'http://kimag.es'
 
 if __file__=$0
     img = ARGV[0]
@@ -22,4 +23,9 @@ if __file__=$0
         #puts newpage.body
         puts newpage.links[5].href
     end
+        page = agent.get(host)
+        form = page.forms[0]
+        form.file_upload('userfile1').file_name=img
+        newpage = form.submit form.buttons[0]
+        puts newpage.links[6].href
 end

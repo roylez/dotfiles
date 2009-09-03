@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Mon Aug 31 10:06:46 2009 EST
+#Last Change: Thu Sep 03 10:35:28 2009 EST
 #Description: mutt main configuration file
 
 ignore *
@@ -42,7 +42,9 @@ mailboxes ! =inbox
 set quit=yes
 #move mail from spool to mailbox when quiting ?
 set move=no
+#urgent notification trigger
 set beep_new=yes
+set check_new=yes
 #do not resume postponed mail
 set recall=no
 
