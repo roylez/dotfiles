@@ -1,9 +1,10 @@
 -- vim: ft=lua fdm=marker
+-- Last Changed: Sat 05 Sep 2009 08:36:34 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
 require("naughty")          -- Notification library
-require("wicked")           -- Widget library
+require("vicious")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -170,17 +171,56 @@ myseparator      = widget({ type = "textbox", name = "myseparator", align = "rig
 myspacer.text    = " "
 myseparator.text = '<span color="' .. beautiful.bg_focus .. '">|</span>'
 
-mycpuicon        = widget({ type = "imagebox", name = "mycpuicon", align = "right" })
+-- {{{ CPU 
+mycpuicon     = widget({ type = "imagebox", name = "mycpuicon", align     = "right" })
+cpuwidget     = widget({ type = 'textbox', name  = 'cpuwidget', align     = 'right' })
+thermalwidget = widget({ type = "textbox", name  = "thermalwidget", align = 'right' })
 mycpuicon.image  = image(beautiful.widget_cpu)
-cpuwidget        = widget({ type = 'textbox', name = 'cpuwidget', align='right' })
-wicked.register(cpuwidget, wicked.widgets.cpu,'$1%')
+vicious.register(thermalwidget, vicious.widgets.thermal, "$1°C", 60, nil, "THM0")
+vicious.register(cpuwidget, vicious.widgets.cpu, '$1%')
+-- }}}
 
+-- {{{ Memory
 mymemicon       = widget({ type = 'imagebox', name = 'mymemicon', align = 'right'})
 mymemicon.image = image(beautiful.widget_mem)
 memwidget       = widget({ type = 'textbox', name = 'memwidget',align = 'right'})
-wicked.register(memwidget, wicked.widgets.mem, '$2M')
+vicious.register(memwidget, vicious.widgets.mem, '$2M')
+-- }}}
 
---wicked.register(cpuwidget, wicked.widgets.cpu, ' <span color="white">CPU:</span> $1%')
+-- {{{ Battery
+batteryicon  = widget({ type = 'imagebox', name = 'batteryicon', align = 'right'})
+batterywidget = widget({ type = 'textbox', name  = 'batterywidget',align = 'right'})
+batteryicon.image = image(beautiful.widget_bat)
+vicious.register(batterywidget, vicious.widgets.bat, "$1$2%", 60, nil, "BAT0")
+--
+-- }}}
+
+-- {{{ Net
+downicon  = widget({ type = 'imagebox', name = 'downicon', align = 'right'})
+upicon    = widget({ type = 'imagebox', name = 'upicon', align   = 'right'})
+netwidget = widget({ type = 'textbox', name  = 'netwidget',align = 'right'})
+downicon.image = image(beautiful.widget_net)
+upicon.image   = image(beautiful.widget_netup)
+function net(format)
+    args = vicious.widgets.net(format)
+    newtab = {}
+    --newtab['{down_kb}'] = string.format('%5.1f', args['{eth0 down_kb}'] + args['{eth1 down_kb}'])
+    newtab['{down_kb}'] = args['{eth0 down_kb}'] + args['{eth1 down_kb}']
+    newtab['{up_kb}'] = args['{eth0 up_kb}'] + args['{eth1 up_kb}']
+    return newtab
+end
+vicious.register(netwidget, net, '<span color="'.. beautiful.fg_netdn_widget ..'">${down_kb}</span> <span color="' .. beautiful.fg_netup_widget ..'">${up_kb}</span>', 2)
+-- }}}
+
+-- {{{ Mail
+
+mailicon   = widget({ type = 'imagebox', name = 'mailicon', align  = 'right'})
+mailwidget = widget({ type = 'textbox', name  = 'mailwidget',align = 'right'})
+mailicon.image = image(beautiful.widget_mail)
+vicious.register(mailwidget, vicious.widgets.mdir, '$1', 30, nil, '~/.mail/inbox')
+
+-- }}}
+
 -- }}}
 
 -- {{{ Create status bar
@@ -211,8 +251,11 @@ for s = 1, screen.count() do
                            mylayoutbox[s],
                            mytasklist[s],
                            mypromptbox[s],
-                           mycpuicon, cpuwidget, myseparator, 
-                           mymemicon, memwidget, myseparator,
+                           mailicon   , mailwidget   , myseparator,
+                           mycpuicon  , cpuwidget    , myspacer   , thermalwidget, myseparator,
+                           mymemicon  , memwidget    , myseparator,
+                           batteryicon, batterywidget, myseparator,
+                           downicon   , netwidget    , upicon     , myseparator  ,
                            --show tray on last screen
                            s == screen.count() and mysystray or nil,
                            mydatebox,

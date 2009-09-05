@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Sun Aug 30 22:10:27 2009 EST
+"Last Change: Fri 04 Sep 2009 06:53:42 AM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -168,6 +168,8 @@ function! AutoHead()
     execute fl . ','. ll .'call NERDComment(0,"toggle")'
 endfunc
 nmap ,h :call AutoHead()<cr>
+
+let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
 
 "--------------------------file type settings---------------------------
 "tags

@@ -1,4 +1,5 @@
 #!/bin/zsh
+#Last Change: Fri 04 Sep 2009 10:28:49 AM EST
 
 #------------------------listing color----------------------------------
 autoload colors 
@@ -204,7 +205,7 @@ esac
 #if [ "$STY" != "" ]; then
 function precmd {
     #urgent notification trigger
-    echo -ne '\a'
+    #echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
     title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1...:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
     echo -ne '\033[?17;0;127c'
