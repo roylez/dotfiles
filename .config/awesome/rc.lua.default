@@ -1,10 +1,13 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Sat 05 Sep 2009 08:36:34 PM EST
+-- Last Changed: Thu 10 Sep 2009 04:29:01 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
 require("naughty")          -- Notification library
-require("vicious")
+require("vicious")          -- widgets
+
+--always display notification on the last screen
+naughty.config.screen           = screen.count()
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -19,10 +22,11 @@ theme_path = awful.util.getdir("config") .. "/themes/zenburn.lua"
 beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
-terminal   = "xterm"
-editor     = "vim"
-editor_cmd = terminal .. " -e " .. editor
-browser    = os.getenv("HOME") .. "/soft/firefox/firefox"
+terminal    = "xterm"
+editor      = "vim"
+editor_cmd  = terminal .. " -e " .. editor
+browser     = os.getenv("HOME") .. "/soft/firefox/firefox"
+dual_screen = "xrandr --output LVDS --mode 1024x768 --output VGA-0 --mode 1280x1024 --right-of LVDS"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -56,6 +60,8 @@ floatapps =
     ["MPlayer"] = true,
     ["pinentry"] = true,
     ["gimp"] = true,
+    ["PCManX"] = true,
+    ['rdesktop'] = true,
     -- by instance
     ["mocp"] = true
 }
@@ -305,6 +311,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey, }          , "Return", function () awful.util.spawn(terminal) end)   ,
     awful.key({ modkey, }          , "f"     , function () awful.util.spawn(browser) end)    ,
+    awful.key({ modkey, }          , "d"     , function () awful.util.spawn(dual_screen) end),
     awful.key({ modkey, "Control" }, "r"     , awesome.restart)                              ,
     awful.key({ modkey, "Shift"   }, "q"     , awesome.quit)                                 ,
     awful.key({ modkey, }          , "l"     , function () awful.tag.incmwfact( 0.05)    end),
@@ -336,7 +343,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey }, "t", awful.client.togglemarked),
+    awful.key({ modkey,           }, "t",      awful.client.togglemarked),
     awful.key({ modkey,}, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal

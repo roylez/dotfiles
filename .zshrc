@@ -1,10 +1,10 @@
 #!/bin/zsh
-#Last Change: Fri 04 Sep 2009 10:28:49 AM EST
+#Last Change: Mon 07 Sep 2009 08:55:46 AM EST
 
 #------------------------listing color----------------------------------
 autoload colors 
 [[ $terminfo[colors] -ge 8 ]] && colors
-if [[ "$TERM" == *256color ]] || [[ "$TERM" = screen ]]; then
+if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
 else
@@ -204,8 +204,8 @@ esac
 #set screen title if not connected remotely
 #if [ "$STY" != "" ]; then
 function precmd {
-    #urgent notification trigger
-    #echo -ne '\a'
+    #a bell, urgent notification trigger
+    echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
     title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1...:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
     echo -ne '\033[?17;0;127c'
