@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Thu 10 Sep 2009 04:29:01 PM EST
+-- Last Changed: Tue 15 Sep 2009 07:36:28 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -490,7 +490,12 @@ awful.hooks.manage.register(function (c, startup)
     -- awful.client.setslave(c)
 
     -- Honor size hints: if you want to drop the gaps between windows, set this to false.
-    -- c.size_hints_honor = false
+    c.size_hints_honor = false
+
+    -- Make sure float apps are in centre of the screen
+    awful.placement.centered(c, c.transient_for)
+    awful.placement.no_offscreen(c)
+
 end)
 
 -- Hook function to execute when arranging the screen.

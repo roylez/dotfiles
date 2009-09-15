@@ -1,5 +1,5 @@
 #!/bin/zsh
-#Last Change: Mon 07 Sep 2009 08:55:46 AM EST
+#Last Change: Tue 15 Sep 2009 07:27:36 PM EST
 
 #------------------------listing color----------------------------------
 autoload colors 
@@ -127,6 +127,8 @@ alias du='du -h'
 alias mkdir='nocorrect mkdir'
 #show directories size
 alias dud='du -s *(/)'
+#date for US and CN
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/Hong_Kong; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #alias which='alias | /usr/bin/which --read-alias'
 alias pyprof='python -m cProfile'
 alias python='nice python'
@@ -205,7 +207,7 @@ esac
 #if [ "$STY" != "" ]; then
 function precmd {
     #a bell, urgent notification trigger
-    echo -ne '\a'
+    #echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
     title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1...:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
     echo -ne '\033[?17;0;127c'
@@ -301,7 +303,7 @@ if `cat /etc/issue |grep Arch >/dev/null`; then
     }
 fi
 #----------------------variables---------------------------------------
-export PATH=$PATH:$HOME/bin:$HOME/.gem/ruby/1.8/bin
+export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export VISUAL=vim
 

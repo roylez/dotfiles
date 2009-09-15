@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Sat May 16 15:45:24 2009 EST
+#Last Change: Mon 14 Sep 2009 11:19:34 PM EST
 #Description: get exchange rate from yahoo
 require 'net/http'
 require 'uri'
 
-if __FILE__ == $0:
+if __FILE__ == $0
     if ARGV.length == 3
         f = ARGV[0].upcase
         t = ARGV[1].upcase

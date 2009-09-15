@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Mon Jul 27 20:07:28 2009 EST
+#Last Change: Mon 14 Sep 2009 03:16:55 PM EST
 #Description: 
+#
 require 'iconv'
-require 'rubygems'
+#require 'rubygems'
 require 'mechanize'
 agent = WWW::Mechanize.new
 agent.max_history = 1

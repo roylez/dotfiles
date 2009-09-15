@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+# coding: utf-8
 #
 require 'yaml'
 require 'net/http'
@@ -14,9 +14,9 @@ bookid = {'6507'=>'卡徒',
         '9782'=>'比蒙传奇',
         '10975'=>'天王',
         #'6530'=>'蔚蓝轨迹',
-        '10072'=>'斗罗大陆',
-        '14058'=>'九鼎记',
-        '14059'=>'阳神',
+        '17062'=>'斗罗大陆',
+        #'14058'=>'九鼎记',
+        #'14059'=>'阳神',
         '405'=>'超级骷髅兵'}
 
 def getLatestNovel(url)
@@ -50,6 +50,10 @@ if __FILE__==$0
     #f = File.open(dbfile,'r+')
     latest = (File.zero?(dbfile) ? {} : YAML.load_file(dbfile))
     alist.each_key do |key|
+        if alist[key].empty?  
+            next 
+        end
+
         if latest.key?( key )
             #屏幕输出更新
             oldi = alist[key].find_index {|x| x[0] == latest[key] }
@@ -59,7 +63,7 @@ if __FILE__==$0
                     puts "\t#{item[1]}"
                     puts "\t%s" % (url0 % [key.to_i/1000,key] + item[0]) 
                 }
-            elsif oldi == nil 
+            elsif oldi == nil and not alist[key].empty?
                 puts "\e[34;1m#{bookid[key]}\e[m has been updated!"
                 puts "\t#{alist[key][-1][1]}"
                 puts "\t%s" % (url0 % [key.to_i/1000,key] + alist[key][-1][0]) 

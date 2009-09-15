@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Fri 04 Sep 2009 06:53:42 AM EST
+"Last Change: Mon 14 Sep 2009 04:03:14 PM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -184,7 +184,7 @@ autocmd BufNewFile *.py
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
-autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\" |call AutoHead()
+autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
 "au FileType ruby set omnifunc=rubycomplete#Complete
 
