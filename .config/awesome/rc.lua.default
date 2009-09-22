@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Tue 15 Sep 2009 07:36:28 PM EST
+-- Last Changed: Tue 22 Sep 2009 09:36:45 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -62,8 +62,9 @@ floatapps =
     ["gimp"] = true,
     ["PCManX"] = true,
     ['rdesktop'] = true,
+    ['snes9x-gtk'] = true,
     -- by instance
-    ["mocp"] = true
+    ["mocp"] = true,
 }
 
 -- Applications to be moved to a pre-defined tag by class or instance.
@@ -223,7 +224,7 @@ vicious.register(netwidget, net, '<span color="'.. beautiful.fg_netdn_widget ..'
 mailicon   = widget({ type = 'imagebox', name = 'mailicon', align  = 'right'})
 mailwidget = widget({ type = 'textbox', name  = 'mailwidget',align = 'right'})
 mailicon.image = image(beautiful.widget_mail)
-vicious.register(mailwidget, vicious.widgets.mdir, '$1', 30, nil, '~/.mail/inbox')
+vicious.register(mailwidget, vicious.widgets.mdir, '<span color="'.. beautiful.fg_widget .. '">$1</span>', 30, nil, '~/.mail/inbox')
 
 -- }}}
 
@@ -250,18 +251,18 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
+    mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { mylauncher,
                            mytaglist[s],
                            mylayoutbox[s],
                            mytasklist[s],
                            mypromptbox[s],
+                           downicon   , netwidget    , upicon     , myseparator  ,
                            mailicon   , mailwidget   , myseparator,
                            mycpuicon  , cpuwidget    , myspacer   , thermalwidget, myseparator,
                            mymemicon  , memwidget    , myseparator,
                            batteryicon, batterywidget, myseparator,
-                           downicon   , netwidget    , upicon     , myseparator  ,
                            --show tray on last screen
                            s == screen.count() and mysystray or nil,
                            mydatebox,

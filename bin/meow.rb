@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+# coding: utf-8
 #
 require 'net/http'
 require 'uri'

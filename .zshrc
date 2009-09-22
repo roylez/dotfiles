@@ -1,5 +1,5 @@
 #!/bin/zsh
-#Last Change: Tue 15 Sep 2009 07:27:36 PM EST
+#Last Change: Mon 21 Sep 2009 07:50:54 AM EST
 
 #------------------------listing color----------------------------------
 autoload colors 
@@ -114,6 +114,7 @@ alias -g L="|less"
 alias -g S="|sort"
 alias -g T="|tail"
 alias -g X="|xargs"
+alias -g N="> /dev/null"
 
 export GREP_COLOR='31;1'
 alias grep='grep -I --color=always'

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Mon Jun 15 13:09:25 2009 EST
+#Last Change: Wed 16 Sep 2009 02:51:02 PM EST
 #Description: 
 require 'net/http'
 require 'uri'
