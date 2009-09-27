@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Tue 22 Sep 2009 09:36:45 PM EST
+-- Last Changed: Fri 25 Sep 2009 03:11:09 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -57,12 +57,13 @@ layouts =
 floatapps =
 {
     -- by class
-    ["MPlayer"] = true,
-    ["pinentry"] = true,
-    ["gimp"] = true,
-    ["PCManX"] = true,
-    ['rdesktop'] = true,
+    ["MPlayer"]    = true,
+    ["pinentry"]   = true,
+    ["gimp"]       = true,
+    ["PCManX"]     = true,
+    ['rdesktop']   = true,
     ['snes9x-gtk'] = true,
+    ['Download']   = true,
     -- by instance
     ["mocp"] = true,
 }
@@ -313,6 +314,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, }          , "Return", function () awful.util.spawn(terminal) end)   ,
     awful.key({ modkey, }          , "f"     , function () awful.util.spawn(browser) end)    ,
     awful.key({ modkey, }          , "d"     , function () awful.util.spawn(dual_screen) end),
+    awful.key({ modkey, }          , "s"     , function () awful.util.spawn(os.getenv('HOME') .. '/bin/shotNpaste.py') end),
     awful.key({ modkey, "Control" }, "r"     , awesome.restart)                              ,
     awful.key({ modkey, "Shift"   }, "q"     , awesome.quit)                                 ,
     awful.key({ modkey, }          , "l"     , function () awful.tag.incmwfact( 0.05)    end),

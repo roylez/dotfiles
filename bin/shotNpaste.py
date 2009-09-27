@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Sat Jun 06 12:55:34 2009 EST
+#Last Change: Wed 23 Sep 2009 07:51:02 PM EST
 #Description: 
-import os, time
+import os, time, shutil
 
 img = "/tmp/shot%s.png" %time.strftime("%Y%m%d%H%M")
 os.system("import %s" %img)
 #msg = os.popen("shag %s" %img).read().strip()
-msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()
+#msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()
+msg = 'http://dl.getdropbox.com/u/243979/screenshot/' + img.split('/')[-1]
+shutil.copy(img,
+        os.path.join(os.environ['HOME'],'remote/Dropbox/Public/screenshot',img.split('/')[-1]))
 print msg
 notifyargs = "notify-send -t 5000 -i ~/.icons/servants/png-1009.png"
 #os.system("echo '%s'|xclip -i -selection primary" %msg)

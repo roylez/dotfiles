@@ -1,0 +1,17 @@
+# Write your default config options here!
+fontconfig=0
+# vo=gl
+# vo=xv
+vo=xv,x11,gl2,sdl,ggi,fbdev,fbdev2
+unicode=yes
+ao=sdl:alsa
+subcp=cp936
+#font=/usr/share/fonts/TTF/uming.ttf
+font=subfont.ttf
+subfont-text-scale=3
+stop-xscreensaver=yes
+subfont-autoscale = 3
+vf=expand=0:60:0:0
+vf=screenshot
+#allow image zoom when fullscreen
+zoom=yes
