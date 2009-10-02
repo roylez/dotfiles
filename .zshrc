@@ -1,5 +1,5 @@
 #!/bin/zsh
-#Last Change: Mon 21 Sep 2009 07:50:54 AM EST
+#Last Change: Fri 02 Oct 2009 09:16:27 PM EST
 
 #------------------------listing color----------------------------------
 autoload colors 
@@ -33,12 +33,13 @@ setopt list_types           # show ls -F style marks in file completion
 setopt long_list_jobs       # show pid in bg job list
 setopt numeric_glob_sort    # when globbing numbered files, use real counting
 setopt inc_append_history   # append to history once executed
+setopt prompt_subst         # prompt more dynamic
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
 #replace the default beep with a message
-ZBEEP="\e[?5h\e[?5l"        # visual beep
+#ZBEEP="\e[?5h\e[?5l"        # visual beep
 #-------------------------completion system-----------------------------
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -77,24 +78,6 @@ zstyle ':completion:*:corrections' format $'\e[33m == \e[1;47;31m %d (errors: %e
 autoload -Uz compinit
 compinit
 
-#---------------------------prompt--------------------------------------
-#autoload -U promptinit zmv
-#promptinit
-if [ "$SSH_TTY" = "" ]; then
-    local host="%B%F{magenta}%m%f%b"
-else
-    local host="%B%F{red}%m%f%b"
-fi
-local user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
-local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
-local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
-export PROMPT=$user"%F{yellow}@%f"$host$job$symbol
-#export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
-export RPROMPT="%F{magenta}%~%f"
-
-# SPROMPT - the spelling prompt
-export SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
-
 #---------------------------history-------------------------------------
 # number of lines kept in history
 export HISTSIZE=10000
@@ -111,12 +94,22 @@ alias -g E="|sed"
 alias -g G="|grep"
 alias -g H="|head"
 alias -g L="|less"
+alias -g R="|tac"
 alias -g S="|sort"
 alias -g T="|tail"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 
+#file types
+[[ -x /usr/bin/apvlv ]] && alias -s pdf=apvlv
+alias -s ps=gv
+for i in jpg png;           alias -s $i=gqview
+for i in avi rmvb wmv;      alias -s $i=mplayer
+for i in rar zip 7z lzma;   alias -s $i="7z x"
+
 export GREP_COLOR='31;1'
+#no correct for mkdir mv and cp
+for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias grep='grep -I --color=always'
 alias egrep='egrep -I --color=always'
 alias cal='cal -3m'
@@ -125,7 +118,6 @@ alias vi='vim'
 alias ll='ls -l'
 alias df='df -Th'
 alias du='du -h'
-alias mkdir='nocorrect mkdir'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
@@ -147,7 +139,7 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias tt="vim +'set spell' ~/doc/TODO.otl"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
-alias gfw="ssh -CNfg -D 7777 -l roy lychee &>/dev/null &"
+alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
 #alias rtm="twitter d rtm"
 #alias rtorrent="screen rtorrent"
 if [ "$HOSTNAME" != 'lychee' ]; then
@@ -179,9 +171,17 @@ alias tslashem='telnet slashem.crash-override.net'
     done
 }
 
+#alarm using atd
 alarm() { 
     echo "msg ${argv[2,-1]} && aplay -q ~/.sounds/MACSound/System\ Notifi.wav" | at now + $1 min
 }
+
+#---change prompt pwd color when changing dir
+#change PWD color
+chpwd_color() { RPROMPT="%F{yellow}%~%f" }       
+#change back before next command
+pwd_color_prexec() { RPROMPT="%F{magenta}%~%f" }
+
 #-----------------functions to set gnu screen title----------------------
 # active command as title in terminals
 case $TERM in
@@ -206,7 +206,7 @@ esac
 
 #set screen title if not connected remotely
 #if [ "$STY" != "" ]; then
-function precmd {
+screen_precmd() {
     #a bell, urgent notification trigger
     #echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
@@ -214,7 +214,7 @@ function precmd {
     echo -ne '\033[?17;0;127c'
 }
 
-function preexec {
+screen_preexec() {
     emulate -L zsh
     local -a cmd; cmd=(${(z)1})
     if [[ $cmd[1]:t == "ssh" ]]; then
@@ -230,6 +230,33 @@ function preexec {
         title $cmd[1]:t "$TERM $cmd[2,-1]"
     fi 
 }
+#-----------------define magic function arrays--------------------------
+typeset -ga preexec_functions precmd_functions chpwd_functions
+
+precmd_functions+=screen_precmd
+
+preexec_functions+=screen_preexec
+preexec_functions+=pwd_color_prexec
+
+chpwd_functions+=chpwd_color
+
+#---------------------------prompt--------------------------------------
+#autoload -U promptinit zmv
+#promptinit
+if [ "$SSH_TTY" = "" ]; then
+    local host="%B%F{magenta}%m%f%b"
+else
+    local host="%B%F{red}%m%f%b"
+fi
+local user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
+local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
+local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
+PROMPT="$user%F{yellow}@%f$host$job$symbol"
+#export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
+RPROMPT="%F{magenta}%~%f"
+
+# SPROMPT - the spelling prompt
+SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
 #-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
@@ -318,6 +345,7 @@ export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
 export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
+export READNULLCMD=less
 [ -x /usr/bin/src-hilite-lesspipe.sh ] && export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
 #for ConTeX

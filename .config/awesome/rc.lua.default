@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Fri 25 Sep 2009 03:11:09 PM EST
+-- Last Changed: Sun 27 Sep 2009 09:10:49 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -85,7 +85,7 @@ use_titlebar = false
 -- Define tags table.
 tags = {}
 tags.settings = {
-    { name = "青龍",  layout = layouts[2]  },
+    { name = "青龍",  layout = layouts[2], mwfact = 0.6 },
     { name = "白虎",  layout = layouts[1]  },
     { name = "朱雀",  layout = layouts[1], mwfact = 0.7 },
     { name = "玄武",  layout = layouts[6]  },

@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Mon 14 Sep 2009 04:03:14 PM EST
+"Last Change: Thu 01 Oct 2009 12:20:45 PM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -14,7 +14,6 @@ set viminfo='10,\"100,:20,%,n~/.viminfo
 
 " do incremental searching
 set incsearch hlsearch
-
 set ignorecase smartcase
 
 set showmatch		" show the matching brackets when typing
@@ -128,15 +127,28 @@ inoremap <expr> <m-;> pumvisible() ?
             \"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 
             \\"\\<down>\" : \"\\<cr>\""
 "---------------------keyboard mappings---------------------------------
+set winaltkeys=no
+
 "ascii art escape sequence for /etc/motd, ssh banner and etc
 imap ,e   <C-V><C-[>[
+
+"move among windows
+"nmap h   <C-W>h
+"nmap i   <C-W>i
+"nmap j   <C-W>j
+"nmap k   <C-W>k
+
+"move in insert mode
+inoremap <m-h> <left>
+inoremap <m-l> <Right>
+inoremap <m-j> <C-o>gj
+inoremap <m-k> <C-o>gk
 
 " search for visual-mode selected text
 vmap / y/<C-R>"<CR>
 
 " taglist.vim
 nmap <F2>   :TlistToggle<CR>
-nmap <F4>   <C-W>w
 
 "Make and make test
 nmap <F5>   :w<CR>:make<CR>

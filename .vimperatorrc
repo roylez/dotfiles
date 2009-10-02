@@ -20,5 +20,9 @@ let g:hintsio="io"
 source! ~/.vimperatorrc.local
 map <silent> <leader>t :exe ":tinyurl "+getBrowser().contentWindow.location.href<CR>
 
+loadplugins
+set flashblock
+set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com
+nmap \w \fbwhitelist
 
 " vim: set ft=vimperator:
