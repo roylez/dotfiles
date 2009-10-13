@@ -1,7 +1,8 @@
 #!/bin/zsh
-#Last Change: Fri 02 Oct 2009 09:16:27 PM EST
+# vim:fdm=marker
+#Last Change: Tue 13 Oct 2009 11:54:53 AM EST
 
-#------------------------listing color----------------------------------
+#{{{------------------------listing color----------------------------------
 autoload colors 
 [[ $terminfo[colors] -ge 8 ]] && colors
 if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
@@ -10,8 +11,9 @@ if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
 else
     eval $(dircolors -b $HOME/.lscolor)
 fi
+#}}}
 
-#---------------------------options-------------------------------------
+#{{{---------------------------options-------------------------------------
 setopt complete_aliases     #do not expand aliases _before_ completion has finished
 setopt auto_cd              # if not a command, try to cd to it.
 setopt auto_pushd            # automatically pushd directories on dirstack
@@ -40,7 +42,9 @@ WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
 #replace the default beep with a message
 #ZBEEP="\e[?5h\e[?5l"        # visual beep
-#-------------------------completion system-----------------------------
+#}}}
+
+#{{{-------------------------completion system-----------------------------
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
@@ -78,7 +82,9 @@ zstyle ':completion:*:corrections' format $'\e[33m == \e[1;47;31m %d (errors: %e
 autoload -Uz compinit
 compinit
 
-#---------------------------history-------------------------------------
+#}}}
+
+#{{{---------------------------history-------------------------------------
 # number of lines kept in history
 export HISTSIZE=10000
 # number of lines saved in the history after logout
@@ -86,7 +92,9 @@ export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
-#---------------------------alias---------------------------------------
+#}}}
+
+#{{{---------------------------alias---------------------------------------
 # alias and listing colors
 alias -g A="|awk"
 alias -g C="|wc"
@@ -122,6 +130,8 @@ alias du='du -h'
 alias dud='du -s *(/)'
 #date for US and CN
 alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/Hong_Kong; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+#bloomberg radio
+alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 #alias which='alias | /usr/bin/which --read-alias'
 alias pyprof='python -m cProfile'
 alias python='nice python'
@@ -159,7 +169,10 @@ fi
 
 alias tnethack='telnet nethack.alt.org'
 alias tslashem='telnet slashem.crash-override.net'
-#-----------------user defined functions--------------------------------
+
+#}}}
+
+#{{{-----------------user defined functions--------------------------------
 #show 256 color tab
 256tab() {
     for k in `seq 0 1`;do 
@@ -176,13 +189,47 @@ alarm() {
     echo "msg ${argv[2,-1]} && aplay -q ~/.sounds/MACSound/System\ Notifi.wav" | at now + $1 min
 }
 
-#---change prompt pwd color when changing dir
+#{{{ functions to set prompt pwd color
+export __PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
-chpwd_color() { RPROMPT="%F{yellow}%~%f" }       
+pwd_color_chpwd() { export __PROMPT_PWD="%U%F{yellow}%~%f%u" }       
 #change back before next command
-pwd_color_prexec() { RPROMPT="%F{magenta}%~%f" }
+pwd_color_prexec() { export __PROMPT_PWD="%F{magenta}%~%f" }
 
-#-----------------functions to set gnu screen title----------------------
+get_prompt_pwd() { echo $__PROMPT_PWD }
+
+#}}}
+
+#{{{functions to display git branch in prompt
+
+#get git branch
+export __CURRENT_GIT_BRANCH=
+
+parse_git_branch() {
+    #do not track git repository sits in $HOME, which is my configurartion dir
+    if [ "$PWD" != "$HOME" ]; then
+        dir=$(git rev-parse --git-dir)
+        if [ "${dir:h}" != "$HOME" ]; then
+            git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+        fi
+    fi
+}
+
+git_branch_prexec() {
+    case "$(history $HISTCMD)" in 
+        *git*)
+        export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
+        ;;
+    esac
+}
+
+git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
+
+#this one is to be used in prompt
+get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{green}%B$__CURRENT_GIT_BRANCH%f%b %F{red}|%f " }
+#}}}
+
+#{{{-----------------functions to set gnu screen title----------------------
 # active command as title in terminals
 case $TERM in
     xterm*|rxvt*)
@@ -230,17 +277,26 @@ screen_preexec() {
         title $cmd[1]:t "$TERM $cmd[2,-1]"
     fi 
 }
-#-----------------define magic function arrays--------------------------
+
+#}}}
+
+#}}}
+
+#{{{-----------------define magic function arrays--------------------------
 typeset -ga preexec_functions precmd_functions chpwd_functions
 
 precmd_functions+=screen_precmd
 
 preexec_functions+=screen_preexec
 preexec_functions+=pwd_color_prexec
+preexec_functions+=git_branch_prexec
 
-chpwd_functions+=chpwd_color
+chpwd_functions+=pwd_color_chpwd
+chpwd_functions+=git_branch_chpwd
 
-#---------------------------prompt--------------------------------------
+#}}}
+
+#{{{---------------------------prompt--------------------------------------
 #autoload -U promptinit zmv
 #promptinit
 if [ "$SSH_TTY" = "" ]; then
@@ -253,12 +309,15 @@ local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
 local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
 PROMPT="$user%F{yellow}@%f$host$job$symbol"
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
-RPROMPT="%F{magenta}%~%f"
+#NOTE  **DO NOT** use double quote ", it does not work
+RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
 
 # SPROMPT - the spelling prompt
 SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
-#-----------------key bindings to fix keyboard---------------------------
+#}}}
+
+#{{{-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -299,7 +358,9 @@ fi
 bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
 
-#-----------------user defined widgets & binds-----------------------
+#}}}
+
+#{{{-----------------user defined widgets & binds-----------------------
 #from linuxtoy.org: 
 #   pressing TAB in an empty command makes a cd command with completion list
 dumb-cd(){
@@ -319,7 +380,10 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
 #c-z to continue as well
 bindkey -s "" "fg\n"
-#----------------------distro specific stuff---------------------------
+
+#}}}
+
+#{{{----------------------distro specific stuff---------------------------
 if `cat /etc/issue |grep Arch >/dev/null`; then
     function command_not_found_handler() {
         echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
@@ -330,7 +394,9 @@ if `cat /etc/issue |grep Arch >/dev/null`; then
         return 0
     }
 fi
-#----------------------variables---------------------------------------
+#}}}
+
+#{{{----------------------variables---------------------------------------
 export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export VISUAL=vim
@@ -360,3 +426,5 @@ export READNULLCMD=less
 
 #for slrn
 #export NNTPSERVER=news.newsfan.net 
+
+#}}}
