@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Tue 13 Oct 2009 11:54:53 AM EST
+#Last Change: Tue 13 Oct 2009 09:12:20 PM EST
 
 #{{{------------------------listing color----------------------------------
 autoload colors 
@@ -208,14 +208,14 @@ export __CURRENT_GIT_BRANCH=
 parse_git_branch() {
     #do not track git repository sits in $HOME, which is my configurartion dir
     if [ "$PWD" != "$HOME" ]; then
-        dir=$(git rev-parse --git-dir)
+        dir=$(git rev-parse --git-dir 2>/dev/null)
         if [ "${dir:h}" != "$HOME" ]; then
             git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
         fi
     fi
 }
 
-git_branch_prexec() {
+git_branch_precmd() {
     case "$(history $HISTCMD)" in 
         *git*)
         export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
@@ -226,7 +226,7 @@ git_branch_prexec() {
 git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
 
 #this one is to be used in prompt
-get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{green}%B$__CURRENT_GIT_BRANCH%f%b %F{red}|%f " }
+get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{cyan}%B$__CURRENT_GIT_BRANCH%f%b %F{red}|%f " }
 #}}}
 
 #{{{-----------------functions to set gnu screen title----------------------
@@ -286,10 +286,10 @@ screen_preexec() {
 typeset -ga preexec_functions precmd_functions chpwd_functions
 
 precmd_functions+=screen_precmd
+precmd_functions+=git_branch_precmd
 
 preexec_functions+=screen_preexec
 preexec_functions+=pwd_color_prexec
-preexec_functions+=git_branch_prexec
 
 chpwd_functions+=pwd_color_chpwd
 chpwd_functions+=git_branch_chpwd

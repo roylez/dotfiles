@@ -1,10 +1,6 @@
 Xcursor.theme:          ComixCursors-Blue-Regular
 !Xcursor.theme:          Obsidian
 
-*background: #121212
-*foreground: #F6F6F6
-*cursorColor: #ACEA5C
-
 !! husio colors
 !black text
 !*color0: #0d0d0d
@@ -102,6 +98,13 @@ Xcursor.theme:          ComixCursors-Blue-Regular
 !*color14:				#00FFFF
 !*color7:				#BBBBBB
 !*color15:				#FFFFFF
+
+!*foreground: #DDEEDD
+*foreground: #F6F6F6
+*background: #1C1C1C
+!*background: #121212
+*cursorColor: #ACEA5C
+
 !!=============================================================================
 !! 设置 Xftp.dpi(字体分辨率）
 !!=============================================================================
@@ -150,8 +153,6 @@ URxvt.scrollWithBuffer: True
 !set the artificial transparency of the v.t.
 URxvt.inheritPixmap:	True
 !URxvt.backgroundPixmap:     /home/roylez/pic/wallpaper/crest.xpm
-!URxvt.background:	black
-URxvt.foreground:	gray
 
 URxvt.tintColor:	#999
 URxvt.fadeColor:        honeydew3
@@ -195,8 +196,6 @@ xterm*geometry: 105x33
 xterm*scrollBar: false
 xterm*rightScrollBar: true
 xterm*loginshell: true
-!xterm*background: black
-xterm*foreground: grey
 xterm*borderLess: true
 xterm*colorUL: yellow
 xterm*colorBD: green

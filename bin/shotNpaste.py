@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Wed 23 Sep 2009 07:51:02 PM EST
 #Description: 
 import os, time, shutil
 
 img = "/tmp/shot%s.png" %time.strftime("%Y%m%d%H%M")
 os.system("import %s" %img)
+#os.system("scrot -s %s" %img)
 #msg = os.popen("shag %s" %img).read().strip()
 #msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()
 msg = 'http://dl.getdropbox.com/u/243979/screenshot/' + img.split('/')[-1]

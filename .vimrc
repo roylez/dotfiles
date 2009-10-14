@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Thu 01 Oct 2009 12:20:45 PM EST
+"Last Change: Tue 13 Oct 2009 10:54:10 AM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -23,6 +23,7 @@ set ruler		" show the cursor position all the time in statusline
 set laststatus=2        " always display a nicer status bar
 set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
 set wildmenu		" show possible command when pressing <TAB>
+set cmdheight=2
 set notitle             " do not set xterm dynamic title
 "set number
 
@@ -219,7 +220,7 @@ autocmd FileType tex,plaintex,context
             \|nmap <buffer> <F8> gwap	
 
 " shell script
-autocmd BufNewFile *.sh 0put='#!/bin/bash' |call AutoHead()
+autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
 
 "Gnuplot
 autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()

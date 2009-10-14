@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Sun 27 Sep 2009 09:10:49 PM EST
+-- Last Changed: Fri 09 Oct 2009 10:15:45 AM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -26,7 +26,7 @@ terminal    = "xterm"
 editor      = "vim"
 editor_cmd  = terminal .. " -e " .. editor
 browser     = os.getenv("HOME") .. "/soft/firefox/firefox"
-dual_screen = "xrandr --output LVDS --mode 1024x768 --output VGA-0 --mode 1280x1024 --right-of LVDS"
+dual_screen = "xrandr --output LVDS --mode 1024x768 --output VGA-0 --mode 1280x1024 --below LVDS"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -340,7 +340,7 @@ globalkeys = awful.util.table.join(
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey, "Control" }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
