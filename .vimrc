@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Tue 13 Oct 2009 10:54:10 AM EST
+"Last Change: Fri 16 Oct 2009 03:24:02 PM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -245,7 +245,7 @@ au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu spell
 
 "RestructuredText 
-autocmd BufRead *.rst  set ft=rest ai formatoptions=tcroqn2 nu spell
+autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
 
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab

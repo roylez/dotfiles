@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Tue 13 Oct 2009 09:12:20 PM EST
+#Last Change: Sat 24 Oct 2009 11:16:56 AM EST
 
 #{{{------------------------listing color----------------------------------
 autoload colors 
@@ -13,38 +13,44 @@ else
 fi
 #}}}
 
-#{{{---------------------------options-------------------------------------
-setopt complete_aliases     #do not expand aliases _before_ completion has finished
-setopt auto_cd              # if not a command, try to cd to it.
-setopt auto_pushd            # automatically pushd directories on dirstack
-setopt pushd_ignore_dups      # do not push dups on stack
-setopt pushd_silent          # be quiet about pushds and popds
-setopt brace_ccl            # expand alphabetic brace expressions
-#setopt chase_links          # ~/ln -> /; cd ln; pwd -> /
-setopt complete_in_word     # stays where it is and completion is done from both ends
-setopt correct              # spell check for commands only
-#setopt equals extended_glob # use extra globbing operators
-setopt hash_list_all        # search all paths before command completion
+# {{{---------------------------options-------------------------------------
+setopt complete_aliases         #do not expand aliases _before_ completion has finished
+setopt auto_cd                  # if not a command, try to cd to it.
+setopt auto_pushd               # automatically pushd directories on dirstack
+setopt auto_continue            #automatically send SIGCON to disowned jobs
+setopt pushd_ignore_dups        # do not push dups on stack
+setopt pushd_silent             # be quiet about pushds and popds
+setopt brace_ccl                # expand alphabetic brace expressions
+#setopt chase_links             # ~/ln -> /; cd ln; pwd -> /
+setopt complete_in_word         # stays where it is and completion is done from both ends
+setopt correct                  # spell check for commands only
+#setopt equals extended_glob    # use extra globbing operators
+setopt no_hist_beep             # don not beep on history expansion errors
+setopt hash_list_all            # search all paths before command completion
 setopt hist_ignore_all_dups     # when runing a command several times, only store one
-setopt hist_reduce_blanks   # reduce whitespace in history
-setopt share_history        # share history among sessions
-setopt hist_verify       # reload full command when runing from history
-setopt hist_expire_dups_first  #remove dups when max size reached
-setopt interactive_comments # why not?
-setopt list_types           # show ls -F style marks in file completion
-setopt long_list_jobs       # show pid in bg job list
-setopt numeric_glob_sort    # when globbing numbered files, use real counting
-setopt inc_append_history   # append to history once executed
-setopt prompt_subst         # prompt more dynamic
+setopt hist_reduce_blanks       # reduce whitespace in history
+setopt share_history            # share history among sessions
+setopt hist_verify              # reload full command when runing from history
+setopt hist_expire_dups_first   #remove dups when max size reached
+setopt interactive_comments     # comments in history
+setopt list_types               # show ls -F style marks in file completion
+setopt long_list_jobs           # show pid in bg job list
+setopt numeric_glob_sort        # when globbing numbered files, use real counting
+setopt inc_append_history       # append to history once executed
+setopt prompt_subst             # prompt more dynamic
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
+#report to me when people login/logout
+watch=(notme)
 #replace the default beep with a message
 #ZBEEP="\e[?5h\e[?5l"        # visual beep
-#}}}
 
-#{{{-------------------------completion system-----------------------------
+#is-at-least 4.3.0 && 
+# }}}
+
+# {{{-------------------------completion system-----------------------------
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
@@ -82,7 +88,7 @@ zstyle ':completion:*:corrections' format $'\e[33m == \e[1;47;31m %d (errors: %e
 autoload -Uz compinit
 compinit
 
-#}}}
+# }}}
 
 #{{{---------------------------history-------------------------------------
 # number of lines kept in history
@@ -172,7 +178,7 @@ alias tslashem='telnet slashem.crash-override.net'
 
 #}}}
 
-#{{{-----------------user defined functions--------------------------------
+# {{{-----------------user defined functions--------------------------------
 #show 256 color tab
 256tab() {
     for k in `seq 0 1`;do 
@@ -226,7 +232,7 @@ git_branch_precmd() {
 git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
 
 #this one is to be used in prompt
-get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{cyan}%B$__CURRENT_GIT_BRANCH%f%b %F{red}|%f " }
+get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{green}$__CURRENT_GIT_BRANCH%f %F{red}|%f " }
 #}}}
 
 #{{{-----------------functions to set gnu screen title----------------------
@@ -280,8 +286,6 @@ screen_preexec() {
 
 #}}}
 
-#}}}
-
 #{{{-----------------define magic function arrays--------------------------
 typeset -ga preexec_functions precmd_functions chpwd_functions
 
@@ -296,7 +300,9 @@ chpwd_functions+=git_branch_chpwd
 
 #}}}
 
-#{{{---------------------------prompt--------------------------------------
+# }}}
+
+# {{{---------------------------prompt--------------------------------------
 #autoload -U promptinit zmv
 #promptinit
 if [ "$SSH_TTY" = "" ]; then
@@ -309,15 +315,23 @@ local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
 local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
 PROMPT="$user%F{yellow}@%f$host$job$symbol"
 #export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
-#NOTE  **DO NOT** use double quote ", it does not work
+#NOTE  **DO NOT** use double quote , it does not work
 RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
 
 # SPROMPT - the spelling prompt
 SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
+#行编辑高亮模式 {{{
+zle_highlight=(region:bg=magenta
+               special:bold,fg=magenta
+               default:bold
+               isearch:underline
+               )
 #}}}
 
-#{{{-----------------key bindings to fix keyboard---------------------------
+# }}}
+
+# {{{-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -358,9 +372,9 @@ fi
 bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
 
-#}}}
+# }}}
 
-#{{{-----------------user defined widgets & binds-----------------------
+# {{{-----------------user defined widgets & binds-----------------------
 #from linuxtoy.org: 
 #   pressing TAB in an empty command makes a cd command with completion list
 dumb-cd(){
@@ -381,7 +395,7 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 #c-z to continue as well
 bindkey -s "" "fg\n"
 
-#}}}
+# }}}
 
 #{{{----------------------distro specific stuff---------------------------
 if `cat /etc/issue |grep Arch >/dev/null`; then
@@ -396,10 +410,11 @@ if `cat /etc/issue |grep Arch >/dev/null`; then
 fi
 #}}}
 
-#{{{----------------------variables---------------------------------------
+# {{{----------------------variables---------------------------------------
 export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export VISUAL=vim
+export SUDO_PROMPT='[[31;5msudo[m] password for [33;1m%p[m: '
 
 #MOST like colored man pages
 export LESS_TERMCAP_md=$'\E[1;31m'      #bold1
@@ -427,4 +442,10 @@ export READNULLCMD=less
 #for slrn
 #export NNTPSERVER=news.newsfan.net 
 
-#}}}
+#ruby, damned ruby 1.9 path bug
+if [[ $(hostname) == Lancelot ]]; then
+    export GEM_HOME=/usr/lib/ruby/1.9.1/rubygems
+    export GEM_PATH=$GEM_HOME:$HOME/.gem/ruby/1.9.1
+fi
+
+# }}}

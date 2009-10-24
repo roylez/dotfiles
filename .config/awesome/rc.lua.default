@@ -1,5 +1,5 @@
 -- vim: ft=lua fdm=marker
--- Last Changed: Fri 09 Oct 2009 10:15:45 AM EST
+-- Last Changed: Wed 21 Oct 2009 01:30:31 PM EST
 
 require("awful")            -- Standard awesome library
 require("beautiful")        -- Theme handling library
@@ -64,6 +64,7 @@ floatapps =
     ['rdesktop']   = true,
     ['snes9x-gtk'] = true,
     ['Download']   = true,
+    ['feh']        = true,
     -- by instance
     ["mocp"] = true,
 }

@@ -94,7 +94,11 @@ if __name__== '__main__':
     if not os.path.exists(dir):
         sys.exit(0)
 
-    list = os.listdir(dir)
+    #get around permission denied problem
+    try:
+        list = os.listdir(dir)
+    except:
+        list = []
 
     if name in list or _name in list :
         sys.exit(0)
