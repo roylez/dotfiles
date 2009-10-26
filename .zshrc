@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Sat 24 Oct 2009 11:16:56 AM EST
+#Last Change: Mon 26 Oct 2009 08:01:39 AM EST
 
 #{{{------------------------listing color----------------------------------
 autoload colors 
@@ -135,7 +135,7 @@ alias du='du -h'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/Hong_Kong; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/Hong_Kong Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 #alias which='alias | /usr/bin/which --read-alias'

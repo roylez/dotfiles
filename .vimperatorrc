@@ -22,7 +22,7 @@ map <silent> <leader>t :exe ":tinyurl "+getBrowser().contentWindow.location.href
 
 loadplugins
 set flashblock
-set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com
+set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com
 nmap \w \fbwhitelist
 
 " vim: set ft=vimperator:
