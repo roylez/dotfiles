@@ -1,16 +1,26 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Mon 26 Oct 2009 08:01:39 AM EST
+#Last Change: Fri Oct 30 20:10:44 2009 EST
+
+# 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
+if [[  "$-" != *i* ]]; then return 0; fi
+#}}}
 
 #{{{------------------------listing color----------------------------------
-autoload colors 
-[[ $terminfo[colors] -ge 8 ]] && colors
 if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
 else
     eval $(dircolors -b $HOME/.lscolor)
 fi
+
+#color defined for prompts and etc
+autoload colors zsh/terminfo
+autoload -U promptinit
+promptinit
+#[[ $terminfo[colors] -ge 8 ]] && colors
+pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
+for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
 #}}}
 
 # {{{---------------------------options-------------------------------------
@@ -59,9 +69,9 @@ zstyle ':completion:*' ignore-parents parent pwd directory
 #menu selection in completion
 zstyle ':completion:*' menu select=1
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match _user_expand
+zstyle ':completion:*' completer _complete _match #_user_expand
 zstyle ':completion:*:match:*' original only 
-zstyle ':completion:*' user-expand _pinyin
+#zstyle ':completion:*' user-expand _pinyin
 zstyle ':completion:*:approximate:*' max-errors 1 numeric 
 ## case-insensitive (uppercase from lowercase) completion
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
@@ -127,6 +137,7 @@ for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias grep='grep -I --color=always'
 alias egrep='egrep -I --color=always'
 alias cal='cal -3m'
+alias freeze='kill -STOP'
 alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
 alias vi='vim'
 alias ll='ls -l'
@@ -135,7 +146,7 @@ alias du='du -h'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/Hong_Kong Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 #alias which='alias | /usr/bin/which --read-alias'
@@ -196,11 +207,11 @@ alarm() {
 }
 
 #{{{ functions to set prompt pwd color
-export __PROMPT_PWD="%F{magenta}%~%f"
+export __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { export __PROMPT_PWD="%U%F{yellow}%~%f%u" }       
+pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_yellow%~$pR" }       
 #change back before next command
-pwd_color_prexec() { export __PROMPT_PWD="%F{magenta}%~%f" }
+pwd_color_prexec() { export __PROMPT_PWD="$pfg_magenta%~$pR" }
 
 get_prompt_pwd() { echo $__PROMPT_PWD }
 
@@ -232,7 +243,11 @@ git_branch_precmd() {
 git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
 
 #this one is to be used in prompt
-get_prompt_git() { [ ! -z $__CURRENT_GIT_BRANCH ] && echo "%F{green}$__CURRENT_GIT_BRANCH%f %F{red}|%f " }
+get_prompt_git() { 
+    if [ ! -z $__CURRENT_GIT_BRANCH ]; then
+        echo "%{$fg[green]%}$__CURRENT_GIT_BRANCH %{$fg[red]%}|%{$reset_color%} " 
+    fi
+}
 #}}}
 
 #{{{-----------------functions to set gnu screen title----------------------
@@ -287,16 +302,29 @@ screen_preexec() {
 #}}}
 
 #{{{-----------------define magic function arrays--------------------------
-typeset -ga preexec_functions precmd_functions chpwd_functions
+#typeset -ga preexec_functions precmd_functions chpwd_functions
+#precmd_functions+=screen_precmd
+#precmd_functions+=git_branch_precmd
+#preexec_functions+=screen_preexec
+#preexec_functions+=pwd_color_prexec
+#chpwd_functions+=pwd_color_chpwd
+#chpwd_functions+=git_branch_chpwd
 
-precmd_functions+=screen_precmd
-precmd_functions+=git_branch_precmd
+#the following solution should work on older version <4.3 of zsh. CentOS stinks.
+precmd() {
+    screen_precmd 
+    git_branch_precmd
+}
 
-preexec_functions+=screen_preexec
-preexec_functions+=pwd_color_prexec
+preexec() {
+    screen_preexec
+    pwd_color_prexec
+}
 
-chpwd_functions+=pwd_color_chpwd
-chpwd_functions+=git_branch_chpwd
+chpwd() {
+    pwd_color_chpwd
+    git_branch_chpwd
+}
 
 #}}}
 
@@ -306,33 +334,36 @@ chpwd_functions+=git_branch_chpwd
 #autoload -U promptinit zmv
 #promptinit
 if [ "$SSH_TTY" = "" ]; then
-    local host="%B%F{magenta}%m%f%b"
+    local host="$pB$pfg_magenta%m$pR"
 else
-    local host="%B%F{red}%m%f%b"
+    local host="$pB$pfg_red%m$pR"
 fi
-local user="%B%(!:%F{red}:%F{green})%n%f%b"       #different color for privileged sessions
-local symbol="%B%(!:%F{red}# :%F{yellow}> )%f%b"
-local job="%1(j,%F{red}:%F{blue}%j,)%f%b"
-PROMPT="$user%F{yellow}@%f$host$job$symbol"
-#export RPROMPT="%{$fg_no_bold[${1:-magenta}]%}%~%{$reset_color%}"
+local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       #different color for privileged sessions
+local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
+local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
+PROMPT="$user$pfg_yellow@$pR$host$job$symbol"
+PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
 RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
 
 # SPROMPT - the spelling prompt
-SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
+SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
 
 #行编辑高亮模式 {{{
-zle_highlight=(region:bg=magenta
-               special:bold,fg=magenta
-               default:bold
-               isearch:underline
-               )
+if [[ $ZSH_VERSION = 4.3.* ]]; then
+    zle_highlight=(region:bg=magenta
+                   special:bold,fg=magenta
+                   default:bold
+                   isearch:underline
+                   )
+fi
 #}}}
 
 # }}}
 
 # {{{-----------------key bindings to fix keyboard---------------------------
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
+# 设置键盘 {{{
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
 autoload -U zkbd
@@ -369,8 +400,14 @@ fi
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
 
+# }}}
+
+# 键绑定  {{{ 
 bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
+bindkey '[1;5D' backward-word     # C-left
+bindkey '[1;5C' forward-word      # C-right
+# }}}
 
 # }}}
 
@@ -417,6 +454,7 @@ export VISUAL=vim
 export SUDO_PROMPT='[[31;5msudo[m] password for [33;1m%p[m: '
 
 #MOST like colored man pages
+export PAGER=less
 export LESS_TERMCAP_md=$'\E[1;31m'      #bold1
 export LESS_TERMCAP_mb=$'\E[1;31m'
 export LESS_TERMCAP_me=$'\E[m'
@@ -442,10 +480,6 @@ export READNULLCMD=less
 #for slrn
 #export NNTPSERVER=news.newsfan.net 
 
-#ruby, damned ruby 1.9 path bug
-if [[ $(hostname) == Lancelot ]]; then
-    export GEM_HOME=/usr/lib/ruby/1.9.1/rubygems
-    export GEM_PATH=$GEM_HOME:$HOME/.gem/ruby/1.9.1
-fi
-
+# source host specific config
+[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 # }}}

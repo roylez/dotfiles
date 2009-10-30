@@ -1,5 +1,4 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Last Change: Fri 16 Oct 2009 03:24:02 PM EST
 "Description: vim runtime configure file 
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
@@ -13,7 +12,7 @@ set history=50		" keep 50 lines of command line history
 set viminfo='10,\"100,:20,%,n~/.viminfo 
 
 " do incremental searching
-set incsearch hlsearch
+set incsearch hlsearch wrapscan
 set ignorecase smartcase
 
 set showmatch		" show the matching brackets when typing
@@ -93,7 +92,9 @@ if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme inkpot
+    "colorscheme inkpot
+    "colorscheme leo
+    colorscheme molokai
 else
     colorscheme tango
 endif
@@ -198,8 +199,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
-autocmd FileType ruby set omnifunc=rubycomplete#Complete
-"au FileType ruby set omnifunc=rubycomplete#Complete
+"autocmd FileType ruby set omnifunc=rubycomplete#Complete
 
 "C/C++
 autocmd FileType cpp setlocal nofoldenable

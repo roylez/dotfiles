@@ -40,7 +40,16 @@ theme.border_marked = "#91231c"
 -- {{{ Titlebars
 theme.titlebar_bg_focus  = "#3F3F3F"
 theme.titlebar_bg_normal = "#3F3F3F"
--- theme.titlebar_[normal|focus]
+-- }}}
+
+-- There are other variable sets
+-- overriding the default one when
+-- defined, the sets are:
+-- [taglist|tasklist]_[bg|fg]_[focus|urgent]
+-- titlebar_[normal|focus]
+-- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
+-- Example:
+--theme.taglist_bg_focus = "#CC9393"
 -- }}}
 
 -- {{{ Widgets
