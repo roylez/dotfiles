@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Fri Oct 30 20:10:44 2009 EST
+#Last Change: Fri 30 Oct 2009 08:23:35 PM EST
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
 if [[  "$-" != *i* ]]; then return 0; fi
@@ -15,10 +15,10 @@ else
 fi
 
 #color defined for prompts and etc
-autoload colors zsh/terminfo
+autoload colors
 autoload -U promptinit
 promptinit
-#[[ $terminfo[colors] -ge 8 ]] && colors
+[[ $terminfo[colors] -ge 8 ]] && colors
 pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
 #}}}
@@ -311,17 +311,17 @@ screen_preexec() {
 #chpwd_functions+=git_branch_chpwd
 
 #the following solution should work on older version <4.3 of zsh. CentOS stinks.
-precmd() {
+function precmd() {
     screen_precmd 
     git_branch_precmd
 }
 
-preexec() {
+function preexec() {
     screen_preexec
     pwd_color_prexec
 }
 
-chpwd() {
+function chpwd() {
     pwd_color_chpwd
     git_branch_chpwd
 }
