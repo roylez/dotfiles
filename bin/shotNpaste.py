@@ -5,7 +5,8 @@
 import os, time, shutil
 
 img = "/tmp/shot%s.png" %time.strftime("%Y%m%d%H%M")
-os.system("import %s" %img)
+os.system("import %s && sh ~/bin/p-b破报纸边缘效果.sh %s %s" \
+        %(img, img, img))
 #os.system("scrot -s %s" %img)
 #msg = os.popen("shag %s" %img).read().strip()
 #msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()

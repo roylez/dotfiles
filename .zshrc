@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Fri 30 Oct 2009 08:23:35 PM EST
+#Last Change: Fri 30 Oct 2009 10:50:54 PM EST
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
 if [[  "$-" != *i* ]]; then return 0; fi
@@ -302,29 +302,35 @@ screen_preexec() {
 #}}}
 
 #{{{-----------------define magic function arrays--------------------------
-#typeset -ga preexec_functions precmd_functions chpwd_functions
-#precmd_functions+=screen_precmd
-#precmd_functions+=git_branch_precmd
-#preexec_functions+=screen_preexec
-#preexec_functions+=pwd_color_prexec
-#chpwd_functions+=pwd_color_chpwd
-#chpwd_functions+=git_branch_chpwd
+if [[ $ZSH_VERSION = 4.2.* ]]; then
+    #the following solution should work on older version <4.3 of zsh. 
+    #The "function" keyword is essential for it to work with the old zsh.
+    #NOTE these function fails dynamic screen title, not sure why
+    #CentOS stinks.
+    function precmd() {
+        screen_precmd 
+        git_branch_precmd
+    }
 
-#the following solution should work on older version <4.3 of zsh. CentOS stinks.
-function precmd() {
-    screen_precmd 
-    git_branch_precmd
-}
+    function preexec() {
+        screen_preexec
+        pwd_color_prexec
+    }
 
-function preexec() {
-    screen_preexec
-    pwd_color_prexec
-}
-
-function chpwd() {
-    pwd_color_chpwd
-    git_branch_chpwd
-}
+    function chpwd() {
+        pwd_color_chpwd
+        git_branch_chpwd
+    }
+else
+    #this works with zsh 4.3.*, will remove the above ones when possible
+    typeset -ga preexec_functions precmd_functions chpwd_functions
+    precmd_functions+=screen_precmd
+    precmd_functions+=git_branch_precmd
+    preexec_functions+=screen_preexec
+    preexec_functions+=pwd_color_prexec
+    chpwd_functions+=pwd_color_chpwd
+    chpwd_functions+=git_branch_chpwd
+fi
 
 #}}}
 
