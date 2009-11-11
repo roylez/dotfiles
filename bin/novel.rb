@@ -45,9 +45,7 @@ if __FILE__==$0
     #f = File.open(dbfile,'r+')
     latest = (File.zero?(dbfile) ? {} : YAML.load_file(dbfile))
     alist.each_key do |key|
-        if alist[key].empty?  
-            next 
-        end
+        next if alist[key].empty?  
 
         if latest.key?( key )
             #屏幕输出更新

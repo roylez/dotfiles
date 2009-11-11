@@ -1,17 +1,42 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Fri 30 Oct 2009 10:50:54 PM EST
+#Last Change: Wed 11 Nov 2009 01:57:15 PM EST
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
 if [[  "$-" != *i* ]]; then return 0; fi
 #}}}
 
-#{{{------------------------listing color----------------------------------
+# 为兼容旧版本定义 is-at-least 函数{{{
+function is-at-least {
+    local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version
+
+    min_ver=(${=1})
+    version=(${=2:-$ZSH_VERSION} 0)
+
+    while (( $min_cnt <= ${#min_ver} )); do
+      while [[ "$part" != <-> ]]; do
+        (( ++ver_cnt > ${#version} )) && return 0
+        part=${version[ver_cnt]##*[^0-9]}
+      done
+
+      while true; do
+        (( ++min_cnt > ${#min_ver} )) && return 0
+        [[ ${min_ver[min_cnt]} = <-> ]] && break
+      done
+
+      (( part > min_ver[min_cnt] )) && return 0
+      (( part < min_ver[min_cnt] )) && return 1
+      part=''
+    done
+}
+# }}}
+
+# 定义颜色 {{{
 if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
     #use prefefined colors
-    eval $(dircolors -b $HOME/.lscolor256)
+    [[ -f $HOME/.lscolor256 ]] && eval $(dircolors -b $HOME/.lscolor256)
 else
-    eval $(dircolors -b $HOME/.lscolor)
+    [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
 fi
 
 #color defined for prompts and etc
@@ -23,7 +48,7 @@ pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
 #}}}
 
-# {{{---------------------------options-------------------------------------
+# 设置参数 {{{
 setopt complete_aliases         #do not expand aliases _before_ completion has finished
 setopt auto_cd                  # if not a command, try to cd to it.
 setopt auto_pushd               # automatically pushd directories on dirstack
@@ -60,7 +85,7 @@ watch=(notme)
 #is-at-least 4.3.0 && 
 # }}}
 
-# {{{-------------------------completion system-----------------------------
+# 命令补全参数{{{
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
@@ -100,17 +125,7 @@ compinit
 
 # }}}
 
-#{{{---------------------------history-------------------------------------
-# number of lines kept in history
-export HISTSIZE=10000
-# number of lines saved in the history after logout
-export SAVEHIST=10000
-# location of history
-export HISTFILE=$HOME/.zsh_history
-
-#}}}
-
-#{{{---------------------------alias---------------------------------------
+# 命令别名 {{{
 # alias and listing colors
 alias -g A="|awk"
 alias -g C="|wc"
@@ -131,7 +146,6 @@ for i in jpg png;           alias -s $i=gqview
 for i in avi rmvb wmv;      alias -s $i=mplayer
 for i in rar zip 7z lzma;   alias -s $i="7z x"
 
-export GREP_COLOR='31;1'
 #no correct for mkdir mv and cp
 for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias grep='grep -I --color=always'
@@ -189,7 +203,7 @@ alias tslashem='telnet slashem.crash-override.net'
 
 #}}}
 
-# {{{-----------------user defined functions--------------------------------
+# 自定义函数 {{{
 #show 256 color tab
 256tab() {
     for k in `seq 0 1`;do 
@@ -205,6 +219,9 @@ alias tslashem='telnet slashem.crash-override.net'
 alarm() { 
     echo "msg ${argv[2,-1]} && aplay -q ~/.sounds/MACSound/System\ Notifi.wav" | at now + $1 min
 }
+
+#calculator
+calc()  { awk "BEGIN{ print $* }" ; }
 
 #{{{ functions to set prompt pwd color
 export __PROMPT_PWD="$pfg_magenta%~$pR"
@@ -302,7 +319,7 @@ screen_preexec() {
 #}}}
 
 #{{{-----------------define magic function arrays--------------------------
-if [[ $ZSH_VERSION = 4.2.* ]]; then
+if ! (is-at-least 4.3); then
     #the following solution should work on older version <4.3 of zsh. 
     #The "function" keyword is essential for it to work with the old zsh.
     #NOTE these function fails dynamic screen title, not sure why
@@ -336,7 +353,7 @@ fi
 
 # }}}
 
-# {{{---------------------------prompt--------------------------------------
+# 提示符 {{{
 #autoload -U promptinit zmv
 #promptinit
 if [ "$SSH_TTY" = "" ]; then
@@ -356,7 +373,7 @@ RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
 
 #行编辑高亮模式 {{{
-if [[ $ZSH_VERSION = 4.3.* ]]; then
+if (is-at-least 4.3); then
     zle_highlight=(region:bg=magenta
                    special:bold,fg=magenta
                    default:bold
@@ -367,7 +384,7 @@ fi
 
 # }}}
 
-# {{{-----------------key bindings to fix keyboard---------------------------
+# 键盘定义及键绑定 {{{
 #bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
 # 设置键盘 {{{
 # create a zkbd compatible hash;
@@ -417,7 +434,7 @@ bindkey '[1;5C' forward-word      # C-right
 
 # }}}
 
-# {{{-----------------user defined widgets & binds-----------------------
+# 自定义widget {{{
 #from linuxtoy.org: 
 #   pressing TAB in an empty command makes a cd command with completion list
 dumb-cd(){
@@ -440,7 +457,7 @@ bindkey -s "" "fg\n"
 
 # }}}
 
-#{{{----------------------distro specific stuff---------------------------
+# 特定发行版配置 {{{
 if `cat /etc/issue |grep Arch >/dev/null`; then
     function command_not_found_handler() {
         echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
@@ -453,7 +470,14 @@ if `cat /etc/issue |grep Arch >/dev/null`; then
 fi
 #}}}
 
-# {{{----------------------variables---------------------------------------
+# 环境变量及其他参数 {{{
+# number of lines kept in history
+export HISTSIZE=10000
+# number of lines saved in the history after logout
+export SAVEHIST=10000
+# location of history
+export HISTFILE=$HOME/.zsh_history
+
 export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export VISUAL=vim

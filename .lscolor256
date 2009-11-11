@@ -68,7 +68,7 @@ TERM xterm-debian
 NORMAL 00       # global default, although everything should be something.
 FILE   00       # normal file
 DIR    01;04;38;05;75  # directory
-LINK   01;38;05;81  # symbolic link.  (If you set this to 'target' instead of a
+LINK   01;38;05;51  # symbolic link.  (If you set this to 'target' instead of a
                     # numerical value, the color is as for the file pointed to.)
 FIFO 38;05;142;48;05;235   # pipe
 SOCK 01;38;05;176      # socket
@@ -123,6 +123,8 @@ EXEC 01;38;05;46
 .db 01;38;05;100
 .iso 01;38;05;100
 .pdb 01;38;05;100
+.img 01;38;05;100
+.gho 01;38;05;100
 .yml 01;38;05;100
 .bib 01;38;05;100
 

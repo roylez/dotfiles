@@ -55,7 +55,8 @@ set commentstring=#%s       " default comment style
 set magic
 
 " 输入:set list命令是应该显示些啥？
-set listchars=tab:>-,eol:<
+"set listchars=tab:>-,eol:<
+set listchars=nbsp:¬,eol:¶,tab:>-,extends:»,precedes:«,trail:•
 
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
@@ -150,6 +151,12 @@ inoremap <m-k> <C-o>gk
 vmap / y/<C-R>"<CR>
 
 " taglist.vim
+let g:Tlist_GainFocus_On_ToggleOpen=1
+let g:Tlist_Exit_OnlyWindow=1
+"let g:Tlist_Use_Right_Window=1
+let g:Tlist_Show_One_File=1
+let g:Tlist_Enable_Fold_Column=0
+let g:Tlist_Auto_Update=1
 nmap <F2>   :TlistToggle<CR>
 
 "Make and make test
@@ -174,11 +181,11 @@ function! AutoHead()
     if getline(fl) !~ "^$"
         let fl += 1
     endif 
-    let ll = fl+3
+    let ll = fl+2
     call setline(fl,"Author: Roy L Zuo (roylzuo at gmail dot com)")
-    call append(fl,"Last Change: ")
-    call append(fl+1,"Description: ")
-    call append(fl+2,"")
+    "call append(fl,"Last Change: ")
+    call append(fl,"Description: ")
+    call append(fl+1,"")
     execute fl . ','. ll .'call NERDComment(0,"toggle")'
 endfunc
 nmap ,h :call AutoHead()<cr>

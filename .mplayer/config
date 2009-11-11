@@ -1,5 +1,5 @@
 # Write your default config options here!
-fontconfig=0
+fontconfig=1
 # vo=gl
 # vo=xv
 vo=xv,x11,gl2,sdl,ggi,fbdev,fbdev2
@@ -15,3 +15,4 @@ vf=expand=0:60:0:0
 vf=screenshot
 #allow image zoom when fullscreen
 zoom=yes
+stop-xscreensaver=yes
