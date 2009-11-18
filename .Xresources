@@ -1,7 +1,17 @@
+! vim: fdm=marker
+
+!   themes {{{
+
 Xcursor.theme:          ComixCursors-Blue-Regular
 !Xcursor.theme:          Obsidian
+!*foreground: #DDEEDD
+*foreground: #F6F6F6
+*background: #1C1C1C
+!*background: #121212
+*cursorColor: #ACEA5C
 
-!! husio colors
+
+!! husio colors  {{{
 !black text
 !*color0: #0d0d0d
 !*color8: #0d0d0d
@@ -26,8 +36,9 @@ Xcursor.theme:          ComixCursors-Blue-Regular
 !!white
 !*color7: #EDEDED
 !*color15: #EDEDED
+! }}}
 
-!-- Tango color scheme
+!-- Tango color scheme   {{{
 !black
 !*color0: #2e3436
 *color0: #1e1e1e
@@ -53,6 +64,7 @@ Xcursor.theme:          ComixCursors-Blue-Regular
 !white
 *color7: #d3d7cf
 *color15: #eeeeec
+! }}}
 
 ! ---| thayer bright |--- {{{
 !black
@@ -98,22 +110,20 @@ Xcursor.theme:          ComixCursors-Blue-Regular
 !*color14:				#00FFFF
 !*color7:				#BBBBBB
 !*color15:				#FFFFFF
+!}}}
 
-!*foreground: #DDEEDD
-*foreground: #F6F6F6
-*background: #1C1C1C
-!*background: #121212
-*cursorColor: #ACEA5C
+! }}}
 
-!!=============================================================================
-!! 设置 Xftp.dpi(字体分辨率）
-!!=============================================================================
+!! 设置 Xftp.dpi(字体分辨率） {{{
 Xft.dpi:                96 
 Xft.hinting:            1
 Xft.hintstyle:          hintslight
 Xft.antialias:          1
 Xft.rgba:               rgb
-!!========================NETHACK==============================================
+
+! }}}
+
+! NETHACK {{{
 ! Lines beginning with ! are comments and are ignored.
 NetHack*font:                   vga
 NetHack*autofocus:              true
@@ -135,9 +145,9 @@ NetHack*map*bright_blue:        blue
 NetHack*map*bright_magenta:     magenta
 NetHack*map*bright_cyan:        cyan
 NetHack*map*white:              white
-!!=============================================================================
-!! RXVT-unicode setting
-!!=============================================================================
+! }}}
+
+!  RXVT-unicode {{{
 !urxvt setting
 URxvt.geometry:		85x30
 
@@ -187,7 +197,10 @@ URxvt.font:             xft:Monaco:medium:antialias=True:pixelsize=14, \
 URxvt.boldFont:         xft:Monaco:bold:antialias=True:pixelsize=14, \
                 xft:DejaVu Sans Mono:bold:antialias=True:pixelsize=14, \
                 xft:wenquanyi bitmap song:bold:pixelsize=15:antialias=True
-!!--------------------xterm settings------------------------------------ 
+
+! }}}
+
+! xterm {{{ 
 !look and feel
 xterm.termName: xterm-256color
 xterm.title:    xterm
@@ -198,7 +211,9 @@ xterm*rightScrollBar: true
 xterm*loginshell: true
 xterm*borderLess: true
 xterm*colorUL: yellow
-xterm*colorBD: green
+xterm*colorBD: wheat
+!xterm*colorBDMode: true
+!xterm*veryBoldColors: 4
 xterm*cursorBlink: true
 xterm*cursorColor: green
 !xterm*cursorColor: OliveDrab1
@@ -210,6 +225,7 @@ XTerm*borderColor:SlateGrey
 
 !saved scrollback
 xterm*saveLines: 1000
+xterm*fastScroll: true
 
 !highlight selected area
 xterm*highlightSelection: true
@@ -266,3 +282,32 @@ XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35
 
 !urgent trigger
 !XTerm*bellIsUrgent: true
+
+! }}}
+
+! {{{              GNUPLOT 
+!
+gnuplot*background:  white
+gnuplot*textColor:   black
+gnuplot*borderColor: black
+gnuplot*axisColor:   black
+gnuplot*line1Color:  red
+gnuplot*line2Color:  green
+gnuplot*line3Color:  blue
+gnuplot*line4Color:  magenta
+gnuplot*line5Color:  cyan
+gnuplot*line6Color:  sienna
+gnuplot*line7Color:  orange
+gnuplot*line8Color:  coral
+gnuplot*borderWidth: 2
+gnuplot*axisWidth:   1
+gnuplot*line1Width:  1
+gnuplot*line2Width:  1
+gnuplot*line3Width:  1
+gnuplot*line4Width:  1
+gnuplot*line5Width:  1
+gnuplot*line6Width:  1
+gnuplot*line7Width:  1
+gnuplot*line8Width:  1
+
+!}}}

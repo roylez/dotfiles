@@ -1,6 +1,6 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Wed 11 Nov 2009 01:57:15 PM EST
+#Last Change: Thu 12 Nov 2009 03:12:58 PM EST
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
 if [[  "$-" != *i* ]]; then return 0; fi
@@ -262,7 +262,7 @@ git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
 #this one is to be used in prompt
 get_prompt_git() { 
     if [ ! -z $__CURRENT_GIT_BRANCH ]; then
-        echo "%{$fg[green]%}$__CURRENT_GIT_BRANCH %{$fg[red]%}|%{$reset_color%} " 
+        echo "%{$fg[green]%}$__CURRENT_GIT_BRANCH %{$fg_bold[cyan]%}$PR_RSEP%{$reset_color%} " 
     fi
 }
 #}}}
@@ -367,6 +367,12 @@ local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
 PROMPT="$user$pfg_yellow@$pR$host$job$symbol"
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
+typeset -A altchar
+set -A altchar ${(s..)terminfo[acsc]}
+PR_SET_CHARSET="%{$terminfo[enacs]%}"
+PR_SHIFT_IN="%{$terminfo[smacs]%}"
+PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
+PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
 RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
 
 # SPROMPT - the spelling prompt

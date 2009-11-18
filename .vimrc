@@ -51,6 +51,8 @@ set backup
 set backupdir=$HOME/.backup
 
 set commentstring=#%s       " default comment style
+set sps=best,10             " only show 10 best spell suggestions
+set dictionary+=/usr/share/dict/words
 
 set magic
 
@@ -69,25 +71,20 @@ if &term =~ "xterm"
     autocmd VimLeave * :!echo -ne "\033]12;green\007"
 endif
 
-" 高亮当前行
-"set cursorline
-"set cursorcolumn
-autocmd InsertLeave * set nocursorline
-autocmd InsertEnter * set cursorline 
-
 let fortran_have_tabs=1	    " this line must be placed before syntax on
+let fortran_fold=1
+
+set foldenable
+set foldmethod=syntax
+set foldnestmax=1
+
+set background=dark
 
 syntax on 
 "maybe necessary for urxvt, because vim use ^H for backspace, 
 "but urxvt can use both ^H and ^?
 "fixdel
 
-set foldenable
-let fortran_fold=1
-set foldmethod=syntax
-set foldnestmax=1
-
-set background=dark
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
     if !has("gui_running")
@@ -99,6 +96,12 @@ if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
 else
     colorscheme tango
 endif
+
+" 高亮当前行
+"set cursorline
+"set cursorcolumn
+autocmd InsertLeave * set nocursorline
+autocmd InsertEnter * set cursorline 
 
 "---------------------encoding detection--------------------------------
 "set encoding&		    " terminal charset: follows current locale
@@ -123,12 +126,12 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 "---------------------completion settings-------------------------------
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-inoremap <expr> <c-n> pumvisible() ? 
-            \"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
-inoremap <expr> <m-;> pumvisible() ? 
-            \"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 
-            \\"\\<down>\" : \"\\<cr>\""
+"inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+"inoremap <expr> <c-n> pumvisible() ? 
+            "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
+"inoremap <expr> <m-;> pumvisible() ? 
+            "\"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 
+            "\\"\\<down>\" : \"\\<cr>\""
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
 
@@ -253,6 +256,9 @@ autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu spell
 
 "RestructuredText 
 autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
+
+"viki
+autocmd BufNewFile,BufRead *.viki set ft=viki
 
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab

@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Thu 05 Nov 2009 01:06:25 PM EST
+#Last Change: Fri 13 Nov 2009 11:37:41 AM EST
 #Description: mutt main configuration file
 
 ignore *
@@ -16,7 +16,7 @@ set editor="vim"
 
 #set smtp agent
 set sendmail="~/bin/filtersend"
-set sendmail_wait = -1
+set sendmail_wait = 5
 #set sendmail='msmtp -a uq'
 macro generic \Cx_ "<enter-command>set sendmail" "Internal macro from the MSMTP module"
 macro generic \Cx| "\Cx_ = \"/usr/bin/msmtp" "Internal macro from the MSMTP module"
