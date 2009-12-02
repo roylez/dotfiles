@@ -16,3 +16,4 @@ vf=screenshot
 #allow image zoom when fullscreen
 zoom=yes
 stop-xscreensaver=yes
+ontop=yes

@@ -1,6 +1,5 @@
 #!/bin/zsh
 # vim:fdm=marker
-#Last Change: Thu 12 Nov 2009 03:12:58 PM EST
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
 if [[  "$-" != *i* ]]; then return 0; fi
@@ -190,7 +189,7 @@ if [ "$HOSTNAME" != 'lychee' ]; then
     qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
 fi
 [ -x /usr/bin/pal ] && alias pal="pal -r 0-7 --color"
-[ -x /usr/bin/cdf ] && alias df="cdf -h"
+#[ -x /usr/bin/cdf ] && alias df="cdf -h"
 if [ -x /usr/bin/grc ]; then
     alias cl="/usr/bin/grc -es --colour=auto"
     for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
@@ -204,6 +203,7 @@ alias tslashem='telnet slashem.crash-override.net'
 #}}}
 
 # 自定义函数 {{{
+# 普通自定义函数 {{{
 #show 256 color tab
 256tab() {
     for k in `seq 0 1`;do 
@@ -222,6 +222,11 @@ alarm() {
 
 #calculator
 calc()  { awk "BEGIN{ print $* }" ; }
+
+#ccze for log viewing
+[[ -x /usr/bin/ccze ]] && lless() { cat $* |ccze -A |less }
+
+# }}}
 
 #{{{ functions to set prompt pwd color
 export __PROMPT_PWD="$pfg_magenta%~$pR"
@@ -250,7 +255,7 @@ parse_git_branch() {
 }
 
 git_branch_precmd() {
-    case "$(history $HISTCMD)" in 
+    case "$(fc -l -nr $HISTCMD)" in 
         *git*)
         export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
         ;;

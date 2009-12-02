@@ -31,6 +31,7 @@ set matchtime=5
 set lazyredraw          " faster for macros
 
 set guifont=Monaco\ 10
+set guifontwide=WenQuanYi\ Micro\ Hei\ 12
 
 set smartindent autoindent
 set expandtab
@@ -139,10 +140,10 @@ set winaltkeys=no
 imap ,e   <C-V><C-[>[
 
 "move among windows
-"nmap h   <C-W>h
-"nmap i   <C-W>i
-"nmap j   <C-W>j
-"nmap k   <C-W>k
+nmap <C-h>   <C-W>h
+nmap <C-i>  <C-W>i
+nmap <C-j>   <C-W>j
+nmap <C-k>   <C-W>k
 
 "move in insert mode
 inoremap <m-h> <left>
@@ -262,6 +263,12 @@ autocmd BufNewFile,BufRead *.viki set ft=viki
 
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
+
+"bbcode
+autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
+
+"remind
+autocmd BufNewFile,BufRead *.rem set ft=remind
 "-------------------special settings------------------------------------
 "big files?
 let g:LargeFile = 0.3	"in megabyte

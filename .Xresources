@@ -212,8 +212,8 @@ xterm*loginshell: true
 xterm*borderLess: true
 xterm*colorUL: yellow
 xterm*colorBD: wheat
-!xterm*colorBDMode: true
-!xterm*veryBoldColors: 4
+xterm*colorBDMode: true
+xterm*veryBoldColors: 4
 xterm*cursorBlink: true
 xterm*cursorColor: green
 !xterm*cursorColor: OliveDrab1
