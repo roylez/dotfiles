@@ -165,11 +165,12 @@ alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 #alias which='alias | /usr/bin/which --read-alias'
 alias pyprof='python -m cProfile'
 alias python='nice python'
+alias info='info --vi-keys'
 alias ri='ri -f ansi'
 alias history='history 1'       #zsh specific
 #alias mplayer='mplayer -cache 512'
 alias zhcon='zhcon --utf8'
-alias vless="/usr/share/vim/macros/less.sh"
+alias vless="/usr/share/vim/vim72/macros/less.sh"
 del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
 alias port='netstat -ntlp'      #opening ports
@@ -178,6 +179,8 @@ alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias tt="vim +'set spell' ~/doc/TODO.otl"
+alias t="todo.sh"
+alias rtc="$HOME/workspace/rtc/rtc.rb"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
 alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
 #alias rtm="twitter d rtm"
@@ -226,6 +229,9 @@ calc()  { awk "BEGIN{ print $* }" ; }
 #ccze for log viewing
 [[ -x /usr/bin/ccze ]] && lless() { cat $* |ccze -A |less }
 
+#man page to pdf
+[[ -x /usr/bin/ps2pdf ]] && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
+
 # }}}
 
 #{{{ functions to set prompt pwd color
@@ -255,7 +261,7 @@ parse_git_branch() {
 }
 
 git_branch_precmd() {
-    case "$(fc -l -nr $HISTCMD)" in 
+    case "$(fc -l -1)" in 
         *git*)
         export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
         ;;

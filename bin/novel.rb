@@ -8,7 +8,7 @@ require 'iconv'
 
 dbfile = File.join(ENV['HOME'],'.backup','latest.yml')
 bookid = {'6507'=>'卡徒',
-        '8823'=>'仙道求索',
+        #'8823'=>'仙道求索',
         '9782'=>'比蒙传奇',
         '18487'=>'猎国',
         #'10975'=>'天王',

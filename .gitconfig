@@ -9,19 +9,20 @@
 [push]
     default = matching
 [alias]
-    a  = add
-    b  = branch
-    c  = commit
-    co = checkout
-    d  = diff
-    l  = log
-    lc = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-    lg = log --graph
-    m  = merge
-    pl = pull
-    pu = push
-    s  = status
-    t  = tag
+    a   = add
+    b   = branch
+    c   = commit
+    co  = checkout
+    d   = diff
+    des = describe --tags
+    l   = log
+    lc  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+    lg  = log --graph
+    m   = merge
+    pl  = pull
+    pu  = push
+    s   = status
+    t   = tag
 [merge]
 	tool = gvimdiff
 [github]

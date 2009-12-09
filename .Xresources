@@ -210,9 +210,10 @@ xterm*scrollBar: false
 xterm*rightScrollBar: true
 xterm*loginshell: true
 xterm*borderLess: true
-xterm*colorUL: yellow
+xterm*colorUL: green
 xterm*colorBD: wheat
 xterm*colorBDMode: true
+xterm*colorULMode: true
 xterm*veryBoldColors: 4
 xterm*cursorBlink: true
 xterm*cursorColor: green
@@ -222,6 +223,11 @@ xterm*cursorColor: green
 XTerm*cursorColorBackground:DimGray
 XTerm*highlight:LemonChiffon
 XTerm*borderColor:SlateGrey
+
+!mouse pointer theme
+XTerm*pointerShape: bogosity
+!mkaz.com/ref/xterm_colors.html
+XTerm*pointerColor: gold1
 
 !saved scrollback
 xterm*saveLines: 1000

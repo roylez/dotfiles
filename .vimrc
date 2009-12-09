@@ -141,7 +141,7 @@ imap ,e   <C-V><C-[>[
 
 "move among windows
 nmap <C-h>   <C-W>h
-nmap <C-i>  <C-W>i
+nmap <C-l>  <C-W>l
 nmap <C-j>   <C-W>j
 nmap <C-k>   <C-W>k
 
