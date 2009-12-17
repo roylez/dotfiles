@@ -1,5 +1,5 @@
-#require 'wirble'
-#require 'pp'
+#!/usr/bin/env ruby
+require 'rubygems' unless RUBY_VERSION > '1.9'
 %w(wirble pp irb/completion).each {|m| require m}
 
 ARGV << ' --readline'
@@ -15,6 +15,7 @@ Wirble.colorize
     #:HISTORY_FILE => "#{ENV['HOME']}/.irb-save-history"
 
 def history(how_many = 50)
+    return false unless how_many.class == Fixnum
     history_size = Readline::HISTORY.size
 
     # no lines, get out of here

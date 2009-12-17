@@ -22,7 +22,7 @@ set ruler		" show the cursor position all the time in statusline
 set laststatus=2        " always display a nicer status bar
 set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
 set wildmenu		" show possible command when pressing <TAB>
-set cmdheight=2
+"set cmdheight=2
 set notitle             " do not set xterm dynamic title
 "set number
 

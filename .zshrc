@@ -93,7 +93,7 @@ zstyle ':completion:*' ignore-parents parent pwd directory
 #menu selection in completion
 zstyle ':completion:*' menu select=1
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _complete _match #_user_expand
+zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match #_user_expand
 zstyle ':completion:*:match:*' original only 
 #zstyle ':completion:*' user-expand _pinyin
 zstyle ':completion:*:approximate:*' max-errors 1 numeric 
@@ -122,6 +122,13 @@ zstyle ':completion:*:corrections' format $'\e[33m == \e[1;47;31m %d (errors: %e
 autoload -Uz compinit
 compinit
 
+#force rehash when command not found
+#  http://zshwiki.org/home/examples/compsys/general
+_force_rehash() {
+    (( CURRENT == 1 )) && rehash
+    return 1    # Because we did not really complete anything
+}
+
 # }}}
 
 # 命令别名 {{{
@@ -129,7 +136,7 @@ compinit
 alias -g A="|awk"
 alias -g C="|wc"
 alias -g E="|sed"
-alias -g G="|grep"
+alias -g G="|egrep"
 alias -g H="|head"
 alias -g L="|less"
 alias -g R="|tac"
@@ -173,13 +180,19 @@ alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
+# better use tput than directly use $terminfo 
+# so that it still work when window is resized
+alias c='remind -w$(tput cols) -mc+lc2 ~/.reminders'
+alias t="todo.sh"
+tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
+alias tt='vim ~/.reminders/main.rem'
 alias port='netstat -ntlp'      #opening ports
+#Terminal - Harder, Faster, Stronger SSH clients 
+alias ssh="ssh -4 -C -c blowfish-cbc"
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-#alias tt="vim +'set spell' ~/doc/TODO.otl"
-alias t="todo.sh"
+#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias rtc="$HOME/workspace/rtc/rtc.rb"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
 alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
@@ -227,7 +240,7 @@ alarm() {
 calc()  { awk "BEGIN{ print $* }" ; }
 
 #ccze for log viewing
-[[ -x /usr/bin/ccze ]] && lless() { cat $* |ccze -A |less }
+[[ -x /usr/bin/ccze ]] && lless() { tac $* |ccze -A |less }
 
 #man page to pdf
 [[ -x /usr/bin/ps2pdf ]] && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
@@ -273,7 +286,7 @@ git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
 #this one is to be used in prompt
 get_prompt_git() { 
     if [ ! -z $__CURRENT_GIT_BRANCH ]; then
-        echo "%{$fg[green]%}$__CURRENT_GIT_BRANCH %{$fg_bold[cyan]%}$PR_RSEP%{$reset_color%} " 
+        echo " $pfg_black$pbg_white$pB $__CURRENT_GIT_BRANCH $pR" 
     fi
 }
 #}}}
@@ -375,7 +388,7 @@ fi
 local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       #different color for privileged sessions
 local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
-PROMPT="$user$pfg_yellow@$pR$host$job$symbol"
+PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
 typeset -A altchar
@@ -383,8 +396,8 @@ set -A altchar ${(s..)terminfo[acsc]}
 PR_SET_CHARSET="%{$terminfo[enacs]%}"
 PR_SHIFT_IN="%{$terminfo[smacs]%}"
 PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
-RPROMPT='$(get_prompt_git)$(get_prompt_pwd)'
+#PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
+RPROMPT='$(get_prompt_pwd)'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
