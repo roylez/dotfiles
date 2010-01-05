@@ -171,8 +171,8 @@ URxvt.fadeColor:        honeydew3
 URxvt.cursorBlink:      False
 !URxvt.cursorUnderline:  True
 !URxvt.cursorColor:      green
-URxvt.colorBD:		yellow
-URxvt.colorUL:		white
+URxvt.colorBD:		Wheat
+!URxvt.colorUL:		white
 URxvt.shading:		60
 URxvt.fading:		30
 URxvt*underlineURLs:    true

@@ -32,7 +32,7 @@ def ipLookup(string)
     res = Net::HTTP.post_form(URI.parse("http://ipseeker.cn/index.php"),
             {'B1'=>Iconv.iconv("GB2312","UTF-8",'查询'), 'job'=>'search','search_ip'=>string})
     page = Iconv.iconv("UTF-8","GB2312",res.body).join
-    address = page.scan(/查询结果二.*#{string}.*?-&nbsp;\s+(.*?)<\/span/)[0][0]
+    address = page.match(/查询结果.*?\s*(?:&nbsp; -?){2,2}(.*?)<\/span>/m)[1]
     text = %Q{<span size="13000" color="red" weight="bold">%s</span>} \
             % ("\n"+ address.sub(" ", "\n\n    ") )
     system("%s '%s地址在：' '%s'" % [$notifyargs,string,text] )

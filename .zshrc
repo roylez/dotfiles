@@ -180,15 +180,9 @@ alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
-# better use tput than directly use $terminfo 
-# so that it still work when window is resized
-alias c='remind -w$(tput cols) -mc+lc2 ~/.reminders'
-alias t="todo.sh"
-tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
-alias tt='vim ~/.reminders/main.rem'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients 
-alias ssh="ssh -4 -C -c blowfish-cbc"
+#alias ssh="ssh -4 -C -c blowfish-cbc"
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
@@ -250,7 +244,7 @@ calc()  { awk "BEGIN{ print $* }" ; }
 #{{{ functions to set prompt pwd color
 export __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_yellow%~$pR" }       
+pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
 #change back before next command
 pwd_color_prexec() { export __PROMPT_PWD="$pfg_magenta%~$pR" }
 
@@ -268,7 +262,7 @@ parse_git_branch() {
     if [ "$PWD" != "$HOME" ]; then
         dir=$(git rev-parse --git-dir 2>/dev/null)
         if [ "${dir:h}" != "$HOME" ]; then
-            git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+            git branch --no-color 2> /dev/null | sed -e '/^[^*]/d;s/* \(.*\)/\1/'
         fi
     fi
 }
@@ -460,6 +454,10 @@ bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
 bindkey '[1;5D' backward-word     # C-left
 bindkey '[1;5C' forward-word      # C-right
+
+autoload -U edit-command-line
+zle -N      edit-command-line
+bindkey '\ee' edit-command-line
 # }}}
 
 # }}}

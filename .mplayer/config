@@ -1,10 +1,10 @@
 # Write your default config options here!
-fontconfig=1
+fontconfig=0
 # vo=gl
 # vo=xv
 vo=xv,x11,gl2,sdl,ggi,fbdev,fbdev2
 unicode=yes
-ao=alsa
+#ao=alsa
 subcp=cp936
 #font=/usr/share/fonts/TTF/uming.ttf
 font=subfont.ttf
