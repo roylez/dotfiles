@@ -1,6 +1,6 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Fri 11 Dec 2009 11:10:47 AM EST
+#Last Change: Wed 06 Jan 2010 02:26:29 PM EST
 #Description: mutt main configuration file
 
 ignore *
@@ -322,7 +322,8 @@ color quoted2 red default
 color hdrdefault cyan default
 color header  default magenta .*
 #color header   brightred blue ^Subject:
-color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
+#color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
+color header   brightgreen cyan ^(From|To|Cc|Subject|X-Bogosity):
 color signature cyan default
 
 color index yellow default ~p                 # To me
@@ -330,6 +331,5 @@ color index blue default ~P                # From me
 color index brightyellow default ~N          # New
 color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
-color index magenta default ~D              # Deleted
-color index brightyellow blue ~F               # flaged
-
+color index cyan default ~D              # Deleted
+color index brightyellow cyan ~F               # flaged

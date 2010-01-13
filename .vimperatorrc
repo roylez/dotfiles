@@ -13,6 +13,7 @@ set "editor=gvim -c start -f"
 set nextpattern=s*下一页|下一张|下一篇|下页|后页s*,^bnextb,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b
 set previouspattern=s*上一页|上一张|上一篇|上页|前页s*,^bprev|previousb,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$
 set titlestring=Firefox
+set vb
 set showstatuslinks=2
 vmap <F11> gT
 vmap <F12> gt

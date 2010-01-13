@@ -52,6 +52,7 @@ setopt complete_aliases         #do not expand aliases _before_ completion has f
 setopt auto_cd                  # if not a command, try to cd to it.
 setopt auto_pushd               # automatically pushd directories on dirstack
 setopt auto_continue            #automatically send SIGCON to disowned jobs
+setopt extended_glob            # so that patterns like ^() *~() ()# can be used
 setopt pushd_ignore_dups        # do not push dups on stack
 setopt pushd_silent             # be quiet about pushds and popds
 setopt brace_ccl                # expand alphabetic brace expressions
@@ -244,9 +245,9 @@ calc()  { awk "BEGIN{ print $* }" ; }
 #{{{ functions to set prompt pwd color
 export __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
+pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_blue%~$pR" }
 #change back before next command
-pwd_color_prexec() { export __PROMPT_PWD="$pfg_magenta%~$pR" }
+pwd_color_prexec() { export __PROMPT_PWD="$pfg_cyan%~$pR" }
 
 get_prompt_pwd() { echo $__PROMPT_PWD }
 

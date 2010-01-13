@@ -253,7 +253,7 @@ au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu spell
+autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu nospell
 
 "RestructuredText 
 autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2

@@ -10,85 +10,148 @@ Xcursor.theme:          ComixCursors-Blue-Regular
 !*background: #121212
 *cursorColor: #ACEA5C
 
+!            black   red     green   yellow  blue    magenta cyan    white
+! normal     0       1       2       3       4       5       6       7       
+! bold       8       9       10      11      12      13      14      15
 
 !! husio colors  {{{
-!black text
 !*color0: #0d0d0d
 !*color8: #0d0d0d
-!!red text
 !*color1: #B73F23
 !*color9: #C74B2E
-!!green text
 !*color2: #82B94A
 !*color10: #82B94A
-!!yellow text
 !*color3: #C5CF43
 !*color11: #C5CF43
-!!blue text
 !*color4: #6C89B1
 !*color12: #6C89B1
-!!magenta text
 !*color5: #AA6F90
 !*color13: #AA6F90
-!!cyan text
 !*color6: #A673BE
 !*color14: #A673BE
-!!white
 !*color7: #EDEDED
 !*color15: #EDEDED
 ! }}}
 
 !-- Tango color scheme   {{{
-!black
 !*color0: #2e3436
-*color0: #1e1e1e
-*color8: #555753
-!red
-*color1: #cc0000
-*color9: #ef2929
-!green
-*color2: #4e9a06
-*color10: #8ae234
-!yellow
-*color3: #c4a000
-*color11: #fce94f
-!blue
-*color4: #3465a4
-*color12: #729fcf
-!magenta
-*color5: #75507b
-*color13: #ad7fa8
-!cyan
-*color6: #0b939b
-*color14: #00f5e9
-!white
-*color7: #d3d7cf
-*color15: #eeeeec
+!*color0: #1e1e1e
+!*color8: #555753
+!*color1: #cc0000
+!*color9: #ef2929
+!*color2: #4e9a06
+!*color10: #8ae234
+!*color3: #c4a000
+!*color11: #fce94f
+!*color4: #3465a4
+!*color12: #729fcf
+!*color5: #75507b
+!*color13: #ad7fa8
+!*color6: #0b939b
+!*color14: #00f5e9
+!*color7: #d3d7cf
+!*color15: #eeeeec
 ! }}}
 
-! ---| thayer bright |--- {{{
-!black
+!Colorful-Neon {{{
+!*color0: #5A5A5A
+!*color0: #262729
+!!*color8: #554444
+!*color8: #3E3E3E
+!*color1: #FF4747
+!*color9: #FF6767
+!*color2: #AFC81C
+!*color10: #BFC81C
+!*color3: #FDD338
+!*color11: #F4D461
+!*color4: #619AF4
+!*color12: #5496FF
+!*color5: #5F5A90
+!*color13: #826AB1
+!*color6: #47E0FF
+!*color14: #2ED9FB
+!*color7: #FFFFFF
+!*color15: #DEDEDE
+!}}}
+
+! thayer molokai inspired colors {{{
+ 
+*color0: #1b1d1e
+*color8: #505354
+*color1: #f92672
+*color9: #ff5995
+*color2: #82b414
+*color10: #b6e354
+*color3: #fd971f
+*color11: #feed6c
+*color4: #56c2d6
+*color12: #8cedff
+*color5: #8c54fe
+*color13: #9e6ffe
+*color6: #465457
+*color14: #899ca1
+*color7: #ccccc6
+*color15: #f8f8f2
+!}}}
+ 
+! Arthur colors -- from Daisuke Aramaki (
+! muted tango scheme {{{
+!*background: #262729
+!*foreground: light grey
+!*color0: #3d352a
+!*color1: #cd5c5c
+!*color2: #86af80
+!*color3: #e8ae5b
+!*color4: #6495ed
+!*color5: #deb887
+!*color6: #b0c4de
+!*color7: #bbaa99
+!*color8: #554444
+!*color9: #cc5533
+!*color10: #88aa22
+!*color11: #ffa75d
+!*color12: #87ceeb
+!*color13: #996600
+!*color14: #b0c4de
+!*color15: #ddccbb
+!}}}
+ 
+! skwid colors {{{
+!*foreground: #DDEEDD
+!*background: #1C1C1C
+!*color0: #1C1C1C
+!*color8: #4d4d4d
+!*color1: #D81860
+!*color9: #F00060
+!*color2: #B7CE42
+!*color10: #BDE077
+!*color3: #FEA63C
+!*color11: #FFE863
+!*color4: #66AABB
+!*color12: #AACCBB
+!*color5: #B7416E
+!*color13: #BB4466
+!*color6: #5E7175
+!*color14: #A3BABF
+!*color7: #DDEEDD
+!*color15: #6C887A
+!}}}
+
+! ---| thayer bright (monokai inspired)|--- {{{
 !*color0:                  #181c18
 !*color8:                  #555555
-!!red
 !*color1:                  #ff3300
 !*color9:                  #ff6655
-!!green
 !*color2:                  #75cc2b
 !*color10:                 #95ff58
-!!yellow
 !*color3:                  #ffe975
 !*color11:                 #ffef9c
-!!blue -> violet
 !*color4:                  #285577
 !*color12:                 #6677ff
-!!magenta -> pink
 !*color5:                  #ce5c00
 !*color13:                 #f57900
-!!cyan -> blue
 !*color6:                  #3399ff
 !*color14:                 #99ccff
-!!white
 !*color7:                  #c4c4c4
 !*color15:                 #ffffff
 !}}}
@@ -179,7 +242,8 @@ URxvt*underlineURLs:    true
 
 URxvt.saveLines:	1500
 !allow double click to select URL
-URxvt*cutchars:         `"()'*<>[]{|}
+!URxvt*cutchars:         `"()'*<>[]{|}
+URxvt*cutchars:         `'",;@&*=|?()[]{}
 !this makes urxvt to start faster??
 URxvt.preeditType:	Root
 !urgent notification
@@ -190,12 +254,12 @@ URxvt.keysym.Delete:       \033[3~
 
 !italicFont and boldItalicFont undefined
 !URxvt.font:             xft:Luxi Mono:regular:antialias=True:pixelsize=15, 
-URxvt.font:             xft:Monaco:medium:antialias=True:pixelsize=14, \
-                xft:DejaVu Sans Mono:book:antialias=True:pixelsize=14, \
+URxvt.font:             xft:Monaco:medium:autohint=True:size=10, \
+                xft:DejaVu Sans Mono:book:autohint=True:size=10, \
                 xft:wenquanyi bitmap song:medium:pixelsize=15:antialias=True
 !URxvt.boldFont:         xft:Luxi Mono:bold:antialias=True:pixelsize=15, 
-URxvt.boldFont:         xft:Monaco:bold:antialias=True:pixelsize=14, \
-                xft:DejaVu Sans Mono:bold:antialias=True:pixelsize=14, \
+URxvt.boldFont:         xft:Monaco:bold:autohint=True:size=10, \
+                xft:DejaVu Sans Mono:bold:autohint=True:size=10, \
                 xft:wenquanyi bitmap song:bold:pixelsize=15:antialias=True
 
 ! }}}
@@ -225,9 +289,10 @@ XTerm*highlight:LemonChiffon
 XTerm*borderColor:SlateGrey
 
 !mouse pointer theme
-XTerm*pointerShape: bogosity
+!XTerm*pointerShape: bogosity
+XTerm*pointerShape: pencil
 !mkaz.com/ref/xterm_colors.html
-XTerm*pointerColor: gold1
+XTerm*pointerColor: azure
 
 !saved scrollback
 xterm*saveLines: 1000
