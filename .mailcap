@@ -1,0 +1,19 @@
+# word document
+application/msword;antiword %s|uniq; copiousoutput
+#application/msword;catdoc %s | less ; nametemplate=%s.doc; copiousoutput
+application/excel; xls2csv %s | less; copiousoutput
+application/x-msexcel; xls2csv %s | less; copiousoutput
+#application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
+text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
+
+# images 
+#image/jpeg; display 'jpeg'; test=test -n "$DISPLAY"
+#image/pjpeg; display 'jpeg'; test=test -n "$DISPLAY"
+image/*; feh %s; test=test -n "$DISPLAY"
+
+# portable document format
+application/pdf; acroread %s; test=test -n "DISPLAY"
+application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
+
+#text html
+text/html; w3m -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
