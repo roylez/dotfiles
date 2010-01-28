@@ -234,6 +234,9 @@ alarm() {
 #calculator
 calc()  { awk "BEGIN{ print $* }" ; }
 
+#recalculate track db gain with mp3gain
+[[ -x /usr/bin/mp3gain ]] && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
+
 #ccze for log viewing
 [[ -x /usr/bin/ccze ]] && lless() { tac $* |ccze -A |less }
 

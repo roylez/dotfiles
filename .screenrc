@@ -28,7 +28,7 @@ terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 # tell screen how to set colors. AB = background, AF=foreground
 #terminfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #dynamic title
-terminfo xterm* 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+terminfo xterm* 'XT:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
 
 # Automatically detach on hangup, or the screen will keep eating your memory after the terminal emulator has been terminated.
 autodetach on		# default: on

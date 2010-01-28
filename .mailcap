@@ -1,5 +1,5 @@
 # word document
-application/msword;antiword %s|uniq; copiousoutput
+application/msword;antiword -f %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
 #application/msword;catdoc %s | less ; nametemplate=%s.doc; copiousoutput
 application/excel; xls2csv %s | less; copiousoutput
 application/x-msexcel; xls2csv %s | less; copiousoutput

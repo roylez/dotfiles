@@ -225,7 +225,7 @@ URxvt.scrollWithBuffer: True
 
 !set the artificial transparency of the v.t.
 URxvt.inheritPixmap:	True
-!URxvt.backgroundPixmap:     /home/roylez/pic/wallpaper/crest.xpm
+URxvt.backgroundPixmap:     /home/roylez/meidia/pic/wallpaper/crest.xpm
 
 URxvt.tintColor:	#999
 URxvt.fadeColor:        honeydew3
@@ -280,6 +280,7 @@ xterm*colorBDMode: true
 xterm*colorULMode: true
 xterm*veryBoldColors: 4
 xterm*cursorBlink: true
+xterm*cursorUnderLine: true
 xterm*cursorColor: green
 !xterm*cursorColor: OliveDrab1
 !xterm*cursorColor: RoyalBlue1
@@ -351,6 +352,7 @@ xterm*faceSize:     10
 !allow selecting email/url by double click
 XTerm*charClass: 33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
 
+XTerm*visualBell: true
 !urgent trigger
 !XTerm*bellIsUrgent: true
 
