@@ -64,6 +64,7 @@ setopt no_hist_beep             # don not beep on history expansion errors
 setopt hash_list_all            # search all paths before command completion
 setopt hist_ignore_all_dups     # when runing a command several times, only store one
 setopt hist_reduce_blanks       # reduce whitespace in history
+setopt hist_ignore_space        # do not remember commands starting with space
 setopt share_history            # share history among sessions
 setopt hist_verify              # reload full command when runing from history
 setopt hist_expire_dups_first   #remove dups when max size reached

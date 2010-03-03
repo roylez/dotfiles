@@ -168,6 +168,9 @@ let g:Tlist_Enable_Fold_Column=0
 let g:Tlist_Auto_Update=1
 nmap <F2>   :TlistToggle<CR>
 
+"insert time stamp in insert mode
+inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
+
 "Make and make test
 nmap <F5>   :w<CR>:make<CR>
 nmap <F6>   :make test<CR>
@@ -258,7 +261,7 @@ au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufNewFile,BufRead *.mkd,*.mdown  set ft=mkd comments=n:> nu nospell
+autocmd BufNewFile,BufRead *.mkd,*.mdown set ft=mkd comments=n:> nu nospell textwidth=0
 
 "RestructuredText 
 autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
