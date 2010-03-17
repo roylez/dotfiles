@@ -1,6 +1,5 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Wed 20 Jan 2010 04:31:54 PM EST
 #Description: mutt main configuration file
 
 ignore *
@@ -169,7 +168,7 @@ set maildir_header_cache_verify=no
 #headers:
 my_hdr X-PGP-Key-ID:3038867F
 #backup everything sent to gmail's sent box
-my_hdr Bcc: roylzuo+sent@gmail.com
+#my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
 set query_command = "lbdbq '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
@@ -289,8 +288,6 @@ send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.co
 send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>';set signature="
 #send2-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 
-#send-hook . "my_hdr Bcc:roylzuo+Sent@gmail.com"
-#
 # ---------------------color theme-----------------------------------
 color normal    white default
 color attachment magenta default

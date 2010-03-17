@@ -146,6 +146,7 @@ alias -g S="|sort"
 alias -g T="|tail"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
+alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 
 #file types
 [[ -x /usr/bin/apvlv ]] && alias -s pdf=apvlv
@@ -185,13 +186,14 @@ alias m='mutt'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients 
 #alias ssh="ssh -4 -C -c blowfish-cbc"
-alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b:b_pyramid -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias rtc="$HOME/workspace/rtc/rtc.rb"
 alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
-alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
+#alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
+alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070 -l roy"
 #alias rtm="twitter d rtm"
 #alias rtorrent="screen rtorrent"
 if [ "$HOSTNAME" != 'lychee' ]; then
@@ -201,7 +203,7 @@ if [ "$HOSTNAME" != 'lychee' ]; then
     qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
 fi
 [ -x /usr/bin/pal ] && alias pal="pal -r 0-7 --color"
-#[ -x /usr/bin/cdf ] && alias df="cdf -h"
+[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
 if [ -x /usr/bin/grc ]; then
     alias cl="/usr/bin/grc -es --colour=auto"
     for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
