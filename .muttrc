@@ -93,6 +93,7 @@ set fast_reply
 #no reply to myself
 unset metoo
 unset reply_self
+set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 # default regexp cacthes everything and is too much for me
 #set quote_regexp="^([ \t]*[>])+"
 # *sigh* this catches raster too. why can't people just use a standard,
@@ -120,8 +121,10 @@ subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake
 
 #score "~s believe" -10
 
+set strict_threads
 set sort=reverse-threads
 set sort_aux=last-date-received
+set sort_browser=reverse-date # showing mbox list default to newest first
 #set sort_aux=score
 set ascii_chars=no
 

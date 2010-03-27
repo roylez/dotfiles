@@ -133,89 +133,6 @@ _force_rehash() {
 
 # }}}
 
-# 命令别名 {{{
-# alias and listing colors
-alias -g A="|awk"
-alias -g C="|wc"
-alias -g E="|sed"
-alias -g G="|egrep"
-alias -g H="|head"
-alias -g L="|less"
-alias -g R="|tac"
-alias -g S="|sort"
-alias -g T="|tail"
-alias -g X="|xargs"
-alias -g N="> /dev/null"
-alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
-
-#file types
-[[ -x /usr/bin/apvlv ]] && alias -s pdf=apvlv
-alias -s ps=gv
-for i in jpg png;           alias -s $i=gqview
-for i in avi rmvb wmv;      alias -s $i=mplayer
-for i in rar zip 7z lzma;   alias -s $i="7z x"
-
-#no correct for mkdir mv and cp
-for i in mkdir mv cp;       alias $i="nocorrect $i"
-alias grep='grep -I --color=always'
-alias egrep='egrep -I --color=always'
-alias cal='cal -3m'
-alias freeze='kill -STOP'
-alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
-alias vi='vim'
-alias ll='ls -l'
-alias df='df -Th'
-alias du='du -h'
-#show directories size
-alias dud='du -s *(/)'
-#date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
-#bloomberg radio
-alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
-#alias which='alias | /usr/bin/which --read-alias'
-alias pyprof='python -m cProfile'
-alias python='nice python'
-alias info='info --vi-keys'
-alias ri='ri -f ansi'
-alias history='history 1'       #zsh specific
-#alias mplayer='mplayer -cache 512'
-alias zhcon='zhcon --utf8'
-alias vless="/usr/share/vim/vim72/macros/less.sh"
-del() {mv -vif -- $* ~/.Trash}
-alias m='mutt'
-alias port='netstat -ntlp'      #opening ports
-#Terminal - Harder, Faster, Stronger SSH clients 
-#alias ssh="ssh -4 -C -c blowfish-cbc"
-alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
-#alias tree="tree --dirsfirst"
-alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-alias rtc="$HOME/workspace/rtc/rtc.rb"
-alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
-#alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
-alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070 -l roy"
-#alias rtm="twitter d rtm"
-#alias rtorrent="screen rtorrent"
-if [ "$HOSTNAME" != 'lychee' ]; then
-    for i in showq qstat qdel qnodes showstart; do 
-        alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
-    done
-    qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
-fi
-[ -x /usr/bin/pal ] && alias pal="pal -r 0-7 --color"
-[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
-if [ -x /usr/bin/grc ]; then
-    alias cl="/usr/bin/grc -es --colour=auto"
-    for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
-        alias $i="cl $i"
-    done
-fi
-
-alias tnethack='telnet nethack.alt.org'
-alias tslashem='telnet slashem.crash-override.net'
-
-#}}}
-
 # 自定义函数 {{{
 # 普通自定义函数 {{{
 #show 256 color tab
@@ -237,14 +154,17 @@ alarm() {
 #calculator
 calc()  { awk "BEGIN{ print $* }" ; }
 
+#check if a binary exists in path
+bin-exist() {[[ -x `whence -cp $1 2>/dev/null` ]]}
+
 #recalculate track db gain with mp3gain
-[[ -x /usr/bin/mp3gain ]] && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
+(bin-exist mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
 
 #ccze for log viewing
-[[ -x /usr/bin/ccze ]] && lless() { tac $* |ccze -A |less }
+(bin-exist ccze) && lless() { tac $* |ccze -A |less }
 
 #man page to pdf
-[[ -x /usr/bin/ps2pdf ]] && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
+(bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
 
 # }}}
 
@@ -377,6 +297,89 @@ fi
 #}}}
 
 # }}}
+
+# 命令别名 {{{
+# alias and listing colors
+alias -g A="|awk"
+alias -g C="|wc"
+alias -g E="|sed"
+alias -g G="|egrep"
+alias -g H="|head"
+alias -g L="|less"
+alias -g R="|tac"
+alias -g S="|sort"
+alias -g T="|tail"
+alias -g X="|xargs"
+alias -g N="> /dev/null"
+alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
+
+#file types
+(bin-exist apvlv) && alias -s pdf=apvlv
+alias -s ps=gv
+for i in jpg png;           alias -s $i=gqview
+for i in avi rmvb wmv;      alias -s $i=mplayer
+for i in rar zip 7z lzma;   alias -s $i="7z x"
+
+#no correct for mkdir mv and cp
+for i in mkdir mv cp;       alias $i="nocorrect $i"
+alias grep='grep -I --color=always'
+alias egrep='egrep -I --color=always'
+alias cal='cal -3m'
+alias freeze='kill -STOP'
+alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
+alias vi='vim'
+alias ll='ls -l'
+alias df='df -Th'
+alias du='du -h'
+#show directories size
+alias dud='du -s *(/)'
+#date for US and CN
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+#bloomberg radio
+alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
+#alias which='alias | /usr/bin/which --read-alias'
+alias pyprof='python -m cProfile'
+alias python='nice python'
+alias info='info --vi-keys'
+alias ri='ri -f ansi'
+alias history='history 1'       #zsh specific
+#alias mplayer='mplayer -cache 512'
+alias zhcon='zhcon --utf8'
+alias vless="/usr/share/vim/vim72/macros/less.sh"
+del() {mv -vif -- $* ~/.Trash}
+alias m='mutt'
+alias port='netstat -ntlp'      #opening ports
+#Terminal - Harder, Faster, Stronger SSH clients 
+#alias ssh="ssh -4 -C -c blowfish-cbc"
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+#alias tree="tree --dirsfirst"
+alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
+#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias rtc="$HOME/workspace/rtc/rtc.rb"
+alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
+#alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
+alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070 -l roy"
+#alias rtm="twitter d rtm"
+#alias rtorrent="screen rtorrent"
+if [ "$HOSTNAME" != 'lychee' ]; then
+    for i in showq qstat qdel qnodes showstart; do 
+        alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
+    done
+    qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
+fi
+(bin-exist pal) && alias pal="pal -r 0-7 --color"
+[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
+if (bin-exist grc); then
+    alias cl="grc -es --colour=auto"
+    for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
+        alias $i="cl $i"
+    done
+fi
+
+alias tnethack='telnet nethack.alt.org'
+alias tslashem='telnet slashem.crash-override.net'
+
+#}}}
 
 # 提示符 {{{
 #autoload -U promptinit zmv
@@ -530,7 +533,7 @@ export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
 export READNULLCMD=less
-[ -x /usr/bin/src-hilite-lesspipe.sh ] && export LESSOPEN="| src-hilite-lesspipe.sh %s"
+(bin-exist src-hilite-lesspipe.sh) && export LESSOPEN="| src-hilite-lesspipe.sh %s"
 
 #for ConTeX
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex
