@@ -46,7 +46,7 @@ set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 
 set formatprg=fmt
-set formatoptions+=mM     " default tcq, mM to help wrap chinese
+"set formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
 set backupdir=$HOME/.backup

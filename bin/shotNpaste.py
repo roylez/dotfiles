@@ -10,7 +10,7 @@ os.system("import %s && sh ~/bin/p-b破报纸边缘效果.sh %s %s" \
 #os.system("scrot -s %s" %img)
 #msg = os.popen("shag %s" %img).read().strip()
 #msg = os.popen("/home/roylez/bin/uploadimg.rb %s" %img).read().strip()
-msg = 'http://dl.getdropbox.com/u/243979/screenshot/' + img.split('/')[-1]
+msg = 'https://dl.getdropbox.com/u/243979/screenshot/' + img.split('/')[-1]
 shutil.copy(img,
         os.path.join(os.environ['HOME'],'remote/Dropbox/Public/screenshot',img.split('/')[-1]))
 print msg
