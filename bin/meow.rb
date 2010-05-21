@@ -12,15 +12,15 @@ iconno = rand(icons.length)
 $notifyargs = "notify-send -t 5000 -i %s" %icons[iconno]
 
 def translate(string)
-    translation = IO.popen(%Q{sdcv -u 朗道英汉字典5.0 -n "%s"} % string).readlines
+    translation = IO.popen(%Q{sdcv -u "朗道英汉字典5.0" -n "%s"} % string).readlines
     for line in translation
         translation.shift
         break if line =~ /^-->#{string}$/
     end
-    translation.shift
+    translation = translation[1..-1].collect{|a| a.gsub(/("|')/,"\\1")}.join
     if translation
         system(%Q{%s "%s的意思是：" "%s"} % [$notifyargs, string,translation] )
-        system(%Q{espeak %s} %string)
+        #system(%Q{espeak %s} %string)
     else
         text = %Q{<span size="13000" color="brown" weight="bold">%s</span>} \
             % "\n\n  没有查到%s这个词" %string 
