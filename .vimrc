@@ -32,6 +32,8 @@ set lazyredraw          " faster for macros
 
 set guifont=Monaco\ 10
 set guifontwide=WenQuanYi\ Micro\ Hei\ 12
+set guioptions-=T
+set guioptions-=r
 
 set smartindent autoindent
 set expandtab

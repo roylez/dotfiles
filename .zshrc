@@ -1,11 +1,16 @@
 #!/bin/zsh
 # vim:fdm=marker
 
-# 如果不是交互shell就直接结束 (unix power tool, 2.11) {{{
+# 预配置 {{{
+# 如果不是交互shell就直接结束 (unix power tool, 2.11)
 if [[  "$-" != *i* ]]; then return 0; fi
-#}}}
 
-# 为兼容旧版本定义 is-at-least 函数{{{
+# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
+#   例如在aix主机，需要把 /usr/linux/bin
+#   置于PATH最前以便下面的配置所调用的命令是linux的版本
+[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+
+# 为兼容旧版本定义 is-at-least 函数
 function is-at-least {
     local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version
 
@@ -28,7 +33,8 @@ function is-at-least {
       part=''
     done
 }
-# }}}
+
+#}}}
 
 # 定义颜色 {{{
 if [[ "$TERM" = *256color ]] || [[ "$TERM" = screen ]]; then
@@ -545,9 +551,4 @@ export READNULLCMD=less
 #for intel fortran compiler
 #source $HOME/soft/intel/ifort/bin/ifortvars.sh
 
-#for slrn
-#export NNTPSERVER=news.newsfan.net 
-
-# source host specific config
-[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 # }}}
