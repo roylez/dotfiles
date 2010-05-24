@@ -272,7 +272,10 @@ ignores = (
   { mask = "BaByChU"; level = "ALL"; }
 );
 logs = { };
-hilights = ( { text = "roylez"; nick = "yes"; word = "yes"; } );
+hilights = (
+  { text = "roylez"; nick = "yes"; word = "yes"; },
+  { text = "主席"; nick = "yes"; word = "yes"; }
+);
 windows = {
   1 = { immortal = "yes"; name = "(status)"; level = "ALL"; };
   2 = {

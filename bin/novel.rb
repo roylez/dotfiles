@@ -7,7 +7,8 @@ require 'uri'
 require 'iconv'
 
 dbfile = File.join(ENV['HOME'],'.backup','latest.yml')
-bookid = {'6507'=>'卡徒',
+bookid = {
+        #'6507'=>'卡徒',
         #'8823'=>'仙道求索',
         '18487'=>'猎国',
         #'10975'=>'天王',

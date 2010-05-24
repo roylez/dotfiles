@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Fri 25 Dec 2009 12:38:47 PM EST
+#Last Change: Wed 19 May 2010 08:02:02 PM CST
 #Description: 
 require "rubygems"
 require "mechanize"
@@ -12,7 +12,7 @@ host = 'http://kimag.es'
 if __file__=$0
     img = ARGV[0]
 
-    agent = WWW::Mechanize.new
+    agent = Mechanize.new
     agent.max_history = 1
     agent.user_agent_alias= 'Windows IE 7'
     case host
