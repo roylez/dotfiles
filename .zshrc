@@ -553,4 +553,6 @@ export READNULLCMD=less
 #for intel fortran compiler
 #source $HOME/soft/intel/ifort/bin/ifortvars.sh
 
+#clear up PATH
+typeset -U PATH
 # }}}
