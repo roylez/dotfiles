@@ -46,8 +46,6 @@ fi
 
 #color defined for prompts and etc
 autoload colors
-autoload -U promptinit
-promptinit
 [[ $terminfo[colors] -ge 8 ]] && colors
 pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
@@ -388,8 +386,6 @@ alias tslashem='telnet slashem.crash-override.net'
 #}}}
 
 # 提示符 {{{
-#autoload -U promptinit zmv
-#promptinit
 if [ "$SSH_TTY" = "" ]; then
     local host="$pB$pfg_magenta%m$pR"
 else
