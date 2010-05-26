@@ -92,7 +92,8 @@ watch=(notme)
 # }}}
 
 # 命令补全参数{{{
-zmodload -i zsh/complist
+#   zsytle ':completion:*:completer:context or command:argument:tag'
+zmodload -i zsh/complist        # for menu-list completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
 #ignore list in completion
