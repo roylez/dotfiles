@@ -34,6 +34,7 @@ function is-at-least {
     done
 }
 
+export SHELL=`which zsh`
 #}}}
 
 # 定义颜色 {{{
