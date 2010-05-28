@@ -349,13 +349,11 @@ alias dud='du -s *(/)'
 alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
-#alias which='alias | /usr/bin/which --read-alias'
 alias pyprof='python -m cProfile'
 alias python='nice python'
 alias info='info --vi-keys'
 alias ri='ri -f ansi'
 alias history='history 1'       #zsh specific
-#alias mplayer='mplayer -cache 512'
 alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 del() {mv -vif -- $* ~/.Trash}
@@ -367,27 +365,10 @@ alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-alias rtc="$HOME/workspace/rtc/rtc.rb"
-alias mlychee="sshfs -p 2023 roy@lychee: /home/roylez/remote/lychee"
 #alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
-alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070 -l roy"
-#alias rtm="twitter d rtm"
-#alias rtorrent="screen rtorrent"
-if [ "$HOSTNAME" != 'lychee' ]; then
-    for i in showq qstat qdel qnodes showstart; do 
-        alias $i="ssh roy@lychee -p 2023 /opt/bin/$i"
-    done
-    qsub(){ssh roy@lychee -p 2023 "cd ${(S)PWD#lez/remote/lychee};/opt/bin/qsub -o /tmp -e /tmp $1"}
-fi
+alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070"
 (bin-exist pal) && alias pal="pal -r 0-7 --color"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
-if (bin-exist grc); then
-    alias cl="grc -es --colour=auto"
-    for i in diff cat make gcc g++ as gas ld netstat ping traceroute; do
-        alias $i="cl $i"
-    done
-fi
-
 alias tnethack='telnet nethack.alt.org'
 alias tslashem='telnet slashem.crash-override.net'
 
