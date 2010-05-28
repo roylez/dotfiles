@@ -524,7 +524,9 @@ export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
 export READNULLCMD=less
+# In archlinux the pipe script is in PATH, how ever in debian it is not
 (bin-exist src-hilite-lesspipe.sh) && export LESSOPEN="| src-hilite-lesspipe.sh %s"
+[ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
 #for ConTeX
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex

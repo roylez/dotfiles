@@ -27,3 +27,5 @@
 	tool = gvimdiff
 [github]
 	user = roylez
+[core]
+	pager = cat
