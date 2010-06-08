@@ -8,7 +8,7 @@ hardstatus alwayslastline
 #left aligned
 #hardstatus string "%{= R}[%{y}%l%{r}][ %{=b b}%-w%{=rb db}%>%n %t%{-}%+w%{-b}%< %=%{R}][%{G}%c %{M}%D %m-%d%{R}]"
 #center aligned
-hardstatus string "%{= r}[ %{G}%H%{= r} ][ %= %{=b b}%-w%{=rb db}%>%n %t%{-}%+w %=%{= r}][%{G}%c %{M}%D %m-%d%{r}]"
+hardstatus string "%{= B}:%{= b}: %{= r}[ %{G}%H%{= r} ] %= %{=b b}%-w%{=rb db}%>%n %t%{-}%+w %=%{= r}[ %{G}%c %{M}%D %m-%d %{r}] %{= b}:%{B}:"
 #caption always "%{= mW} %= %H %="
 #caption always "%{= gk}%-Lw%{= rW}%50> %n%f* %t %{-}%+Lw%< %= %{= Gk} %H %{= rW} %l %{= Gk} %0c:%s %d/%m %{-}"
 #new version from vermaden
