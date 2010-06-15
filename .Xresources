@@ -236,7 +236,7 @@ URxvt.cursorBlink:      False
 !URxvt.cursorColor:      green
 URxvt.colorBD:		Wheat
 !URxvt.colorUL:		white
-URxvt.shading:		60
+URxvt.shading:		30
 URxvt.fading:		30
 URxvt*underlineURLs:    true
 
@@ -341,7 +341,7 @@ xterm*faceName: Monaco:antialias=True
 !xterm*faceName: monofur:antialias=True:pixelsize=16
 !xterm*faceName: DejaVu Sans Mono:antialias=True:pixelsize=15
 !xterm*faceNameDoublesize: Droid Sans Fallback:pixelsize=16:antialias=True
-xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:antialias=True:pixelsize=16
+xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:antialias=True:pixelsize=15.5
 !xterm*faceNameDoublesize: Wenquanyi Bitmap Song:pixelsize=15:antialias=True
 !xterm*faceNameDoublesize: YaHei Consolas Hybrid:pixelsize=16:antialias=True
 xterm*xftAntialias: true
