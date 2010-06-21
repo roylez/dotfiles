@@ -9,7 +9,7 @@ alias edit "eval -f \"get $0 -o ~/.lftp/edit.tmp.$$ && shell \\\"cp -p ~/.lftp/e
 ## make prompt look better
 #set prompt "lftp \S\? \u\@\h:\w> "
 ## some may prefer colors (contributed by Matthew <mwormald@optusnet.com.au>)
-set prompt "\[\e[0;30m\][\[\e[0;34m\]f\[\e[1m\]t\[\e[37m\]p\[\e[0;30m\]] \[\e[1;32m\]\u\[\e[0;33m\]\@\[\e[1;31m\]\h\[\e[0;30m\]:\[\e[1;34m\]\w\[\e[0;30m\]>\[\e[0m\] "
+set prompt "\[\e[0;33m\][\[\e[0;34m\]f\[\e[1m\]t\[\e[37m\]p\[\e[0;33m\]] \[\e[1;32m\]\u\[\e[0;33m\]\@\[\e[1;31m\]\h\[\e[0;33m\]:\[\e[1;34m\]\w\[\e[0;33m\]>\[\e[0m\] "
 ## Uncomment the following two lines to make switch cls and ls, making
 ## cls the default.
 alias ls command cls
