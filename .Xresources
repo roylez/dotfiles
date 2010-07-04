@@ -242,8 +242,7 @@ URxvt*underlineURLs:    true
 
 URxvt.saveLines:	1500
 !allow double click to select URL
-!URxvt*cutchars:         `"()'*<>[]{|}
-URxvt*cutchars:         `'",;@&*=|?()[]{}
+URxvt*cutchars:         "`\"()';@?=,*<>[]{|}"
 !this makes urxvt to start faster??
 URxvt.preeditType:	Root
 !urgent notification
@@ -277,7 +276,7 @@ xterm*borderLess: true
 xterm*colorUL: green
 xterm*colorBD: wheat
 xterm*colorBDMode: false
-xterm*colorULMode: true
+xterm*colorULMode: false
 xterm*veryBoldColors: 4
 xterm*cursorBlink: false
 xterm*cursorUnderLine: False

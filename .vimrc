@@ -170,6 +170,9 @@ let g:Tlist_Enable_Fold_Column=0
 let g:Tlist_Auto_Update=1
 nmap <F2>   :TlistToggle<CR>
 
+" NERDtree
+nmap <F3>   :NERDTreeToggle<CR>
+
 "insert time stamp in insert mode
 inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
 

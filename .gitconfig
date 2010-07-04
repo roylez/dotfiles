@@ -23,6 +23,7 @@
     pu  = push
     s   = status
     t   = tag
+    untrack = rm -r --cached
 [merge]
 	tool = gvimdiff
 [github]
