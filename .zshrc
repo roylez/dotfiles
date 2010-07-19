@@ -488,16 +488,16 @@ bindkey -s "" "fg\n"
 # }}}
 
 # 特定发行版配置 {{{
-if `cat /etc/issue |grep Arch >/dev/null`; then
-    function command_not_found_handler() {
-        echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
-        if grep Arch /etc/issue >/dev/null; then
-            echo 
-            pacfile /bin/$1$|awk '{split($1,a,"/");print a[1] "/\033[31m" a[2] "\033[m\t\t\t/" $2}'
-        fi
-        return 0
-    }
-fi
+#if `cat /etc/issue |grep Arch >/dev/null`; then
+    #function command_not_found_handler() {
+        #echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
+        #if grep Arch /etc/issue >/dev/null; then
+            #echo 
+            #pacfile /bin/$1$|awk '{split($1,a,"/");print a[1] "/\033[31m" a[2] "\033[m\t\t\t/" $2}'
+        #fi
+        #return 0
+    #}
+#fi
 #}}}
 
 # 环境变量及其他参数 {{{

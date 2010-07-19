@@ -280,6 +280,9 @@ set pgp_getkeys_command="gpg --recv-keys %r > /dev/null 2>&1"
 # This version uses --status-fd messages
 set pgp_good_sign="^\\[GNUPG:\\] GOODSIG"
 
+# auto decode pgp, also deal with inline pgp
+set pgp_auto_decode=yes
+
 # ---------------------hooks-----------------------------------------
 # set official signature
 # cannot be used with set signature=..., which overwrites the hook
