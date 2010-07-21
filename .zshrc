@@ -78,7 +78,7 @@ setopt list_types               # show ls -F style marks in file completion
 setopt long_list_jobs           # show pid in bg job list
 setopt numeric_glob_sort        # when globbing numbered files, use real counting
 setopt inc_append_history       # append to history once executed
-setopt prompt_subst             # prompt more dynamic
+setopt prompt_subst             # prompt more dynamic, allow function in prompt
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
@@ -187,33 +187,51 @@ get_prompt_pwd() { echo $__PROMPT_PWD }
 
 #{{{functions to display git branch in prompt
 
-#get git branch
-export __CURRENT_GIT_BRANCH=
+get_git_status() {
+    unset __CURRENT_GIT_BRANCH
+    unset __CURRENT_GIT_BRANCH_STATUS
+    unset __CURRENT_GIT_BRANCH_IS_DIRTY
 
-parse_git_branch() {
-    #do not track git repository sits in $HOME, which is my configurartion dir
-    if [ "$PWD" != "$HOME" ]; then
-        dir=$(git rev-parse --git-dir 2>/dev/null)
-        if [ "${dir:h}" != "$HOME" ]; then
-            git branch --no-color 2> /dev/null | sed -e '/^[^*]/d;s/* \(.*\)/\1/'
+    local st="$(git status 2>/dev/null)"
+    if [[ -n "$st" ]]; then
+        local -a arr
+        arr=(${(f)st})
+
+        if [[ $arr[1] =~ 'Not currently on any branch.' ]]; then
+            __CURRENT_GIT_BRANCH='no-branch'
+        else
+            __CURRENT_GIT_BRANCH="${arr[1][(w)4]}";
         fi
+
+        if [[ $arr[2] =~ 'Your branch is' ]]; then
+            if [[ $arr[2] =~ 'ahead' ]]; then
+                __CURRENT_GIT_BRANCH_STATUS='ahead'
+            elif [[ $arr[2] =~ 'diverged' ]]; then
+                __CURRENT_GIT_BRANCH_STATUS='diverged'
+            else
+                __CURRENT_GIT_BRANCH_STATUS='behind'
+            fi
+        fi
+
+        [[ ! $st =~ 'nothing to commit' ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
     fi
 }
 
-git_branch_precmd() {
-    case "$(fc -l -1)" in 
-        *git*)
-        export __CURRENT_GIT_BRANCH="$(parse_git_branch)"
-        ;;
-    esac
-}
+git_branch_precmd() { [[ "$(fc -l -1)" == *git* ]] && get_git_status }
 
-git_branch_chpwd() { export __CURRENT_GIT_BRANCH="$(parse_git_branch)" }
+git_branch_chpwd() { get_git_status }
 
 #this one is to be used in prompt
 get_prompt_git() { 
-    if [ ! -z $__CURRENT_GIT_BRANCH ]; then
-        echo " $pfg_black$pbg_white$pB $__CURRENT_GIT_BRANCH $pR" 
+    if [[ -n $__CURRENT_GIT_BRANCH ]]; then
+        local s=$__CURRENT_GIT_BRANCH
+        case "$__CURRENT_GIT_BRANCH_STATUS" in
+            ahead) s+="+" ;;
+            diverged) s+="=" ;;
+            behind) s+="-" ;;
+        esac
+        [[ -n "$__CURRENT_GIT_BRANCH_IS_DIRTY" ]] && s+="*"
+        echo " $pfg_black$pbg_white$pB $s $pR" 
     fi
 }
 #}}}
