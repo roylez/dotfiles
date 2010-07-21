@@ -192,6 +192,9 @@ get_git_status() {
     unset __CURRENT_GIT_BRANCH_STATUS
     unset __CURRENT_GIT_BRANCH_IS_DIRTY
 
+    # do not track git branch info in ~
+    [[ "$PWD" = "$HOME" ]]  &&  return
+
     local st="$(git status 2>/dev/null)"
     if [[ -n "$st" ]]; then
         local -a arr
