@@ -175,11 +175,11 @@ bin-exist() {[[ -x `whence -cp $1 2>/dev/null` ]]}
 # }}}
 
 #{{{ functions to set prompt pwd color
-export __PROMPT_PWD="$pfg_magenta%~$pR"
+__PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { export __PROMPT_PWD="$pU$pfg_blue%~$pR" }
+pwd_color_chpwd() { __PROMPT_PWD="$pU$pfg_blue%~$pR" }
 #change back before next command
-pwd_color_prexec() { export __PROMPT_PWD="$pfg_cyan%~$pR" }
+pwd_color_prexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 
 get_prompt_pwd() { echo $__PROMPT_PWD }
 
@@ -275,7 +275,6 @@ screen_precmd() {
 }
 
 screen_preexec() {
-    emulate -L zsh
     local -a cmd; cmd=(${(z)1})
     if [[ $cmd[1]:t == "ssh" ]]; then
         title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd"
