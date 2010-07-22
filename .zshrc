@@ -177,7 +177,7 @@ bin-exist() {[[ -x `whence -cp $1 2>/dev/null` ]]}
 #{{{ functions to set prompt pwd color
 __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { __PROMPT_PWD="$pU$pfg_blue%~$pR" }
+pwd_color_chpwd() { __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
 #change back before next command
 pwd_color_prexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 
@@ -335,6 +335,7 @@ fi
 # 命令别名 {{{
 # alias and listing colors
 alias -g A="|awk"
+alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|wc"
 alias -g E="|sed"
 alias -g G="|egrep"
