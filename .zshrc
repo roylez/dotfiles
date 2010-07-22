@@ -194,6 +194,8 @@ get_git_status() {
 
     # do not track git branch info in ~
     [[ "$PWD" = "$HOME" ]]  &&  return
+    local dir=$(git rev-parse --git-dir 2>/dev/null)
+    [[ "${dir:h}" = "$HOME" ]] && return
 
     local st="$(git status 2>/dev/null)"
     if [[ -n "$st" ]]; then
