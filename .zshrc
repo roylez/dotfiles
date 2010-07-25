@@ -245,28 +245,27 @@ get_prompt_git() {
 # active command as title in terminals
 case $TERM in
     xterm*|rxvt*)
-    function title() 
-    { 
-        #print -nP '\e]0;'$*'\a'
-        print -nPR $'\033]0;'$1$'\a'
-    } ;;
+        function title() { print -nP "\e]0;$1\a" } 
+        ;;
     screen*)
-    #only set screen title if it is in a local shell
-    if [ -x /usr/bin/screen -a -n $STY ] && (screen -ls |grep $STY &>/dev/null); then
-        function title() 
-        {
-            #modify screen title
-            print -nPR $'\033k'$1$'\033'\\
-            #modify window title bar
-            #print -nPR $'\033]0;'$2$'\a'
-        } 
-    else
-        function title() {}
-    fi
-    ;;
+        #only set screen title if it is in a local shell
+        if [ -n $STY ] && (screen -ls |grep $STY &>/dev/null); then
+            function title() 
+            {
+                #modify screen title
+                print -nP "\ek$1\e\\"
+                #modify window title bar
+                #print -nPR $'\033]0;'$2$'\a'
+            } 
+        elif [ -n $TMUX ]; then       # actually in tmux !
+            function title() {  print -nP "\e]2;$1\a" }
+        else
+            function title() {}
+        fi
+        ;;
     *) 
-    function title() {}
-    ;;
+        function title() {} 
+        ;;
 esac     
 
 #set screen title if not connected remotely
