@@ -202,7 +202,7 @@ get_git_status() {
         local -a arr
         arr=(${(f)st})
 
-        if [[ $arr[1] =~ 'Not currently on any branch.' ]]; then
+        if [[ $arr[1] = 'Not currently on any branch.' ]]; then
             __CURRENT_GIT_BRANCH='no-branch'
         else
             __CURRENT_GIT_BRANCH="${arr[1][(w)4]}";
