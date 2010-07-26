@@ -46,7 +46,7 @@ else
 fi
 
 #color defined for prompts and etc
-autoload colors
+autoload -U colors
 [[ $terminfo[colors] -ge 8 ]] && colors
 pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
@@ -208,17 +208,17 @@ get_git_status() {
             __CURRENT_GIT_BRANCH="${arr[1][(w)4]}";
         fi
 
-        if [[ $arr[2] =~ 'Your branch is' ]]; then
-            if [[ $arr[2] =~ 'ahead' ]]; then
+        if [[ $arr[2] = 'Your branch is' ]]; then
+            if [[ $arr[2] = 'ahead' ]]; then
                 __CURRENT_GIT_BRANCH_STATUS='ahead'
-            elif [[ $arr[2] =~ 'diverged' ]]; then
+            elif [[ $arr[2] = 'diverged' ]]; then
                 __CURRENT_GIT_BRANCH_STATUS='diverged'
             else
                 __CURRENT_GIT_BRANCH_STATUS='behind'
             fi
         fi
 
-        [[ ! $st =~ 'nothing to commit' ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
+        [[ ! $st = 'nothing to commit' ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
     fi
 }
 
