@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Tue 08 Jun 2010 08:37:54 PM CST
 #Description: 
 require "rubygems"
 require "mechanize"
