@@ -72,11 +72,11 @@ if &term =~ "xterm"
     let &t_SI = "\e]12;RoyalBlue1\007"
     let &t_EI = "\e]12;IndianRed2\007"
     autocmd VimLeave * :!echo -ne "\e]12;green\007"
-elseif &term =~ "screen"    " screen in urxvt or xterm
-    :silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
-    let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
-    let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
-    autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
+"elseif &term =~ "screen"    " screen in urxvt or xterm
+    ":silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
+    "let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
+    "let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
+    "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
 endif
 
 let fortran_have_tabs=1	    " this line must be placed before syntax on
