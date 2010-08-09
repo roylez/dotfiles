@@ -333,7 +333,10 @@ xterm*highlightSelection: true
 xterm*eightBitInput: false
 xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
-xterm*deleteIsDEL: true
+!use ^[[3~ for delete
+xterm*deleteIsDEL: false    
+!use ^H for backspace instead of ^?
+XTerm*ttyModes: erase 
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2
