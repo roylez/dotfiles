@@ -335,8 +335,6 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
-!use ^H for backspace instead of ^?
-XTerm*ttyModes: erase 
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2
@@ -371,7 +369,7 @@ xterm*faceName: Monaco:antialias=True
 !xterm*faceName: monofur:antialias=True:pixelsize=16
 !xterm*faceName: DejaVu Sans Mono:antialias=True:pixelsize=15
 !xterm*faceNameDoublesize: Droid Sans Fallback:pixelsize=16:antialias=True
-xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:antialias=True:pixelsize=15.5
+xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:antialias=True:pixelsize=15.8
 !xterm*faceNameDoublesize: Wenquanyi Bitmap Song:pixelsize=15:antialias=True
 !xterm*faceNameDoublesize: YaHei Consolas Hybrid:pixelsize=16:antialias=True
 xterm*xftAntialias: true

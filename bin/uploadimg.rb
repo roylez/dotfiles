@@ -5,9 +5,9 @@ require "rubygems"
 require "mechanize"
 
 #host = "http://petaimg.com"
-#host = 'http://kimag.es'
+host = 'http://kimag.es'
 #host = 'http://bayimg.com'
-host = 'http://www.hostanypic.com/'
+#host = 'http://www.hostanypic.com/'
 
 if __file__=$0
     img = ARGV[0]
