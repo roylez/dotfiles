@@ -2,7 +2,7 @@
 
 !   themes {{{
 
-Xcursor.theme:          ComixCursors-Blue-Regular
+Xcursor.theme:          ComixCursors-Black-Regular
 !Xcursor.theme:          Obsidian
 !*foreground: #DDEEDD
 !*foreground: #F6F6F6
@@ -335,6 +335,7 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
+XTerm*ttyModes: erase 
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2

@@ -57,6 +57,8 @@ nethack on
 #utf-8 handling
 defutf8 on
 
+attrcolor b ".I"
+
 #use zshell as default shell
 #shell zsh
 shell /bin/zsh
