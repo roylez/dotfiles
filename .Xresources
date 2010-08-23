@@ -335,7 +335,6 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
-XTerm*ttyModes: erase 
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2

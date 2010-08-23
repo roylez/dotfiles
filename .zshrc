@@ -202,23 +202,23 @@ get_git_status() {
         local -a arr
         arr=(${(f)st})
 
-        if [[ $arr[1] = '*Not currently on any branch.*' ]]; then
+        if [[ $arr[1] =~ 'Not currently on any branch.' ]]; then
             __CURRENT_GIT_BRANCH='no-branch'
         else
             __CURRENT_GIT_BRANCH="${arr[1][(w)4]}";
         fi
 
-        if [[ $arr[2] == 'Your branch is' ]]; then
-            if [[ $arr[2] == 'ahead' ]]; then
+        if [[ $arr[2] =~ 'Your branch is' ]]; then
+            if [[ $arr[2] =~ 'ahead' ]]; then
                 __CURRENT_GIT_BRANCH_STATUS='ahead'
-            elif [[ $arr[2] == 'diverged' ]]; then
+            elif [[ $arr[2] =~ 'diverged' ]]; then
                 __CURRENT_GIT_BRANCH_STATUS='diverged'
             else
                 __CURRENT_GIT_BRANCH_STATUS='behind'
             fi
         fi
 
-        [[ ! $st == 'nothing to commit' ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
+        [[ ! $st =~ "nothing to commit" ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
     fi
 }
 

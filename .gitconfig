@@ -25,7 +25,7 @@
     t   = tag
     untrack = rm -r --cached
 [merge]
-	tool = gvimdiff
+	tool = vimdiff
 [github]
 	user = roylez
 [core]
