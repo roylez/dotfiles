@@ -337,7 +337,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|wc"
 alias -g E="|sed"
-alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1')\" egrep -i"
+alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1;7')\" egrep -i"
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less"
 alias -g P="|column -t"
