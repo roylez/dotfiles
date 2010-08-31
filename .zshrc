@@ -338,12 +338,12 @@ alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things 
 alias -g C="|wc"
 alias -g E="|sed"
 alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1;7')\" egrep -i"
-alias -g H="|head -n $(($LINES-2))"
+alias -g H='|head -n $(($LINES-2))'
 alias -g L="|less"
 alias -g P="|column -t"
 alias -g R="|tac"
 alias -g S="|sort"
-alias -g T="|tail -n $(($LINES-2))"
+alias -g T='|tail -n $(($LINES-2))'
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
