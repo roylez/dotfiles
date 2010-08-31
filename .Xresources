@@ -2,7 +2,7 @@
 
 !   themes {{{
 
-Xcursor.theme:          ComixCursors-Black-Regular
+Xcursor.theme:          ComixCursors-Black-Small
 !Xcursor.theme:          Obsidian
 !*foreground: #DDEEDD
 !*foreground: #F6F6F6
