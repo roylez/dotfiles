@@ -40,8 +40,8 @@ altscreen on
 defscrollback 1000
 
 # Set messages timeout to 5 second: 
-msgwait 5
-msgminwait 2
+msgwait 4
+msgminwait 1
 pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 #version
 # start message:

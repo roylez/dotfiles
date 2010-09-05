@@ -177,7 +177,7 @@ bin-exist() {[[ -x `whence -cp $1 2>/dev/null` ]]}
 #{{{ functions to set prompt pwd color
 __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
-pwd_color_chpwd() { __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
+pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
 #change back before next command
 pwd_color_prexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 

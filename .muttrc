@@ -117,7 +117,7 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 #mailing list
 #subscribe china@lists.uq.edu.au
 subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au 
-subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com
+subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org
 
 #score "~s believe" -10
 
