@@ -1,8 +1,12 @@
 # vim: ft=conf
 # priority based coloring
-/^x /      , 0;30;2
+/^x /      , 0;35;2
 >2      , 31;1
 >1      , 32
+
+# tickler, goal and special day
+/[^.]?(T:)/   , 31;1;7    , 3
+/[^.]?(G:)/   , 33;1;7    , -5
 
 # pattern matching, coloring and prioritizing
 /^\(A\)/ ,  , 3
@@ -10,9 +14,8 @@
 /^\(C\)/ ,  , 1
 /^x /      , , -0.1
 /\+\w+/  , 35;1;7 , 0.5
-/W|WAIT/ , 36;7   , -5
+/(W|WAIT) / , 36;7   , -3
 /@\w+/  ,  32;1  , 0
 
-# tickler, goal and special day
-/[^.]?(T:)/   , 31;1;7    , 3
-/[^.]?(G:)/   , 33;1;7    , -3
+# project specific
+/\+neo / ,  , -0.3
