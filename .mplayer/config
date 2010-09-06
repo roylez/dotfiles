@@ -19,3 +19,4 @@ vf=screenshot
 zoom=yes
 stop-xscreensaver=yes
 ontop=yes
+nolirc=yes

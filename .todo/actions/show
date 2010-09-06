@@ -1,0 +1,118 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Author: Roy L Zuo (roylzuo at gmail dot com)
+#Description: 
+
+def usage
+    puts "   show "
+    puts "     shows todo list and calendar entries according to patterns defined."
+end
+
+class Tasks
+    attr_reader :tasks
+
+    def self.from_string(string)
+        tasks = []
+
+        lno = 0
+        string.each_line do |l|
+            l.strip!
+            next    if l.empty?
+            lno += 1
+            pri = 0.0
+            @@pat_rules.each {|pat, color, contri| pri += contri  if l =~ pat }
+            tasks << [ lno, pri, l]
+        end
+        tasks
+    end
+
+    def self.read_rules(rules_file=File.join(ENV['TODO_ACTIONS_DIR'],'show.rc'))
+        pri_rules = []
+        pat_rules = []
+
+        lno = 0
+        IO.foreach(rules_file) do |l|
+            l.strip!
+            lno += 1 
+            next    if l[0] == '#' || l.empty?
+            items = l.split(/\s*,\s*/)
+            case items.size
+            when 2
+                if items.first =~ /\/.*\//
+                    pri_rules << [ eval( "proc {|pri, task| task =~ #{items.first} }" ), items.last ]
+                else
+                    pri_rules << [ eval( "proc {|pri, task| pri #{items.first} }" ), items.last ]
+                end
+            when 3
+                pat_rules << [ eval( items.first ), items[1], items.last.to_f ]
+            else
+                raise "Invalid pattern on line #{lno}"
+            end
+        end
+        [pri_rules, pat_rules]
+    end
+
+    @@pri_rules, @@pat_rules = read_rules
+
+    def initialize
+        @tasks = Tasks.from_string(open(ENV['TODO_FILE']).read)
+        self << Tasks.from_string(`rem |grep -Ev '^Reminders for'`)
+        sort!
+    end
+
+    def sort!
+        @tasks.sort!{|x,y| [y[1],x[0]] <=> [x[1], y[0]]}
+    end
+
+    def <<( list )
+        @tasks += list.collect{|lno, pri, l| [lno + @tasks.size, pri, l]}
+        clean
+    end
+
+    def clean
+        todo_compeleted = @tasks.collect{|x| x[2] }
+        today = Time.now.strftime("%Y-%m-%d")
+        done_file = File.join(ENV['TODO_DIR'], 'done.txt')
+        @tasks.delete_if do |lno, pri, l|
+            next    if l =~ /^x /
+            in_todo = todo_compeleted.include?("x #{today} #{l}")
+            in_done = (`grep "#{today} #{l}" #{done_file}|wc -l`.strip == '1')
+            in_done or in_todo
+        end
+    end
+
+    def show
+        reset = "\e[m"
+        @tasks.each do |lno, pri, task|
+            pri_c = "\e[m"
+            @@pri_rules.each{|r, c| 
+                if r.call(pri, task)
+                    pri_c = "\e[#{c}m"; break
+                end
+            }
+            @@pat_rules.each{|pat, col, pri|
+                if task =~ pat
+                    task.gsub!(pat){|match| 
+                        if $1
+                            "#{match.delete $1}#{reset}\e[#{col}m#{$1}#{reset}#{pri_c}"
+                        else
+                            "#{reset}\e[#{col}m#{match}#{reset}#{pri_c}"
+                        end
+                    }
+                end
+            }
+            puts "\e[36m%-3d\e[m#{pri_c}#{task}#{reset}" %lno
+        end
+    end
+end
+
+if __FILE__==$0
+    exit if ARGV.empty?
+
+    if ARGV.first == "usage"
+        usage
+    else
+        tasks = Tasks.new
+        tasks.show
+    end
+end
