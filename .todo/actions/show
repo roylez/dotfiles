@@ -94,7 +94,9 @@ class Tasks
                 if task =~ pat
                     task.gsub!(pat){|match| 
                         if $1
-                            "#{match.delete $1}#{reset}\e[#{col}m#{$1}#{reset}#{pri_c}"
+                            mid = $1
+                            pre, post = match.split mid
+                            "#{pre}#{reset}\e[#{col}m#{mid}#{reset}#{pri_c}#{post}"
                         else
                             "#{reset}\e[#{col}m#{match}#{reset}#{pri_c}"
                         end
