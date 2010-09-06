@@ -34,7 +34,7 @@ class Tasks
         IO.foreach(rules_file) do |l|
             l.strip!
             lno += 1 
-            next    if l[0] == '#' || l.empty?
+            next    if l =~ /^#/ || l.empty?
             items = l.split(/\s*,\s*/)
             case items.size
             when 2

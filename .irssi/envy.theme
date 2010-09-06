@@ -41,7 +41,7 @@ abstracts = {
   ban = "$*";
   # Kaikissa alemmissa: $0 = mode, $1 = nick
   msgnick = "$0$1- %|";
-  ownmsgnick = "{msgnick %K<$0 %G$1-%K>}%n";
+  ownmsgnick = "{msgnick %K<$0 %G$1-%K>}%n%C";
   ownnick = "$*";
   pubmsgnick = "{msgnick %K<$0 %W$1-%K>}%n";
   pubnick = "$*";
