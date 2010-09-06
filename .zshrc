@@ -5,11 +5,6 @@
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 if [[  "$-" != *i* ]]; then return 0; fi
 
-# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
-#   例如在aix主机，需要把 /usr/linux/bin
-#   置于PATH最前以便下面的配置所调用的命令是linux的版本
-[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
-
 # 为兼容旧版本定义 is-at-least 函数
 function is-at-least {
     local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version
@@ -79,6 +74,7 @@ setopt long_list_jobs           # show pid in bg job list
 setopt numeric_glob_sort        # when globbing numbered files, use real counting
 setopt inc_append_history       # append to history once executed
 setopt prompt_subst             # prompt more dynamic, allow function in prompt
+setopt nonomatch 
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
@@ -331,75 +327,6 @@ fi
 
 # }}}
 
-# 命令别名 {{{
-# alias and listing colors
-alias -g A="|awk"
-alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
-alias -g C="|wc"
-alias -g E="|sed"
-alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1;7')\" egrep -i"
-alias -g H='|head -n $(($LINES-2))'
-alias -g L="|less"
-alias -g P="|column -t"
-alias -g R="|tac"
-alias -g S="|sort"
-alias -g T='|tail -n $(($LINES-2))'
-alias -g X="|xargs"
-alias -g N="> /dev/null"
-alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
-
-# tmux or screen ?
-(bin-exist tmux) && alias s=tmux || alias s=screen
-
-#file types
-(bin-exist apvlv) && alias -s pdf=apvlv
-alias -s ps=gv
-for i in jpg png;           alias -s $i=gqview
-for i in avi rmvb wmv;      alias -s $i=mplayer
-for i in rar zip 7z lzma;   alias -s $i="7z x"
-
-#no correct for mkdir mv and cp
-for i in mkdir mv cp;       alias $i="nocorrect $i"
-alias grep='grep -I --color=always'
-alias egrep='egrep -I --color=always'
-alias cal='cal -3m'
-alias freeze='kill -STOP'
-alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
-alias vi='vim'
-alias ll='ls -l'
-alias df='df -Th'
-alias du='du -h'
-#show directories size
-alias dud='du -s *(/)'
-#date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
-#bloomberg radio
-alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
-alias pyprof='python -m cProfile'
-alias python='nice python'
-alias info='info --vi-keys'
-alias ri='ri -f ansi'
-alias history='history 1'       #zsh specific
-alias zhcon='zhcon --utf8'
-alias vless="/usr/share/vim/vim72/macros/less.sh"
-del() {mv -vif -- $* ~/.Trash}
-alias m='mutt'
-alias port='netstat -ntlp'      #opening ports
-#Terminal - Harder, Faster, Stronger SSH clients 
-#alias ssh="ssh -4 -C -c blowfish-cbc"
-alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
-#alias tree="tree --dirsfirst"
-alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-#alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
-alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070"
-(bin-exist pal) && alias pal="pal -r 0-7 --color"
-[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
-alias tnethack='telnet nethack.alt.org'
-alias tslashem='telnet slashem.crash-override.net'
-
-#}}}
-
 # 提示符 {{{
 if [ "$SSH_TTY" = "" ]; then
     local host="$pB$pfg_magenta%m$pR"
@@ -512,19 +439,6 @@ bindkey -s "" "fg\n"
 
 # }}}
 
-# 特定发行版配置 {{{
-#if `cat /etc/issue |grep Arch >/dev/null`; then
-    #function command_not_found_handler() {
-        #echo "Man, you really need some coffee. \nA clear-headed one would not type things like \"$1\"."|cowsay -f small -W 50
-        #if grep Arch /etc/issue >/dev/null; then
-            #echo 
-            #pacfile /bin/$1$|awk '{split($1,a,"/");print a[1] "/\033[31m" a[2] "\033[m\t\t\t/" $2}'
-        #fi
-        #return 0
-    #}
-#fi
-#}}}
-
 # 环境变量及其他参数 {{{
 # number of lines kept in history
 export HISTSIZE=10000
@@ -561,9 +475,80 @@ export READNULLCMD=less
 #export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
 [[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
 
-#for intel fortran compiler
-#source $HOME/soft/intel/ifort/bin/ifortvars.sh
+# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
+#   例如在aix主机，需要把 /usr/linux/bin
+#   置于PATH最前以便下面的配置所调用的命令是linux的版本
+[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 
-#clear up PATH
-typeset -U PATH
 # }}}
+
+# 命令别名 {{{
+# alias and listing colors
+alias -g A="|awk"
+alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
+alias -g C="|wc"
+alias -g E="|sed"
+alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1;7')\" egrep -i"
+alias -g H="|head -n $(($LINES-2))"
+alias -g L="|less"
+alias -g P="|column -t"
+alias -g R="|tac"
+alias -g S="|sort"
+alias -g T="|tail -n $(($LINES-2))"
+alias -g X="|xargs"
+alias -g N="> /dev/null"
+alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
+
+# tmux or screen ?
+(bin-exist tmux) && alias s=tmux || alias s=screen
+
+#file types
+(bin-exist apvlv) && alias -s pdf=apvlv
+alias -s ps=gv
+for i in jpg png;           alias -s $i=gqview
+for i in avi rmvb wmv;      alias -s $i=mplayer
+for i in rar zip 7z lzma;   alias -s $i="7z x"
+
+#no correct for mkdir mv and cp
+for i in mkdir mv cp;       alias $i="nocorrect $i"
+alias grep='grep -I --color=always'
+alias egrep='egrep -I --color=always'
+alias cal='cal -3m'
+alias freeze='kill -STOP'
+alias ls='ls -h --color=auto -X --time-style="+[33m[[32m%Y-%m-%d [35m%k:%M[33m][m"'
+alias vi='vim'
+alias ll='ls -l'
+alias df='df -Th'
+alias du='du -h'
+#show directories size
+alias dud='du -s *(/)'
+#date for US and CN
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+#bloomberg radio
+alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
+alias pyprof='python -m cProfile'
+alias python='nice python'
+alias info='info --vi-keys'
+alias ri='ri -f ansi'
+alias history='history 1'       #zsh specific
+alias zhcon='zhcon --utf8'
+alias vless="/usr/share/vim/vim72/macros/less.sh"
+del() {mv -vif -- $* ~/.Trash}
+alias m='mutt'
+alias port='netstat -ntlp'      #opening ports
+#Terminal - Harder, Faster, Stronger SSH clients 
+#alias ssh="ssh -4 -C -c blowfish-cbc"
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+#alias tree="tree --dirsfirst"
+alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
+#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+#alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
+alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070"
+(bin-exist pal) && alias pal="pal -r 0-7 --color"
+[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
+alias tnethack='telnet nethack.alt.org'
+alias tslashem='telnet slashem.crash-override.net'
+
+#}}}
+
+typeset -U PATH
