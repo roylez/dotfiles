@@ -9,7 +9,7 @@ def usage
 end
 
 class Tasks
-    attr_reader :tasks
+    attr_accessor :tasks
 
     def self.from_string(string)
         tasks = []
@@ -52,9 +52,15 @@ class Tasks
         [pri_rules, pat_rules]
     end
 
+    def self.from_a(a)
+        new = Tasks.new
+        new.tasks = a
+        new
+    end
+
     @@pri_rules, @@pat_rules = read_rules
 
-    def initialize
+    def read_all
         @tasks = Tasks.from_string(open(ENV['TODO_FILE']).read)
         self << Tasks.from_string(`rem |grep -Ev '^Reminders for'`)
         sort!
@@ -62,6 +68,11 @@ class Tasks
 
     def sort!
         @tasks.sort!{|x,y| [y[1],x[0]] <=> [x[1], y[0]]}
+    end
+
+    def grep(exp)
+        a = @tasks.select{|lno, pri, l| l =~ /#{exp}/i }
+        Tasks.from_a(a)
     end
 
     def <<( list )
@@ -109,12 +120,14 @@ class Tasks
 end
 
 if __FILE__==$0
-    exit if ARGV.empty?
-
+    ARGV.shift  if ARGV.first == File.basename( $0 )
+    
     if ARGV.first == "usage"
         usage
     else
         tasks = Tasks.new
+        tasks.read_all
+        tasks = tasks.grep(ARGV.join(" "))  unless ARGV.empty?
         tasks.show
     end
 end
