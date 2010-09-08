@@ -64,6 +64,7 @@ class Tasks
         @tasks = Tasks.from_string(open(ENV['TODO_FILE']).read)
         self << Tasks.from_string(`rem |grep -Ev '^Reminders for'`)
         sort!
+        @tasks
     end
 
     def sort!
