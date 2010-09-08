@@ -24,6 +24,7 @@
     s   = status
     t   = tag
     untrack = rm -r --cached
+    merge-branch-file = checkout --merge 
 [merge]
 	tool = vimdiff
 [github]
