@@ -30,7 +30,6 @@ function is-at-least {
 }
 
 export SHELL=`which zsh`
-#}}}
 
 # 定义颜色 {{{
 if [[ ("$TERM" == *256color || "$TERM" == screen*) && -f $HOME/.lscolor256 ]]; then
@@ -45,6 +44,7 @@ autoload colors
 [[ $terminfo[colors] -ge 8 ]] && colors
 pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
+#}}}
 #}}}
 
 # 设置参数 {{{
@@ -85,6 +85,11 @@ watch=(notme)
 #ZBEEP="\e[?5h\e[?5l"        # visual beep
 
 #is-at-least 4.3.0 && 
+
+# 自动加载自定义函数
+fpath=($HOME/.zfunctions $fpath)
+# 需要设置了extended_glob才能glob到所有的函数，为了补全能用，又需要放在compinit前面
+autoload -U ${fpath[1]}/*(:t)       
 # }}}
 
 # 命令补全参数{{{
@@ -136,10 +141,6 @@ _force_rehash() {
 # }}}
 
 # 自定义函数 {{{
-
-# 自动加载自定义函数
-fpath=($HOME/.zfunctions $fpath)
-autoload -U ${fpath[1]}/*(:t)       # 需要设置了extended_glob才行...
 
 # 普通自定义函数 {{{
 #show 256 color tab
