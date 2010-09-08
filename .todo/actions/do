@@ -2,7 +2,7 @@
 
 load File.join(ENV['TODO_ACTIONS_DIR'], "show")
 
-all_tasks = Tasks.new.tasks
+all_tasks = Tasks.new.read_all
 
 jobs = ARGV[1..-1].collect{|j| j.to_i }
 
