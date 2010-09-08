@@ -5,6 +5,10 @@
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 if [[  "$-" != *i* ]]; then return 0; fi
 
+# 自动加载自定义函数
+fpath=($HOME/.zfunctions $fpath)
+autoload -U ${fpath[1]}/*(:t)
+
 # 为兼容旧版本定义 is-at-least 函数
 function is-at-least {
     local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version
@@ -136,10 +140,6 @@ _force_rehash() {
 # }}}
 
 # 自定义函数 {{{
-
-# 自动加载自定义函数
-fpath=($HOME/.zfunctions $fpath)
-autoload -U ${fpath[1]}/*{:t}
 
 # 普通自定义函数 {{{
 #show 256 color tab
