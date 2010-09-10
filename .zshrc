@@ -181,9 +181,7 @@ __PROMPT_PWD="$pfg_magenta%~$pR"
 #change PWD color
 pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
 #change back before next command
-pwd_color_prexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
-
-get_prompt_pwd() { echo $__PROMPT_PWD }
+pwd_color_preexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 
 #}}}
 
@@ -298,6 +296,8 @@ screen_preexec() {
 
 #}}}
 
+unset_vi_cmd() { unset VIMODE }
+
 #{{{-----------------define magic function arrays--------------------------
 if ! (is-at-least 4.3); then
     #the following solution should work on older version <4.3 of zsh. 
@@ -311,7 +311,7 @@ if ! (is-at-least 4.3); then
 
     function preexec() {
         screen_preexec
-        pwd_color_prexec
+        pwd_color_preexec
     }
 
     function chpwd() {
@@ -323,8 +323,9 @@ else
     typeset -ga preexec_functions precmd_functions chpwd_functions
     precmd_functions+=screen_precmd
     precmd_functions+=git_branch_precmd
+    precmd_functions+=unset_vi_cmd
     preexec_functions+=screen_preexec
-    preexec_functions+=pwd_color_prexec
+    preexec_functions+=pwd_color_preexec
     chpwd_functions+=pwd_color_chpwd
     chpwd_functions+=git_branch_chpwd
 fi
@@ -351,7 +352,7 @@ PR_SET_CHARSET="%{$terminfo[enacs]%}"
 PR_SHIFT_IN="%{$terminfo[smacs]%}"
 PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
 #PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
-RPROMPT='$(get_prompt_pwd)'
+RPROMPT='$VIMODE $__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
@@ -443,6 +444,14 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 #c-z to continue as well
 bindkey -s "" "fg\n"
 
+zle-keymap-select () {
+    VIMODE="${${KEYMAP/vicmd/COMMAND}/(main|viins)/}"
+    [ -n "$VIMODE" ] && VIMODE="${pbg_black}${pfg_yellow}-- $pB${pfg_blue}$VIMODE$pR$pbg_black${pfg_yellow} --$pR"
+    zle reset-prompt
+}
+
+zle -N zle-keymap-select
+
 # }}}
 
 # 环境变量及其他参数 {{{
@@ -486,6 +495,9 @@ export READNULLCMD=less
 #   置于PATH最前以便下面的配置所调用的命令是linux的版本
 [[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 
+# redefine command not found
+(bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70}
+
 # }}}
 
 # 命令别名 {{{
@@ -494,7 +506,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|wc"
 alias -g E="|sed"
-alias -g G="|RANDOM=\$(date +%N) GREP_COLOR=\"\$(echo 3\$[RANDOM%6+1]';1;7')\" egrep -i"
+alias -g G='|GREP_COLOR=$(echo 3$[$(date +%N)%6+1]'\'';1;7'\'') egrep -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less"
 alias -g P="|column -t"
