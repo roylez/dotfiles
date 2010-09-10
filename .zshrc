@@ -296,8 +296,6 @@ screen_preexec() {
 
 #}}}
 
-unset_vi_cmd() { unset VIMODE }
-
 #{{{-----------------define magic function arrays--------------------------
 if ! (is-at-least 4.3); then
     #the following solution should work on older version <4.3 of zsh. 
@@ -323,7 +321,6 @@ else
     typeset -ga preexec_functions precmd_functions chpwd_functions
     precmd_functions+=screen_precmd
     precmd_functions+=git_branch_precmd
-    precmd_functions+=unset_vi_cmd
     preexec_functions+=screen_preexec
     preexec_functions+=pwd_color_preexec
     chpwd_functions+=pwd_color_chpwd
@@ -352,7 +349,7 @@ PR_SET_CHARSET="%{$terminfo[enacs]%}"
 PR_SHIFT_IN="%{$terminfo[smacs]%}"
 PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
 #PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
-RPROMPT='$VIMODE $__PROMPT_PWD'
+RPROMPT='$__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
@@ -413,6 +410,8 @@ fi
 # 键绑定  {{{ 
 bindkey "" history-beginning-search-backward
 bindkey "" history-beginning-search-forward
+bindkey -M viins "" history-beginning-search-backward
+bindkey -M viins "" history-beginning-search-forward
 bindkey '[1;5D' backward-word     # C-left
 bindkey '[1;5C' forward-word      # C-right
 
@@ -443,14 +442,6 @@ function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
 #c-z to continue as well
 bindkey -s "" "fg\n"
-
-zle-keymap-select () {
-    VIMODE="${${KEYMAP/vicmd/COMMAND}/(main|viins)/}"
-    [ -n "$VIMODE" ] && VIMODE="${pbg_black}${pfg_yellow}-- $pB${pfg_blue}$VIMODE$pR$pbg_black${pfg_yellow} --$pR"
-    zle reset-prompt
-}
-
-zle -N zle-keymap-select
 
 # }}}
 
