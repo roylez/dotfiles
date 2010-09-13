@@ -437,6 +437,15 @@ dumb-cd(){
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
+# colorize command as cyan if found in path or defined.
+check-cmd-self-insert() {
+    zle .self-insert
+    args=(${(s: :)BUFFER})
+    cmd=$args[1]
+    type $cmd &>/dev/null && region_highlight=("0 ${#cmd} fg=cyan,bold") || region_highlight=("0 ${#cmd} fg=red,bold")
+}
+zle -N self-insert check-cmd-self-insert
+
 #拼音补全
 function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
