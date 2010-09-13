@@ -520,8 +520,8 @@ for i in rar zip 7z lzma;   alias -s $i="7z x"
 
 #no correct for mkdir mv and cp
 for i in mkdir mv cp;       alias $i="nocorrect $i"
-alias grep='grep -I --color=always'
-alias egrep='egrep -I --color=always'
+alias grep='grep -I --color=auto'
+alias egrep='egrep -I --color=auto'
 alias cal='cal -3m'
 alias freeze='kill -STOP'
 alias ls=$'ls -h --color=auto -X --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
