@@ -439,9 +439,24 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
 # colorize command as cyan if found in path or defined.
 recolor-cmd() {
-    args=(${(s: :)BUFFER})
+    args=(${(z)BUFFER})
     cmd=$args[1]
-    type $cmd &>/dev/null && region_highlight=("0 ${#cmd} fg=cyan,bold") || region_highlight=("0 ${#cmd} fg=red,bold")
+    res=$(builtin type $cmd 2>/dev/null)
+    [ -z $res ]  && return
+    if [ $res =~ 'reserved word' ]; then
+        color="magenta"
+    elif [ $res =~ 'an alias' ]; then
+        color="cyan"
+    elif [ $res =~ 'shell builtin' ]; then
+        color="yellow"
+    elif [ $res =~ 'shell function' ]; then
+        color='green'
+    elif [ $res =~ "$cmd is" ]; then
+        color="blue"
+    else
+        color="red"
+    fi
+    region_highlight=("0 ${#cmd} fg=${color},bold")
 }
 
 check-cmd-self-insert() { zle .self-insert && recolor-cmd }

@@ -19,7 +19,7 @@ jobs.each{|j|
         job = all_tasks.select{|x| x[0] == j && x[2] !~ /^x /}    # in current job list
         next if job.empty?
         job = job.first
-        next if `grep "#{Time.now.strftime("%Y-%m-%d")} #{job[2]}" #{done_file}|wc -l`.strip == '1'
+        next if `grep "#{Time.now.strftime("%Y-%m-%d")} #{job[2]} 2>/dev/null" #{done_file}|wc -l`.strip == '1'
         #add and do
         system("#{ENV['TODO_SH']} command add #{job[2]}")
         system("#{ENV['TODO_SH']} command do #{todo_tasks.size + 1}")
