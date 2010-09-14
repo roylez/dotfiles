@@ -280,18 +280,14 @@ screen_precmd() {
 
 screen_preexec() {
     local -a cmd; cmd=(${(z)1})
-    if [[ $cmd[1]:t == "ssh" ]]; then
-        title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd"
-    elif [[ $cmd[1]:t == "sudo" ]]; then
-        title "#"$cmd[2]:t "$TERM $cmd[3,-1]"
-    elif [[ $cmd[1]:t == "for" ]]; then
-        title "()"$cmd[7] "$TERM $cmd"
-    elif [[ $cmd[1]:t == "svn" ]]; then
-        title "$cmd[1,2]" "$TERM $cmd"
-    elif [[ $cmd[1]:t == "ls" ]] || [[ $cmd[1]:t == "ll" ]] ; then
-    else
-        title $cmd[1]:t "$TERM $cmd[2,-1]"
-    fi 
+    case $cmd[1]:t in
+        'ssh')          title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd";;
+        'sudo')         title "#"$cmd[2]:t "$TERM $cmd[3,-1]";;
+        'for')          title "()"$cmd[7] "$TERM $cmd";;
+        'svn'|'git')    title "$cmd[1,2]" "$TERM $cmd";;
+        'ls'|'ll')      ;;
+        *)              title $cmd[1]:t "$TERM $cmd[2,-1]";;
+    esac
 }
 
 #}}}
@@ -443,20 +439,16 @@ recolor-cmd() {
     cmd=$args[1]
     res=$(builtin type $cmd 2>/dev/null)
     [ -z $res ]  && return
-    if [ $res =~ 'reserved word' ]; then
-        color="magenta"
-    elif [ $res =~ 'an alias' ]; then
-        color="cyan"
-    elif [ $res =~ 'shell builtin' ]; then
-        color="yellow"
-    elif [ $res =~ 'shell function' ]; then
-        color='green'
-    elif [ $res =~ "$cmd is" ]; then
-        color="blue"
-    else
-        color="red"
-    fi
-    region_highlight=("0 ${#cmd} fg=${color},bold")
+    case $res in
+        *'reserved word'*)      color="fg=magenta";;
+        *'an alias'*)           color="fg=cyan";;
+        *'shell builtin'*)      color="fg=yellow";;
+        *'shell function'*)     color='fg=green';;
+        *"$cmd is"*)
+            [[ $cmd = 'sudo' ]] && color="fg=red" || color="fg=blue";;
+        *)                      color="none";;
+    esac
+    region_highlight=("0 ${#cmd} ${color},bold")
 }
 
 check-cmd-self-insert() { zle .self-insert && recolor-cmd }
