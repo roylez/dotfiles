@@ -434,23 +434,6 @@ zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
 # colorize command as cyan if found in path or defined.
-#recolor-cmd() {
-    #args=(${(z)BUFFER})
-    #cmd=$args[1]
-    #res=$(builtin type $cmd 2>/dev/null)
-    #[ -z $res ]  && return
-    #case $res in
-        #*'reserved word'*)      color="fg=magenta";;
-        #*'an alias'*)           color="fg=cyan";;
-        #*'shell builtin'*)      color="fg=yellow";;
-        #*'shell function'*)     color='fg=green';;
-        #*"$cmd is"*)
-            #[[ $cmd = 'sudo' ]] && color="fg=red" || color="fg=blue";;
-        #*)                      color="none";;
-    #esac
-    #region_highlight=("0 ${#cmd} ${color},bold")
-#}
-
 recolor-cmd() {
     region_highlight=()
     colorize=true
@@ -466,7 +449,7 @@ recolor-cmd() {
                 *'shell builtin'*)   style="fg=yellow,bold";;
                 *'shell function'*)  style='fg=green,bold';;
                 *"$arg is"*)         
-                    [[ $arg = 'sudo' ]] && style="fg=red,bold" || color="fg=blue,bold";;
+                    [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
                 *)                   style='none,bold';;
             esac
             region_highlight+=("$start_pos $end_pos $style")
