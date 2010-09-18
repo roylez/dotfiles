@@ -433,13 +433,14 @@ dumb-cd(){
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
-# colorize command as cyan if found in path or defined.
+# colorize command as blue if found in path or defined.
 recolor-cmd() {
     region_highlight=()
     colorize=true
     start_pos=0
     for arg in ${(z)BUFFER}; do
-        ((end_pos=$start_pos+${#arg}+1))
+        ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+        ((end_pos=$start_pos+${#arg}))
         if $colorize; then
             colorize=false
             res=$(LC_ALL=C builtin type $arg 2>/dev/null)
