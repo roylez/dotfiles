@@ -434,6 +434,8 @@ zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
 # colorize command as blue if found in path or defined.
+TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
+
 recolor-cmd() {
     region_highlight=()
     colorize=true
@@ -455,9 +457,7 @@ recolor-cmd() {
             esac
             region_highlight+=("$start_pos $end_pos $style")
         fi
-        if [[ $arg = '|' ]] || [[ $arg = 'sudo' ]]; then
-              colorize=true
-        fi
+        [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
         start_pos=$end_pos
     done
 }
