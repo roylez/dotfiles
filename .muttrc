@@ -295,4 +295,5 @@ send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f s
 #send2-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 
 # ---------------------color theme-----------------------------------
-source `[[ "$TERM" == xterm-256color ]] && echo $HOME/.mutt.color256 || echo $HOME/.mutt.color8`
+#source `[[ "$TERM" == xterm-256color ]] && echo $HOME/.mutt.color256 || echo $HOME/.mutt.color8`
+source "$HOME/.mutt.color8"
