@@ -62,13 +62,18 @@ class Tasks
 
     def read_all
         @tasks = Tasks.from_string(open(ENV['TODO_FILE']).read)
-        self << Tasks.from_string(`rem |grep -Ev '^Reminders for'`)
+        self << Tasks.from_string(`rem |grep -Ev '^(Reminders for|No reminders)'`)
         sort!
         @tasks
     end
 
     def sort!
-        @tasks.sort!{|x,y| [y[1],x[0]] <=> [x[1], y[0]]}
+        @tasks.sort!{|x,y| 
+            projx = x[2].scan(/[ \^](\+\w+)/).join
+            projy = y[2].scan(/[ \^](\+\w+)/).join
+            # priority desc, project, line number asc
+            [y[1],projx, x[0]] <=> [x[1],projy,y[0]]
+        }
     end
 
     def grep(exp)

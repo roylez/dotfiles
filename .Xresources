@@ -294,7 +294,8 @@ URxvt.boldFont:         xft:Monaco:bold:autohint=True:size=10, \
 ! xterm {{{ 
 !look and feel
 xterm.termName: xterm-256color
-xterm.title:    xterm
+xterm.title:    Xterm
+xterm.vt100.allowTitleOps:  false
 xterm*geometry: 105x33
 !xterm*geometry: 100x33
 xterm*scrollBar: false
