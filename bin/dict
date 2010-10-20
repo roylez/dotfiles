@@ -63,7 +63,7 @@ if __name__=='__main__':
     #test if the string contains chinese
     if ' '.join(args).isalpha():
         #os.system('echo %s |festival --tts' %' '.join(args))
-        os.system('espeak -ven+13 %s &>/dev/null' %' '.join(args))
+        os.system('[[ -x /usr/bin/espeak ]] && espeak -ven+13 %s &>/dev/null' %' '.join(args))
     #get word translation
     xml1= urllib2.urlopen("http://dict.yodao.com/search?keyfrom=dict.python&q=" + '+'.join(args) + "&xmlDetail=true&doctype=xml").read()
     word, translist = parseDict(xml1)
