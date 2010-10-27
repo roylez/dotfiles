@@ -94,7 +94,7 @@ syntax on
 "fixdel
 
 "if has 256 colour, use a 256 colour theme
-if $TERM =~ '^xterm' || $TERM =~ '^screen' || has("gui_running")
+if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif

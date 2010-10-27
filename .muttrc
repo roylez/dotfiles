@@ -99,7 +99,7 @@ set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 # *sigh* this catches raster too. why can't people just use a standard,
 # recognisable quote delimeter? Is is *so* hard? Is the extra dash *that*
 # important?
-set quote_regexp="^( {0,4}-?[>|:]| {0,4}[a-z0-9]+[>|]+)+"
+#set quote_regexp="^( {0,4}-?[>|:}]| {0,4}[a-z0-9]+[>}|]+)+"
 
 # 设置你自己的邮件头。
 #my_hdr From: Zuo Le<lzuo@graduate.hku.hk>

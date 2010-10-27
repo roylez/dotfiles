@@ -278,6 +278,7 @@ URxvt.preeditType:	Root
 
 !URxvt.keysym.M-v:       command:paste
 URxvt.keysym.Delete:       \033[3~
+URxvt*backspaceky:      ^H
 
 !italicFont and boldItalicFont undefined
 !URxvt.font:             xft:Luxi Mono:regular:antialias=True:pixelsize=15, 
@@ -304,7 +305,7 @@ xterm*loginshell: true
 xterm*borderLess: true
 xterm*colorUL: green
 xterm*colorBD: wheat
-xterm*colorBDMode: false
+xterm*colorBDMode: true
 xterm*colorULMode: false
 xterm*veryBoldColors: 4
 xterm*cursorBlink: false
@@ -336,6 +337,8 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
+!use ^H for backspace, if you prefer vt220 compatible ^?, set to false
+xterm*backarrowKey: true        
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2
