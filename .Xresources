@@ -214,6 +214,16 @@ Xft.rgba:               rgb
 
 ! }}}
 
+! use ^? for backspace (xterm and friends) {{{
+!   http://www.ibb.net/~anne/keyboard.html 
+*VT100.Translations: #override \
+              <Key>BackSpace: string(0x7F)\n\
+              <Key>Delete:    string("\033[3~")\n\
+              <Key>Home:      string("\033[1~")\n\
+              <Key>End:       string("\033[4~")
+*ttyModes: erase ^?
+! }}}
+
 ! NETHACK {{{
 ! Lines beginning with ! are comments and are ignored.
 NetHack*font:                   vga
@@ -337,9 +347,6 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
-!xterm by default use ^H for backspace, which is in fact IN CORRECT.
-!if you prefer vt220 compatible ^?, set to false
-xterm*backarrowKey: false        
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2

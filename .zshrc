@@ -35,8 +35,11 @@ export SHELL=`which zsh`
 if [[ ("$TERM" = *256color || "$TERM" = screen*) && -f $HOME/.lscolor256 ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
+    use_256color=1
+    #menu_color="1;7;38;5;143"
 else
     [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
+    #menu_color="1;7;33"
 fi
 
 #color defined for prompts and etc
@@ -95,12 +98,11 @@ autoload -U ${fpath[1]}/*(:t)
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'
 zmodload -i zsh/complist        # for menu-list completion
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:*:kill:*' list-colors '=%*=01;31' 
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" "ma=${${use_256color+1;7;38;5;143}:-1;7;33}"
 #ignore list in completion
 zstyle ':completion:*' ignore-parents parent pwd directory
 #menu selection in completion
-zstyle ':completion:*' menu select=1
+zstyle ':completion:*' menu select=2
 #zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match #_user_expand
 zstyle ':completion:*:match:*' original only 
@@ -110,10 +112,10 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 ### case-insensitive (all) completion
 #zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-#kill completion
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:*:*:*:processes' force-list always
 zstyle ':completion:*:processes' command 'ps -au$USER' 
+zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=36=1;31"
 #use cache to speed up pacman completion
 zstyle ':completion::complete:*' use-cache on
 #zstyle ':completion::complete:*' cache-path .zcache 
@@ -494,7 +496,7 @@ export PAGER=less
 export LESS_TERMCAP_md=$'\E[1;31m'      #bold1
 export LESS_TERMCAP_mb=$'\E[1;31m'
 export LESS_TERMCAP_me=$'\E[m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'  #search highlight
+export LESS_TERMCAP_so=$'\E[01;7;34m'  #search highlight
 export LESS_TERMCAP_se=$'\E[m'
 export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
 export LESS_TERMCAP_ue=$'\E[m'
