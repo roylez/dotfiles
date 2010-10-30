@@ -76,6 +76,7 @@ shell /bin/zsh
 #bindkey -k k8 kill
 #bindkey -k k9 screen
 #bindkey -k k; title
+bind k kill         # fix K key with old version
 bindkey -k F1 prev
 bindkey -k F2 next
 # =-=-=-=-=-=-=-=-=-=-=-Sessions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #

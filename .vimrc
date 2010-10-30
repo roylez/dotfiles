@@ -92,6 +92,7 @@ syntax on
 "maybe necessary for urxvt, because vim use ^H for backspace, 
 "but urxvt can use both ^H and ^?
 "fixdel
+set backspace=2
 
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
