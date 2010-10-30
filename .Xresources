@@ -347,6 +347,8 @@ xterm*altSendsEscape: true
 xterm*metaSendsEscape: true
 !use ^[[3~ for delete
 xterm*deleteIsDEL: false    
+!use ^? for backspace
+xterm.*backarrowKey: false 
 
 !print color and bold/underline attributes
 xterm*printAttributes: 2
