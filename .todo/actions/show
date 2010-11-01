@@ -69,8 +69,8 @@ class Tasks
 
     def sort!
         @tasks.sort!{|x,y| 
-            projx = x[2].scan(/[ \^](\+\w+)/).join
-            projy = y[2].scan(/[ \^](\+\w+)/).join
+            projx = x[2].scan(/(?: (\+\w+)|^(\+\w+))/).join
+            projy = y[2].scan(/(?: (\+\w+)|^(\+\w+))/).join
             # priority desc, project, line number asc
             [y[1],projx, x[0]] <=> [x[1],projy,y[0]]
         }

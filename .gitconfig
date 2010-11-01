@@ -21,7 +21,8 @@
     m   = merge
     pl  = pull
     pu  = push
-    s   = status -sb
+    s   = status -s
+    sb  = status -sb
     t   = tag
     untrack = rm -r --cached
     merge-branch-file = checkout --merge 
