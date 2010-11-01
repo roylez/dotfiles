@@ -21,7 +21,7 @@
     m   = merge
     pl  = pull
     pu  = push
-    s   = status
+    s   = status -sb
     t   = tag
     untrack = rm -r --cached
     merge-branch-file = checkout --merge 
@@ -31,3 +31,5 @@
 	user = roylez
 [core]
 	pager = cat
+[branch]
+	autosetuprebase = always
