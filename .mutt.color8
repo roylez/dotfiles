@@ -28,10 +28,10 @@ color quoted  green default
 color quoted1 yellow default
 color quoted2 red default
 color hdrdefault cyan default
-color header  default magenta .*
 #color header   brightred blue ^Subject:
 #color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
-color header   brightgreen cyan ^(From|To|Cc|Subject|X-Bogosity):
+color header  brightblack cyan  .*
+color header  default magenta ^(From|To|Cc|Subject|X-Bogosity):
 color signature cyan default
 
 color index yellow default ~p                 # To me
