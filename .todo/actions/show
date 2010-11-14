@@ -62,7 +62,7 @@ class Tasks
 
     def read_all
         @tasks = Tasks.from_string(open(ENV['TODO_FILE']).read)
-        self << Tasks.from_string(`rem |grep -E '^(T|D|G): '`)
+        self << Tasks.from_string(`rem |grep -E '^(T|D|G): '`)  if File.file?('/usr/bin/rem')
         sort!
         @tasks
     end
