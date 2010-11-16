@@ -224,6 +224,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
+autocmd Filetype ruby set ts=2 sw=2
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 
 "C/C++
