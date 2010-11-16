@@ -36,10 +36,9 @@ if [[ ("$TERM" = *256color || "$TERM" = screen*) && -f $HOME/.lscolor256 ]]; the
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
     use_256color=1
-    #menu_color="1;7;38;5;143"
+    export TERMCAP=${TERMCAP/Co\#8/Co\#256}
 else
     [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
-    #menu_color="1;7;33"
 fi
 
 #color defined for prompts and etc

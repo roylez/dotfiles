@@ -28,7 +28,7 @@ terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 # tell screen how to set colors. AB = background, AF=foreground
 #terminfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #dynamic title
-terminfo xterm* 'XT:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+termcapinfo xterm* 'Co#256:XT:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
 
 # Automatically detach on hangup, or the screen will keep eating your memory after the terminal emulator has been terminated.
 autodetach on		# default: on
@@ -60,8 +60,7 @@ defutf8 on
 attrcolor b ".I"
 
 #use zshell as default shell
-#shell zsh
-shell /bin/zsh
+shell zsh
 
 # =-=-=-=-=-=-=-=-=-=-=Key bindings-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # bind F1  to select 1
