@@ -1,0 +1,3 @@
+#METHODS="m_muttalias m_inmail m_abook" 
+METHODS="m_inmail m_abook" 
+MUTTALIAS_FILES=.mutt.alias

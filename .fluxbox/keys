@@ -18,10 +18,12 @@ OnDesktop Mouse3 :ToggleCmd {rootMenu} {hideMenus}
 
 #Mod1 Tab            :MacroCmd {ShadeOn}{NextWindow {static}}
 Mod1 Tab            :NextWindow {static}
-Mod1 Shift Tab      :PrevWindow
+Mod4 j              :NextWindow {static}
+Mod4 k              :PrevWindow
 Mod1 F4             :Close
-Control Right       :NextWorkspace
-Control Left        :PrevWorkspace
+Mod4 F12            :NextWorkspace
+Mod4 F11            :PrevWorkspace
+Mod4 m              :Maximize
 Mod1 Right          :NextTab
 Mod1 Left           :PrevTab
 Mod1 space          :Shade
@@ -46,7 +48,7 @@ Mod1 e None k       :ExecCommand skype
 Mod1 e None o       :ExecCommand export QT_IM_MODULE=SCIM && opera
 Mod1 e None p       :ExecCommand pcmanx
 Mod1 e None r       :ExecCommand rox
-Mod1 e None s       :ExecCommand xterm -title XTerm -e screen -d -RR
+Mod4 Return         :ExecCommand xterm
 Mod1 e None u       :ExecCommand urxvt
 Mod1 e None x       :ExecCommand xterm
 Mod1 e None y       :ExecCommand lyx
