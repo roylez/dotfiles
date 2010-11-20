@@ -40,4 +40,4 @@ color index brightyellow default ~N          # New
 color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
 color index cyan default ~D              # Deleted
-color index brightyellow cyan ~F               # flaged
+color index black cyan ~F               # flaged
