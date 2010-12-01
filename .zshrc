@@ -164,7 +164,7 @@ alarm() {
 calc()  { awk "BEGIN{ print $* }" ; }
 
 #check if a binary exists in path
-bin-exist() {[[ -x `whence -cp $1 2>/dev/null` ]]}
+bin-exist() {[[ -n ${commands[$1]} ]]}
 
 #recalculate track db gain with mp3gain
 (bin-exist mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
