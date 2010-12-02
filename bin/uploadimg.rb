@@ -28,7 +28,7 @@ if __file__=$0
         newpage = agent.get(host).form_with(:method=>'POST') do |f|
             f.file_upload('userfile1').file_name = img
         end.submit
-        puts newpage.links[6].href
+        puts (newpage / "input[@name='link']").last['value']
     when 'http://www.hostanypic.com/'
         newpage = agent.get(host).form_with(:method=>'POST') do |f|
             f.file_upload('uploads_0').file_name = img
