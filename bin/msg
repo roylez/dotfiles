@@ -22,5 +22,5 @@ else
     title = '错误'
     text  = '参数无效'
 end
-text = %Q{<span size="14000" weight="bold">\n#{text}</span>}
+text = %Q{<span size="12000" weight="bold">\n#{text}</span>}
 system(%Q{notify-send -i #{icon} '#{title}' '#{text}'})

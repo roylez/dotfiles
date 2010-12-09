@@ -571,7 +571,7 @@ alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 alias pyprof='python -m cProfile'
 alias python='nice python'
 alias info='info --vi-keys'
-alias ri='ri -f ansi'
+alias ri='ri -T -f ansi --width=$COLUMNS'
 alias history='history 1'       #zsh specific
 alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"

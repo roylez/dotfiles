@@ -10,5 +10,6 @@ shift
 }
 
 for i in "$@"; do
-    $TODO_SH command replace $i `sed -n "${i}p" $TODO_FILE|sed -r "s:(MAYBE|WAITING|WAIT) ?::"` 2>/dev/null
+    line=`sed -n "${i}p" $TODO_FILE`
+    $TODO_SH command replace $i `echo $line|sed -r "s:(MAYBE|WAITING|WAIT)( [0-9]{4}-[0-9]{2}-[0-9]{2})? ?::"` 2>/dev/null
 done
