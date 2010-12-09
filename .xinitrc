@@ -33,6 +33,9 @@ case $1 in
     i3)
     exec i3
     ;;
+    wmii)
+    exec wmii
+    ;;
     *)
     exec $DEFAULT_SESSION
     ;;
