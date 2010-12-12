@@ -120,7 +120,7 @@ class Tasks
                     }
                 end
             }
-            puts " \e[36m%-4d\e[m#{pri_c}#{task}#{reset}" %lno
+            puts "\e[36m%3d\e[m  #{pri_c}#{task}#{reset}" %lno
         end
     end
 end
