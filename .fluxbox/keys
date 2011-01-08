@@ -42,7 +42,7 @@ Mod1 m              :MacroCmd {ExecCommand echo 'Regenerating menu ...'| osd_cat
 
 Mod1 e None a       :ExecCommand arandr
 Mod1 e None d       :ExecCommand cd ~/soft/sancho && ./sancho
-Mod1 e None f       :ExecCommand ${HOME}/soft/firefox/firefox
+Mod1 e None f       :ExecCommand firefox
 Mod1 e None g       :ExecCommand pidgin
 Mod1 e None k       :ExecCommand skype
 Mod1 e None o       :ExecCommand export QT_IM_MODULE=SCIM && opera

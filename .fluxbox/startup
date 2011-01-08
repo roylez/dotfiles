@@ -54,16 +54,16 @@ sleep 1
 {
     #nm-applet --sm-disable &
     #wicd-client &
-    conky &
     root-tail -g 1000x150+20+570 -fn fixed /var/log/messages,yellow --justify --cont '> ' &
     #autocutsel &
     aplay ~/.sounds/fanqiejiayuan-start.wav &
-    ipager &
+    #ipager &
     #tint2 &
     #launchy &
     #xterm -e screen &
     #urxvtc -e screen &
     #scim -d &
+    conky &
 } &
 
 wait $fbpid
