@@ -3,7 +3,7 @@
 #Author: Roy L Zuo (roylzuo at gmail dot com)
 #Description: 
 
-$: << '/home/roylez/lib/ruby'
+$: << File.join(ENV['HOME'], 'lib/ruby')
 
 require "msg.rb"
 
@@ -24,12 +24,12 @@ class VolumeControl
 
     def down
         set("#{@step}%- unmute")
-        `aplay /home/roylez/.sounds/MACSound/Close.wav`
+        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
     end
 
     def up
         set("#{@step}%+ unmute")
-        `aplay /home/roylez/.sounds/MACSound/Close.wav`
+        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
     end
 
     def show

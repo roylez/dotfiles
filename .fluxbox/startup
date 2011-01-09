@@ -54,7 +54,7 @@ sleep 1
 {
     #nm-applet --sm-disable &
     #wicd-client &
-    root-tail -g 1000x150+20+570 -fn fixed /var/log/messages,yellow --justify --cont '> ' &
+    #root-tail -g 1000x150+20+570 -fn fixed /var/log/messages,yellow --justify --cont '> ' &
     #autocutsel &
     aplay ~/.sounds/fanqiejiayuan-start.wav &
     #ipager &
@@ -63,7 +63,7 @@ sleep 1
     #xterm -e screen &
     #urxvtc -e screen &
     #scim -d &
-    conky &
+    #conky &
 } &
 
 wait $fbpid
@@ -74,3 +74,5 @@ wait $fbpid
 #wmcpuload &
 #wmmemload &
 #wmclock &
+
+conky &
