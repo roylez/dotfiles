@@ -76,6 +76,7 @@ shell zsh
 #bindkey -k k9 screen
 #bindkey -k k; title
 bind k kill         # fix K key with old version
+bind s              # prevent screen from freezing on c-a s
 bindkey -k F1 prev
 bindkey -k F2 next
 # =-=-=-=-=-=-=-=-=-=-=-Sessions=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
