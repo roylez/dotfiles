@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Author: Roy L Zuo (roylzuo at gmail dot com)
+#Description: 
+
+$: << File.join(ENV['HOME'], 'lib/ruby')
+
+require "msg.rb"
+
+class VolumeControl
+    def initialize
+        @step = 5
+        @notify = File.file?("/usr/bin/notify-send") ? :show_notification : nil
+    end
+
+    def mute_toggle
+        set "toggle"
+    end
+
+    def set(control)
+        `amixer sset Master #{control}`
+        show
+    end
+
+    def down
+        set("#{@step}%- unmute")
+        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
+    end
+
+    def up
+        set("#{@step}%+ unmute")
+        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
+    end
+
+    def show
+        @status = `amixer get Master`
+        puts @status
+        @notify.nil? || send(@notify)
+    end
+
+    private
+
+    def show_notification
+        volume = mute = nil
+        if @status =~ /Playback.*?\[(.*?)%\].*?\[(on|off)\]/m
+            volume = $1.to_i
+            mute = $2
+        end
+        if volume && mute
+            status = case volume
+                     when 0..33     then    'low'
+                     when 34..66    then    'medium'
+                     when 67..100   then    'high'
+                     end
+            status = 'muted' if mute == 'off'
+            icon = "/usr/share/icons/Tango/scalable/status/audio-volume-#{status}.svg"
+            title = mute == 'off' ? "\n    扬声器已静音" : "\n    现在音量是 #{volume}%"
+            msg :icon => icon, :text => '' , :title => title
+        end
+    end
+end
+
+if __FILE__ == $0
+    require 'optparse'
+
+    vc = VolumeControl.new
+
+    case ARGV.first
+    when 'help'
+        puts "#{$0} <command>"
+        puts "    help      show this help"
+        puts "    show      display current volume info"
+        puts "    up        increase volume"
+        puts "    down      decrease volume"
+        puts "    toggle    toggle mute"
+    when "show"
+        vc.show
+    when "up"
+        vc.up
+    when "down"
+        vc.down
+    when "toggle"
+        vc.mute_toggle
+    end
+end

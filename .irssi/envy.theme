@@ -304,7 +304,7 @@ formats = {
     set_not_boolean = "%r:%K:: Setting {hilight $0} isn't boolean, use /SET";
     translation_not_found = "%r:%K:: %rError%K opening translation table file $0: $1";
     translation_file_error = "%r:%K:: %rError%K parsing translation table file $0";
-    pubmsg = "{pubmsgnick {pubnick %c$[-15]0}$2}$1";
+    pubmsg = "{pubmsgnick {pubnick %M$[-15]0}$2}$1";
     own_msg = "{ownmsgnick {ownnick $[-15]0$2}}$1";
     own_msg_channel = "{ownmsgnick {ownnick $[-15]0$3}{msgchannel $1}}$2";
     own_msg_private_query = "{ownprivmsgnick {ownprivnick $[-15]2}}$1";
@@ -312,7 +312,7 @@ formats = {
     pubmsg_me_channel = "{pubmsgmenick {menick $[-15]0$3}{msgchannel $1}}$2";
     pubmsg_hilight = "{pubmsghinick $0 $0 $[-15]1$3%n}$2";
     pubmsg_hilight_channel = "{pubmsghinick $0 $[-15]1$4{msgchannel $2}}$3";
-    pubmsg_channel = "{pubmsgnick {pubnick %c$[-15]0}$2}$1";
+    pubmsg_channel = "{pubmsgnick {pubnick %M$[-15]0}$2}$1";
     msg_private_query = "{privmsgnick $[-15]0}$2";
   };
   "fe-common/irc/dcc" = {

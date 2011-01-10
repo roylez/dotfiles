@@ -18,10 +18,10 @@ xscreensaver -no-splash&
 #urxvtd&
 fetchmail &
 wicd-client &
-tpb -d&
+#tpb -d&
 #[[ -x /usr/bin/dropboxd ]] && dropboxd &
 
-DEFAULT_SESSION=awesome
+DEFAULT_SESSION=fluxbox
 
 case $1 in
     awesome)
