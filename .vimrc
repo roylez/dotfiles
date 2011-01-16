@@ -193,6 +193,9 @@ nmap to :tabnew<cr>
 nmap tc :tabclose<cr>
 nmap gf <C-W>gf
 
+" clear search highlight with F5
+nmap <F5>   :noh<cr><ESC>
+
 "Auomatically add file head. NERO_commenter.vim needed.
 function! AutoHead()        
     let fl = line(".") 

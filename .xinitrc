@@ -2,8 +2,9 @@
 xrdb ~/.Xresources
 xmodmap ~/.Xmodmap
 
-export XMODIFIERS=@im=SCIM
-export GTK_IM_MODULE=scim
+#export XMODIFIERS=@im=SCIM
+export XMODIFIERS=@im=fcitx
+export GTK_IM_MODULE=xim
 export QT_IM_MODULE=xim
 export SDL_AUDIODRIVER="alsa"
 
@@ -12,7 +13,8 @@ export SDL_AUDIODRIVER="alsa"
     #eval `dbus-launch --sh-syntax --exit-with-session`
 #fi
 
-scim -d &
+#scim -d &
+fcitx &
 xscreensaver -no-splash&
 #killall -s9 urxvtd
 #urxvtd&

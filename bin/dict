@@ -35,8 +35,9 @@ def parseSentence(xml):
     tree = ElementTree.fromstring(xml)
     senlist = []
     for node in deepFindAll(tree,'example-sentences/sentence-pair'):
-        senlist.append([node.find('sentence').text,
-            node.find('sentence-translation').text])
+        sent = node.find('sentence').text
+        trans = node.find('sentence-translation').text
+        if trans and sent:  senlist.append([sent,trans ])
     return senlist
 
 def deepFindAll(element, tag):

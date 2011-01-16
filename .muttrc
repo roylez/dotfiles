@@ -117,7 +117,7 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 #mailing list
 #subscribe china@lists.uq.edu.au
 subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au 
-subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org
+subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org todotxt@yahoogroups.com
 
 #score "~s believe" -10
 
@@ -287,7 +287,8 @@ set pgp_auto_decode=yes
 # set official signature
 # cannot be used with set signature=..., which overwrites the hook
 # setting.
-send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
+#send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
+send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
 #send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
 #send-hook "~t ^.*edu\.au" "set from='Roy Zuo <z.le@uq.edu.au>';set signature=~/.mutt.sign"
 #send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.com>;set signature=~/.mutt.sign'"
