@@ -1,0 +1,28 @@
+[Profile]
+# Main Window Position X
+MainWindowOffsetX=500
+# Main Window Position Y
+MainWindowOffsetY=1
+# Input Window Position X
+InputWindowOffsetX=300
+# Input Window Position Y
+InputWindowOffsetY=50
+# Use Full Width Character
+Corner=False
+# Use Chinese Punctuation
+ChnPunc=True
+# Input Window Shows at the position of cursor
+TrackCursor=True
+# Prompt the phrases after input
+UseLegend=False
+# Current Input Method Index
+IMIndex=0
+# Locked
+Locked=False
+# Show Main Window in a compact way
+CompactMainWindow=False
+# Use Traditional Chinese in Input
+UseGBKT=False
+# Use recording mode
+Recording=False
+

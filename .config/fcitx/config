@@ -1,0 +1,152 @@
+[Program]
+# Font
+Font=Trebuchet MS
+# Menu Font
+MenuFont=
+# Font Locale to display
+FontLocale=zh_CN.UTF-8
+# Record File of Input
+RecordFile=
+# Use System Tray Icon
+UseTray=True
+# Use DBus to display UI (Require KIMPanel)
+UseDBus=False
+# Enable Addons to Fcitx
+EnableAddons=True
+# Seconds sleep before fcitx really start
+DelayStart=0
+
+[Output]
+# Use English Punc After a Number
+HalfPuncAfterNumber=True
+# Action after press enter
+EnterAction=Commit
+# Action after press SemiColon
+SemiColonAction=QuickPhrase
+# Input English Character if you input upper case
+InputEngByCapitalChar=True
+# Convert Punc to Chinese Punc
+ConvertPunc=True
+# Disable Paging in Legend Mode
+LegendModeDisablePaging=True
+# Send inputed Text if Switch to English Mode
+SendTextWhenSwitchEng=False
+
+[Appearance]
+# Candidate Word Number
+CandidateWordNumber=7
+# Main Window Hide Mode
+MainWindowHideMode=Hide
+# Show Input Window In the center of screen
+CenterInputWindow=False
+# Show Input Window After Trigger Input Mode
+ShowInputWindowAfterTriggering=True
+# Show Point After Index
+ShowPointAfterIndex=True
+# Show Input Speed
+ShowInputSpeed=True
+# Show Version
+ShowVersion=False
+# Show Hint Window while ENV is not correctly configured.
+ShowHintWindow=False
+# Skin Name in use
+SkinType=classic
+
+[Hotkey]
+# Hot key of Triggering Input Method
+TriggerKey=CTRL_SPACE
+# Hotkey of Switching Chinese and English Mode
+ChnEngSwitchKey=L_CTRL
+# Double click Switch Key to Change Mode
+DoubleSwitchKey=False
+# Interval of Two Key Input
+TimeInterval=250
+# Hotkey of Switching Follow Cursor Mode
+FollowCursorKey=CTRL_K
+# Hotkey of Hiding Main Window
+HideMainWindowKey=CTRL_ALT_H
+# Hotkey of Switching Virtual Keyboard
+VKSwitchKey=CTRL_ALT_K
+# Hotkey of Switching Traditional Chinese Input Mode On.
+TraditionalChnSwitchKey=CTRL_ALT_F
+# Hotkey of Switching Legend Mode
+LegendSwitchKey=CTRL_L
+# Hotkey of Looking up the Corresponding pinyin of Word.
+LookupPinyinKey=CTRL_ALT_E
+# Hotkey of Switching Full Width Character Mode
+FullWidthSwitchKey=SHIFT_SPACE
+# Hotkey of Switch Chinese Punc Mode
+ChnPuncSwitchKey=ALT_SPACE
+# Hotkey of Going Prev Page
+PrevPageKey=,
+# Hotkey of Going Next Page
+NextPageKey=.
+# Hotkey to Choose Second and Third Candidate Word
+SecondThirdCandWordKey=SHIFT
+# Hotkey of Saving All Config and Input History
+SaveAllKey=CTRL_ALT_S
+# Hotkey of Switching Recording Mode
+SetRecordingKey=CTRL_ALT_J
+# Hotkey of Reseting Recording Mode
+ResetRecordingKey=CTRL_ALT_A
+
+[InputMethod]
+# Pinyin Priority Order, Zero to Disable
+PinyinOrder=1
+# Shuangpin Priority Order, Zero to Disable
+ShuangpinOrder=0
+# Default Shuangpin Schema
+DefaultShuangpinSchema=自然码
+# Quwei Priority Order, Zero to Disable
+QuweiOrder=0
+# Table Priority Order, Zero to Disable
+TableOrder=0
+# Give the tips of Phrase
+PhraseTips=True
+
+[Pinyin]
+# Use Complete Pinyin
+UseCompletePinyin=False
+# Auto Create Phrase
+AutoCreatePhrase=True
+# Save Auto Created Phrase
+SaveAutoPhrase=False
+# Hotkey of Adding Frequent Word
+AddFreqWordKey=CTRL_8
+# Hotkey of Deleting Frequent Word
+DeleteFreqWordKey=CTRL_7
+# Hotkey of Delete User Phrase
+DeleteUserPhraseKey=CTRL_DELETE
+# Hotkey of Inputing Word From Phrase
+InputWordFromPhraseKey=[]
+# Rule of Candidate Word Order
+BaseOrder=AdjustFreq
+# Rule of Candidate Phrase Order
+PhraseOrder=AdjustFast
+# Rule of Frequent Word Order
+FreqOrder=AdjustNo
+# Fuzzy an and ang
+FuzzyAnAng=False
+# Fuzzy en and eng
+FuzzyEnEng=False
+# Fuzzy ian and iang
+FuzzyIanIang=False
+# Fuzzy in and ing
+FuzzyInIng=False
+# Fuzzy ou and u
+FuzzyOuU=False
+# Fuzzy uan and uang
+FuzzyUanUang=False
+# Fuzzy c and ch
+FuzzyCCh=False
+# Fuzzy f and h
+FuzzyFH=False
+# Fuzzy l and n
+FuzzyLN=False
+# Fuzzy s and sh
+FuzzySSH=False
+# Fuzzy z and zh
+FuzzyZZH=False
+# Fix misstype gn/ng
+Misstype=False
+
