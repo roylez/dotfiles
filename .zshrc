@@ -405,10 +405,13 @@ fi
 # }}}
 
 # 键绑定  {{{ 
-bindkey "" history-beginning-search-backward
-bindkey "" history-beginning-search-forward
-bindkey -M viins "" history-beginning-search-backward
-bindkey -M viins "" history-beginning-search-forward
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "" history-beginning-search-backward-end
+bindkey "" history-beginning-search-forward-end
+bindkey -M viins "" history-beginning-search-backward-end
+bindkey -M viins "" history-beginning-search-forward-end
 bindkey '[1;5D' backward-word     # C-left
 bindkey '[1;5C' forward-word      # C-right
 
@@ -513,14 +516,18 @@ export READNULLCMD=less
 #export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
 [[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
 
-# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
-#   例如在aix主机，需要把 /usr/linux/bin
-#   置于PATH最前以便下面的配置所调用的命令是linux的版本
-[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
-
 # redefine command not found
 (bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70}
 
+# }}}
+
+# 读入其他配置 {{{ 
+
+# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
+#   例如在aix主机，需要把 /usr/linux/bin
+#   置于PATH最前以便下面的配置所调用的命令是linux的版本
+[[ -f $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST
+[[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
 # }}}
 
 # 命令别名 {{{
@@ -557,7 +564,7 @@ alias grep='grep -I --color=auto'
 alias egrep='egrep -I --color=auto'
 alias cal='cal -3'
 alias freeze='kill -STOP'
-alias ls=$'ls -h --color=auto -X --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
+alias ls=$'ls -h --color=auto --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
 alias ll='ls -l'
 alias df='df -Th'
@@ -580,7 +587,8 @@ alias m='mutt'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients 
 #alias ssh="ssh -4 -C -c blowfish-cbc"
-alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=5:frameref=2:8x8dct:bframes=3:weight_b -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+#alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
 #alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"

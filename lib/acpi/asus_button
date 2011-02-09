@@ -1,0 +1,2 @@
+event=hotkey[ /](ATKD|HOTK) .*
+action=/home/roylez/lib/acpi/asus_button.sh %e

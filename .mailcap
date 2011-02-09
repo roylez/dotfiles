@@ -12,7 +12,7 @@ text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
 image/*; feh %s; test=test -n "$DISPLAY"
 
 # portable document format
-application/pdf; acroread %s; test=test -n "DISPLAY"
+application/pdf; evince %s; test=test -n "DISPLAY"
 application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
 
 #text html
