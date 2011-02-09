@@ -1,0 +1,23 @@
+# GTD alias: 
+# better use tput than directly use $terminfo 
+# so that it still work when window is resized
+
+# rvm for gem version management
+if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+
+# autojump
+[[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
+
+alias pw='vim ~/.auth.bfa'
+
+alias t="todo.sh"
+alias td="todo.sh do"
+alias tc='todo.sh continue'
+alias tw='todo.sh wait'
+alias tp="todo.sh p"
+alias ta="todo.sh add"
+alias ts="todo.sh show"
+tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
+alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
+
+compdef t=todo.sh
