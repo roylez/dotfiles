@@ -1,0 +1,17 @@
+#!/bin/bash
+
+action=$1
+shift
+
+[ "$action" = "usage" ] && {
+    echo "  wait ITEM#..."
+    echo "    mark an item as in \"WAIT\" status"
+    exit
+}
+
+for i in "$@"; do
+    line=`sed -n "${i}p" $TODO_FILE`
+    ( echo $line |grep -Ev "WAIT|WAITING" ) && {
+        $TODO_SH command append $i WAIT `date +%Y-%m-%d` 2>/dev/null
+    }
+done
