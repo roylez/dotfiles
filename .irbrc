@@ -1,19 +1,13 @@
 #!/usr/bin/env ruby
 require 'rubygems' unless RUBY_VERSION > '1.9'
-%w(wirble pp irb/completion).each {|m| require m}
+%w(wirble pp irb/completion).each {|m| require m rescue puts "Warning: #{m} gem not installed!"}
 
+$: << '.'
 ARGV << ' --readline'
 # start wirble (with color)
 
 Wirble.init(:skip_prompt => true, :skip_history => true)
 Wirble.colorize
-
-#IRB.conf.merge! \
-    #:PROMPT_MODE => :INF_RUBY,
-    #:AUTO_INDENT => true,
-    #:SAVE_HISTORY => 10000,
-    #:HISTORY_FILE => "#{ENV['HOME']}/.irb-save-history"
-
 def history(how_many = 50)
     return false unless how_many.class == Fixnum
     history_size = Readline::HISTORY.size
@@ -35,7 +29,6 @@ def history(how_many = 50)
     start_index.upto(end_index) {|i| print_line i}
     nil
 end
-#alias :h  :history
 
 # -2 because -1 is ourself
 def history_do(lines = (Readline::HISTORY.size - 2))
@@ -96,8 +89,9 @@ def irb_eval(lines)
 end
 
 if $0 =~ /.*irb/
-    HISTFILE    = "#{ENV['HOME']}/.irb_history"
+    AUTO_INDENT = true
     MAXHISTSIZE = 3000
+    HISTFILE    = "#{ENV['HOME']}/.irb_history"
 
     if defined? Readline::HISTORY
       histfile = File::expand_path( HISTFILE )
@@ -122,3 +116,5 @@ if $0 =~ /.*irb/
       }
     end
 end
+
+

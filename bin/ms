@@ -1,0 +1,13 @@
+#!/bin/bash
+mail_folder=$HOME/.mail
+vfolder=search
+vfolder_path=$mail_folder/$vfolder
+
+rm -rf $vfolder_path && mkdir -p $vfolder_path/{cur,tmp,new}
+
+count=0
+for i in $(notmuch search --output=files "$@"); do
+    ln -s -t $vfolder_path/cur $i &
+    ((count++))
+done
+[[ $count -gt 0 ]] && mutt -f "=$vfolder" || echo "Nothing found"

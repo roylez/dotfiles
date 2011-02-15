@@ -21,3 +21,5 @@ tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
 alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
 
 compdef t=todo.sh
+
+export NNTPSERVER='news.gmane.org'

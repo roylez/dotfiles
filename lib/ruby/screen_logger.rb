@@ -19,8 +19,8 @@ class ScreenLogger
         @screen.datetime_format="%m-%d %H:%M:%S "
         @screen.level = Logger::INFO
         #@screen.formatter = Logger::Formatter.new
-        def @screen.add(severity, message = nil, progname = nil, &block)
-            level_color = { 
+        class << @screen
+            LEVELCOLOR = { 
                 Logger::INFO => nil,
                 Logger::DEBUG => nil,
                 Logger::WARN => "\e[1;33m",
@@ -28,23 +28,25 @@ class ScreenLogger
                 Logger::FATAL => "\e[1;35m",
             }
 
-            severity ||= UNKNOWN
-            if @logdev.nil? or severity < @level
-                return true
-            end
-            progname ||= @progname
-            if message.nil?
-                if block_given?
-                    message = yield
-                else
-                    message = progname
-                    progname = @p
+            def add(severity, message = nil, progname = nil, &block)
+                severity ||= UNKNOWN
+                if @logdev.nil? or severity < @level
+                    return true
                 end
-            end
-            message = "#{level_color[severity]}#{message}\e[m"    if ScreenLogger.use_color and level_color[severity]
-            @logdev.write( format_message(format_severity(severity), Time.now, progname, message))
-            true
-        end 
+                progname ||= @progname
+                if message.nil?
+                    if block_given?
+                        message = yield
+                    else
+                        message = progname
+                        progname = @p
+                    end
+                end
+                message = "#{LEVELCOLOR[severity]}#{message}\e[m"    if ScreenLogger.use_color and LEVELCOLOR[severity]
+                @logdev.write( format_message(format_severity(severity), Time.now, progname, message))
+                true
+            end 
+        end
     end
 
     def method_missing(method, *args, &block)
