@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
-require 'rubygems' unless RUBY_VERSION > '1.9'
+unless RUBY_VERSION > '1.9'
+    %w(rubygems fileutils).each{|m| require m}
+    include FileUtils
+end
 %w(wirble pp irb/completion).each {|m| require m rescue puts "Warning: #{m} gem not installed!"}
 
 $: << '.'
