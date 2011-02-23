@@ -23,7 +23,7 @@ wicd-client &
 #tpb -d&
 #[[ -x /usr/bin/dropboxd ]] && dropboxd &
 
-DEFAULT_SESSION=fluxbox
+DEFAULT_SESSION=awesome
 
 case $1 in
     awesome)

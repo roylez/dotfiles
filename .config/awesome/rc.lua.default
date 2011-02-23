@@ -53,10 +53,10 @@ layouts =
 -- Define a tag table which hold all screen tags.
 tags = {}
 tags.settings = {
-    { name = "梅",  layout = layouts[2], },
-    { name = "蘭",  layout = layouts[1]  },
-    { name = "竹",  layout = layouts[1], mwfact = 0.7 },
-    { name = "菊",  layout = layouts[6]  },
+    { name = "青龍",  layout = layouts[2], },
+    { name = "白虎",  layout = layouts[1]  },
+    { name = "朱雀",  layout = layouts[1], mwfact = 0.7 },
+    { name = "玄武",  layout = layouts[6]  },
 }
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
@@ -132,8 +132,8 @@ function net(format)
     args = vicious.widgets.net(format)
     newtab = {}
     --newtab['{down_kb}'] = string.format('%5.1f', args['{eth0 down_kb}'] + args['{eth1 down_kb}'])
-    newtab['{down_kb}'] = args['{eth0 down_kb}'] + args['{eth1 down_kb}']
-    newtab['{up_kb}'] = args['{eth0 up_kb}'] + args['{eth1 up_kb}']
+    newtab['{down_kb}'] = args['{eth0 down_kb}'] + args['{wlan0 down_kb}']
+    newtab['{up_kb}'] = args['{eth0 up_kb}'] + args['{wlan0 up_kb}']
     return newtab
 end
 vicious.register(netwidget, net, '<span color="'.. beautiful.fg_netdn_widget ..'">${down_kb}</span> <span color="' .. beautiful.fg_netup_widget ..'">${up_kb}</span>', 2)
@@ -144,7 +144,7 @@ vicious.register(netwidget, net, '<span color="'.. beautiful.fg_netdn_widget ..'
 mailicon   = widget({ type = 'imagebox', name = 'mailicon'})
 mailwidget = widget({ type = 'textbox', name  = 'mailwidget'})
 mailicon.image = image(beautiful.widget_mail)
-vicious.register(mailwidget, vicious.widgets.mdir, '<span color="'.. beautiful.fg_widget .. '">$1</span>', 30, '~/.mail/inbox')
+vicious.register(mailwidget, vicious.widgets.mdir, '<span color="'.. beautiful.fg_widget .. '">$1</span>', 30, { '~/.mail/inbox' })
 
 -- }}}
 

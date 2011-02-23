@@ -1,3 +1,13 @@
+! fluxbox-update_configs added '(workspace=[current])' to (Next|Prev)(Window|Group)
+! check lines marked by 'FBCV13' if they are correctly updated
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Mouse1 :MacroCmd {Focus} {Raise} {ActivateTab}
+!mouse actions added by fluxbox-update_configs
+OnTitlebar Move1 :StartMoving
+OnLeftGrip Move1 :StartResizing bottomleft
+OnRightGrip Move1 :StartResizing bottomright
+OnWindowBorder Move1 :StartMoving
+
 ! vim:ft=fluxkeys textwidth=255
 
 !mouse actions added by fluxbox-update_configs
@@ -17,9 +27,9 @@ OnDesktop Mouse2 :workspaceMenu
 OnDesktop Mouse3 :ToggleCmd {rootMenu} {hideMenus}
 
 #Mod1 Tab            :MacroCmd {ShadeOn}{NextWindow {static}}
-Mod1 Tab            :NextWindow {static}
-Mod4 j              :NextWindow {static}
-Mod4 k              :PrevWindow
+Mod1 Tab            :NextWindow {static} (workspace=[current])  !! FBCV13 !!
+Mod4 j              :NextWindow {static} (workspace=[current])  !! FBCV13 !!
+Mod4 k              :PrevWindow (workspace=[current]) !! FBCV13 !!
 Mod1 F4             :Close
 Mod4 F12            :NextWorkspace
 Mod4 F11            :PrevWorkspace
@@ -75,3 +85,7 @@ MoveMode: None l    :MoveRight 2
 
 Control XF86Forward      :ExecCommand amixer set Master 2dB+
 Control XF86Back         :ExecCommand amixer set Master 2dB-
+
+
+
+

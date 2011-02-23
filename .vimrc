@@ -173,6 +173,7 @@ nmap <F2>   :TlistToggle<CR>
 
 " NERDtree
 nmap <F3>   :NERDTreeToggle<CR>
+let g:NERDTreeWinPos="right"
 
 "insert time stamp in insert mode
 inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
@@ -227,6 +228,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
+let g:ruby_no_comment_fold=1
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 
 "C/C++
