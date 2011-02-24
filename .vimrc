@@ -147,6 +147,9 @@ set winaltkeys=no
 "ascii art escape sequence for /etc/motd, ssh banner and etc
 imap ,e   <C-V><C-[>[
 
+"insert time stamp
+imap <F8> <C-R>=strftime("%Y-%m-%d %H:%M")<CR>
+
 "move among windows
 nmap <C-h>   <C-W>h
 nmap <C-l>  <C-W>l
