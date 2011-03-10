@@ -1,8 +1,7 @@
 "1.0b3 (created: 2010/11/06 12:31:35)
+" vim: set ft=vim
 
 set runtimepath=/home/roylez/.pentadactyl
-
-" vim: set ft=vim
 
 imap <F11> <esc>gT
 imap <F12> <esc>gt
@@ -23,7 +22,7 @@ vmap <F12> gt
 source! ~/.vimperatorrc.local
 map <silent> <leader>t :exe ":tinyurl "+getBrowser().contentWindow.location.href<CR>
 set autocomplete=
-"colorscheme desert
+colorscheme desert
 
 "loadplugins
 "set flashblock

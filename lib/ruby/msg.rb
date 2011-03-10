@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Last Change: Sun 09 Jan 2011 04:53:20 PM CST
+#Last Change: Wed 23 Feb 2011 08:42:58 PM CST
 #Description: 
 
 icon_path = File.join( ENV['HOME'], '.icons')
