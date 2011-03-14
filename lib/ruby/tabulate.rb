@@ -22,6 +22,18 @@ $template = {
         :hlframe => "", :hrframe => "",
         :padding => 0, 
     },
+    'sqlite' => {
+        :rs => '', :fs => '  ', :cross => '  ',
+        :lframe => '', :rframe => '',
+        :hlframe => "", :hrframe => "",
+        :padding => 0, :hs => '-'
+    },
+    'plain2' => {
+        :rs => '', :fs => ':', :cross => '+',
+        :lframe => '', :rframe => '',
+        :hlframe => "", :hrframe => "",
+        :hs => "-", :padding => 1,
+    },
     'plain_alt' => {
         :rs => '', :fs => ' ', :cross => '+',
         :lframe => '', :rframe => '',
@@ -61,25 +73,37 @@ def tabulate(labels, data, indent = 0,style="simple" )
     data = [ $template[style][:hlframe] + data[0].join($template[style][:fs]) + $template[style][:hrframe] ] + \
         data[1..-1].collect {|l| $template[style][:lframe] + l.join($template[style][:fs]) + $template[style][:rframe] }
     lines = []
+
+    #add top frame
     if !$template[style][:tframe].to_s.empty?
         lines << $template[style][:cross] + widths.collect{|n| $template[style][:tframe] *n }.join($template[style][:cross]) + $template[style][:cross]
     end
+
+    #add title 
     lines << data[0]
+
+    #add title ruler
     if !$template[style][:hs].to_s.empty? and !$template[style][:lframe].to_s.empty?
         lines << $template[style][:cross] + widths.collect{|n| $template[style][:hs] *n }.join($template[style][:cross]) + $template[style][:cross]
     elsif !$template[style][:hs].to_s.empty?
         lines << widths.collect{|n| $template[style][:hs] *n }.join($template[style][:cross])
     end
+
+    #add data
     data[1..-2].each{ |line|
         lines << line
         if !$template[style][:rs].to_s.empty?
             lines << $template[style][:cross] + widths.collect{|n| $template[style][:rs] *n }.join($template[style][:cross]) + $template[style][:cross]
         end
     }
+
+    #add last record and bottom frame
     lines << data[-1]
     if !$template[style][:bframe].to_s.empty?
         lines << $template[style][:cross] + widths.collect{|n| $template[style][:bframe] *n }.join($template[style][:cross]) + $template[style][:cross]
     end
+
+    #add indent
     lines.collect {|l| ' '*indent + l}.join("\n")
 end
 
@@ -98,14 +122,20 @@ class Array
 end
 
 class String
-#    def n_wide_char
-#        (bytesize - size ) / 2
-#    end
-#    def width
-#        size + n_wide_char 
-#    end
-    def width
-        gsub(/(\e|\033|\33)\[[;0-9]*\D/,'').size
+    if RUBY_VERSION >= '1.9'
+        def contains_cjk?               # Oniguruma regex !!!
+            (self =~ /\p{Han}|\p{Katakana}|\p{Hiragana}\p{Hangul}/)
+        end
+        def width
+            gsub(/(\e|\033|\33)\[[;0-9]*\D/,'').split(//).inject( 0 ) do |s, i|
+                s += i.contains_cjk? ? 2 : 1
+                s 
+            end
+        end
+    else
+        def width
+            gsub(/(\e|\033|\33)\[[;0-9]*\D/,'').size
+        end
     end
 end
 
@@ -116,5 +146,10 @@ if __FILE__ == $0
     #formater.source = source 
     #formater.labels = labels
     #puts formater.display
-    puts tabulate(labels, source, 0, ARGV[0])
+    puts "Available themes: #{$template.keys.inspect}"
+    $template.keys.each do |k|
+        puts "#{k} :"
+        puts tabulate(labels, source, 4, k)
+        puts 
+    end
 end

@@ -14,11 +14,17 @@ class ScreenLogger
         @log = Logger.new(file)
         @log.datetime_format="%Y%m%d %H:%M:%S "
         @log.level = Logger::DEBUG
-        #@log.formatter = Logger::Formatter.new
+        @log.formatter = proc {|severity, time, progname, msg|
+            "%s#%d [%5s] - %s: %s\n" %
+            [ time.strftime(self.datetime_format) , $$, severity, progname, msg.to_s ]
+        }
         @screen = Logger.new(STDOUT)
         @screen.datetime_format="%m-%d %H:%M:%S "
         @screen.level = Logger::INFO
-        #@screen.formatter = Logger::Formatter.new
+        @screen.formatter = proc {|severity, time, progname, msg|
+            "%s#%d [%5s] - %s: %s\n" %
+            [ time.strftime(self.datetime_format) , $$, severity, progname, msg.to_s ]
+        }
         class << @screen
             LEVELCOLOR = { 
                 Logger::INFO => nil,

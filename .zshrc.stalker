@@ -17,3 +17,4 @@ alias pw="vim ~/.auth.bfa"
 compdef ssh-copy-id=ssh
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+source /usr/share/autojump/autojump.zsh
