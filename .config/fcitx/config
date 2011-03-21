@@ -6,7 +6,7 @@ MenuFont=
 # Font Locale to display
 FontLocale=zh_CN.UTF-8
 # Record File of Input
-RecordFile=
+RecordFile=/home/roylez/.config/fcitx/record.dat
 # Use System Tray Icon
 UseTray=True
 # Use DBus to display UI (Require KIMPanel)
@@ -50,7 +50,7 @@ ShowVersion=False
 # Show Hint Window while ENV is not correctly configured.
 ShowHintWindow=False
 # Skin Name in use
-SkinType=darkie
+SkinType=dark
 
 [Hotkey]
 # Hot key of Triggering Input Method
