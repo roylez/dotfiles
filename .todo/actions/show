@@ -3,6 +3,8 @@
 #Author: Roy L Zuo (roylzuo at gmail dot com)
 #Description: 
 
+require 'yaml'
+
 def usage
     puts "   show "
     puts "     shows todo list and calendar entries according to patterns defined."
@@ -20,36 +22,35 @@ class Tasks
             next    if l.empty?
             lno += 1
             pri = 0.0
-            @@pat_rules.each {|pat, color, contri| pri += contri  if l =~ pat }
+            @@pat_rules.each {|r| pri += r['point']  if l =~ r['pattern'] and r.key? 'point' }
             tasks << [ lno, pri, l]
         end
         tasks
     end
 
-    def self.read_rules(rules_file=File.join(ENV['TODO_ACTIONS_DIR'],'show.rc'))
+    def self.read_rules(rules_file=File.join(ENV['TODO_ACTIONS_DIR'],'show_config.yml'))
         pri_rules = []
         pat_rules = []
 
-        lno = 0
-        IO.foreach(rules_file) do |l|
-            l.strip!
-            lno += 1 
-            next    if l =~ /^#/ || l.empty?
-            items = l.split(/\s*,\s*/)
-            case items.size
-            when 2
-                if items.first =~ /\/.*\//
-                    pri_rules << [ eval( "proc {|pri, task| task =~ #{items.first} }" ), items.last ]
+        rules = YAML.load_file rules_file
+
+        rules['priorities'].each do |r| 
+            r[0] = eval r[0]
+        end
+
+        rules['patterns'].each do |r| 
+            r['pattern'] = eval r['pattern']
+            if r['display']
+                if r['display'] =~ /^proc/
+                    r['display'] = eval(r['display'])
                 else
-                    pri_rules << [ eval( "proc {|pri, task| pri #{items.first} }" ), items.last ]
+                    color = r['display']
+                    r['display'] = proc {|match| "\e[#{color}m#{match}\e[m" }
                 end
-            when 3
-                pat_rules << [ eval( items.first ), items[1], items.last.to_f ]
-            else
-                raise "Invalid pattern on line #{lno}"
             end
         end
-        [pri_rules, pat_rules]
+
+        [ rules['priorities'], rules['patterns'] ]
     end
 
     def self.from_a(a)
@@ -103,31 +104,48 @@ class Tasks
         @tasks.each do |lno, pri, task|
             pri_c = "\e[m"
             @@pri_rules.each{|r, c| 
-                if r.call(pri, task)
+                if r.call(pri)
                     pri_c = "\e[#{c}m"; break
                 end
             }
-            @@pat_rules.each{|pat, col, pri|
-                if task =~ pat
-                    task.gsub!(pat){|match| 
-                        if $1
-                            mid = $1
-                            pre, post = match.split mid
-                            "#{pre}#{reset}\e[#{col}m#{mid}#{reset}#{pri_c}#{post}"
-                        else
-                            "#{reset}\e[#{col}m#{match}#{reset}#{pri_c}"
-                        end
-                    }
-                end
+            # rules: 
+            #   'display'   for display
+            #   'points'    priority offset
+            #   'pattern'   for matching
+            @@pat_rules.each{|r|
+                task.gsub!(r['pattern']){|match| 
+                    if $1
+                        mid = $1
+                        pre, post = match.split mid
+                        "#{pre}#{reset}#{r['display'].call(mid)}#{pri_c}#{post}"
+                    else
+                        "#{reset}#{r['display'].call(match)}#{pri_c}"
+                    end
+                }   if r['display']
             }
             puts "\e[36m%3d\e[m  #{pri_c}#{task}#{reset}" %lno
         end
     end
 end
 
+def relative_date(date)
+    date = Date.parse(date, true) unless /Date.*/ =~ date.class.to_s
+    days = (date - Date.today).to_i
+
+    return 'today'     if days >= 0 and days < 1
+    return 'tomorrow'  if days >= 1 and days < 2
+    return 'yesterday' if days >= -1 and days < 0
+
+    return "in #{days} days"      if days.abs < 60 and days > 0
+    return "#{days.abs} days ago" if days.abs < 60 and days < 0
+
+    return date.strftime('%A, %B %e') if days.abs < 182
+    return date.strftime('%A, %B %e, %Y')
+end
+
 if __FILE__==$0
     ARGV.shift  if ARGV.first == File.basename( $0 )
-    
+
     if ARGV.first == "usage"
         usage
     else
