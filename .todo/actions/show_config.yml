@@ -1,6 +1,6 @@
 ---
 priorities:
-    -   [ proc {|p| p > 2 }, 31;1 ]
+    -   [ proc {|p| p > 3 }, 31;1 ]
     -   [ proc {|p| p > 1 }, 33;1 ]
     -   [ proc {|p| p < -7}, 0;35;2 ]
     -   [ proc {|p| p < 0 }, 0;37 ]
@@ -37,7 +37,7 @@ patterns:
         display:      32;1
     -   pattern:    '/^[^x].*(SOMEDAY|MAYBE) */'
         display:      36;7
-        point:      -13
+        point:      -7
 
     -   pattern:    /\+neo /
         point:      0.3

@@ -20,23 +20,19 @@ class ThreadPool
         include Observable
 
         def initialize
+            @thread = Thread.new { } 
+        end
+
+        def process(&block)
             @thread = Thread.new do
-                loop do
-                    block = get_block
-                    if block
-                        block.call
-                        @block = nil
-                        changed     #job done, notify observer
-                        notify_observers(self) 
-                    end
-                end
+                block.call
+                changed
+                notify_observers self
             end
         end
-        def process(&block)
-            @block = block
-        end
-        def get_block
-            @block
+
+        def join
+            @thread.join
         end
     end
 
@@ -47,6 +43,7 @@ class ThreadPool
         @mutex = Mutex.new
         @max_size = max_size
         @workers = Queue.new
+        @working_workers = [ ]
         @max_size.times {|i| 
             worker = Worker.new
             @workers << worker
@@ -55,7 +52,7 @@ class ThreadPool
     end
 
     def wait
-        sleep 0.01 until @workers.size == @max_size
+        @working_workers.each { |w| w.join }
     end
 
     # callback from Observables
@@ -68,6 +65,7 @@ class ThreadPool
         worker = @workers.pop
         puts "#{@max_size - @workers.size} threads working..."  if $DEBUG
         worker.process(&block)
+        @working_workers << worker
     end
 end
 

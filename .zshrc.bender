@@ -4,6 +4,7 @@
 
 # rvm for gem version management
 if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+export RUBYLIB=$HOME/lib/ruby
 
 # autojump
 [[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh

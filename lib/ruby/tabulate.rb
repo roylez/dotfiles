@@ -140,7 +140,7 @@ class String
 end
 
 if __FILE__ == $0
-    source = [["\e[31maht\e[m",3],[4,'5'],['s',['abc','de']]]
+    source = [["\e[31maht\e[m",3],[4,"\e[33m你好\e[m"],['s',['abc','de']]]
     labels = ["a",'b']
     #formater = TableFormatter.new
     #formater.source = source 

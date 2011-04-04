@@ -5,9 +5,8 @@ require "rubygems"
 require "mechanize"
 
 #host = "http://petaimg.com"
-host = 'http://kimag.es'
-#host = 'http://bayimg.com'
-#host = 'http://www.hostanypic.com/'
+#host = 'http://kimag.es'
+host = 'http://imm.io'
 
 if __file__=$0
     img = ARGV[0]
@@ -35,7 +34,10 @@ if __file__=$0
         end.submit
         newpage = agent.get(newpage.links[0].href)
         puts (newpage/"textarea[@name='textarea{4}1']").first.inner_text.gsub(/\[.*?\]/,'')
-    when 'http://bayimg.com'
-        puts 'hello'
+    when 'http://imm.io'
+        newpage = agent.get(host).form_with(:method=>'POST') do |f|
+            f.file_upload('image').file_name = img
+        end.submit
+        puts newpage.uri.to_s.sub('imm', 'i.imm') + '.' + img.split('.').last
     end
 end
