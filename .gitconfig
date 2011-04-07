@@ -27,10 +27,10 @@
     untrack = rm -r --cached
     merge-branch-file = checkout --merge 
 [merge]
-	tool = vimdiff
+    tool = vimdiff
 [github]
-	user = roylez
+    user = roylez
 [core]
-	pager = cat
+    pager = cat
 [branch]
-	autosetuprebase = always
+    autosetuprebase = always
