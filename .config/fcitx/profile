@@ -12,7 +12,7 @@ Corner=False
 # Use Chinese Punctuation
 ChnPunc=True
 # Input Window Shows at the position of cursor
-TrackCursor=False
+TrackCursor=True
 # Prompt the phrases after input
 UseLegend=False
 # Current Input Method Index

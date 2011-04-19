@@ -475,6 +475,16 @@ zle -N backward-delete-char check-cmd-backward-delete-char
 #拼音补全
 function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
+#add sudo to current buffer
+sudo-command-line() {
+    [[ -z $BUFFER ]] && zle up-history
+    [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
+    zle end-of-line                 #光标移动到行末
+}
+zle -N sudo-command-line
+#定义快捷键为： [Esc] [Esc]
+bindkey "\e\e" sudo-command-line
+
 #c-z to continue as well
 bindkey -s "" "fg\n"
 

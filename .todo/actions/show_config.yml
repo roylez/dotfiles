@@ -2,7 +2,7 @@
 priorities:
     -   [ proc {|p| p > 3 }, 31;1 ]
     -   [ proc {|p| p > 1 }, 33;1 ]
-    -   [ proc {|p| p < -7}, 0;35;2 ]
+    -   [ proc {|p| p < -10}, 0;35;2 ]
     -   [ proc {|p| p < 0 }, 0;37 ]
 
 patterns:
@@ -19,16 +19,16 @@ patterns:
     -   pattern:    /^\(C\)/
         point:      1
     -   pattern:    '/^x /'
-        point:      -10
+        point:      -20
     -   pattern:    '/^(\+[^ ]+)/'
-        display:      35;1;7
+        display:      35;1
         point:      0.5
     -   pattern:    '/ (\+[^ ]+)/'
-        display:      35;1;7
+        display:      35;1
         point:      0.5
     -   pattern:    '/^[^x].*(WAIT) */'
         display:      36;7
-        point:      -3
+        point:      -6
     -   pattern:    '/ (\d{4}-\d{2}-\d{2}) */'
         display:    proc {|match| %Q{\e[33m(#{relative_date(Date.parse match)})\e[m} }
     -   pattern:    '/^(@[^ ]+)/'
