@@ -53,6 +53,13 @@ set formatprg=fmt
 set backup
 set backupdir=$HOME/.backup
 
+if version >= 703
+    set undodir=~/.vim/undo
+    set undofile
+    set undolevels=100
+    set undoreload=1000
+endif
+
 set commentstring=#%s       " default comment style
 set sps=best,10             " only show 10 best spell suggestions
 set dictionary+=/usr/share/dict/words

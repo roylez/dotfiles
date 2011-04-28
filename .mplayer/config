@@ -2,6 +2,7 @@
 fontconfig=0
 # vo=gl
 # vo=xv
+# vaapi
 vo=xv,x11,gl2,sdl,ggi,fbdev,fbdev2
 unicode=yes
 #ao=alsa,jack,oss

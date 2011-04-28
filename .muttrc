@@ -117,7 +117,7 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 #mailing list
 #subscribe china@lists.uq.edu.au
 subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au 
-subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org todotxt@yahoogroups.com
+subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org todotxt@yahoogroups.com ruby-talk@ruby-lang.org
 
 #score "~s believe" -10
 
@@ -204,6 +204,10 @@ bind    pager   <Up>    previous-line
 bind    pager   <Down>  next-line
 bind    pager   gg      top
 bind    pager   G       bottom
+
+#toggle thread view
+macro    pager   V       '<esc>V'
+macro    index   V       '<esc>V'
 
 #macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
 # ---------------------GnuPG stuff-----------------------------------

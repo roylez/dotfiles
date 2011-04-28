@@ -38,6 +38,9 @@ case $1 in
     wmii)
     exec wmii
     ;;
+    wmfs)
+    exec wmfs
+    ;;
     *)
     exec $DEFAULT_SESSION
     ;;
