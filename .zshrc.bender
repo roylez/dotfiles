@@ -24,3 +24,5 @@ alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
 compdef t=todo.sh
 
 export NNTPSERVER='news.gmane.org'
+
+alias msfconsole=/opt/metasploit/msfconsole

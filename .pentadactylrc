@@ -17,6 +17,7 @@ set titlestring=Firefox
 set novb
 set defsearch=g
 set showstatuslinks=status
+set guioptions+=c
 vmap <F11> gT
 vmap <F12> gt
 source! ~/.vimperatorrc.local

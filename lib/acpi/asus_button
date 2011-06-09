@@ -1,2 +1,2 @@
-event=hotkey[ /](ATKD|HOTK) .*
+event=hotkey[ /](ATKD|HOTK|ATK).*
 action=/home/roylez/lib/acpi/asus_button.sh %e

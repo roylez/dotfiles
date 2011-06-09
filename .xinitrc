@@ -27,23 +27,26 @@ DEFAULT_SESSION=awesome
 
 case $1 in
     awesome)
-    exec awesome
-    ;;
+        exec awesome
+        ;;
     fluxbox)
-    exec startfluxbox
-    ;;
+        exec startfluxbox
+        ;;
+    subtle)
+        exec subtle
+        ;;
     i3)
-    exec i3
-    ;;
+        exec i3
+        ;;
     wmii)
-    exec wmii
-    ;;
+        exec wmii
+        ;;
     wmfs)
-    exec wmfs
-    ;;
+        exec wmfs
+        ;;
     *)
-    exec $DEFAULT_SESSION
-    ;;
+        exec $DEFAULT_SESSION
+        ;;
 esac
 
 xsetroot -cursor_name left_ptr

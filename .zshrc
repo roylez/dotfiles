@@ -346,7 +346,8 @@ PR_SET_CHARSET="%{$terminfo[enacs]%}"
 PR_SHIFT_IN="%{$terminfo[smacs]%}"
 PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
 #PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
-RPROMPT='$__PROMPT_PWD'
+local prompt_time="%(?:$pfg_green:$pfg_red)%*$pR"
+RPROMPT='$__PROMPT_PWD $prompt_time'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
@@ -604,7 +605,7 @@ alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
-alias gfw="ssh -o ServerAliveInterval=60 -Cg -D 7070"
+alias gfw="ssh -C2g -o ServerAliveInterval=60 -c blowfish-cbc -D 7070"
 (bin-exist pal) && alias pal="pal -r 0-7 --color"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
 alias tnethack='telnet nethack.alt.org'
