@@ -293,6 +293,9 @@ autocmd BufNewFile,BufRead *.viki set ft=viki
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 
+"pentadactyl
+autocmd BufNewFile,BufRead /tmp/pentadactyl*.tmp set textwidth=9999
+
 "bbcode
 autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
 
