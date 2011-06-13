@@ -1,0 +1,4 @@
+set completion-ignore-case on
+
+"": history-search-backward
+"": history-search-forward
