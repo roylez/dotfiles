@@ -7,7 +7,7 @@
     status = auto
     grep   = always
 [push]
-    default = matching
+	default = tracking
 [alias]
     a   = add
     b   = branch

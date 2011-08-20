@@ -605,7 +605,7 @@ alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 #alias gfw="ssh -o ServerAliveInterval=60 -CNfg -D 7777 -l roy lychee &>/dev/null &"
-alias gfw="ssh -C2g -o ServerAliveInterval=60 -c blowfish-cbc -D 7070"
+alias gfw="ssh -C2g -o ServerAliveInterval=60 -c arcfour -D 7070"
 (bin-exist pal) && alias pal="pal -r 0-7 --color"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
 alias tnethack='telnet nethack.alt.org'
