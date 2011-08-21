@@ -240,6 +240,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
 let g:ruby_no_comment_fold=1
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
+autocmd FileType ruby set shiftwidth=2 softtabstop=2
 
 "C/C++
 autocmd FileType cpp setlocal nofoldenable

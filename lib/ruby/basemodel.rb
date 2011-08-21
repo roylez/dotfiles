@@ -17,9 +17,7 @@ class DotHash < OpenStruct
 
     def merge(hash)
         h = clone
-        hash.each do |k, v|
-            h[k.to_sym] = v
-        end
+        hash.each { |k, v| h[k.to_sym] = v }
         h
     end
 
