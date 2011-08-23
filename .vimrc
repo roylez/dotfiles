@@ -101,18 +101,6 @@ syntax on
 "fixdel
 set backspace=2
 
-"if has 256 colour, use a 256 colour theme
-if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
-    if !has("gui_running")
-        set t_Co=256
-    endif
-    "colorscheme inkpot
-    "colorscheme leo
-    colorscheme molokai
-else
-    colorscheme tango
-endif
-
 " 高亮当前行
 "set cursorline
 "set cursorcolumn
@@ -173,17 +161,13 @@ inoremap <m-k> <C-o>gk
 vmap / y/<C-R>"<CR>
 
 " taglist.vim
-let g:Tlist_GainFocus_On_ToggleOpen=1
-let g:Tlist_Exit_OnlyWindow=1
-"let g:Tlist_Use_Right_Window=1
-let g:Tlist_Show_One_File=1
-let g:Tlist_Enable_Fold_Column=0
-let g:Tlist_Auto_Update=1
-nmap <F2>   :TlistToggle<CR>
-
-" NERDtree
-nmap <F3>   :NERDTreeToggle<CR>
-let g:NERDTreeWinPos="right"
+"let g:Tlist_GainFocus_On_ToggleOpen=1
+"let g:Tlist_Exit_OnlyWindow=1
+""let g:Tlist_Use_Right_Window=1
+"let g:Tlist_Show_One_File=1
+"let g:Tlist_Enable_Fold_Column=0
+"let g:Tlist_Auto_Update=1
+"nmap <F2>   :TlistToggle<CR>
 
 "insert time stamp in insert mode
 inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
@@ -191,11 +175,6 @@ inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
 "Make and make test
 nmap <F5>   :w<CR>:make<CR>
 nmap <F6>   :make test<CR>
-
-" NERO_comment.vim
-let g:NERDShutUp=1
-nmap <F9>   ,c<SPACE>
-vmap <F9>   ,c<SPACE>
 
 " tab navigation
 nmap tp :tabprevious<cr> 
@@ -337,3 +316,7 @@ autocmd BufReadPost *
 
 "warn long lines
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
+
+if filereadable( $HOME . '/.vimrc.bundle' )
+    source ~/.vimrc.bundle
+endif

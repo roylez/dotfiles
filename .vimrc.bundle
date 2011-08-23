@@ -1,0 +1,42 @@
+" vim: ft=vim
+"git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'The-NERD-tree'
+nmap <F3>   :NERDTreeToggle<CR>
+let g:NERDTreeWinPos="right"
+
+Bundle 'The-NERD-Commenter'
+let g:NERDShutUp=1
+nmap <F9> <leader>c<SPACE>
+vmap <F9> <leader>c<SPACE>
+
+Bundle 'rails.vim'
+
+Bundle 'Tagbar'
+nmap <F2>   :TagbarToggle<CR>
+
+Bundle 'molokai'
+"Bundle 'railscasts'
+"Bundle 'Solarized'
+"if has 256 colour, use a 256 colour theme
+if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
+    if !has("gui_running")
+        set t_Co=256
+    endif
+    "colorscheme inkpot
+    "colorscheme leo
+    colorscheme molokai
+else
+    colorscheme tango
+endif
+
+Bundle 'simplefold'
+Bundle 'delimitMate.vim'
+Bundle 'openssl.vim'
+
+" syntax
+Bundle 'fluxbox.vim'
+Bundle 'Markdown'
+Bundle 'bbcode'
