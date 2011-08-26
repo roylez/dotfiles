@@ -1,6 +1,7 @@
 " vim: ft=vim
 "git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 set rtp+=~/.vim/bundle/vundle/
+let $GIT_SSL_NO_VERIFY = 'true'
 call vundle#rc()
 
 Bundle 'The-NERD-tree'
@@ -32,6 +33,7 @@ else
     colorscheme tango
 endif
 
+Bundle 'Align'
 Bundle 'simplefold'
 Bundle 'delimitMate.vim'
 Bundle 'openssl.vim'

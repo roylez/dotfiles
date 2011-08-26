@@ -130,6 +130,7 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 "---------------------completion settings-------------------------------
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
+set complete-=i
 "inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 "inoremap <expr> <c-n> pumvisible() ? 
             "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""

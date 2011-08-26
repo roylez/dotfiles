@@ -5,16 +5,16 @@ require "rubygems"
 require "mechanize"
 
 $image_bins = {
-    :kimag => {
-        :url => 'http://kimag.es',
-        :img_field => 'userfile1',
-        :extractor => proc{|page| (page / "input[@name='link']").last['value'] },
-    },
     :imm => {
         :url => 'http://imm.io',
         :img_field => 'image',
         :extractor => proc{|page| page.image_urls.first}
     },
+    :bkup => {
+        :url => 'http://bkup.co',
+        :img_field => 'file1',
+        :extractor => proc{|page| page.uri.to_s }
+    }
 }
 
 def upload_img_to_bin(file)
