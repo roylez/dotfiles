@@ -29,6 +29,7 @@ set notitle             " do not set xterm dynamic title
 set matchtime=5		
 
 set lazyredraw          " faster for macros
+set ttyfast             " better for xterm
 
 set guifont=Monaco\ 10
 set guifontwide=WenQuanYi\ Micro\ Hei\ 12
@@ -52,6 +53,7 @@ set formatprg=fmt
 
 set backup
 set backupdir=$HOME/.backup
+set directory=$HOME/.backup     "swp
 
 if version >= 703
     set undodir=~/.vim/undo

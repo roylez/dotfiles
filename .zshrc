@@ -3,7 +3,7 @@
 
 # 预配置 {{{
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
-if [[  "$-" != *i* ]]; then return 0; fi
+#if [[  "$-" != *i* ]]; then return 0; fi
 
 # 为兼容旧版本定义 is-at-least 函数
 function is-at-least {
@@ -29,7 +29,7 @@ function is-at-least {
     done
 }
 
-export SHELL=`which zsh`
+SHELL=`which zsh`
 
 # 定义颜色 {{{
 if [[ ("$TERM" = *256color || "$TERM" = screen*) && -f $HOME/.lscolor256 ]]; then
@@ -247,7 +247,7 @@ get_prompt_git() {
 }
 #}}}
 
-#{{{-----------------functions to set gnu screen title----------------------
+#{{{ functions to set gnu screen title
 # active command as title in terminals
 case $TERM in
     xterm*|rxvt*)
@@ -298,7 +298,7 @@ screen_preexec() {
 
 #}}}
 
-#{{{-----------------define magic function arrays--------------------------
+#{{{define magic function arrays
 if ! (is-at-least 4.3); then
     #the following solution should work on older version <4.3 of zsh. 
     #The "function" keyword is essential for it to work with the old zsh.

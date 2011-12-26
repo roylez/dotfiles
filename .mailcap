@@ -17,3 +17,6 @@ application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select
 
 #text html
 text/html; w3m -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+
+#videos
+video/*; mplayer %s

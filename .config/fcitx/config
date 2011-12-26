@@ -15,6 +15,7 @@ UseDBus=False
 EnableAddons=True
 # Seconds sleep before fcitx really start
 DelayStart=0
+FirstRun=False
 
 [Output]
 # Use English Punc After a Number

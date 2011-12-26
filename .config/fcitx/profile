@@ -1,28 +1,22 @@
 [Profile]
-# Main Window Position X
-MainWindowOffsetX=500
-# Main Window Position Y
-MainWindowOffsetY=1
-# Input Window Position X
-InputWindowOffsetX=300
-# Input Window Position Y
-InputWindowOffsetY=50
 # Use Full Width Character
-Corner=False
-# Use Chinese Punctuation
-ChnPunc=True
-# Input Window Shows at the position of cursor
-TrackCursor=True
+# Available Value:
+# True False
+FullWidth=False
+# Use Wide Punctuation
+# Available Value:
+# True False
+WidePunc=True
 # Prompt the phrases after input
-UseLegend=False
-# Current Input Method Index
-IMIndex=0
-# Locked
-Locked=False
-# Show Main Window in a compact way
-CompactMainWindow=False
-# Use Traditional Chinese in Input
-UseGBKT=False
-# Use recording mode
-Recording=False
+# Available Value:
+# True False
+UseRemind=False
+# Current Input Method Name
+IMName=pinyin
+# Current Enabled Input Method List
+EnabledIMList=pinyin:True,shuangpin:True,wubi:True,wbpy:True,bingchan:False,cangjie:False,dianbaoma:False,erbi:False,wanfeng:False,ziranma:False
+# Show Preedit String in Client Window
+# Available Value:
+# True False
+PreeditStringInClientWindow=True
 

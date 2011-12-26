@@ -1,4 +1,22 @@
 set completion-ignore-case on
 
+#These will make completions appear immediately after pressing TAB once, instead
+#of the default behavior which is to show them after pressing twice. I think
+#you'll find this saves you many unnecessary keystrokes, but the potential
+#downside is that it could take up the space of terminal backlog you were
+#intending on keeping visible.
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+
+#With this enabled, underscores and hyphens are treated equally when completing,
+#which is a plus to me because I find hyphens a lot easier to type.
+set completion-map-case on
+
+#This one is insanely useful when you have a folder with lots of similarly named
+#files and you are not sure how far the completion has gone when you press TAB.
+#The first part that has been completed will be replaced by "...", and it is
+#simple to see what you need to type to finish the completion.
+set completion-prefix-display-length 2
+
 "": history-search-backward
 "": history-search-forward

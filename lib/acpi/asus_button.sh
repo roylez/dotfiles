@@ -10,7 +10,7 @@ export DISPLAY=:0
 set $*
 
 # "hotkey ATKD 00000030 ...."
-if [[ $2 = ATKD ]]; then
+if [[ $2 = ATK* ]]; then
     case $3 in
         00000032)   # mute
             su roylez -c "$script_dir/change_volume toggle"
