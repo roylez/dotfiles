@@ -18,5 +18,6 @@ set completion-map-case on
 #simple to see what you need to type to finish the completion.
 set completion-prefix-display-length 2
 
+"\t": menu-complete
 "": history-search-backward
 "": history-search-forward
