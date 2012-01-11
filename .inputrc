@@ -1,4 +1,5 @@
 set completion-ignore-case on
 
+"\t": menu-complete
 "": history-search-backward
 "": history-search-forward

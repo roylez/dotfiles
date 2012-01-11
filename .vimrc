@@ -47,7 +47,11 @@ set wrap
 set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 
-set formatprg=fmt
+if executable( 'par' )
+    set formatprg=par\ -req
+else
+    set formatprg=fmt
+endif
 "set formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
@@ -131,6 +135,7 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
 set complete-=i
+set complete-=t
 "inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 "inoremap <expr> <c-n> pumvisible() ? 
             "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""

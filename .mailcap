@@ -16,4 +16,5 @@ application/pdf; evince %s; test=test -n "DISPLAY"
 application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
 
 #text html
-text/html; w3m -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+#text/html; elinks -force-html -dump-width `tput cols` -dump %s; copiousoutput
