@@ -368,10 +368,14 @@ XTerm*VT100.Translations: #override \
     ~Shift <BtnUp>: select-end(CLIPBOARD,PRIMARY,CUT_BUFFER1) \n\
     Ctrl <KeyPress> F9: print() \n
 
+!alt-/ to do word completion with dabbrev-expand
+!XTerm*VT100.Translations: #override \
+!    Mod1 <KeyPress> /:dabbrev-expand() \n
+
 !use mouse wheel to scroll back in GNU Screen, use win key
-XTerm*VT100.translations: #override\
-    Mod4 <Btn5Down>,<Btn5Up>: string(0x5)\n\
-    Mod4 <Btn4Down>,<Btn4Up>: string(0x19) 
+!XTerm*VT100.translations: #override\
+!    Mod4 <Btn5Down>,<Btn5Up>: string(0x5)\n\
+!    Mod4 <Btn4Down>,<Btn4Up>: string(0x19) 
 
 !font and locale
 xterm*locale: true
