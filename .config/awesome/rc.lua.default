@@ -53,10 +53,10 @@ layouts =
 -- Define a tag table which hold all screen tags.
 tags = {}
 tags.settings = {
-    { name = "青龍",  layout = layouts[2], },
-    { name = "白虎",  layout = layouts[1]  },
-    { name = "朱雀",  layout = layouts[1], mwfact = 0.7 },
-    { name = "玄武",  layout = layouts[6]  },
+    { name = "孟章",  layout = layouts[2], },
+    { name = "监兵",  layout = layouts[1]  },
+    { name = "陵光",  layout = layouts[1], mwfact = 0.7 },
+    { name = "执明",  layout = layouts[6]  },
 }
 for s = 1, screen.count() do
     -- Each screen has its own tag table.

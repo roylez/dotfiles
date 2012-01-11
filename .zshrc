@@ -428,9 +428,11 @@ bindkey '\ee' edit-command-line
 
 # }}}
 
-# 自定义widget {{{
-#from linuxtoy.org: 
-#   pressing TAB in an empty command makes a cd command with completion list
+# ZLE 自定义widget {{{
+#
+
+# {{{ pressing TAB in an empty command makes a cd command with completion list 
+# from linuxtoy.org 
 dumb-cd(){
     if [[ -n $BUFFER ]] ; then # 如果该行有内容
         zle expand-or-complete # 执行 TAB 原来的功能
@@ -442,8 +444,9 @@ dumb-cd(){
 }
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+# }}}
 
-# colorize command as blue if found in path or defined.
+# {{{ colorize commands
 TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
 
 recolor-cmd() {
@@ -477,11 +480,12 @@ check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
 
 zle -N self-insert check-cmd-self-insert
 zle -N backward-delete-char check-cmd-backward-delete-char
+# }}}
 
-#拼音补全
+# 拼音补全
 function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
 
-#add sudo to current buffer
+# {{{ double ESC to prepend "sudo"
 sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
     [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
@@ -490,9 +494,25 @@ sudo-command-line() {
 zle -N sudo-command-line
 #定义快捷键为： [Esc] [Esc]
 bindkey "\e\e" sudo-command-line
+# }}}
 
-#c-z to continue as well
+# {{{ c-z to continue
 bindkey -s "" "fg\n"
+# }}}
+
+# {{{ esc-enter to run program in screen split region
+function run-command-in-split-screen() {
+    screen -X eval \
+        "focus bottom" \
+        split \
+        "focus bottom" \
+        "screen $HOME/bin/screen_run $BUFFER" \
+        "focus top"
+    zle kill-buffer
+}
+zle -N run-command-in-split-screen
+bindkey "\e\r" run-command-in-split-screen
+# }}}
 
 # }}}
 
