@@ -44,9 +44,9 @@ if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+"autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+"autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+"autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
@@ -77,6 +77,7 @@ endif
 Bundle 'gmarik/vundle'
 
 Bundle 'Align'
+"Bundle 'Tabular'
 Bundle 'simplefold'
 Bundle 'delimitMate.vim'
 Bundle 'openssl.vim'
@@ -102,6 +103,10 @@ let g:rbpt_colorpairs = [
     \ ]
 "call :RainbowParenthesesToggle()
 nmap <leader>r  :RainbowParenthesesToggle<cr>
+au VimEnter * RainbowParenthesesToggle
+"au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
 
 " syntax
 Bundle 'fluxbox.vim'
