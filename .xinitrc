@@ -21,7 +21,7 @@ xscreensaver -no-splash&
 fetchmail &
 wicd-client &
 #tpb -d&
-#[[ -x /usr/bin/dropboxd ]] && dropboxd &
+dropboxd &
 
 DEFAULT_SESSION=awesome
 

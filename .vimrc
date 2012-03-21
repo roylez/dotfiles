@@ -49,11 +49,11 @@ set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 
 if executable( 'par' )
-    set formatprg=par\ -req
+    set formatprg=par\ req
 else
     set formatprg=fmt
 endif
-"set formatoptions+=mM     " default tcq, mM to help wrap chinese
+set formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
 set backupdir=$HOME/.backup
@@ -225,9 +225,14 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
+"no folding for comment block and if/do blocks
 let g:ruby_no_comment_fold=1
+let g:ruby_no_expensive=1       
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
+
+" scss
+autocmd FileType scss,sass set shiftwidth=2 softtabstop=2
 
 "C/C++
 autocmd FileType cpp setlocal nofoldenable

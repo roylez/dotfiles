@@ -26,3 +26,24 @@ compdef t=todo.sh
 export NNTPSERVER='news.gmane.org'
 
 alias msfconsole=/opt/metasploit/msfconsole
+
+# https://gist.github.com/763451
+function update_bundle_path() {
+  if [[ -f .bundle/config ]]; then
+    if [[ ! -f .bundle/path || .bundle/path -ot .bundle/config ]]; then
+      ruby -rbundler -e 'puts Bundler.bundle_path' > .bundle/path
+    fi
+  fi
+}
+chpwd_functions+=update_bundle_path
+function accept-line-with-bundler() {
+  if [[ -r .bundle/path ]]; then
+    set -- ${=BUFFER}
+    if [[ -x $(< .bundle/path)/bin/$1 ]] && [[ $1 != bundle ]] && [[ -n $BUFFER ]]; then
+      BUFFER="bundle exec $BUFFER"
+    fi
+  fi
+  zle accept-line
+}
+zle -N accept-line-with-bundler
+bindkey "\r" accept-line-with-bundler

@@ -91,7 +91,7 @@ watch=(notme)
 # 自动加载自定义函数
 fpath=($HOME/.zfunctions $fpath)
 # 需要设置了extended_glob才能glob到所有的函数，为了补全能用，又需要放在compinit前面
-autoload -U ${fpath[1]}/*(:t)       
+autoload -U ${fpath[1]}/*(N-.x:t)
 # }}}
 
 # 命令补全参数{{{
@@ -590,7 +590,7 @@ alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 #file types
 (bin-exist apvlv) && alias -s pdf=apvlv
 alias -s ps=gv
-for i in jpg png;           alias -s $i=gqview
+for i in jpg png;           alias -s $i=sxiv
 for i in avi rmvb wmv;      alias -s $i=mplayer
 for i in rar zip 7z lzma;   alias -s $i="7z x"
 

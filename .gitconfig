@@ -26,6 +26,7 @@
     t   = tag
     untrack = rm -r --cached
     merge-branch-file = checkout --merge 
+    rb  = rebase
 [merge]
     tool = vimdiff
 [github]
