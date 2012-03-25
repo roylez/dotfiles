@@ -1,6 +1,12 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: mutt main configuration file
+#Description: 
+#   mutt main configuration file
+# 
+# This configuration represents my current MUTT + offlineimap setup for 
+# "inbox zero" practice. If you are looking for a fetchmail solution, look
+# for my muttrc BEFORE 2012-03-21. 
+#   
 
 ignore *
 unignore From Subject Lines
@@ -48,6 +54,8 @@ set spoolfile="~/.mail/inbox"
 
 # get notified if new mail arrived in inbox
 mailboxes ! =inbox
+
+source ~/.muttrc.inbox_zero
 
 set quit=yes
 #move mail from spool to mailbox when quiting ?

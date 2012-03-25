@@ -18,7 +18,7 @@ fcitx &
 xscreensaver -no-splash&
 #killall -s9 urxvtd
 #urxvtd&
-fetchmail &
+#fetchmail &
 wicd-client &
 #tpb -d&
 dropboxd &
