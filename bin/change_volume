@@ -5,6 +5,26 @@
 
 $: << File.join(ENV['HOME'], 'lib/ruby')
 
+$sound = :alsa
+
+$config = {
+  :oss => {
+    :player => 'ossplay',
+    :up => 'ossmix vmix0-outvol -- +#step#',
+    :down => 'ossmix vmix0-outvol --  -#step#',
+    :toggle => "if ossmix codec1.misc.pcm1-mute|grep OFF;then ossmix codec1.misc.pcm1-mute on;else ossmix codec1.misc.pcm1-mute off;fi;" ,
+    :show => %Q(ossmix |grep vmix0-outvol|cut -d' ' -f4),
+  },
+  :alsa => {
+    :down => "amixer sset Master #step#%- unmute",
+    :up => "amixer sset Master #step#%- unmute",
+    :show => 'amixer get Master',
+    :player => 'aplay',
+    :toggle => 'amixer sset Master toggle'
+  },
+}
+$setting = $config[$sound]
+
 require "msg.rb"
 
 class VolumeControl
@@ -14,27 +34,23 @@ class VolumeControl
     end
 
     def mute_toggle
-        set "toggle"
-    end
-
-    def set(control)
-        `amixer sset Master #{control}`
-        show
+        system($setting[:toggle])
     end
 
     def down
-        set("#{@step}%- unmute")
-        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
+        system($setting[:down].sub('#step#', @step.to_s))
+        show
+        `#{$setting[:player]} #{ENV['HOME']}/.sounds/MACSound/Open.wav`
     end
 
     def up
-        set("#{@step}%+ unmute")
-        `aplay #{ENV['HOME']}/.sounds/MACSound/Open.wav`
+        system($setting[:up].sub('#step#', @step.to_s))
+        show
+        `#{$setting[:player]} #{ENV['HOME']}/.sounds/MACSound/Open.wav`
     end
 
     def show
-        @status = `amixer get Master`
-        puts @status
+        @status = `#{$setting[:show]}`
         @notify.nil? || send(@notify)
     end
 

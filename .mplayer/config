@@ -3,10 +3,10 @@ fontconfig=0
 # vo=gl
 # vo=xv
 # vaapi
-vo=xv,x11,gl2,sdl,ggi,fbdev,fbdev2
+vo=xv,vaapi,x11,gl2,sdl,ggi,fbdev,fbdev2
 unicode=yes
 #ao=alsa,jack,oss
-ao=alsa
+ao=alsa,oss
 mixer-channel="Master"
 subcp=cp936
 #font=/usr/share/fonts/TTF/uming.ttf
