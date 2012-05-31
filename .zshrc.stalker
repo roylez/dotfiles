@@ -20,3 +20,5 @@ compdef ssh-copy-id=ssh
 source /usr/share/autojump/autojump.zsh
 
 export RUBYLIB=$HOME/dotfiles/lib/ruby
+
+alias vim='vim -X'

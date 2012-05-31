@@ -12,10 +12,10 @@ mailboxes =@respond
 mailboxes =@defer
 mailboxes =@delegate
 
-macro pager ,t    "<save-message>=@do\nq" "Save to @DO mbox"
-macro pager ,r    "<save-message>=@respond\nq" "Save to @RESPOND mbox"
-macro pager ,w    "<save-message>=@defer\nq" "Save to @DEFER mbox"
-macro pager ,d    "<save-message>=@delegate\nq" "Save to @DELEGATE mbox"
+macro pager ,t    "<save-message>=@do\n" "Save to @DO mbox"
+macro pager ,r    "<save-message>=@respond\n" "Save to @RESPOND mbox"
+macro pager ,w    "<save-message>=@defer\n" "Save to @DEFER mbox"
+macro pager ,d    "<save-message>=@delegate\n" "Save to @DELEGATE mbox"
 
 #set index_format="%4C %Z %{%b %d %H:%M} %-20.20L [%5c] [%?Y?%-10.10y&----------?] %s"
 

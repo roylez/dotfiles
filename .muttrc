@@ -36,7 +36,7 @@ macro generic \Cx3 "\Cx| -a gmail\"\n\Cx&4\" \"Change the current MSMTP account\
 macro generic \Cx4 "\Cx| -a default: gmail\"\n\Cx&0\" \"Change the current MSMTP account\"\n\Cx_\n" "Switch to account n° 4 for MSMTP"
 
 #set print_command="enscript -Email -2 -r -G"
-set print_command="enscript -Email -G --word-wrap -f Palatino-Roman@11"
+set print_command="enscript -v -Email -G --word-wrap -f Palatino-Roman@11"
 
 # Use Maildir instead of mbox
 set mbox_type=Maildir
@@ -302,7 +302,10 @@ set pgp_auto_decode=yes
 #send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
 #send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
+<<<<<<< HEAD
 #send-hook "~t ^.*edu\.au" "set from='Roy Zuo <z.le@uq.edu.au>';set signature=~/.mutt.sign"
+=======
+>>>>>>> inbox zero for mutt
 send-hook "~t ^.*ibm\.com" "set from='Le Zuo <zuole@cn.ibm.com>';set signature=~/.mutt.sign"
 #send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.com>;set signature=~/.mutt.sign'"
 #send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>';set signature="

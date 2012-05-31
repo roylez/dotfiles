@@ -14,7 +14,7 @@ UseRemind=False
 # Current Input Method Name
 IMName=pinyin
 # Current Enabled Input Method List
-EnabledIMList=pinyin:True,shuangpin:True,wubi:True,wbpy:True,bingchan:False,cangjie:False,dianbaoma:False,erbi:False,wanfeng:False,ziranma:False
+EnabledIMList=pinyin:True,shuangpin:True,googlepinyin:True
 # Show Preedit String in Client Window
 # Available Value:
 # True False
