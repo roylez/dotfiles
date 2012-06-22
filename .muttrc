@@ -302,10 +302,7 @@ set pgp_auto_decode=yes
 #send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
 #send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
-<<<<<<< HEAD
 #send-hook "~t ^.*edu\.au" "set from='Roy Zuo <z.le@uq.edu.au>';set signature=~/.mutt.sign"
-=======
->>>>>>> inbox zero for mutt
 send-hook "~t ^.*ibm\.com" "set from='Le Zuo <zuole@cn.ibm.com>';set signature=~/.mutt.sign"
 #send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.com>;set signature=~/.mutt.sign'"
 #send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>';set signature="

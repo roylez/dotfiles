@@ -17,7 +17,7 @@ $config = {
   },
   :alsa => {
     :down => "amixer sset Master #step#%- unmute",
-    :up => "amixer sset Master #step#%- unmute",
+    :up => "amixer sset Master #step#%+ unmute",
     :show => 'amixer get Master',
     :player => 'aplay',
     :toggle => 'amixer sset Master toggle'
