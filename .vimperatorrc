@@ -22,6 +22,7 @@ colorscheme ot_sweets
 let g:hintsio="io"
 source! ~/.vimperatorrc.local
 map <silent> <leader>t :exe ":tinyurl "+getBrowser().contentWindow.location.href<CR>
+set hintchars="hjklasdfgyuiopqwertnmzxcvb"
 
 loadplugins
 set flashblock

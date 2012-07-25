@@ -1,6 +1,5 @@
 # vim: ft=sh
 xrdb ~/.Xresources
-xmodmap ~/.Xmodmap
 
 #export XMODIFIERS=@im=SCIM
 export XMODIFIERS=@im=fcitx
@@ -19,9 +18,10 @@ xscreensaver -no-splash&
 #killall -s9 urxvtd
 #urxvtd&
 #fetchmail &
-wicd-client &
+wicd-client -t &
 #tpb -d&
 dropboxd &
+xmodmap ~/.Xmodmap
 
 DEFAULT_SESSION=awesome
 

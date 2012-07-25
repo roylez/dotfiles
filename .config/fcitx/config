@@ -54,10 +54,11 @@ ShowHintWindow=False
 SkinType=darkie
 
 [Hotkey]
+SwitchKey=Disabled
 # Hot key of Triggering Input Method
 TriggerKey=CTRL_SPACE
 # Hotkey of Switching Chinese and English Mode
-ChnEngSwitchKey=L_CTRL
+ChnEngSwitchKey=False
 # Double click Switch Key to Change Mode
 DoubleSwitchKey=False
 # Interval of Two Key Input
