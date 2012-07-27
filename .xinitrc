@@ -3,8 +3,10 @@ xrdb ~/.Xresources
 
 #export XMODIFIERS=@im=SCIM
 export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE=xim
-export QT_IM_MODULE=xim
+#export GTK_IM_MODULE=xim
+#export QT_IM_MODULE=xim
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
 export SDL_AUDIODRIVER="alsa"
 
 # D-bus
@@ -21,7 +23,7 @@ xscreensaver -no-splash&
 wicd-client -t &
 #tpb -d&
 dropboxd &
-xmodmap ~/.Xmodmap
+xmodmap $HOME/.Xmodmap
 
 DEFAULT_SESSION=awesome
 
