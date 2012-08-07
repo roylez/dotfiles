@@ -15,6 +15,8 @@ hardstatus string "%{= B}:%{= b}: %{= r}[ %{=b G}%H%{= r} ] %= %{=b b}%-w%{=rb d
 #hardstatus string '%{= M} %H%{= G} %l %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%c '
 windowlist title  '%{u .g}Num Flags Title%='
 windowlist string '%{.g}%3n %{.y}%f%09=%{-} %t %='
+
+rendition bell '=rb' 'dr'
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 ##    Some general options    ##
 
