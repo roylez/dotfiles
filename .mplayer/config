@@ -8,12 +8,13 @@ unicode=yes
 #ao=alsa,jack,oss
 ao=alsa,oss
 mixer-channel="Master"
-subcp=cp936
+subcp=enca:zh:UTF-8
+ass=yes
 #font=/usr/share/fonts/TTF/uming.ttf
 font=subfont.ttf
-subfont-text-scale=3
+subfont-text-scale=5
 stop-xscreensaver=yes
-subfont-autoscale = 3
+subfont-autoscale=3
 vf=expand=0:60:0:0
 vf=screenshot
 #allow image zoom when fullscreen

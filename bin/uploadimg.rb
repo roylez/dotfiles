@@ -10,11 +10,11 @@ $image_bins = {
         :img_field => 'image',
         :extractor => proc{|page| page.image_urls.first}
     },
-    :bkup => {
-        :url => 'http://bkup.co',
-        :img_field => 'file1',
-        :extractor => proc{|page| page.uri.to_s }
-    }
+    #:bkup => {
+        #:url => 'http://bkup.co',
+        #:img_field => 'file1',
+        #:extractor => proc{|page| page.uri.to_s }
+    #}
 }
 
 def upload_img_to_bin(file)

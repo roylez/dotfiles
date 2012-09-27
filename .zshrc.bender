@@ -11,17 +11,18 @@ export RUBYLIB=$HOME/lib/ruby
 
 alias pw='vim ~/.auth.bfa'
 
-alias t="todo.sh"
-alias td="todo.sh do"
-alias tc='todo.sh continue'
-alias tw='todo.sh wait'
-alias tp="todo.sh p"
-alias ta="todo.sh add"
-alias ts="todo.sh show"
-tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
-alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
+#alias t="todo.sh"
+#alias td="todo.sh do"
+#alias tc='todo.sh continue'
+#alias tw='todo.sh wait'
+#alias tp="todo.sh p"
+#alias ta="todo.sh add"
+#alias ts="todo.sh show"
+#tn() {todo.sh ls $* |egrep -v 'MAYBE|WAIT'}
+#alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
 
-compdef t=todo.sh
+#compdef t=todo.sh
+alias t=toodledo
 
 export NNTPSERVER='news.gmane.org'
 
