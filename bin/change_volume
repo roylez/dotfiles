@@ -69,7 +69,7 @@ class VolumeControl
                      when 67..100   then    'high'
                      end
             status = 'muted' if mute == 'off'
-            icon = "/usr/share/icons/Tango/scalable/status/audio-volume-#{status}.svg"
+            icon = "/usr/share/icons/Tango/64x64/status/audio-volume-#{status}.png"
             title = mute == 'off' ? "\n    扬声器已静音" : "\n    现在音量是 #{volume}%"
             msg :icon => icon, :text => '' , :title => title
         end

@@ -21,8 +21,14 @@ if [[ $2 = ATK* ]]; then
         00000030)   # volume up
             su roylez -c "$script_dir/change_volume up"
             ;;
-        0000005c)   # suspend-hybrid
-            pm-suspend-hybrid &
+        0000005c)
+            # suspend-hybrid
+            #pm-suspend-hybrid &
+            # swiss knife program, must be wrapped by rvm first
+            #
+            #   rvm wrapper ruby-1.9.2-head 1.9.2 meow.rb
+            #
+            su roylez -c "/home/roylez/.rvm/bin/1.9.2_meow.rb" 2>&1
             ;;
     esac
 fi

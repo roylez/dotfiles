@@ -34,4 +34,4 @@
 [core]
     pager = cat
 [branch]
-    autosetuprebase = remote
+    ;autosetuprebase = remote
