@@ -7,7 +7,7 @@ map <F12> gt
 nmap <F11> gT
 nmap <F12> gt
 set complete=sl
-set wildoptions=sort
+"set wildoptions=sort
 "set "editor=xterm -e vim -c ':colorscheme inkroy' -f"
 set "editor=xterm -e vim -c start -f"
 set nextpattern=\s*下一页|下一张|下一篇|下页|后页\s*,^\\bnext\\b,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b
@@ -26,7 +26,7 @@ set hintchars="hjklasdfgyuiopqwertnmzxcvb"
 
 loadplugins
 set flashblock
-set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com
+set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com
 nmap \w \fbwhitelist
 
 " vim: set ft=vimperator:

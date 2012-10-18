@@ -141,10 +141,10 @@ vicious.register(netwidget, net, '<span color="'.. beautiful.fg_netdn_widget ..'
 
 -- {{{ Mail
 
-mailicon   = widget({ type = 'imagebox', name = 'mailicon'})
-mailwidget = widget({ type = 'textbox', name  = 'mailwidget'})
-mailicon.image = image(beautiful.widget_mail)
-vicious.register(mailwidget, vicious.widgets.mdir, '<span color="'.. beautiful.fg_widget .. '">$1</span>', 30, { '~/.mail/inbox' })
+--mailicon   = widget({ type = 'imagebox', name = 'mailicon'})
+--mailwidget = widget({ type = 'textbox', name  = 'mailwidget'})
+--mailicon.image = image(beautiful.widget_mail)
+--vicious.register(mailwidget, vicious.widgets.mdir, '<span color="'.. beautiful.fg_widget .. '">$1</span>', 30, { '~/.mail/2012' })
 
 -- }}}
 
@@ -231,7 +231,7 @@ for s = 1, screen.count() do
         myseparator, batterywidget, batteryicon,
         myseparator, memwidget    , mymemicon  ,
         myseparator, thermalwidget, myspacer   , cpuwidget, mycpuicon,
-        myseparator, mailwidget   , mailicon   ,
+        --myseparator, mailwidget   , mailicon   ,
         myseparator, upicon       , netwidget  , downicon,
         myseparator, mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -387,11 +387,15 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "Plugin-container"},
+      properties = { floating = true } },
     { rule = { class = "feh" },
       properties = { floating = true } },
+    { rule = { name = "Gnuplot" },
+      properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
+    { rule = { class = "Firefox" },
+      properties = { tag = tags[1][2] } },
 }
 -- }}}
 
@@ -424,4 +428,17 @@ end)
 
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+-- }}}
+
+-- {{{ Auto Starts
+function run_once(cmd)
+    findme = cmd
+    firstspace = cmd:find(" ")
+    if firstspace then
+        findme = cmd:sub(0, firstspace-1)
+    end
+    awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end
+
+run_once("xmodmap " .. os.getenv("HOME") .. "/.Xmodmap")
 -- }}}

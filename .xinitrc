@@ -23,6 +23,8 @@ xscreensaver -no-splash&
 wicd-client -t &
 #tpb -d&
 dropboxd &
+rescuetime &
+
 xmodmap $HOME/.Xmodmap
 
 DEFAULT_SESSION=awesome
