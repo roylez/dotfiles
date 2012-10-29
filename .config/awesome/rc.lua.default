@@ -305,7 +305,10 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end)
+              end),
+    awful.key({ modkey }, 'Up', function () awful.util.spawn(os.getenv('HOME') .. '/bin/change_volume up') end),
+    awful.key({ modkey }, 'Down', function () awful.util.spawn(os.getenv('HOME') .. '/bin/change_volume down') end),
+    awful.key({ modkey }, 'Right', function () awful.util.spawn("/home/roylez/.rvm/bin/1.9.2_meow.rb") end)
 )
 
 clientkeys = awful.util.table.join(
