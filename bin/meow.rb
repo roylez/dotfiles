@@ -11,11 +11,20 @@ icons = Dir.glob(File.join(ENV['HOME'],'.icons','servants','*.png'))
 iconno = rand(icons.length)
 $notifyargs = "notify-send -t 5000 -i %s" %icons[iconno]
 
+def get_dict
+  lines = `sdcv -l -n`.split("\n")[1..-1]
+  lines ? lines.first.split.first : nil
+end
+
 def translate(string)
-    translation = IO.popen(%Q{sdcv -u "朗道英汉字典5.0" -n "%s"} % string).readlines
-    for line in translation
-        translation.shift
-        break if line =~ /^-->#{string}$/
+    unless dict = get_dict
+      translation = nil
+    else
+      translation = IO.popen(%Q{sdcv -u "#{dict}" -n "%s"} % string).readlines
+      for line in translation
+          translation.shift
+          break if line =~ /^-->#{string}$/
+      end
     end
     translation = translation[1..-1].collect{|a| a.gsub(/("|')/,"\\1")}.join
     if translation
@@ -40,18 +49,18 @@ end
 
 def phoneLookup(string)
     #手机号查询
-    res = Net::HTTP.post_form(URI.parse("http://flash.chinaren.com/ip/mobile.php"),
-                              {'mobile'=>string,'step'=>'2'})
-    page = Iconv.iconv("UTF-8","GBK",res.body).join
-    result = page.scan(/tdc2>(.*?)<\/TD>/)
+    res = Net::HTTP.post_form(URI.parse("http://ipseeker.cn/mobile.php"),
+            {'job'=>'search','mobile'=>string})
+    page = Iconv.iconv("UTF-8","GB2312",res.body).join
+    result = page.scan(/所属地区：(.*?)<br>卡 类 型：(.*?)<br>/).first
     text = %Q{<span size="13000" color="red" weight="bold">%s</span>} \
-            % ("\n"+result[1][0].sub('&nbsp;', '')+"\n\n"+result[2][0])
+            % ("\n"+result.first.sub('&nbsp;', '')+"\n\n"+result.last)
     system %Q{%s '%s机主在：' '%s'} % [$notifyargs,string,text] 
 end 
 
 def pasteSelection(string)
     #上传选中内容
-    agent = WWW::Mechanize.new
+    agent = Mechanize.new
     agent.max_history = 1
     agent.user_agent_alias= 'Windows IE 7'
     begin
