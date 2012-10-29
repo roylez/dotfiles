@@ -9,3 +9,5 @@ keycode 66 = Super_L
 !keycode 227 = Super_L
 !keycode 113 = Alt_R
 !add mod4 = Super_L
+
+pointer = 3 2 1
