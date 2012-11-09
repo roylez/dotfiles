@@ -22,10 +22,10 @@ xscreensaver -no-splash&
 #fetchmail &
 wicd-client -t &
 #tpb -d&
-dropboxd &
-rescuetime &
-
-xmodmap $HOME/.Xmodmap
+#dropboxd &
+xmodmap $HOME/.Xmodmap &
+/usr/share/android-notifier-desktop/run.sh &
+gtk-redshift -l 31.24:121.2 -t 6500:5500 -m vidmode &
 
 DEFAULT_SESSION=awesome
 

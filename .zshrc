@@ -352,7 +352,7 @@ PR_SHIFT_IN="%{$terminfo[smacs]%}"
 PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
 #PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
 local prompt_time="%(?:$pfg_green:$pfg_red)%*$pR"
-RPROMPT='$__PROMPT_PWD $prompt_time'
+RPROMPT='$__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "

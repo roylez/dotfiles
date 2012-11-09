@@ -35,6 +35,7 @@ class VolumeControl
 
     def mute_toggle
         system($setting[:toggle])
+        show
     end
 
     def down
