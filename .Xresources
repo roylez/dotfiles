@@ -176,7 +176,7 @@ Xcursor.theme:          ComixCursors-Orange-Regular-Slim
 
 ! tvale {{{
 !*background:    #000000
-*background:    #423F37
+*background:    #333333
 *foreground:    #FFFFFF
 !black
 *color0 :            #222222
