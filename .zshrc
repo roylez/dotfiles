@@ -5,30 +5,6 @@
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 #if [[  "$-" != *i* ]]; then return 0; fi
 
-# 为兼容旧版本定义 is-at-least 函数
-function is-at-least {
-    local IFS=".-" min_cnt=0 ver_cnt=0 part min_ver version
-
-    min_ver=(${=1})
-    version=(${=2:-$ZSH_VERSION} 0)
-
-    while (( $min_cnt <= ${#min_ver} )); do
-      while [[ "$part" != <-> ]]; do
-        (( ++ver_cnt > ${#version} )) && return 0
-        part=${version[ver_cnt]##*[^0-9]}
-      done
-
-      while true; do
-        (( ++min_cnt > ${#min_ver} )) && return 0
-        [[ ${min_ver[min_cnt]} = <-> ]] && break
-      done
-
-      (( part > min_ver[min_cnt] )) && return 0
-      (( part < min_ver[min_cnt] )) && return 1
-      part=''
-    done
-}
-
 SHELL=`which zsh`
 
 # 定义颜色 {{{
@@ -92,6 +68,8 @@ watch=(notme)
 fpath=($HOME/.zfunctions $fpath)
 # 需要设置了extended_glob才能glob到所有的函数，为了补全能用，又需要放在compinit前面
 autoload -U ${fpath[1]}/*(N-.x:t)
+
+autoload -U is-at-least
 # }}}
 
 # 命令补全参数{{{

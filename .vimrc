@@ -277,6 +277,9 @@ au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 "markdown
 autocmd BufNewFile,BufRead *.mkd,*.mdown set ft=markdown comments=n:> nu nospell textwidth=0
 
+"coffee script
+autocmd BufNewFile,BufRead *.coffee set ft=coffee
+
 "RestructuredText 
 autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
 

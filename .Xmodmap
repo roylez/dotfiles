@@ -4,7 +4,7 @@ keycode 233 = XF86Forward
 clear lock
 remove lock = Caps_Lock
 !add Mod4 = Caps_Lock
-keycode 66 = Super_L
+keycode 66 = Super_R
 !keycode 108 = Super_L
 !keycode 227 = Super_L
 !keycode 113 = Alt_R

@@ -108,3 +108,5 @@ Bundle 'bbcode'
 
 Bundle 'vimwiki'
 let g:vimwiki_folding=1
+
+Bundle 'vim-coffee-script'

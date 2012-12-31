@@ -26,7 +26,7 @@ set hintchars="hjklasdfgyuiopqwertnmzxcvb"
 
 loadplugins
 set flashblock
-set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com
+set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com,acfun.tv
 nmap \w \fbwhitelist
 
 " vim: set ft=vimperator:
