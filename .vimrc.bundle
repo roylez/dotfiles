@@ -110,3 +110,4 @@ Bundle 'vimwiki'
 let g:vimwiki_folding=1
 
 Bundle 'vim-coffee-script'
+autocmd BufNewFile,BufRead *.coffee set ft=coffee
