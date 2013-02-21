@@ -8,6 +8,7 @@ export RUBYLIB=$HOME/lib/ruby
 
 # autojump
 [[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
 
 alias pw='vim ~/.auth.bfa'
 
@@ -22,7 +23,7 @@ alias pw='vim ~/.auth.bfa'
 #alias c='remind -w$COLUMNS -mc+lc2 ~/.reminders'
 
 #compdef t=todo.sh
-alias t=toodledo
+alias t=task
 
 export NNTPSERVER='news.gmane.org'
 

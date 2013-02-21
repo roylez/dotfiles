@@ -110,3 +110,8 @@ Bundle 'vimwiki'
 let g:vimwiki_folding=1
 
 Bundle 'vim-coffee-script'
+
+Bundle 'EasyMotion'
+let g:EasyMotion_leader_key='<Leader>'
+
+Bundle 'ctrlp.vim'

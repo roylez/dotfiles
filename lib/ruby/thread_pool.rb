@@ -7,7 +7,7 @@
     email_addresses.each do |addr|
         pool.process {send_mail_to addr}
     end
-    pool.join
+    pool.wait
 =end 
 
 require 'thread'
