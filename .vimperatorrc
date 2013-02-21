@@ -25,8 +25,8 @@ map <silent> <leader>t :exe ":tinyurl "+getBrowser().contentWindow.location.href
 set hintchars="hjklasdfgyuiopqwertnmzxcvb"
 
 loadplugins
-set flashblock
-set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com,acfun.tv
+"set flashblock
+"set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com,acfun.tv
 nmap \w \fbwhitelist
 
 " vim: set ft=vimperator:
