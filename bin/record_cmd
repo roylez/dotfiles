@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Description: 
+
+SCRIPT = "/tmp/script.log"
+TIMING = "/tmp/timing.log"
+
+SHELL = ENV['SHELL']
+
+puts "Start Recording, please use ctrl-D to terminate..."
+
+pid = fork do
+  exec("#{SHELL} -c 'script -f -q -t #{SCRIPT} 2> #{TIMING}'")
+end
+
+Process.wait pid
+
+puts "Recording Completed"
+
+file = ARGV.first || 'shell_record'
+script_content = open(SCRIPT).read
+timing_content = open(TIMING).read
+
+open(file, 'w') do |f|
+  f.puts <<-record
+#!/bin/bash
+#Description: shell command record automatically generated 
+
+if ! ( type script &>/dev/null ) ; then
+    echo "'script' command not found, please try to install it."
+    exit 1
+fi
+
+TIMING_FILE=/tmp/timing.log
+SCRIPT_FILE=/tmp/script.log
+
+timing=$(cat <<TIMING
+#{timing_content}
+TIMING
+)
+
+script=$(cat <<SCRIPT
+#{script_content}
+SCRIPT
+)
+
+echo '####### REPLAY START ######'
+
+echo "$timing" > $TIMING_FILE
+echo "$script" > $SCRIPT_FILE
+
+scriptreplay $TIMING_FILE $SCRIPT_FILE
+
+echo '######## REPLAY END #######'
+  record
+end
+
+File.chmod(0755, file)
