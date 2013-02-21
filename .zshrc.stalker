@@ -1,13 +1,14 @@
 #bindkey -v
 
-alias t='todo.sh'
-alias ts='todo.sh show'
-alias ta='t a'
-alias tp='t p'
-alias td='t do'
-alias tw='t wait'
-alias tc='t continue'
-compdef t=todo.sh
+#alias t='todo.sh'
+#alias ts='todo.sh show'
+#alias ta='t a'
+#alias tp='t p'
+#alias td='t do'
+#alias tw='t wait'
+#alias tc='t continue'
+alias t=task
+compdef t=task
 
 #export GEM_HOME=$HOME/.gems/1.8
 

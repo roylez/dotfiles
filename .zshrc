@@ -158,6 +158,9 @@ bin-exist() {[[ -n ${commands[$1]} ]]}
 #man page to pdf
 (bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
 
+#help command for builtins
+help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
+
 # }}}
 
 #{{{ functions to set prompt pwd color
