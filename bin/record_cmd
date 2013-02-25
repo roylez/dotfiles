@@ -2,6 +2,10 @@
 # coding: utf-8
 #Description: 
 
+def reduce_gap(timing_string)
+  timing_string.gsub(/(\d{2,}|[1-9])\.\d+/, '1.0')
+end
+
 SCRIPT = "/tmp/script.log"
 TIMING = "/tmp/timing.log"
 
@@ -19,7 +23,7 @@ puts "Recording Completed"
 
 file = ARGV.first || 'shell_record'
 script_content = open(SCRIPT).read
-timing_content = open(TIMING).read
+timing_content = reduce_gap(open(TIMING).read)
 
 open(file, 'w') do |f|
   f.puts <<-record
