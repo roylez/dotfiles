@@ -18,6 +18,8 @@ alias pw="vim ~/.auth.bfa"
 compdef ssh-copy-id=ssh
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
 source /usr/share/autojump/autojump.zsh
 
 export RUBYLIB=$HOME/dotfiles/lib/ruby
