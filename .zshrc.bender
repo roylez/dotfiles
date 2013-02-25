@@ -6,6 +6,8 @@
 if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
 export RUBYLIB=$HOME/lib/ruby
 
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
 # autojump
 [[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh

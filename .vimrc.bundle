@@ -116,3 +116,5 @@ let g:EasyMotion_leader_key='<Leader>'
 
 Bundle 'ctrlp.vim'
 autocmd BufNewFile,BufRead *.coffee set ft=coffee
+
+Bundle 'Syntastic'
