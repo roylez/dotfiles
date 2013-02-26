@@ -64,7 +64,7 @@ class SyncWarrior < Toodledo
       # new tasks
       edited_tasks = ltasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
       # completed tasks
-      completed_tasks = ctasks.select{|i| i[:entry] > @last_sync and i[:toodleid] and i[:entry] < sync_start }
+      completed_tasks = ctasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid] and i[:end] < sync_start }  
       puts "Update #{edited_tasks.size} edited tasks and #{completed_tasks.size} completed tasks..."
       ntasks = (edited_tasks + completed_tasks).collect{|i| taskwarrior_to_toodle(i)}
       edit_tasks(ntasks)        unless ntasks.empty?
@@ -79,7 +79,7 @@ class SyncWarrior < Toodledo
       else
         ntasks = get_tasks(:fields => useful_fields, :comp => 0)
       end
-      puts "Download #{ntasks.size} new tasks found on server"
+      puts "Download #{ntasks.size} changed tasks found on server..."
       # toodledo ids in local tasks
       lids = ltasks.collect{|i| i[:toodleid]}
       # add new tasks
@@ -171,6 +171,8 @@ class SyncWarrior < Toodledo
       } 
       t = Hash[t]
       t[:tags] = t[:tags].strip.split(",")  if t[:tags]
+      t[:entry] = t[:entry].to_i
+      t[:end] = t[:end].to_i  if t[:end]
       tasks << t
     end
     tasks
@@ -192,7 +194,7 @@ class SyncWarrior < Toodledo
     toodletask[:title]    = task[:description]
     toodletask[:id]       = task[:toodleid]   if task[:toodleid]
     toodletask[:duedate]  = task[:due].to_i   if task[:due]
-    toodletask[:complete] = task[:entry].to_i if task[:entry]
+    toodletask[:completed] = task[:end].to_i if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
     if task[:tags]
@@ -224,7 +226,7 @@ class SyncWarrior < Toodledo
   def tw_project_to_toodle(project_name)
     folder = @remote_folders.find{|f| f[:name] == project_name}
     unless folder
-      folder = add_folder(project_name)
+      folder = add_folder(project_name).first
       @remote_folders << folder
     end
     folder[:id]
@@ -233,10 +235,10 @@ class SyncWarrior < Toodledo
   # TW @tag => toodle context
   def tw_context_to_toodle(context_name)
     # remove prefixing '@'
-    context_name = context[1..-1]
+    context_name = context_name[1..-1]
     context = @remote_contexts.find{|c| c[:name] == context_name}
     unless context
-      context = add_context(context_name)
+      context = add_context(context_name).first
       @remote_contexts << context
     end
     context[:id]
@@ -280,6 +282,7 @@ class SyncWarrior < Toodledo
     twtask[:priority] = toodle_priority_to_tw(task[:priority])   if task[:priority]
     twtask[:status] = task[:completed] ? "completed" : "pending"
     twtask[:uuid] = SecureRandom.uuid
+    twtask[:entry] = Time.now.to_i
     if task[:context]
       con = toodle_context_to_tw(task[:context])
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
@@ -310,23 +313,32 @@ if __FILE__ == $0
   begin
     userid, password = YAML.load_file(CONFIG_FILE)
   rescue
-    userid = password = nil
+    userid = password = user = nil
   end
 
   unless userid and password
     puts "It looks like this is your first time using this SyncWarrior."
     puts
+    first_run = true
+    userid = nil
     user = question_prompt("toodledo login name")
     password = question_prompt("toodledo password")
-    w = SyncWarrior.new(nil, password, TASK_FILE, COMP_FILE, CACHE_FILE, user)
+  end
+
+  begin
+    w = SyncWarrior.new(userid, password, TASK_FILE, COMP_FILE, CACHE_FILE, user)
     res = w.sync
-    if res
-      open(CONFIG_FILE, 'w'){|f| f.puts( [w.userid, password].to_yaml )}
-    else
-      puts "Sync does not complete successfully, please check your login credentials."
-    end
-  else 
-    w = SyncWarrior.new(userid, password, TASK_FILE, COMP_FILE, CACHE_FILE )
-    w.sync
+  rescue RemoteAPIError => e
+    puts "API Error: #{e.message}"
+    exit 1
+  rescue Net::ReadTimeout
+    puts "Connection Timeout"
+    exit 1
+  end
+
+  if res and first_run
+    open(CONFIG_FILE, 'w'){|f| f.puts( [w.userid, password].to_yaml )}
+  elsif not res
+    puts "Sync does not complete successfully, please check your login credentials."
   end
 end
