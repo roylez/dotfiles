@@ -51,6 +51,10 @@ class Toodledo
     tasks
   end
 
+  def get_deleted_tasks(after = nil)
+    call_task_api(:deleted, :after => after)
+  end
+
   def get_contexts
     call_context_api(:get)
   end
