@@ -174,7 +174,7 @@ class SyncWarrior < Toodledo
       t[:entry] = t[:entry].to_i
       t[:end] = t[:end].to_i  if t[:end]
       tasks << t
-    end
+    end if File.file? file
     tasks
   end
 
@@ -331,8 +331,8 @@ if __FILE__ == $0
   rescue RemoteAPIError => e
     puts "API Error: #{e.message}"
     exit 1
-  rescue Net::ReadTimeout
-    puts "Connection Timeout"
+  rescue Exception => e
+    puts "Error: #{e}"
     exit 1
   end
 
