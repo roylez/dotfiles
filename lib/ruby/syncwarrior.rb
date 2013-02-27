@@ -6,6 +6,7 @@
 require 'logger'
 require 'time'
 require 'yaml'
+require 'io/console'
 YAML::ENGINE.yamler = 'psych' # to use UTF-8 in yaml
 require 'securerandom'
 require_relative 'toodledo'
@@ -294,11 +295,11 @@ end
 
 # prompt user to input something
 #
-def question_prompt(field, default = nil)
+def question_prompt(field, opts = {})
     trap("INT") { exit 1 }
     begin
       print "Please input #{field}: "
-      response = STDIN.gets.strip
+      response = opts[:password] ? STDIN.noecho(&:gets).strip : STDIN.gets.strip
     end until not response.empty?
     response
 end
@@ -322,7 +323,8 @@ if __FILE__ == $0
     first_run = true
     userid = nil
     user = question_prompt("toodledo login name")
-    password = question_prompt("toodledo password")
+    password = question_prompt("toodledo password", :password => true)
+    puts
   end
 
   begin
