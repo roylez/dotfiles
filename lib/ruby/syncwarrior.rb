@@ -38,38 +38,42 @@ class SyncWarrior < Toodledo
     check_changes
   end
 
-  def sync
-    sync_start = Time.now.to_i
-    useful_fields = [:folder, :context, :tag, :duedate, :priority]
-
-    ltasks = read_taskwarrior_file(@task_file)
-    ctasks = read_taskwarrior_file(@comp_file)
-
-    update_remote_folders
-    update_remote_contexts
-
+  def upload_new
     # upload new task to toodle
     # 
-    ntasks = ltasks.select{|i| not i[:toodleid] }.collect{|i| [i[:uuid], taskwarrior_to_toodle(i)] }
+    ntasks = local_tasks.select{|i| not i[:toodleid] }.collect{|i| [i[:uuid], taskwarrior_to_toodle(i)] }
     unless ntasks.empty?
       puts "Upload #{ntasks.size} new tasks to toodledo..."
       newids = Hash[[ntasks.map(&:first), add_tasks(ntasks.map(&:last))].transpose]
-      ltasks.each do |t|
+      newids.each do |uuid, id|
+        puts "[#{id}] created on server, UUID: #{uuid}"
+      end
+      local_tasks.each do |t|
         t[:toodleid] = newids[t[:uuid]]   if newids.key? t[:uuid]
       end
     end
+  end
 
+  def upload_edited
     # upload edited tasks
     #
-    if @last_sync
-      # new tasks
-      edited_tasks = ltasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
-      # completed tasks
-      completed_tasks = ctasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid] and i[:end] < sync_start }  
+    return unless @last_sync
+    # new tasks
+    edited_tasks = local_tasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
+    # completed tasks
+    completed_tasks = local_complete_tasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid] and i[:end] < sync_start }  
+    unless (edited_tasks.size + completed_tasks.size) > 0
       puts "Update #{edited_tasks.size} edited tasks and #{completed_tasks.size} completed tasks..."
       ntasks = (edited_tasks + completed_tasks).collect{|i| taskwarrior_to_toodle(i)}
+      ntasks.each do |t|
+        puts "[#{t[:id]}] changed locally, uploaded to server"
+      end
       edit_tasks(ntasks)        unless ntasks.empty?
     end
+  end
+
+  def download_new_and_edited
+    useful_fields = [:folder, :context, :tag, :duedate, :priority]
 
     # download new tasks and edited tasks 
     #
@@ -80,37 +84,81 @@ class SyncWarrior < Toodledo
       else
         ntasks = get_tasks(:fields => useful_fields, :comp => 0)
       end
-      puts "Download #{ntasks.size} changed tasks found on server..."
+      ntasks.each do |t|
+        puts "[#{t[:id]}] changed remotely, downloaded from server"
+      end
+      puts "Downloaded #{ntasks.size} changed tasks found on server..."
       # toodledo ids in local tasks
-      lids = ltasks.collect{|i| i[:toodleid]}
+      lids = local_tasks.collect{|i| i[:toodleid]}
       # add new tasks
-      ltasks.concat(ntasks.
+      local_tasks.concat(ntasks.
                     select{|i| not lids.include?(i[:id])}.
                     collect{|i| toodle_to_taskwarrior(i)}
                    )
       # add edited tasks
       ntasks.select{|i| lids.include?(i[:id])}.each do |t|
-        lindex = ltasks.find_index{|i| i[:toodleid] == t[:id] }
-        ltasks[lindex] = toodle_to_taskwarrior(t)
+        lindex = local_tasks.find_index{|i| i[:toodleid] == t[:id] }
+        local_tasks[lindex] = toodle_to_taskwarrior(t)
       end
     end
-    
+  end
+
+  def download_deleted
     # download the list of deleted tasks
     #
     if @remote_task_deleted
       dtasks = get_deleted_tasks(@last_sync)
       # toodledo ids in local tasks
-      lids = ltasks.collect{|i| i[:toodleid]}
+      lids = local_tasks.collect{|i| i[:toodleid]}
       dtasks.select{|t| lids.include? t[:id] }.map(&:id).each do |id|
-        ltasks.delete_if {|i| i[:toodleid] == id }
+        local_tasks.delete_if {|i| i[:toodleid] == id }
       end
     end
+  end
 
-    # write task information
-    #
-    write_taskwarrior_file(ltasks)
+  def local_tasks
+    @local_tasks ||= read_taskwarrior_file(@task_file)
+  end
 
-    # write cache for future reuse
+  def local_complete_tasks
+    @completed_tasks ||= read_taskwarrior_file(@comp_file)
+  end
+
+  def sync_folders
+    if @remote_folder_modified.nil? or @remote_folder_modified
+      @remote_folders = get_folders
+      @remote_folder_modified =false
+    end
+  end
+
+  def sync_contexts
+    if @remote_context_modified.nil? or @remote_context_modified
+      @remote_contexts = get_contexts
+      @remote_context_modified = false
+    end
+  end
+
+  def sync_start
+    @sync_start ||= Time.now.to_i
+  end
+
+  def sync
+
+    sync_folders
+
+    sync_contexts
+
+    # first download, very important
+    download_new_and_edited
+
+    download_deleted
+    
+    upload_new
+
+    upload_edited
+
+    write_taskwarrior_file
+
     write_cache_file
 
     true
@@ -180,9 +228,9 @@ class SyncWarrior < Toodledo
   end
 
   # write to a taskwarrior file
-  def write_taskwarrior_file(data)
+  def write_taskwarrior_file
     open(@task_file, 'w') do |f|
-      data.each do |t|
+      local_tasks.each do |t|
         t[:tags] = t[:tags].join(",")   if t[:tags]
         f.puts('[' + t.collect{|k, v| %Q{#{k}:"#{v}"} }.join(" ") + ']')
       end
@@ -207,20 +255,6 @@ class SyncWarrior < Toodledo
       toodletask[:tag] = task[:tags].join(",")
     end
     toodletask
-  end
-
-  def update_remote_folders
-    if @remote_folder_modified.nil? or @remote_folder_modified
-      @remote_folders = get_folders
-      @remote_folder_modified =false
-    end
-  end
-
-  def update_remote_contexts
-    if @remote_context_modified.nil? or @remote_context_modified
-      @remote_contexts = get_contexts
-      @remote_context_modified = false
-    end
   end
 
   # TW project => toodle folder
@@ -335,6 +369,7 @@ if __FILE__ == $0
     exit 1
   rescue Exception => e
     puts "Error: #{e}"
+    puts e.backtrace  if $DEBUG
     exit 1
   end
 
