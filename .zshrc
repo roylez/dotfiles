@@ -535,7 +535,7 @@ export READNULLCMD=less
 [[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
 
 # redefine command not found
-(bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70}
+(bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70; return 127;}
 
 # }}}
 
