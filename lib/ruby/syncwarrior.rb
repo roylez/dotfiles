@@ -45,11 +45,11 @@ class SyncWarrior < Toodledo
     unless ntasks.empty?
       puts "Upload #{ntasks.size} new tasks to toodledo..."
       newids = Hash[[ntasks.map(&:first), add_tasks(ntasks.map(&:last))].transpose]
-      newids.each do |uuid, id|
-        puts "[#{id}] created on server, UUID: #{uuid}"
+      newids.each do |uuid, task|
+        puts "[#{task}] created on server, UUID: #{uuid}"
       end
       local_tasks.each do |t|
-        t[:toodleid] = newids[t[:uuid]]   if newids.key? t[:uuid]
+        t[:toodleid] = newids[t[:uuid]][:id]   if newids.key? t[:uuid]
       end
     end
   end
