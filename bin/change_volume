@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description: 更改音量大小并用notify-send提示
 
 $: << File.join(ENV['HOME'], 'lib/ruby')
 
@@ -14,13 +14,15 @@ $config = {
     :down => 'ossmix vmix0-outvol --  -#step#',
     :toggle => "if ossmix codec1.misc.pcm1-mute|grep OFF;then ossmix codec1.misc.pcm1-mute on;else ossmix codec1.misc.pcm1-mute off;fi;" ,
     :show => %Q(ossmix |grep vmix0-outvol|cut -d' ' -f4),
+    :step => 2
   },
   :alsa => {
     :down => "amixer sset Master #step#%- unmute",
     :up => "amixer sset Master #step#%+ unmute",
     :show => 'amixer get Master',
     :player => 'aplay',
-    :toggle => 'amixer sset Master toggle'
+    :toggle => 'amixer sset Master toggle',
+    :step => 5
   },
 }
 $setting = $config[$sound]
@@ -29,7 +31,7 @@ require "msg.rb"
 
 class VolumeControl
     def initialize
-        @step = 5
+        @step = $setting[:step]
         @notify = File.file?("/usr/bin/notify-send") ? :show_notification : nil
     end
 

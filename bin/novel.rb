@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#
+#description: 查询最新小说更新
 require 'yaml'
 require 'net/http'
 require 'uri'

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#
+# description: 万用提示脚本
 require 'net/http'
 require 'uri'
 require 'iconv'

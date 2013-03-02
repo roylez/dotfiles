@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description: 上传图片到网络并返回链接
 require "rubygems"
 require "mechanize"
 

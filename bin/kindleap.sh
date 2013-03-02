@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim:fdm=marker
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description: 为kindle起无线网络
 
 if [[ $1 = 'start' ]]; then
     # source and target interfaces

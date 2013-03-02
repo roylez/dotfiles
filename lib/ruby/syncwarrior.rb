@@ -110,7 +110,7 @@ class SyncWarrior < Toodledo
       dtasks = get_deleted_tasks(@last_sync)
       # toodledo ids in local tasks
       lids = local_tasks.collect{|i| i[:toodleid]}
-      dtasks.select{|t| lids.include? t[:id] }.map(&:id).each do |id|
+      dtasks.select{|t| lids.include? t[:id] }.collect{|i| i[:id]}.each do |id|
         local_tasks.delete_if {|i| i[:toodleid] == id }
       end
     end
@@ -167,10 +167,10 @@ class SyncWarrior < Toodledo
   # private
   def check_changes
     if @prev_account_info
-      @remote_task_modified    = true  if has_new_info? :lastedit_task
-      @remote_task_deleted     = true  if has_new_info? :lastdelete_task
-      @remote_folder_modified  = true  if has_new_info? :lastedit_folder
-      @remote_context_modified = true  if has_new_info? :lastedit_context
+      @remote_task_modified    = has_new_info? :lastedit_task
+      @remote_task_deleted     = has_new_info? :lastdelete_task
+      @remote_folder_modified  = has_new_info? :lastedit_folder
+      @remote_context_modified = has_new_info? :lastedit_context
     end
   end
 
@@ -247,7 +247,7 @@ class SyncWarrior < Toodledo
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
     if task[:tags]
-      context = task[:tags].find{|i| i.start_with? '@' }.delete('@')
+      context = task[:tags].find{|i| i.start_with? '@' }
       if context
         toodletask[:context] = tw_context_to_toodle(context)
         task[:tags] = task[:tags].select{|t| not t.start_with? '@'}
@@ -270,7 +270,7 @@ class SyncWarrior < Toodledo
   # TW @tag => toodle context
   def tw_context_to_toodle(context_name)
     # remove prefixing '@'
-    context_name = context_name[1..-1]
+    context_name = context_name.delete("@")
     context = @remote_contexts.find{|c| c[:name] == context_name}
     unless context
       context = add_context(context_name).first

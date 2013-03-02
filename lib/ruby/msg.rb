@@ -2,7 +2,7 @@
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
 #Last Change: Wed 23 Feb 2011 08:42:58 PM CST
-#Description: 
+#Description: 用notify-send在桌面显示提醒
 
 icon_path = File.join( ENV['HOME'], '.icons')
 servants = Dir.glob(File.join(icon_path, 'servants', '*.png'))
@@ -24,9 +24,23 @@ else
 end
 
 def msg(kwds={})
-    kwds = { icon:$icon, title:$title, text:$text }.merge(kwds)
-    kwds[:text] = %Q{<span size="12000" weight="bold">\n#{kwds[:text]}</span>}
-    system(%Q{DISPLAY=:0.0 notify-send -i #{kwds[:icon]} '#{kwds[:title]}' '#{kwds[:text]}'})
+    kwds = { :dbus => false, icon:$icon, title:$title, text:$text, :replace => 1 }.merge(kwds)
+    cmd_prefix = "DISPLAY=:0.0"
+    unless kwds[:dbus]
+      kwds[:text] = %Q{<span size="12000" weight="bold">\n#{kwds[:text]}</span>}
+      system(%Q{#{cmd_prefix} notify-send -i #{kwds[:icon]} '#{kwds[:title]}' '#{kwds[:text]}'})
+    else
+      system(%Q{#{cmd_prefix} \
+        dbus-send --type=method_call --dest='org.freedesktop.Notifications' /org/freedesktop/Notifications org.freedesktop.Notifications.Notify \
+        string:"#{kwds[:application]}" \
+        uint32:"#{kwds[:replace]}" \
+        string:"#{kwds[:icon]}" \
+        string:"#{kwds[:title]}" \
+        string:"\n#{kwds[:text]}" \
+        array:string:"#{kwds[:actions]}" \
+        dict:string:string:'','' \ 
+      })
+    end
 end
 
 if __FILE__==$0

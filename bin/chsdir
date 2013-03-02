@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # shaozx@gmail.com 2009-05-04
 #
-# 在控制台使用 cd 命令时用拼音补全中文路径
+# Description: 在控制台使用 cd 命令时用拼音补全中文路径
 #
 # 实验目录如下：
 # biff@lenovo:/domain/WorkSpace$ ls

@@ -1,5 +1,6 @@
 #!/bin/sh
 # https://wiki.archlinux.org/index.php/OfflineIMAP
+# description: 为offlineimap起守护进程
 
 set -efu
 

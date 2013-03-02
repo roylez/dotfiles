@@ -1,0 +1,15 @@
+#!/bin/bash
+# description: 显示脚本的功能
+
+[[ $1 == "" ]] && folder=~/bin || folder=$1
+
+for f in $folder/*; do
+    of=$f
+    if [[ -h $f ]]; then
+        f=`readlink $f`
+    fi
+    if [[ -f $f ]] && [[ -x $f ]] && !( file $f|grep ELF &>/dev/null ); then
+        desc=`head $f|awk '/# ?[Dd]escription:/'|sed 's=#.*: *=='`
+        printf "%-30s $desc\n" `basename $of`
+    fi
+done

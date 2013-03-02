@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
-#
+#Description: 粘贴一段文字到 pastbin.com
 require 'rubygems'
 require 'mechanize'
 

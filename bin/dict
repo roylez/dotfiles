@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
+# description: 查询有道词典
 import sys, urllib2, optparse, os
 try:
     import xml.etree.ElementTree as ElementTree # in python >=2.5

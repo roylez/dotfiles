@@ -1,6 +1,7 @@
 #!/bin/bash
 #script xepyhr-awesome
 # author: dante4d <dante4d@gmail.com>
+# description: 在Xephyr窗口中测试新的awesome配置
 Xephyr -ac -br -noreset -screen 800x600 :1 &
 sleep 1
 awesome_dir=$HOME/.config/awesome

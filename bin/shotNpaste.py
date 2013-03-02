@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description: 截图并自动上传
 import os, time, shutil
 
 img = "/tmp/shot%s.png" %time.strftime("%Y%m%d%H%M")

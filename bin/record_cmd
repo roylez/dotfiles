@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#Description: 
+#Description: 记录屏幕输入输出
 
 def reduce_gap(timing_string)
   timing_string.gsub(/(\d{2,}|[1-9])\.\d+/, '1.0')
