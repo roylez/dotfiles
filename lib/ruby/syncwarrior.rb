@@ -14,7 +14,7 @@ require_relative 'toodledo'
 class SyncWarrior < Toodledo
   attr_reader   :userid
 
-  def initialize(userid, password, taskfile, compfile, cachefile, user = nil)
+  def initialize(userid, password, taskfile, compfile, cachefile, opts = {})
     @task_file         = taskfile
     @comp_file         = compfile
     @cache_file        = cachefile
@@ -30,10 +30,12 @@ class SyncWarrior < Toodledo
     @appid             = 'syncwarrior'
     @apptoken          = 'api512ab65a08df3'
 
+    @due_field         = opts[:scheduled_is_due] ? :scheduled : :due
+
     read_cache_file
 
     # must have userid till now
-    super(:userid => userid, :password => password, :user => user, :token => @token)
+    super(:userid => userid, :password => password, :user => opts[:user], :token => @token)
 
     check_changes
   end
@@ -87,7 +89,6 @@ class SyncWarrior < Toodledo
       ntasks.each do |t|
         puts "[#{t[:id]}] changed remotely, downloaded from server"
       end
-      puts "Downloaded #{ntasks.size} changed tasks found on server..."
       # toodledo ids in local tasks
       lids = local_tasks.collect{|i| i[:toodleid]}
       # add new tasks
@@ -242,7 +243,7 @@ class SyncWarrior < Toodledo
     toodletask = {}
     toodletask[:title]    = task[:description]
     toodletask[:id]       = task[:toodleid]   if task[:toodleid]
-    toodletask[:duedate]  = task[:due].to_i   if task[:due]
+    toodletask[:duedate]  = task[@due_field].to_i   if task[@due_field]
     toodletask[:completed] = task[:end].to_i if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
@@ -311,7 +312,7 @@ class SyncWarrior < Toodledo
     twtask = {}
     twtask[:toodleid] = task[:id]
     twtask[:description] = task[:title]
-    twtask[:due] = task[:duedate].to_i  if task[:duedate]
+    twtask[@due_field] = task[:duedate].to_i  if task[:duedate]
     twtask[:tags] = task[:tag].split(",").map(&:strip)  if task[:tag]
     twtask[:project] = toodle_folder_to_tw(task[:folder])   if task[:folder]
     twtask[:priority] = toodle_priority_to_tw(task[:priority])   if task[:priority]
@@ -346,23 +347,26 @@ if __FILE__ == $0
   CONFIG_FILE   = File.join(TASK_BASE_DIR, 'syncwarrior_conf.yml')
 
   begin
-    userid, password = YAML.load_file(CONFIG_FILE)
+    $config = YAML.load_file(CONFIG_FILE)
   rescue
-    userid = password = user = nil
+    $config = {}
   end
 
-  unless userid and password
+  unless $config[:userid] and $config[:password]
     puts "It looks like this is your first time using this SyncWarrior."
     puts
     first_run = true
-    userid = nil
-    user = question_prompt("toodledo login name")
-    password = question_prompt("toodledo password", :password => true)
+    $config[:userid] = nil
+    $config[:user] = question_prompt("toodledo login name")
+    $config[:password] = question_prompt("toodledo password", :password => true)
     puts
   end
 
   begin
-    w = SyncWarrior.new(userid, password, TASK_FILE, COMP_FILE, CACHE_FILE, user)
+    w = SyncWarrior.new($config[:userid], $config[:password], 
+                        TASK_FILE, COMP_FILE, CACHE_FILE, 
+                        { :user => $config[:user], :scheduled_is_due => $config[:scheduled_is_due]}
+                       )
     res = w.sync
   rescue RemoteAPIError => e
     puts "API Error: #{e.message}"
@@ -374,7 +378,7 @@ if __FILE__ == $0
   end
 
   if res and first_run
-    open(CONFIG_FILE, 'w'){|f| f.puts( [w.userid, password].to_yaml )}
+    open(CONFIG_FILE, 'w'){|f| f.puts( $config.merge(:userid => w.userid).to_yaml )}
   elsif not res
     puts "Sync does not complete successfully, please check your login credentials."
   end
