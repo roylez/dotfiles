@@ -243,7 +243,7 @@ class SyncWarrior < Toodledo
     toodletask = {}
     toodletask[:title]    = task[:description]
     toodletask[:id]       = task[:toodleid]   if task[:toodleid]
-    toodletask[:duedate]  = task[@due_field].to_i   if task[@due_field]
+    toodletask[:duedate]  = to_toodle_date(task[@due_field].to_i)   if task[@due_field]
     toodletask[:completed] = task[:end].to_i if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
@@ -307,12 +307,24 @@ class SyncWarrior < Toodledo
     end
   end
 
+  # toodle use GMT, all timestamps for date will be adjust to GMT noon
+  #
+  def to_toodle_date(secs)
+    t = Time.at(secs).strftime("%Y-%m-%d 12:00:00 UTC")
+    Time.parse(t).to_i
+  end
+
+  def from_toodle_date(secs)
+    t = Time.at(secs).utc.strftime("%Y-%m-%d 12:00:00")
+    Time.parse(t).to_i
+  end
+
   # convert from toodledo to TaskWarrior format
   def toodle_to_taskwarrior(task)
     twtask = {}
     twtask[:toodleid] = task[:id]
     twtask[:description] = task[:title]
-    twtask[@due_field] = task[:duedate].to_i  if task[:duedate]
+    twtask[@due_field] = from_toodle_date(task[:duedate].to_i)  if task[:duedate]
     twtask[:tags] = task[:tag].split(",").map(&:strip)  if task[:tag]
     twtask[:project] = toodle_folder_to_tw(task[:folder])   if task[:folder]
     twtask[:priority] = toodle_priority_to_tw(task[:priority])   if task[:priority]
