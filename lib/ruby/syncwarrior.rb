@@ -315,7 +315,7 @@ class SyncWarrior < Toodledo
   end
 
   def from_toodle_date(secs)
-    t = Time.at(secs).utc.strftime("%Y-%m-%d 12:00:00")
+    t = Time.at(secs).utc.strftime("%Y-%m-%d 00:00:00")
     Time.parse(t).to_i
   end
 
