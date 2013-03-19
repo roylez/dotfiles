@@ -9,11 +9,11 @@ if [[ $1 = 'start' ]]; then
     [[ -n $3 ]] && tint=$3 || tint=wlan1
     sudo ifconfig $tint 10.10.10.1 netmask 255.255.255.0
     sudo iptables -t nat -A POSTROUTING -o $sint -j MASQUERADE
-    sudo /etc/rc.d/dhcp4 start
-    sudo /etc/rc.d/hostapd start
+    sudo systemctl start dhcpd4
+    sudo systemctl start hostapd
 elif [[ $1 == 'stop' ]]; then
-    sudo /etc/rc.d/hostapd stop
-    sudo /etc/rc.d/dhcp4 stop
+    sudo systemctl stop hostapd
+    sudo systemctl stop dhcpd4
 else
     echo "Usage: $0 {start|stop} [SINTERFACE [TINTERFACE]]"
 fi

@@ -1,0 +1,10 @@
+#!/bin/bash
+# description: toggle music playing
+
+if ( mocp -S &> /dev/null ); then
+    ~/bin/msg "开始播放音乐"
+    mocp -p
+else
+    ~/bin/msg "暂停/继续"
+    mocp -G
+fi
