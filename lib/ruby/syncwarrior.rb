@@ -48,7 +48,7 @@ class SyncWarrior < Toodledo
       puts "Upload #{ntasks.size} new tasks to toodledo..."
       newids = Hash[[ntasks.map(&:first), add_tasks(ntasks.map(&:last))].transpose]
       newids.each do |uuid, task|
-        puts "[#{task}] created on server, UUID: #{uuid}"
+        puts "[NEW]<= #{task}, UUID: #{uuid}"
       end
       local_tasks.each do |t|
         t[:toodleid] = newids[t[:uuid]][:id]   if newids.key? t[:uuid]
@@ -60,15 +60,15 @@ class SyncWarrior < Toodledo
     # upload edited tasks
     #
     return unless @last_sync
-    # new tasks
-    edited_tasks = local_tasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
+    # edited tasks
+    edited_tasks = old_local_tasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
     # completed tasks
-    completed_tasks = local_complete_tasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid] and i[:end] < sync_start }  
-    unless (edited_tasks.size + completed_tasks.size) > 0
+    completed_tasks = local_complete_tasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid]}  
+    if (edited_tasks.size + completed_tasks.size) > 0
       puts "Update #{edited_tasks.size} edited tasks and #{completed_tasks.size} completed tasks..."
       ntasks = (edited_tasks + completed_tasks).collect{|i| taskwarrior_to_toodle(i)}
       ntasks.each do |t|
-        puts "[#{t[:id]}] changed locally, uploaded to server"
+        puts "[UPDATE]<= #{t}"
       end
       edit_tasks(ntasks)        unless ntasks.empty?
     end
@@ -87,7 +87,7 @@ class SyncWarrior < Toodledo
         ntasks = get_tasks(:fields => useful_fields, :comp => 0)
       end
       ntasks.each do |t|
-        puts "[#{t[:id]}] changed remotely, downloaded from server"
+        puts "[UPDATE]=> #{t}"
       end
       # toodledo ids in local tasks
       lids = local_tasks.collect{|i| i[:toodleid]}
@@ -119,6 +119,10 @@ class SyncWarrior < Toodledo
 
   def local_tasks
     @local_tasks ||= read_taskwarrior_file(@task_file)
+  end
+
+  def old_local_tasks
+    @old_local_tasks ||= read_taskwarrior_file(@task_file)
   end
 
   def local_complete_tasks
@@ -244,7 +248,7 @@ class SyncWarrior < Toodledo
     toodletask[:title]    = task[:description]
     toodletask[:id]       = task[:toodleid]   if task[:toodleid]
     toodletask[:duedate]  = to_toodle_date(task[@due_field].to_i)   if task[@due_field]
-    toodletask[:completed] = task[:end].to_i if task[:end]
+    toodletask[:completed] = to_toodle_date(task[:end].to_i) if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
     if task[:tags]
