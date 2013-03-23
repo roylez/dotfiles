@@ -236,7 +236,9 @@ case $TERM in
         ;;
     screen*)
         #only set screen title if it is in a local shell
-        if [ -n $STY ] && (screen -ls |grep $STY &>/dev/null); then
+        if [[ -n $SSH_CONNECTION ]]; then
+            function title() {}
+        elif [[ -n $STY ]] && (screen -ls |grep $STY &>/dev/null); then
             function title() 
             {
                 #modify screen title
@@ -244,10 +246,12 @@ case $TERM in
                 #modify window title bar
                 #print -nPR $'\033]0;'$2$'\a'
             } 
-        elif [ -n $TMUX ]; then       # actually in tmux !
-            function title() {  print -nP "\e]2;$1\a" }
-        else
-            function title() {}
+        elif [[ -n $TMUX ]]; then       # actually in tmux !
+            function title()
+            {  
+                #print -nP "\e]2;$1\a" 
+                print -nP "\e]2;$1\a" 
+            }
         fi
         ;;
     *) 
