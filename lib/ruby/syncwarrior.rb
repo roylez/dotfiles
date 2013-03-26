@@ -66,10 +66,17 @@ class SyncWarrior < Toodledo
     completed_tasks = local_complete_tasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid]}  
     if (edited_tasks.size + completed_tasks.size) > 0
       puts "Update #{edited_tasks.size} edited tasks and #{completed_tasks.size} completed tasks..."
-      ntasks = (edited_tasks + completed_tasks).collect{|i| taskwarrior_to_toodle(i)}
-      ntasks.each do |t|
+      edited_tasks = edited_tasks.collect do |i|
+        t = taskwarrior_to_toodle(i)
         puts "[UPDATE]<= #{t}"
+        t
       end
+      completed_tasks = completed_tasks.collect do |i|
+        t = taskwarrior_to_toodle(i)
+        puts "[COMPLETE]<= #{t}"
+        t
+      end
+      ntasks = edited_tasks + completed_tasks
       edit_tasks(ntasks)        unless ntasks.empty?
     end
   end
@@ -86,20 +93,20 @@ class SyncWarrior < Toodledo
       else
         ntasks = get_tasks(:fields => useful_fields, :comp => 0)
       end
-      ntasks.each do |t|
-        puts "[UPDATE]=> #{t}"
-      end
       # toodledo ids in local tasks
-      lids = local_tasks.collect{|i| i[:toodleid]}
+      lids = old_local_tasks.collect{|i| i[:toodleid]}
+
       # add new tasks
-      local_tasks.concat(ntasks.
-                    select{|i| not lids.include?(i[:id])}.
-                    collect{|i| toodle_to_taskwarrior(i)}
-                   )
-      # add edited tasks
+      ntasks.select{|i| not lids.include?(i[:id])}.each{|i| 
+        t = toodle_to_taskwarrior(i)
+        local_tasks << t 
+        puts "[NEW]=> #{t}"
+      }
+      # add edited tasks, including completed
       ntasks.select{|i| lids.include?(i[:id])}.each do |t|
         lindex = local_tasks.find_index{|i| i[:toodleid] == t[:id] }
-        local_tasks[lindex] = toodle_to_taskwarrior(t)
+        local_tasks[lindex].merge(toodle_to_taskwarrior(t))
+        puts "[UPDATE]=> #{t}"
       end
     end
   end
@@ -111,8 +118,9 @@ class SyncWarrior < Toodledo
       dtasks = get_deleted_tasks(@last_sync)
       # toodledo ids in local tasks
       lids = local_tasks.collect{|i| i[:toodleid]}
-      dtasks.select{|t| lids.include? t[:id] }.collect{|i| i[:id]}.each do |id|
-        local_tasks.delete_if {|i| i[:toodleid] == id }
+      dtasks.select{|t| lids.include? t[:id] }.each do |t|
+        local_tasks.delete_if {|i| i[:toodleid] == t[:id] }
+        puts "[DELETE]=> #{t}"
       end
     end
   end
@@ -154,13 +162,15 @@ class SyncWarrior < Toodledo
     sync_contexts
 
     # first download, very important
-    download_new_and_edited
-
-    download_deleted
-    
     upload_new
 
     upload_edited
+
+    #upload_deleted
+    
+    download_new_and_edited
+
+    download_deleted
 
     write_taskwarrior_file
 
