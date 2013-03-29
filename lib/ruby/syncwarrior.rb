@@ -134,9 +134,8 @@ class SyncWarrior < Toodledo
     if first_sync?
       #ntasks = get_tasks(:fields => useful_fields, :comp => 0)
       ntasks = get_tasks(:fields => useful_fields)
-    elsif @remote_context_modified
-      p @last_sync
-      ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync)
+    elsif @remote_task_modified
+      ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync )
     end
     @pull[:modified] = ntasks
 
@@ -238,7 +237,7 @@ class SyncWarrior < Toodledo
     @prev_account_info = cache[:account_info]
     @remote_folders    = cache[:remote_folders]
     @remote_contexts   = cache[:remote_contexts]
-    @last_sync         = cache[:last_sync] + 5      # shift a bit later
+    @last_sync         = cache[:last_sync]
   end
 
   # write cache data to cache file
@@ -326,8 +325,9 @@ class SyncWarrior < Toodledo
 
   # toodle use GMT, all timestamps for date will be adjust to GMT noon
   #
-  def to_toodle_date(secs)
-    t = Time.at(secs).strftime("%Y-%m-%d 12:00:00 UTC")
+  def to_toodle_date(secs, noon = true)
+    t = Time.at(secs).
+      strftime("%Y-%m-%d #{noon ? '12:00:00' : '%H:%M:%S'} UTC")
     Time.parse(t).to_i
   end
 
