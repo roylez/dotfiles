@@ -10,6 +10,13 @@ require 'io/console'
 YAML::ENGINE.yamler = 'psych' # to use UTF-8 in yaml
 require 'securerandom'
 require_relative 'toodledo'
+require_relative 'taskwarrior'
+
+class TaskCollection
+  def new_task_ids
+    select{|i| not i.toodleid }.collect(&:uuid)
+  end
+end
 
 class SyncWarrior < Toodledo
   attr_reader   :userid
@@ -18,6 +25,8 @@ class SyncWarrior < Toodledo
     @task_file         = taskfile
     @comp_file         = compfile
     @cache_file        = cachefile
+
+    @task_warrior      = TaskCollection.from_task_file(@task_file, @comp_file)
 
     @remote_folders    = []
     @remote_contexts   = []
@@ -32,109 +41,16 @@ class SyncWarrior < Toodledo
 
     @due_field         = opts[:scheduled_is_due] ? :scheduled : :due
 
+    # things to be merged with remote
+    @push              = {:add => [], :edit => []}
+    @pull              = {:edit => [], :deleted => []}
+
     read_cache_file
 
     # must have userid till now
     super(:userid => userid, :password => password, :user => opts[:user], :token => @token)
 
     check_changes
-  end
-
-  def upload_new
-    # upload new task to toodle
-    # 
-    ntasks = local_tasks.select{|i| not i[:toodleid] }.collect{|i| [i[:uuid], taskwarrior_to_toodle(i)] }
-    unless ntasks.empty?
-      puts "Upload #{ntasks.size} new tasks to toodledo..."
-      newids = Hash[[ntasks.map(&:first), add_tasks(ntasks.map(&:last))].transpose]
-      newids.each do |uuid, task|
-        puts "[NEW]<= #{task}, UUID: #{uuid}"
-      end
-      local_tasks.each do |t|
-        t[:toodleid] = newids[t[:uuid]][:id]   if newids.key? t[:uuid]
-      end
-    end
-  end
-
-  def upload_edited
-    # upload edited tasks
-    #
-    return unless @last_sync
-    # edited tasks
-    edited_tasks = old_local_tasks.select{|i| i[:entry] > @last_sync and i[:entry] < sync_start }
-    # completed tasks
-    completed_tasks = local_complete_tasks.select{|i| i[:end] and i[:end] > @last_sync and i[:toodleid]}  
-    if (edited_tasks.size + completed_tasks.size) > 0
-      puts "Update #{edited_tasks.size} edited tasks and #{completed_tasks.size} completed tasks..."
-      edited_tasks = edited_tasks.collect do |i|
-        t = taskwarrior_to_toodle(i)
-        puts "[UPDATE]<= #{t}"
-        t
-      end
-      completed_tasks = completed_tasks.collect do |i|
-        t = taskwarrior_to_toodle(i)
-        puts "[COMPLETE]<= #{t}"
-        t
-      end
-      ntasks = edited_tasks + completed_tasks
-      edit_tasks(ntasks)        unless ntasks.empty?
-    end
-  end
-
-  def download_new_and_edited
-    useful_fields = [:folder, :context, :tag, :duedate, :priority]
-
-    # download new tasks and edited tasks 
-    #
-    if not @last_sync or @remote_task_modified
-      ntasks = []
-      if @last_sync
-        ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync)
-      else
-        ntasks = get_tasks(:fields => useful_fields, :comp => 0)
-      end
-      # toodledo ids in local tasks
-      lids = old_local_tasks.collect{|i| i[:toodleid]}
-
-      # add new tasks
-      ntasks.select{|i| not lids.include?(i[:id])}.each{|i| 
-        t = toodle_to_taskwarrior(i)
-        local_tasks << t 
-        puts "[NEW]=> #{t}"
-      }
-      # add edited tasks, including completed
-      ntasks.select{|i| lids.include?(i[:id])}.each do |t|
-        lindex = local_tasks.find_index{|i| i[:toodleid] == t[:id] }
-        local_tasks[lindex].merge(toodle_to_taskwarrior(t))
-        puts "[UPDATE]=> #{t}"
-      end
-    end
-  end
-
-  def download_deleted
-    # download the list of deleted tasks
-    #
-    if @remote_task_deleted
-      dtasks = get_deleted_tasks(@last_sync)
-      # toodledo ids in local tasks
-      lids = local_tasks.collect{|i| i[:toodleid]}
-      dtasks.select{|t| lids.include? t[:id] }.each do |t|
-        local_tasks.delete_if {|i| i[:toodleid] == t[:id] }
-        puts "[DELETE]=> #{t}"
-      end
-    end
-  end
-
-  def local_tasks
-    @local_tasks ||= read_taskwarrior_file(@task_file)
-  end
-
-  def old_local_tasks
-    @old_local_tasks ||= read_taskwarrior_file(@task_file)
-  end
-
-  def local_complete_tasks
-    @completed_tasks ||= read_taskwarrior_file(@comp_file)
   end
 
   def sync_folders
@@ -155,37 +71,146 @@ class SyncWarrior < Toodledo
     @sync_start ||= Time.now.to_i
   end
 
+  def sync_tasks
+    # if we first upload, and in the case that a task is modified locally and
+    # completed remotely, the modification would be uploaded to server, and it
+    # remains completed on server. Depending implementation of sync, there could
+    # have been two situations: 1. it could not be marked as completed locally;
+    # 2. it could be marked complete, but all merges done remotely should be
+    # download again.
+    #
+    # If we first download, we could make the merge locally and upload anything
+    # that worth uploading; and next time when sync starts, we only needs to
+    # shift @last_sync a few seconds later to avoid double downloads.
+    #
+    # The flow of syncing ....
+    #   download -> local merge -> upload -> ( remote merge )
+    #
+    download_task_changes
+
+    local_merge
+
+    upload_task_changes
+
+    commit_changes
+  end
+
+  def local_merge
+    @pull[:modified].each { |t| _update_task t }
+    @pull[:deleted].collect{|i| i[:id]}.each{|toodleid| @task_warrior.delete_by_id(toodleid) }
+  end
+
+  def upload_task_changes
+    # upload new tasks
+    new_ids = @task_warrior.new_task_ids
+    new_ids.each do |uuid|
+      @push[:add] << @task_warrior[uuid]
+    end
+
+    # upload modified
+    if @last_sync
+      @task_warrior.modified_after(@last_sync).collect(&:uuid).each do |uuid|
+        next if new_ids.include?(uuid)  # avoid double upload
+        @push[:edit] << @task_warrior[uuid]
+      end
+    end
+
+    #TODO: there is no way to upload deleted tasks yet!
+    #
+
+    @push.each do |k,v|
+      v.each do |t|
+        puts "[#{k.to_s.upcase}]<= #{t.to_h}"
+      end
+    end
+  end
+
+  def download_task_changes
+    useful_fields = [:folder, :context, :tag, :duedate, :priority]
+
+    # download new tasks and edited tasks 
+    #
+    ntasks = []
+    if first_sync?
+      #ntasks = get_tasks(:fields => useful_fields, :comp => 0)
+      ntasks = get_tasks(:fields => useful_fields)
+    elsif @remote_context_modified
+      p @last_sync
+      ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync)
+    end
+    @pull[:modified] = ntasks
+
+    # download the list of deleted tasks
+    #
+    if @remote_task_deleted
+      dtasks = get_deleted_tasks(@last_sync)
+      # toodledo ids in local tasks
+      @pull[:deleted] = dtasks.select{|i| i[:id]}
+    end
+
+    @pull.each do |k,v|
+      v.each do |t|
+        puts "[#{k.to_s.upcase}]=> #{t}"
+      end
+    end
+  end
+
   def sync
 
     sync_folders
 
     sync_contexts
 
-    # first download, very important
-    upload_new
-
-    upload_edited
-
-    #upload_deleted
-    
-    download_new_and_edited
-
-    download_deleted
-
-    write_taskwarrior_file
-
-    write_cache_file
+    sync_tasks
 
     true
   end
 
-  # private
+  def commit_changes
+    commit_remote_changes
+
+    commit_local_changes
+
+    write_cache_file
+  end
+
+  private
+  # update a task warrior task
+  def _update_task(t)
+    # toodledo format hash?
+    if id = t[:id]
+      t = toodle_to_taskwarrior(t)
+      if @task_warrior[id]
+        @task_warrior[id] = @task_warrior[id].to_h.merge(t)
+      else
+        @task_warrior << t
+      end
+    else
+      @task_warrior << t
+    end
+  end
+
+  def first_sync?
+    not @last_sync or @task_warrior.size.zero?
+  end
+
   def check_changes
     if @prev_account_info
       @remote_task_modified    = has_new_info? :lastedit_task
       @remote_task_deleted     = has_new_info? :lastdelete_task
       @remote_folder_modified  = has_new_info? :lastedit_folder
       @remote_context_modified = has_new_info? :lastedit_context
+    end
+  end
+
+  def commit_local_changes
+    @task_warrior.to_file(@task_file, @comp_file)
+  end
+
+  def commit_remote_changes
+    @push.each do |k, v|
+      next if v.empty?
+      send("#{k}_tasks".to_sym, v.collect{|t| taskwarrior_to_toodle(t)})
     end
   end
 
@@ -207,7 +232,7 @@ class SyncWarrior < Toodledo
     @prev_account_info = cache[:account_info]
     @remote_folders    = cache[:remote_folders]
     @remote_contexts   = cache[:remote_contexts]
-    @last_sync         = cache[:last_sync]
+    @last_sync         = cache[:last_sync] + 5      # shift a bit later
   end
 
   # write cache data to cache file
@@ -221,34 +246,6 @@ class SyncWarrior < Toodledo
         :remote_contexts => @remote_contexts,
         :last_sync => Time.now.to_i ,
       }.to_yaml)
-    end
-  end
-
-  # read taskwarrior file format
-  def read_taskwarrior_file(file)
-    tasks = []
-    open(file).each_line do |l|
-      l = l.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => 'X')
-      t = l.scan( /\w+:".+?"/ ).collect{|i| 
-        k, v = i.split(':', 2)
-        [k.to_sym, v.gsub(/\A"|"\Z/,'')] 
-      } 
-      t = Hash[t]
-      t[:tags] = t[:tags].strip.split(",")  if t[:tags]
-      t[:entry] = t[:entry].to_i
-      t[:end] = t[:end].to_i  if t[:end]
-      tasks << t
-    end if File.file? file
-    tasks
-  end
-
-  # write to a taskwarrior file
-  def write_taskwarrior_file
-    open(@task_file, 'w') do |f|
-      local_tasks.each do |t|
-        t[:tags] = t[:tags].join(",")   if t[:tags]
-        f.puts('[' + t.collect{|k, v| %Q{#{k}:"#{v}"} }.join(" ") + ']')
-      end
     end
   end
 
@@ -344,7 +341,8 @@ class SyncWarrior < Toodledo
     twtask[:priority] = toodle_priority_to_tw(task[:priority])   if task[:priority]
     twtask[:status] = task[:completed] ? "completed" : "pending"
     twtask[:uuid] = SecureRandom.uuid
-    twtask[:entry] = Time.now.to_i
+    twtask[:entry] = from_toodle_date(task[:modified])
+    twtask[:end] = from_toodle_date(task[:completed])   if task[:completed]
     if task[:context]
       con = toodle_context_to_tw(task[:context])
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
