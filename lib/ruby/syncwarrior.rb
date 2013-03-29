@@ -210,7 +210,13 @@ class SyncWarrior < Toodledo
   def commit_remote_changes
     @push.each do |k, v|
       next if v.empty?
-      send("#{k}_tasks".to_sym, v.collect{|t| taskwarrior_to_toodle(t)})
+      res = send("#{k}_tasks".to_sym, v.collect{|t| taskwarrior_to_toodle(t)})
+      if k == :add  # append remote toodleid to local
+        ids = Hash[ [v.map(&:uuid), res].transpose ]
+        ids.each do |uuid, id|
+          @task_warrior[uuid].toodleid = id
+        end
+      end
     end
   end
 

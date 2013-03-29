@@ -67,6 +67,7 @@ class TaskCollection
   end
 
   def to_file(pending_file, completed_file)
+    dedup
     write_taskwarrior_file(pending_file, pending)
     write_taskwarrior_file(completed_file, completed)
   end
@@ -96,7 +97,7 @@ class TaskCollection
     tasks = []
     open(file).each_line do |l|
       l = l.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => 'X')
-      t = l.scan( /\w+:".+?"/ ).collect{|i| 
+      t = l.scan( /\w+:".*?"/ ).collect{|i| 
         k, v = i.split(':', 2)
         [k.to_sym, v.gsub(/\A"|"\Z/,'')] 
       } 
