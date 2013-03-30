@@ -129,6 +129,11 @@ class Task < OpenStruct
     self.end || self.entry
   end
 
+  # compare modified time stamp to decide who would be overriden
+  def merge(t)
+    Task.new( ( self > t ) ? t.to_h.merge(to_h) : to_h.merge(t.to_h) )
+  end
+
   def <=>(t)
     modified <=> t.modified
   end

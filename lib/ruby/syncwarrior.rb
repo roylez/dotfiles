@@ -96,7 +96,7 @@ class SyncWarrior < Toodledo
   end
 
   def local_merge
-    @pull[:modified].each { |t| _update_task t }
+    @pull[:edit].each { |t| _update_task t }
     @pull[:deleted].collect{|i| i[:id]}.each{|toodleid| @task_warrior.delete_by_id(toodleid) }
   end
 
@@ -179,8 +179,8 @@ class SyncWarrior < Toodledo
     # toodledo format hash?
     if id = t[:id]
       t = toodle_to_taskwarrior(t)
-      if @task_warrior[id]
-        @task_warrior[id] = @task_warrior[id].to_h.merge(t)
+      if old_t = @task_warrior[id]
+        @task_warrior[id] = old_t.merge(t)
       else
         @task_warrior << t
       end
@@ -354,7 +354,7 @@ class SyncWarrior < Toodledo
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
     end
 
-    twtask
+    Task.new(twtask)
   end
 end
 
