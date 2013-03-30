@@ -126,7 +126,7 @@ class SyncWarrior < Toodledo
   end
 
   def download_task_changes
-    useful_fields = [:folder, :context, :tag, :duedate, :priority]
+    useful_fields = [:folder, :context, :tag, :duedate, :priority, :added]
 
     # download new tasks and edited tasks 
     #
@@ -137,7 +137,7 @@ class SyncWarrior < Toodledo
     elsif @remote_task_modified
       ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync )
     end
-    @pull[:modified] = ntasks
+    @pull[:edit] = ntasks
 
     # download the list of deleted tasks
     #
@@ -258,11 +258,11 @@ class SyncWarrior < Toodledo
   def taskwarrior_to_toodle(task)
     toodletask = {}
     toodletask[:title]    = task[:description]
-    toodletask[:id]       = task[:toodleid]   if task[:toodleid]
+    toodletask[:id]       = task[:toodleid]                         if task[:toodleid]
     toodletask[:duedate]  = to_toodle_date(task[@due_field].to_i)   if task[@due_field]
-    toodletask[:completed] = to_toodle_date(task[:end].to_i) if task[:end]
+    toodletask[:completed]= to_toodle_date(task[:end].to_i)         if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
-    toodletask[:folder]   = tw_project_to_toodle(task[:project])   if task[:project]
+    toodletask[:folder]   = tw_project_to_toodle(task[:project])    if task[:project]
     if task[:tags]
       context = task[:tags].find{|i| i.start_with? '@' }
       if context
@@ -339,16 +339,16 @@ class SyncWarrior < Toodledo
   # convert from toodledo to TaskWarrior format
   def toodle_to_taskwarrior(task)
     twtask = {}
-    twtask[:toodleid] = task[:id]
+    twtask[:toodleid]    = task[:id]
     twtask[:description] = task[:title]
-    twtask[@due_field] = from_toodle_date(task[:duedate].to_i)  if task[:duedate]
-    twtask[:tags] = task[:tag].split(",").map(&:strip)  if task[:tag]
-    twtask[:project] = toodle_folder_to_tw(task[:folder])   if task[:folder]
-    twtask[:priority] = toodle_priority_to_tw(task[:priority])   if task[:priority]
-    twtask[:status] = task[:completed] ? "completed" : "pending"
-    twtask[:uuid] = SecureRandom.uuid
-    twtask[:entry] = from_toodle_date(task[:modified])
-    twtask[:end] = from_toodle_date(task[:completed])   if task[:completed]
+    twtask[@due_field]   = from_toodle_date(task[:duedate].to_i)  if task[:duedate]
+    twtask[:tags]        = task[:tag].split(",").map(&:strip)     if task[:tag]
+    twtask[:project]     = toodle_folder_to_tw(task[:folder])     if task[:folder]
+    twtask[:priority]    = toodle_priority_to_tw(task[:priority]) if task[:priority]
+    twtask[:status]      = task[:completed] ? "completed" : "pending"
+    twtask[:uuid]        = SecureRandom.uuid
+    twtask[:entry]       = from_toodle_date(task[:added])
+    twtask[:end]         = from_toodle_date(task[:completed])     if task[:completed]
     if task[:context]
       con = toodle_context_to_tw(task[:context])
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
