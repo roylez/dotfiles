@@ -39,11 +39,11 @@ class TaskCollection
     find{|i| i.uuid == id.to_s } || find{|i| i.toodleid and i.toodleid == id.to_s }
   end
 
-  def []=(id, hash)
+  def []=(id, info)
     item = self[id]
     return nil unless item
     @tasks.delete item
-    new_item = Task.new(item.to_h.merge(hash))
+    new_item = info.is_a?(Task) ? item.merge(info) : Task.new(item.to_h.merge(info))
     @tasks << new_item
     new_item
   end
