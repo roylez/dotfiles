@@ -113,7 +113,7 @@ class TaskCollection
   # write to a taskwarrior file
   def write_taskwarrior_file(file, tasks)
     open(file, 'w') do |f|
-      tasks.each do |t|
+      tasks.sort_by(&:toodleid).each do |t|
         t.tags = t.tags.join(",")   if not t.tags.to_s.empty?
         f.puts('[' + t.to_h.collect{|k, v| %Q{#{k}:"#{v}"} }.join(" ") + ']')
       end
