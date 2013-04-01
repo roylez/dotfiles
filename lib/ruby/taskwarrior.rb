@@ -95,7 +95,7 @@ class TaskCollection
   # read taskwarrior file format
   def self.read_taskwarrior_file(file)
     tasks = []
-    open(file).each_line do |l|
+    IO.readlines(file).each do |l|
       l = l.encode('UTF-8', :invalid => :replace, :undef => :replace, :replace => 'X')
       t = l.scan( /\w+:".*?"/ ).collect{|i| 
         k, v = i.split(':', 2)

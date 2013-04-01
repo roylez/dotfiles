@@ -42,7 +42,7 @@ class SyncWarrior < Toodledo
     @due_field         = opts[:scheduled_is_due] ? :scheduled : :due
 
     # things to be merged with remote
-    @push              = {:add => [], :edit => []}
+    @push              = {:add  => [], :edit    => []}
     @pull              = {:edit => [], :deleted => []}
 
     read_cache_file
@@ -138,6 +138,9 @@ class SyncWarrior < Toodledo
       ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync )
     end
     @pull[:edit] = ntasks
+    @pull[:edit].each do |t|
+      puts "[#{@task_warrior[t[:id]] ? 'EDIT' : 'NEW'}]=> #{t}"
+    end
 
     # download the list of deleted tasks
     #
@@ -147,10 +150,8 @@ class SyncWarrior < Toodledo
       @pull[:deleted] = dtasks.select{|i| i[:id]}
     end
 
-    @pull.each do |k,v|
-      v.each do |t|
-        puts "[#{k.to_s.upcase}]=> #{t}"
-      end
+    @pull[:deleted].each do |t|
+      puts "[DELETED]=> #{t}"
     end
   end
 
