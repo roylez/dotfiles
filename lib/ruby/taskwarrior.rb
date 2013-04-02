@@ -50,7 +50,10 @@ class TaskCollection
 
   def delete_by_id(id)
     item = self[id]
-    @tasks.delete(item)   if item
+    if item
+      puts "deleting #{item.inspect}"
+      @tasks.delete(item)
+    end
   end
 
   def <<(hash)
