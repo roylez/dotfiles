@@ -192,6 +192,7 @@ class SyncWarrior < Toodledo
   private
   # update a task warrior task
   def _update_task(t)
+
     # toodledo format hash?
     if id = t[:id]
       t = toodle_to_taskwarrior(t)

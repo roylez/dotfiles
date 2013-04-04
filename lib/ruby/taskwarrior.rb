@@ -42,7 +42,7 @@ class TaskCollection
   def []=(id, info)
     item = self[id]
     return nil unless item
-    @tasks.delete item
+    delete_by_id id
     new_item = info.is_a?(Task) ? item.merge(info) : Task.new(item.to_h.merge(info))
     @tasks << new_item
     new_item
@@ -52,7 +52,7 @@ class TaskCollection
     item = self[id]
     if item
       puts "deleting #{item.inspect}"
-      @tasks.delete(item)
+      @tasks.delete_at(index(id))
     end
   end
 
@@ -92,6 +92,10 @@ class TaskCollection
     end
     @tasks = new_tasks + old_tasks.values
     self
+  end
+
+  def index(id)
+    @tasks.index{|i| i.uuid == id.to_s || (i.toodleid and i.toodleid == id.to_s) }
   end
 
   private
