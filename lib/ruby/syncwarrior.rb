@@ -134,7 +134,7 @@ class SyncWarrior < Toodledo
 
     @push.each do |k,v|
       v.each do |t|
-        puts "[#{k.to_s.upcase}]<= #{t.to_h}"
+        puts "<=[#{k.to_s.upcase}] #{t.to_h}"
       end
     end
   end
@@ -153,7 +153,7 @@ class SyncWarrior < Toodledo
     end
     @pull[:edit] = ntasks
     @pull[:edit].each do |t|
-      puts "[#{@task_warrior[t[:id]] ? 'EDIT' : 'NEW'}]=> #{t}"
+      puts "=>[#{@task_warrior[t[:id]] ? 'EDIT' : 'ADD'}] #{t}"
     end
 
     # download the list of deleted tasks
@@ -165,7 +165,7 @@ class SyncWarrior < Toodledo
     end
 
     @pull[:delete].each do |t|
-      puts "[DELETE]=> #{t}"
+      puts "=>[DELETE] #{t}"
     end
   end
 

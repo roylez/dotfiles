@@ -51,7 +51,6 @@ class TaskCollection
   def delete_by_id(id)
     item = self[id]
     if item
-      puts "deleting #{item.inspect}"
       @tasks.delete_at(index(id))
     end
   end
