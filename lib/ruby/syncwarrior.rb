@@ -86,15 +86,18 @@ class SyncWarrior < Toodledo
     # The flow of syncing ....
     #   download -> local merge -> upload -> ( remote merge )
     #
+    #   1. calculate local changes, keep **uuid** in @push
+    #   2. download remote changes, keep changed tasks in @pull
+    #   3. locally merge @pull into @task_warrior
+    #   4. push local changes according to @push
+    #
     puts "#{@task_warrior.size} tasks in local repository, #{@task_warrior.completed.size} completed, #{@task_warrior.pending.size} pending."
 
-    download_task_changes
+    update_task_changes
+
+    update_toodle_changes
 
     local_merge
-
-    puts "#{@task_warrior.size} tasks in local repository, #{@task_warrior.completed.size} completed, #{@task_warrior.pending.size} pending."
-
-    upload_task_changes
 
     puts <<-EOS
     Ready to commit changes: 
@@ -114,32 +117,30 @@ class SyncWarrior < Toodledo
     @pull[:delete].collect{|i| i[:id]}.each{|toodleid| @task_warrior.delete_by_id(toodleid) }
   end
 
-  def upload_task_changes
+  def update_task_changes
     # upload new tasks
     new_ids = @task_warrior.new_task_ids
-    new_ids.each do |uuid|
-      @push[:add] << @task_warrior[uuid]
-    end
+    new_ids.each { |uuid| @push[:add] << uuid }
 
     # upload modified
     if @last_sync
       @task_warrior.modified_after(@last_sync).collect(&:uuid).each do |uuid|
         next if new_ids.include?(uuid)  # avoid double upload
-        @push[:edit] << @task_warrior[uuid]
+        @push[:edit] << uuid
       end
     end
 
-    #TODO: there is no way to upload deleted tasks yet!
+    #TODO: deleted tasks are added as edited
     #
 
     @push.each do |k,v|
-      v.each do |t|
-        puts "<=[#{k.to_s.upcase}] #{t.to_h}"
+      v.each do |uuid|
+        puts "<=[#{k.to_s.upcase}] #{@task_warrior[uuid].to_h}"
       end
     end
   end
 
-  def download_task_changes
+  def update_toodle_changes
     useful_fields = [:folder, :context, :tag, :duedate, :priority, :added]
 
     # download new tasks and edited tasks 
@@ -226,12 +227,10 @@ class SyncWarrior < Toodledo
   def commit_remote_changes
     @push.each do |k, v|
       next if v.empty?
-      res = send("#{k}_tasks".to_sym, v.collect{|t| taskwarrior_to_toodle(t)})
+      res = send("#{k}_tasks".to_sym, v.collect{|uuid| taskwarrior_to_toodle(@task_warrior[uuid])})
       if k == :add  # append remote toodleid to local
-        ids = Hash[ [v.map(&:uuid), res].transpose ]
-        ids.each do |uuid, t|
-          @task_warrior[uuid].toodleid = t[:id]
-        end
+        ids = Hash[ [v, res].transpose ]
+        ids.each { |uuid, t| @task_warrior[uuid].toodleid = t[:id] }
       end
     end
   end

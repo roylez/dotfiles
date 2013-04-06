@@ -25,7 +25,7 @@ end
 
 def msg(kwds={})
     kwds = { :dbus => false, icon:$icon, title:$title, text:$text, :replace => 1 }.merge(kwds)
-    cmd_prefix = "DISPLAY=:0.0"
+    cmd_prefix = "DISPLAY=:0.0 XAUTHORITY=#{ENV['HOME']}/.Xauthority"
     unless kwds[:dbus]
       kwds[:text] = %Q{<span size="12000" weight="bold">\n#{kwds[:text]}</span>}
       system(%Q{#{cmd_prefix} notify-send -i #{kwds[:icon]} '#{kwds[:title]}' '#{kwds[:text]}'})
