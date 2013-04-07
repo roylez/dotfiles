@@ -163,7 +163,7 @@ class SyncWarrior < Toodledo
     %Q{Ready to commit changes: 
       Upload:     NEW:#{@push[:add].size}    EDIT:#{@push[:edit].size}
       Download:   EDIT:#{@pull[:edit].size}   DELETE:#{@pull[:delete].size}
-    }.split("\n").each{|l| log.info l }
+    }.strip.split("\n").each{|l| log.info l }
 
     commit_changes
 
