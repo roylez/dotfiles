@@ -12,6 +12,65 @@ require 'securerandom'
 require_relative 'toodledo'
 require_relative 'taskwarrior'
 
+require 'logger'
+module Logger::Severity
+  NEW    = 6
+  EDIT   = 7
+  DELETE = 8
+end
+
+class ScreenLogger < Logger
+  def initialize
+    super(STDOUT)
+    @level = INFO
+    @formatter = proc do |severity, time, progname, msg|
+      "#{time.strftime("%Y-%m-%d %H:%M:%S")} [#{severity}]: #{msg}\n"
+    end
+  end
+
+  alias :add_orig :add 
+  SEVS = %w(DEBUG INFO WARN ERROR FATAL UNKNOWN NEW EDIT DELETE)
+  LEVEL_COLOR = { 
+    INFO => nil,
+    DEBUG => nil,
+    WARN => "\e[1;33m",
+    ERROR => "\e[1;31m",
+    FATAL => "\e[1;35m",
+    NEW => "\e[1;32m",
+    EDIT => "\e[1;33m",
+    DELETE => "\e[1;31m",
+  }
+
+  [:NEW, :EDIT, :DELETE].each do |tag|
+    define_method(tag.to_s.downcase.gsub(/\W+/, '_').to_sym) do |progname, &block|
+      add(ScreenLogger.const_get(tag), nil, progname, &block)
+    end 
+  end
+
+  def format_severity(severity)
+    SEVS[severity] || 'ANY'
+  end
+
+  def add(severity, message = nil, progname = nil, &block)
+    severity ||= UNKNOWN
+    if @logdev.nil? or severity < @level
+      return true
+    end
+    progname ||= @progname
+    if message.nil?
+      if block_given?
+        message = yield
+      else
+        message = progname
+        progname = @progname
+      end
+    end
+    #severity = "#{LEVEL_COLOR[severity]}#{severity}\e[m"    if LEVEL_COLOR[severity]
+    @logdev.write( format_message("#{LEVEL_COLOR[severity]}#{format_severity(severity)}\e[m", Time.now, progname, message))
+    true
+  end
+end
+
 class TaskCollection
   def new_task_ids
     select{|i| not i.toodleid }.collect(&:uuid)
@@ -44,6 +103,8 @@ class SyncWarrior < Toodledo
     # things to be merged with remote
     @push              = {:add  => [], :edit    => []}
     @pull              = {:edit => [], :delete  => []}
+    
+    @logger            = ScreenLogger.new
 
     read_cache_file
 
@@ -91,7 +152,7 @@ class SyncWarrior < Toodledo
     #   3. locally merge @pull into @task_warrior
     #   4. push local changes according to @push
     #
-    puts "#{@task_warrior.size} tasks in local repository, #{@task_warrior.completed.size} completed, #{@task_warrior.pending.size} pending."
+    log.info "#{@task_warrior.size} tasks in local repository(completed: #{@task_warrior.completed.size}, pending: #{@task_warrior.pending.size})"
 
     update_task_changes
 
@@ -99,22 +160,25 @@ class SyncWarrior < Toodledo
 
     local_merge
 
-    puts <<-EOS
-    Ready to commit changes: 
-      Upload:     ADD:#{@push[:add].size}    EDIT:#{@push[:edit].size}
+    %Q{Ready to commit changes: 
+      Upload:     NEW:#{@push[:add].size}    EDIT:#{@push[:edit].size}
       Download:   EDIT:#{@pull[:edit].size}   DELETE:#{@pull[:delete].size}
-    EOS
+    }.split("\n").each{|l| log.info l }
 
     commit_changes
 
-    puts "Commit completed. "
+    log.info "Commit completed. "
 
-    puts "#{@task_warrior.size} tasks in local repository, #{@task_warrior.completed.size} completed, #{@task_warrior.pending.size} pending."
+    log.info "#{@task_warrior.size} tasks in local repository(completed: #{@task_warrior.completed.size}, pending: #{@task_warrior.pending.size})"
   end
 
   def local_merge
     @pull[:edit].each { |t| _update_task t }
     @pull[:delete].collect{|i| i[:id]}.each{|toodleid| @task_warrior.delete_by_id(toodleid) }
+  end
+
+  def log
+    @logger
   end
 
   def update_task_changes
@@ -135,7 +199,8 @@ class SyncWarrior < Toodledo
 
     @push.each do |k,v|
       v.each do |uuid|
-        puts "<=[#{k.to_s.upcase}] #{@task_warrior[uuid].to_h}"
+        key = (k == :add) ? :new : k
+        log.send(key, "<= #{@task_warrior[uuid].to_h}")
       end
     end
   end
@@ -154,7 +219,7 @@ class SyncWarrior < Toodledo
     end
     @pull[:edit] = ntasks
     @pull[:edit].each do |t|
-      puts "=>[#{@task_warrior[t[:id]] ? 'EDIT' : 'ADD'}] #{t}"
+      @task_warrior[t[:id]] ?  log.edit("=> #{t}") : log.new("=> #{t}")
     end
 
     # download the list of deleted tasks
@@ -166,7 +231,7 @@ class SyncWarrior < Toodledo
     end
 
     @pull[:delete].each do |t|
-      puts "=>[DELETE] #{t}"
+      log.delete "=> #{t}"
     end
   end
 
@@ -194,6 +259,7 @@ class SyncWarrior < Toodledo
   # update a task warrior task
   def _update_task(t)
 
+    log.info @task_warrior[t[:id]]
     # toodledo format hash?
     if id = t[:id]
       t = toodle_to_taskwarrior(t)
@@ -205,6 +271,7 @@ class SyncWarrior < Toodledo
     else
       @task_warrior << t
     end
+    log.info @task_warrior[t[:id]]
   end
 
   def first_sync?
