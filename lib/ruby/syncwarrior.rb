@@ -22,7 +22,7 @@ end
 class ScreenLogger < Logger
   def initialize
     super(STDOUT)
-    @level = INFO
+    @level = DEBUG
     @formatter = proc do |severity, time, progname, msg|
       "#{time.strftime("%Y-%m-%d %H:%M:%S")} [#{severity}]: #{msg}\n"
     end
@@ -99,6 +99,7 @@ class SyncWarrior < Toodledo
     @apptoken          = 'api512ab65a08df3'
 
     @due_field         = opts[:scheduled_is_due] ? :scheduled : :due
+    @repeat_from       = opts[:repeat_from] || 1
 
     # things to be merged with remote
     @push              = {:add  => [], :edit    => []}
@@ -206,7 +207,7 @@ class SyncWarrior < Toodledo
   end
 
   def update_toodle_changes
-    useful_fields = [:folder, :context, :tag, :duedate, :priority, :added]
+    useful_fields = [:folder, :context, :tag, :duedate, :priority, :added, :repeat]
 
     # download new tasks and edited tasks 
     #
@@ -259,7 +260,7 @@ class SyncWarrior < Toodledo
   # update a task warrior task
   def _update_task(t)
 
-    log.info @task_warrior[t[:id]]
+    log.debug @task_warrior[t[:id]]
     # toodledo format hash?
     if id = t[:id]
       t = toodle_to_taskwarrior(t)
@@ -268,10 +269,11 @@ class SyncWarrior < Toodledo
       else
         @task_warrior << t
       end
+      log.debug @task_warrior[t[:id]]
     else
       @task_warrior << t
+      log.debug t
     end
-    log.info @task_warrior[t[:id]]
   end
 
   def first_sync?
@@ -347,6 +349,10 @@ class SyncWarrior < Toodledo
     toodletask[:completed]= to_toodle_date(task[:end].to_i)         if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])    if task[:project]
+    if task[:recur]
+      toodletask[:repeat] = tw_recur_to_toodle(task[:recur])
+      toodletask[:repeatfrom] = @repeat_from
+    end
     if task[:tags]
       context = task[:tags].find{|i| i.start_with? '@' }
       if context
@@ -356,6 +362,26 @@ class SyncWarrior < Toodledo
       toodletask[:tag] = task[:tags].join(",")
     end
     toodletask
+  end
+
+  def tw_recur_to_toodle(recur)
+    case recur.to_s.downcase
+    when /\A(daily|weekly|biweekly|monthly|quarterly|yearly)\Z/; $1
+    when /\A(annually)\Z/; 'Yearly'
+    when /\A(fortneight)\Z/; 'Biweekly'
+    when /\A(semiannual)\Z/; 'Semiannually'
+    when /\A(weekdays)\Z/; 'Every weekday'
+    when /\A(weekends)\Z/; 'Every weekend'
+    when /\A(monday|tuesday|wednesday|thursday|friday|satday|sunday)/; "Every #{$1}"
+    when /\A(\d)(\w+)\Z/; 
+      unit = case $2
+             when /^da/; 'day'
+             when /^mo/; 'month'
+             when /^(wk|week)/; 'week'
+             when /^(yr|year)/; 'year'
+             end
+      "Every #{$1} #{unit}"
+    end
   end
 
   # TW project => toodle folder
@@ -433,12 +459,20 @@ class SyncWarrior < Toodledo
     twtask[:uuid]        = SecureRandom.uuid
     twtask[:entry]       = from_toodle_date(task[:added])
     twtask[:end]         = from_toodle_date(task[:completed])     if task[:completed]
+    twtask[:recur]       = toodle_repeat_to_tw(task[:repeat])     if task[:repeat]
     if task[:context]
       con = toodle_context_to_tw(task[:context])
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
     end
 
     Task.new(twtask)
+  end
+
+  def toodle_repeat_to_tw(repeat)
+    case repeat.downcase
+    when /(daily|weekly|biweekly|monthly|quarterly|semiannual|yearly|weekday|weekend|monday|tuesday|wednesday|thursday|friday|satday|sunday)/; $1
+    when /^every (\d+) (\w+)/; "#{$1}#{$2}"
+    end
   end
 end
 
@@ -479,7 +513,7 @@ if __FILE__ == $0
   begin
     w = SyncWarrior.new($config[:userid], $config[:password], 
                         TASK_FILE, COMP_FILE, CACHE_FILE, 
-                        { :user => $config[:user], :scheduled_is_due => $config[:scheduled_is_due]}
+                        $config.reject{|k,_| [:userid, :password].include? k }
                        )
     res = w.sync
   rescue RemoteAPIError => e
