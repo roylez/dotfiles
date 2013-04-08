@@ -44,6 +44,7 @@ class Toodledo
       t.delete(:completed)  unless t[:completed] and t[:completed] > 0
       t.delete(:duedate)    unless t[:duedate] and t[:duedate] > 0
       t.delete(:tag)        if t[:tag] and t[:tag].strip == ''
+      t.delete(:repeat)     if t[:repeat] and t[:repeat].strip == ''
       #t.delete(:folder)     if t[:folder] and t[:folder] == '0'
       #t.delete(:context)    if t[:context] and t[:context] == '0'
       t.each_key{|key| t.delete(key) unless t[key] != '0'}
