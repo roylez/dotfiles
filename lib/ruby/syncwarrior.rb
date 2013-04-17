@@ -458,6 +458,7 @@ class SyncWarrior < Toodledo
     twtask[:uuid]        = SecureRandom.uuid
     twtask[:entry]       = from_toodle_date(task[:added])
     twtask[:end]         = from_toodle_date(task[:completed])     if task[:completed]
+    twtask[:modified]    = from_toodle_date(task[:modified])      if task[:modified]
     twtask[:recur]       = toodle_repeat_to_tw(task[:repeat])     if task[:repeat]
     if task[:context]
       con = toodle_context_to_tw(task[:context])
