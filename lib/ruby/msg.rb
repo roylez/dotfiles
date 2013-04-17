@@ -43,6 +43,11 @@ def msg(kwds={})
     end
 end
 
+def audio_msg(sound_file, kwds={})
+  system(%Q{mplayer -really-quiet '#{sound_file}' &})   if File.file? sound_file
+  msg(kwds)
+end
+
 if __FILE__==$0
-    msg
+  audio_msg("#{ENV['HOME']}/.sounds/meow2.mp3")
 end

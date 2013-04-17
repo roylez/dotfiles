@@ -98,7 +98,6 @@ class SyncWarrior < Toodledo
     @appid             = 'syncwarrior'
     @apptoken          = 'api512ab65a08df3'
 
-    @due_field         = opts[:scheduled_is_due] ? :scheduled : :due
     @repeat_from       = opts[:repeat_from] || 1
 
     # things to be merged with remote
@@ -345,7 +344,7 @@ class SyncWarrior < Toodledo
     toodletask = {}
     toodletask[:title]    = task[:description]
     toodletask[:id]       = task[:toodleid]                         if task[:toodleid]
-    toodletask[:duedate]  = to_toodle_date(task[@due_field].to_i)   if task[@due_field]
+    toodletask[:duedate]  = to_toodle_date(task[:due].to_i)         if task[:due]
     toodletask[:completed]= to_toodle_date(task[:end].to_i)         if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])    if task[:project]
@@ -451,7 +450,7 @@ class SyncWarrior < Toodledo
     twtask = {}
     twtask[:toodleid]    = task[:id]
     twtask[:description] = task[:title]
-    twtask[@due_field]   = from_toodle_date(task[:duedate].to_i)  if task[:duedate]
+    twtask[:due]         = from_toodle_date(task[:duedate].to_i)  if task[:duedate]
     twtask[:tags]        = task[:tag].split(",").map(&:strip)     if task[:tag]
     twtask[:project]     = toodle_folder_to_tw(task[:folder])     if task[:folder]
     twtask[:priority]    = toodle_priority_to_tw(task[:priority]) if task[:priority]

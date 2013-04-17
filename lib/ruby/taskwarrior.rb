@@ -111,6 +111,7 @@ class TaskCollection
       t[:tags] = t[:tags].strip.split(",")  if t[:tags]
       t[:entry] = t[:entry].to_i
       t[:end] = t[:end].to_i  if t[:end]
+      t[:modified] = t[:modified].to_i  if t[:modified]
       tasks << Task.new(t)
     end if File.file? file
     tasks
@@ -131,8 +132,9 @@ end
 class Task < OpenStruct
   include Comparable
 
+  # modified field was added since 2.2, here we work around pre 2.2 versions
   def modified
-    self.end || self.entry
+    super || self.end || self.entry
   end
 
   # compare modified time stamp to decide who would be overriden
