@@ -49,5 +49,5 @@ def audio_msg(sound_file, kwds={})
 end
 
 if __FILE__==$0
-  audio_msg("#{ENV['HOME']}/.sounds/meow2.mp3")
+  audio_msg("#{ENV['HOME']}/.sounds/N9_ringtone/Email 1.mp3")
 end
