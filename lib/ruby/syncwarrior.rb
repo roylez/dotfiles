@@ -13,6 +13,7 @@ require_relative 'toodledo'
 require_relative 'taskwarrior'
 
 require 'logger'
+
 module Logger::Severity
   NEW    = 6
   EDIT   = 7
@@ -128,9 +129,9 @@ class SyncWarrior < Toodledo
     end
   end
 
-  def sync_start
-    @sync_start ||= Time.now.to_i
-  end
+  #def sync_start
+    #@sync_start ||= Time.now.to_i
+  #end
 
   def sync_tasks
     # if we first upload, and in the case that a task is modified locally and
@@ -174,7 +175,11 @@ class SyncWarrior < Toodledo
 
   def local_merge
     @pull[:edit].each { |t| _update_task t }
-    @pull[:delete].collect{|i| i[:id]}.each{|toodleid| @task_warrior.delete_by_id(toodleid) }
+    @pull[:delete].collect{|i| i[:id]}.each{|toodleid| 
+      t = @task_warrior[toodleid]
+      t.status = 'deleted' 
+      t.end = Time.now.to_i
+    }
   end
 
   def log
@@ -481,7 +486,7 @@ if __FILE__ == $0
   begin
     w = SyncWarrior.new($config[:userid], $config[:password], 
                         TASK_FILE, COMP_FILE, CACHE_FILE, 
-                        { :user => $config[:user], :scheduled_is_due => $config[:scheduled_is_due]}
+                        $config.reject{|k,_| [:userid, :password].include? k}
                        )
     res = w.sync
   rescue RemoteAPIError => e

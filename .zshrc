@@ -623,6 +623,8 @@ alias gfw="ssh -C2g -o ServerAliveInterval=60 -c arcfour -D 7070"
 alias tnethack='telnet nethack.alt.org'
 alias tslashem='telnet slashem.crash-override.net'
 
+alias forget='export HISTSIZE=0'
+
 #}}}
 
 typeset -U PATH
