@@ -67,7 +67,8 @@ watch=(notme)
 # 自动加载自定义函数
 fpath=($HOME/.zfunctions $fpath)
 # 需要设置了extended_glob才能glob到所有的函数，为了补全能用，又需要放在compinit前面
-autoload -U ${fpath[1]}/*(N-.x:t)
+_my_functions=${fpath[1]}/*(N-.x:t)
+[[ -n $_my_functions ]] && autoload -U $_my_functions
 
 autoload -U is-at-least
 # }}}
