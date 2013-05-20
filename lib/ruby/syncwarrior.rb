@@ -264,7 +264,7 @@ class SyncWarrior < Toodledo
   # update a task warrior task
   def _update_task(t)
 
-    log.info @task_warrior[t[:id]]
+    #log.info @task_warrior[t[:id]]
     # toodledo format hash?
     if id = t[:id]
       t = toodle_to_taskwarrior(t)
@@ -276,7 +276,7 @@ class SyncWarrior < Toodledo
     else
       @task_warrior << t
     end
-    log.info @task_warrior[t[:id]]
+    #log.info @task_warrior[t[:id]]
   end
 
   def first_sync?
