@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description: Sync taskwarrior task to toodledo
 
 require 'logger'
 require 'time'

@@ -16,7 +16,7 @@ export SDL_AUDIODRIVER="alsa"
 
 #scim -d &
 fcitx &
-xscreensaver -no-splash&
+#xscreensaver -no-splash&
 #killall -s9 urxvtd
 #urxvtd&
 #fetchmail &

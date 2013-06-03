@@ -1,6 +1,5 @@
 #!/bin/bash
-#Description: 
-# download national geographic photo of the day and set it as background
+#Description: download national geographic photo of the day and set it as background
 
 # wait for network connection to be established
 [[ -n $1 ]] && sleep $1
