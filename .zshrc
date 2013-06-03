@@ -219,11 +219,11 @@ get_prompt_git() {
     if [[ -n $__CURRENT_GIT_BRANCH ]]; then
         local s=$__CURRENT_GIT_BRANCH
         case "$__CURRENT_GIT_BRANCH_STATUS" in
-            ahead) s+="+" ;;
-            diverged) s+="=" ;;
-            behind) s+="-" ;;
+            ahead) s+="${pfg_green}+" ;;
+            diverged) s+="${pfg_red}=" ;;
+            behind) s+="${pfg_magenta}-" ;;
         esac
-        [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]] && s+="*"
+        [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]] && s+="${pfg_blue}*"
         echo " $pfg_black$pbg_white$pB $s $pR" 
     fi
 }
