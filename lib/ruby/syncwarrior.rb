@@ -266,15 +266,12 @@ class SyncWarrior < Toodledo
 
     #log.info @task_warrior[t[:id]]
     # toodledo format hash?
-    if id = t[:id]
-      t = toodle_to_taskwarrior(t)
-      if old_t = @task_warrior[id]
-        @task_warrior[id] = old_t.merge(t)
-      else
-        @task_warrior << t
-      end
+    changes = toodle_to_taskwarrior(t)
+    remote_task = Task.new(changes)
+    if id = t[:id] and @task_warrior[id]
+      @task_warrior[id].merge(remote_task)
     else
-      @task_warrior << t
+      @task_warrior << remote_task
     end
     #log.info @task_warrior[t[:id]]
   end
@@ -425,7 +422,7 @@ class SyncWarrior < Toodledo
     Time.parse(t).to_i
   end
 
-  # convert from toodledo to TaskWarrior format
+  # convert from toodledo to TaskWarrior format as a hash
   def toodle_to_taskwarrior(task)
     twtask = {}
     twtask[:toodleid]    = task[:id]
@@ -445,7 +442,7 @@ class SyncWarrior < Toodledo
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]
     end
 
-    Task.new(twtask)
+    twtask
   end
 end
 
