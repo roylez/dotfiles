@@ -139,10 +139,15 @@ class Task < OpenStruct
 
   # compare modified time stamp to decide who would be overriden
   def merge(t)
-    Task.new( ( self > t ) ? t.to_h.merge(to_h) : to_h.merge(t.to_h) )
+    changes = ( self > t ) ? t.to_h.merge(to_h) : to_h.merge(t.to_h)
+    modify(changes)
   end
 
   def <=>(t)
     modified <=> t.modified
+  end
+
+  def modify(changes)
+    changes.each { |k, v| send("#{k}=".to_sym, v) }
   end
 end
