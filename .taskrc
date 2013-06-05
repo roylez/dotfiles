@@ -31,6 +31,9 @@ alias.a=add
 
 color=on
 
+default.due=tom
+
+due=3
 monthsperline=3
 calendar.holidays=full
 
