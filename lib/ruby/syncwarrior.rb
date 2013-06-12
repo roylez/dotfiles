@@ -275,7 +275,7 @@ class SyncWarrior < Toodledo
   def add_tw_task(changes)
     tid = @task_warrior.add_task(changes)
     # create parent for recurring tasks
-    if @task_warrior[tid].recur
+    if @task_warrior[tid].recur and @task_warrior[tid].status == 'pending'
       pid = @task_warrior.add_task(changes.merge(:mask => '-', :status => 'recurring'))
       @task_warrior.edit_task(tid, :imask => '0', :parent => pid)
     end
