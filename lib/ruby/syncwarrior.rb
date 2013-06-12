@@ -290,11 +290,11 @@ class SyncWarrior < Toodledo
   end
 
   def delete_tw_task(id)
+    return unless @task_warrior[id]
+    pid = @task_warrior[id].parent
     @task_warrior.delete_task(id)
     # permanently delete parent task if remote recurring task is deleted
-    if pid = @task_warrior[id].parent
-      @task_warrior.delete_by_id(pid)
-    end
+    @task_warrior.delete_by_id(pid) if pid
   end
 
   def first_sync?

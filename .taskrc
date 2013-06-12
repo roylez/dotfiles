@@ -32,6 +32,7 @@ alias.a=add
 color=on
 
 default.due=tom
+recurrence.limit=0
 
 due=3
 monthsperline=3
