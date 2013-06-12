@@ -73,8 +73,9 @@ class ScreenLogger < Logger
 end
 
 class TaskCollection
+  # must exclude recurring parent here
   def new_task_ids
-    select{|i| not i.toodleid }.collect(&:uuid)
+    select{|i| not i.toodleid and i.status != 'recurring' }.collect(&:uuid)
   end
 end
 
@@ -145,17 +146,23 @@ class SyncWarrior < Toodledo
     # that worth uploading; and next time when sync starts, we only needs to
     # shift @last_sync a few seconds later to avoid double downloads.
     #
+    # As TaskWarrior keeps a parent task for recurring items while toodledo does
+    # not, parent/child task pair is treated as a single task when syncing,
+    # which means whenever a recurring item is completed on toodledo, the whole
+    # pair locally are removed from list (completion for child, deletion for
+    # parent). Similar applies to remote modification, deletion or creation.
+    #
     # The flow of syncing ....
-    #   download -> local merge -> upload -> ( remote merge )
+    #   download -> local merge -> upload -> ( remote merge ) -> save files
     #
     #   1. calculate local changes, keep **uuid** in @push
     #   2. download remote changes, keep changed tasks in @pull
-    #   3. locally merge @pull into @task_warrior
-    #   4. push local changes according to @push
+    #   3. push local changes according to @push
+    #   4. locally merge @pull into @task_warrior
     #
     log.info "#{@task_warrior.size} tasks in local repository(completed: #{@task_warrior.completed.size}, pending: #{@task_warrior.pending.size})"
 
-    update_task_changes
+    update_tw_changes
 
     update_toodle_changes
 
@@ -174,16 +181,16 @@ class SyncWarrior < Toodledo
   end
 
   def local_merge
-    @pull[:add].each    {|t| changes = toodle_to_taskwarrior(t); @task_warrior.add_task(changes) }
-    @pull[:edit].each   {|t| changes = toodle_to_taskwarrior(t); @task_warrior.edit_task(t[:id], changes) }
-    @pull[:delete].each {|t| @task_warrior.delete_task(t[:id]) }
+    @pull[:add].each    {|t| changes = toodle_to_taskwarrior(t); add_tw_task(changes) }
+    @pull[:edit].each   {|t| changes = toodle_to_taskwarrior(t); edit_tw_task(t[:id], changes) }
+    @pull[:delete].each {|t| delete_tw_task(t[:id]) }
   end
 
   def log
     @logger
   end
 
-  def update_task_changes
+  def update_tw_changes
     # upload new tasks
     new_ids = @task_warrior.new_task_ids
     new_ids.each { |uuid| @push[:add] << uuid }
@@ -192,6 +199,7 @@ class SyncWarrior < Toodledo
     if @last_sync
       @task_warrior.modified_after(@last_sync).collect(&:uuid).each do |uuid|
         next if new_ids.include?(uuid)  # avoid double upload
+        next if @task_warrior[uuid].status == 'recurring'   # avoid recurring parent
         @push[:edit] << uuid
       end
     end
@@ -208,7 +216,7 @@ class SyncWarrior < Toodledo
   end
 
   def update_toodle_changes
-    useful_fields = [:folder, :context, :tag, :duedate, :priority, :added]
+    useful_fields = [:folder, :context, :tag, :duedate, :priority, :added, :repeat] 
 
     # download new tasks and edited tasks 
     #
@@ -263,6 +271,31 @@ class SyncWarrior < Toodledo
   end
 
   private
+
+  def add_tw_task(changes)
+    tid = @task_warrior.add_task(changes)
+    # create parent for recurring tasks
+    if @task_warrior[tid].recur
+      pid = @task_warrior.add_task(changes.merge(:mask => '-', :status => 'recurring'))
+      @task_warrior.edit_task(tid, :imask => '0', :parent => pid)
+    end
+  end
+
+  def edit_tw_task(id, changes)
+    @task_warrior.edit_task(id, changes)
+    # sync changes to parent as well
+    if pid = @task_warrior[id].parent
+      @task_warrior.edit_task(pid, changes)
+    end
+  end
+
+  def delete_tw_task(id)
+    @task_warrior.delete_task(id)
+    # permanently delete parent task if remote recurring task is deleted
+    if pid = @task_warrior[id].parent
+      @task_warrior.delete_by_id(pid)
+    end
+  end
 
   def first_sync?
     not @last_sync or @task_warrior.size.zero?
@@ -337,6 +370,10 @@ class SyncWarrior < Toodledo
     toodletask[:completed]= to_toodle_date(task[:end].to_i)         if task[:end]
     toodletask[:priority] = tw_priority_to_toodle(task[:priority])  if task[:priority]
     toodletask[:folder]   = tw_project_to_toodle(task[:project])    if task[:project]
+    if task[:recur]
+      toodletask[:repeat] = tw_recur_to_toodle(task[:recur])
+      toodletask[:repeatfrom] = @repeat_from
+    end 
     if task[:tags]
       context = task[:tags].find{|i| i.start_with? '@' }
       if context
@@ -357,6 +394,26 @@ class SyncWarrior < Toodledo
     end
     folder[:id]
   end
+
+  def tw_recur_to_toodle(recur)
+    case recur.to_s.downcase
+    when /\A(daily|weekly|biweekly|monthly|quarterly|yearly)\Z/; $1
+    when /\A(annually)\Z/; 'Yearly'
+    when /\A(fortneight)\Z/; 'Biweekly'
+    when /\A(semiannual)\Z/; 'Semiannually'
+    when /\A(weekdays)\Z/; 'Every weekday'
+    when /\A(weekends)\Z/; 'Every weekend'
+    when /\A(monday|tuesday|wednesday|thursday|friday|satday|sunday)/; "Every #{$1}"
+    when /\A(\d)(\w+)\Z/; 
+      unit = case $2
+             when /^da/; 'day'
+             when /^mo/; 'month'
+             when /^(wk|week)/; 'week'
+             when /^(yr|year)/; 'year'
+             end
+      "Every #{$1} #{unit}"
+    end
+  end 
 
   # TW @tag => toodle context
   def tw_context_to_toodle(context_name)
@@ -387,6 +444,13 @@ class SyncWarrior < Toodledo
     else; nil
     end
   end
+
+  def toodle_repeat_to_tw(repeat)
+    case repeat.downcase
+    when /(daily|weekly|biweekly|monthly|quarterly|semiannual|yearly|weekday|weekend|monday|tuesday|wednesday|thursday|friday|satday|sunday)/; $1
+    when /^every (\d+) (\w+)/; "#{$1}#{$2}"
+    end
+  end 
 
   def tw_priority_to_toodle(tw_priority)
     case tw_priority
@@ -424,7 +488,7 @@ class SyncWarrior < Toodledo
     twtask[:entry]       = from_toodle_date(task[:added])
     twtask[:end]         = from_toodle_date(task[:completed])     if task[:completed]
     twtask[:modified]    = from_toodle_date(task[:modified])      if task[:modified]
-    #twtask[:recur]       = toodle_repeat_to_tw(task[:repeat])     if task[:repeat]
+    twtask[:recur]       = toodle_repeat_to_tw(task[:repeat])     if task[:repeat]
     if task[:context]
       con = toodle_context_to_tw(task[:context])
       twtask[:tags] = twtask[:tags] ? twtask[:tags].concat([ con ]) : [con]

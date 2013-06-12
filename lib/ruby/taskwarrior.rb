@@ -12,7 +12,8 @@ class TaskCollection
     completed = read_taskwarrior_file(completed_file)
     long_time_ago = Time.parse('2009-07-31 16:00').to_i
     completed.each { |t| t.end = long_time_ago   unless t.end }
-    TaskCollection.new( pending + completed ).dedup
+    #TaskCollection.new( pending + completed ).dedup
+    TaskCollection.new( pending + completed )
   end
 
   def size
@@ -35,8 +36,10 @@ class TaskCollection
     select(&:end)
   end
 
+  # get task by either uuid or toodleid
+  # when using toodleid, only child task is returned
   def [](id)
-    find{|i| i.uuid == id.to_s } || find{|i| i.toodleid and i.toodleid == id.to_s }
+    find{|i| i.uuid == id.to_s } || find{|i| i.toodleid and i.toodleid == id.to_s and i.status != 'recurring' }
   end
 
   # permanently remove a task!
@@ -48,7 +51,9 @@ class TaskCollection
   end
 
   def add_task(hash)
-    @tasks << Task.new(hash)
+    t = Task.new(hash)
+    @tasks << t
+    t[:uuid]
   end
   alias :<< :add_task
 
@@ -76,7 +81,7 @@ class TaskCollection
   end
 
   def to_file(pending_file, completed_file)
-    dedup
+    #dedup
     write_taskwarrior_file(pending_file, pending)
     write_taskwarrior_file(completed_file, completed)
   end
