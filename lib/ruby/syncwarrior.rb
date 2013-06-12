@@ -102,8 +102,8 @@ class SyncWarrior < Toodledo
     #@repeat_from       = opts[:repeat_from] || 1
 
     # things to be merged with remote
-    @push              = {:add  => [], :edit    => []}
-    @pull              = {:edit => [], :delete  => []}
+    @push              = {:add => [], :edit => []}
+    @pull              = {:add => [], :edit => [], :delete  => []}
     
     @logger            = ScreenLogger.new
 
@@ -174,12 +174,9 @@ class SyncWarrior < Toodledo
   end
 
   def local_merge
-    @pull[:edit].each { |t| _update_task t }
-    @pull[:delete].collect{|i| i[:id]}.each{|toodleid| 
-      t = @task_warrior[toodleid]
-      t.status = 'deleted' 
-      t.end = Time.now.to_i
-    }
+    @pull[:add].each    {|t| changes = toodle_to_taskwarrior(t); @task_warrior.add_task(changes) }
+    @pull[:edit].each   {|t| changes = toodle_to_taskwarrior(t); @task_warrior.edit_task(t[:id], changes) }
+    @pull[:delete].each {|t| @task_warrior.delete_task(t[:id]) }
   end
 
   def log
@@ -222,9 +219,14 @@ class SyncWarrior < Toodledo
     elsif @remote_task_modified
       ntasks = get_tasks(:fields => useful_fields, :modafter => @last_sync )
     end
-    @pull[:edit] = ntasks
-    @pull[:edit].each do |t|
-      @task_warrior[t[:id]] ?  log.edit("=> #{t}") : log.new("=> #{t}")
+    ntasks.each do |t|
+      unless id = t[:id] and @task_warrior[id]
+        @pull[:add] << t
+        log.new("=> #{t}")
+      else
+        @pull[:edit] << t
+        log.edit("=> #{t}")
+      end
     end
 
     # download the list of deleted tasks
@@ -261,20 +263,6 @@ class SyncWarrior < Toodledo
   end
 
   private
-  # update a task warrior task
-  def _update_task(t)
-
-    #log.info @task_warrior[t[:id]]
-    # toodledo format hash?
-    changes = toodle_to_taskwarrior(t)
-    remote_task = Task.new(changes)
-    if id = t[:id] and @task_warrior[id]
-      @task_warrior[id].merge(remote_task)
-    else
-      @task_warrior << remote_task
-    end
-    #log.info @task_warrior[t[:id]]
-  end
 
   def first_sync?
     not @last_sync or @task_warrior.size.zero?

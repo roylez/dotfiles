@@ -39,15 +39,7 @@ class TaskCollection
     find{|i| i.uuid == id.to_s } || find{|i| i.toodleid and i.toodleid == id.to_s }
   end
 
-  def []=(id, info)
-    item = self[id]
-    return nil unless item
-    delete_by_id id
-    new_item = info.is_a?(Task) ? item.merge(info) : Task.new(item.to_h.merge(info))
-    @tasks << new_item
-    new_item
-  end
-
+  # permanently remove a task!
   def delete_by_id(id)
     item = self[id]
     if item
@@ -55,8 +47,23 @@ class TaskCollection
     end
   end
 
-  def <<(hash)
+  def add_task(hash)
     @tasks << Task.new(hash)
+  end
+  alias :<< :add_task
+
+  def edit_task(id, info)
+    item = self[id]
+    return nil unless item
+    delete_by_id id
+    new_item = info.is_a?(Task) ? item.merge(info) : Task.new(item.to_h.merge(info))
+    @tasks << new_item
+    new_item
+  end
+  alias :[]= :edit_task
+
+  def delete_task(id, time=nil)
+    edit_task(id, :end => time || Time.now.to_i, :status => 'deleted')
   end
 
   def modified_after(time)

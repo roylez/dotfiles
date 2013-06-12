@@ -6,7 +6,7 @@ map <F11> gT
 map <F12> gt
 nmap <F11> gT
 nmap <F12> gt
-set complete=bh
+set complete=l
 set wildoptions=auto
 "set "editor=xterm -e vim -c ':colorscheme inkroy' -f"
 set "editor=xterm -e vim -c start -f"
