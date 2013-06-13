@@ -60,10 +60,9 @@ class TaskCollection
   def edit_task(id, info)
     item = self[id]
     return nil unless item
-    delete_by_id id
-    new_item = info.is_a?(Task) ? item.merge(info) : Task.new(item.to_h.merge(info))
-    @tasks << new_item
-    new_item
+    #delete_by_id id
+    info.is_a?(Task) ? item.merge(info) : item.modify(info)
+    item
   end
   alias :[]= :edit_task
 

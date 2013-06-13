@@ -13,6 +13,7 @@ require_relative 'toodledo'
 require_relative 'taskwarrior'
 
 require 'logger'
+require 'pry-debugger'
 
 module Logger::Severity
   NEW    = 6
@@ -273,10 +274,16 @@ class SyncWarrior < Toodledo
   private
 
   def add_tw_task(changes)
-    tid = @task_warrior.add_task(changes)
+    tid = @task_warrior.add_task(changes.merge(:uuid => SecureRandom.uuid))
     # create parent for recurring tasks
     if @task_warrior[tid].recur and @task_warrior[tid].status == 'pending'
-      pid = @task_warrior.add_task(changes.merge(:mask => '-', :status => 'recurring'))
+      pid = @task_warrior.add_task(
+        changes.merge(
+          :mask => '-', 
+          :status => 'recurring', 
+          :uuid => SecureRandom.uuid
+        )
+      )
       @task_warrior.edit_task(tid, :imask => '0', :parent => pid)
     end
   end
@@ -484,7 +491,6 @@ class SyncWarrior < Toodledo
     twtask[:project]     = toodle_folder_to_tw(task[:folder])     if task[:folder]
     twtask[:priority]    = toodle_priority_to_tw(task[:priority]) if task[:priority]
     twtask[:status]      = task[:completed] ? "completed" : "pending"
-    twtask[:uuid]        = SecureRandom.uuid
     twtask[:entry]       = from_toodle_date(task[:added])
     twtask[:end]         = from_toodle_date(task[:completed])     if task[:completed]
     twtask[:modified]    = from_toodle_date(task[:modified])      if task[:modified]
