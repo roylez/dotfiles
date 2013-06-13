@@ -292,7 +292,7 @@ class SyncWarrior < Toodledo
     @task_warrior.edit_task(id, changes)
     # sync changes to parent as well
     if pid = @task_warrior[id].parent
-      @task_warrior.edit_task(pid, changes)
+      @task_warrior.edit_task(pid, changes.merge(:status => 'recurring'))
     end
   end
 
