@@ -42,6 +42,10 @@ class TaskCollection
     find{|i| i.uuid == id.to_s } || find{|i| i.toodleid and i.toodleid == id.to_s and i.status != 'recurring' }
   end
 
+  def find_children(parent_uuid)
+    select{|i| i.parent && i.parent == parent_uuid }
+  end
+
   # permanently remove a task!
   def delete_by_id(id)
     item = self[id]
@@ -137,7 +141,6 @@ class TaskCollection
       end
     end
   end
-
 end
 
 class Task < OpenStruct

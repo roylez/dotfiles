@@ -13,7 +13,7 @@ require_relative 'toodledo'
 require_relative 'taskwarrior'
 
 require 'logger'
-require 'pry-debugger'
+#require 'pry-debugger'
 
 module Logger::Severity
   NEW    = 6
@@ -289,10 +289,20 @@ class SyncWarrior < Toodledo
   end
 
   def edit_tw_task(id, changes)
+    task = @task_warrior[id]
     @task_warrior.edit_task(id, changes)
+    parent_mask =  case task.status
+                   when 'completed'; '+'
+                   when 'deleted'; '*'
+                   when 'pending'; '-'
+                   end
     # sync changes to parent as well
-    if pid = @task_warrior[id].parent
-      @task_warrior.edit_task(pid, changes.merge(:status => 'recurring'))
+    if pid = task.parent
+      @task_warrior.edit_task(pid, changes.merge(:status => 'recurring', :mask => parent_mask))
+      # delete all other children, so that when next time a task command is run,
+      # all information would be updated
+      delete_list = @task_warrior.find_children(pid).map(&:uuid).reject{|uuid| uuid == task.uuid }
+      delete_list.each {|id| @task_warrior.delete_by_id(id) }
     end
   end
 
@@ -300,8 +310,13 @@ class SyncWarrior < Toodledo
     return unless @task_warrior[id]
     pid = @task_warrior[id].parent
     @task_warrior.delete_task(id)
-    # permanently delete parent task if remote recurring task is deleted
-    @task_warrior.delete_by_id(pid) if pid
+    # permanently delete parent task and all of its other children 
+    # if remote recurring task is deleted
+    if pid
+      delete_list = [pid]
+      @task_warrior.find_children(pid).each{|t| delete_list << t.uuid }
+      delete_list.each {|id| @task_warrior.delete_by_id(id) }
+    end
   end
 
   def first_sync?
