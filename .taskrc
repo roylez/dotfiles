@@ -56,3 +56,4 @@ default.command=today
 
 calendar.holidays=full
 include /home/roylez/.task/2013_holidays.rc
+include /usr/share/doc/task/rc/holidays.en-US.rc

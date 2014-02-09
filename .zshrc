@@ -162,6 +162,8 @@ bin-exist() {[[ -n ${commands[$1]} ]]}
 #help command for builtins
 help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 
+(bin-exist ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
+
 # }}}
 
 #{{{ functions to set prompt pwd color
@@ -593,6 +595,7 @@ alias vi='vim'
 alias ll='ls -l'
 alias df='df -Th'
 alias du='du -h'
+alias dmesg='dmesg -H'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN

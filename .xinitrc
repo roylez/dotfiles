@@ -25,7 +25,9 @@ wicd-client -t &
 #tpb -d&
 #dropboxd &
 xmodmap $HOME/.Xmodmap &
+xcape -e 'Super_R=Escape' &
 gtk-redshift -l 31.24:121.2 -t 6500:5500 -m vidmode &
+#synergys -a 192.168.11.111:30002 -c $HOME/.synergy.conf -n bender &
 
 DEFAULT_SESSION=awesome
 
