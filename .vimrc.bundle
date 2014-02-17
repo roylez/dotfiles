@@ -131,6 +131,9 @@ endfunction
 
 Bundle 'Syntastic'
 
+Bundle 'bling/vim-airline'
+let g:airline_theme='murmur'
+
 " Unite
 Bundle 'Shougo/vimproc.vim'
 Bundle 'Shougo/unite.vim'
@@ -148,4 +151,3 @@ nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
 "nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
-

@@ -17,6 +17,7 @@ export SDL_AUDIODRIVER="alsa"
 #scim -d &
 /usr/lib/systemd/systemd --user &
 fcitx &
+screen -dmS auto &
 #xscreensaver -no-splash&
 #killall -s9 urxvtd
 #urxvtd&
