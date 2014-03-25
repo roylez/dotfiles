@@ -26,12 +26,15 @@ def ask_variable(variable, opts={}, &block)
             exit
         end
         if opts[:prompt]
-            res = nil  if res.to_i.to_s != res or res.to_i >= opts[:prompt].size
-            res = res.to_i 
+            res = res.split.map(&:to_i)
+            res = nil  if res.any?{|i| i.to_i >= opts[:prompt].size}
         end
         res = nil   if block_given? and ! yield res
     end
-    res
+    if res
+      return ( opts[:output_value] ? res.map{|i| opts[:prompt][i] } : res )
+    end
+    nil
 end
 
 if __FILE__ == $0

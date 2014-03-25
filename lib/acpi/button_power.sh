@@ -5,4 +5,4 @@
 
 /usr/bin/aplay /home/roylez/.sounds/fanqiejiayuan-close.wav 
 wait
-/sbin/halt
+/usr/bin/systemctl halt

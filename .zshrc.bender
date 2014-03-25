@@ -4,9 +4,11 @@
 
 # rvm for gem version management
 if [[ -s $HOME/.rvm/scripts/rvm ]] ; then source $HOME/.rvm/scripts/rvm ; fi
+
 export RUBYLIB=$HOME/lib/ruby
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$HOME/.rbenv/bin:$PATH # Add rbenv to PATH for scripting
+eval "$(rbenv init -)"
 
 PATH=$HOME/.python_env/bin:$PATH    # add python virutal env
 
@@ -14,7 +16,9 @@ PATH=$HOME/.python_env/bin:$PATH    # add python virutal env
 #[[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
 #[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
 
-alias pw='vim ~/.auth.bfa'
+alias pw=' vim ~/.auth.bfa'
+
+alias mplayer=' mplayer'
 
 source ~/lib/shell/z.sh
 
