@@ -596,7 +596,7 @@ alias dmesg='dmesg -H'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+alias adate='for i in US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 alias pyprof='python -m cProfile'

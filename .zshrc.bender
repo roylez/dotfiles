@@ -12,6 +12,8 @@ eval "$(rbenv init -)"
 
 PATH=$HOME/.python_env/bin:$PATH    # add python virutal env
 
+PATH=$HOME/.npm_modules/bin:$PATH
+
 # autojump
 #[[ -x /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
 #[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
@@ -21,6 +23,7 @@ alias pw=' vim ~/.auth.bfa'
 alias mplayer=' mplayer'
 
 source ~/lib/shell/z.sh
+source ~/lib/shell/bundle_exec.zsh
 
 #alias t="todo.sh"
 #alias td="todo.sh do"

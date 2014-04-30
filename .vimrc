@@ -147,7 +147,7 @@ set complete-=t
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
 
-let mapleader="\<Space>" 
+let mapleader="," 
 
 "ascii art escape sequence for /etc/motd, ssh banner and etc
 imap ,e   <C-V><C-[>[

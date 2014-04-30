@@ -31,7 +31,7 @@ alias.a=add
 
 color=on
 
-default.due=tom
+#default.due=tom
 recurrence.limit=0
 
 due=3
@@ -41,7 +41,7 @@ calendar.holidays=full
 report.list.description=Lists all tasks matching the specified criteria
 report.list.columns=id,project,priority,due,recur,tags,description
 report.list.labels=ID,Project,Pri,Due,Recur,Tags,Description & Annotation
-report.list.sort=due+,priority-,project+
+report.list.sort=priority-,project+,due+
 report.list.filter=status:pending
 report.list.dateformat=b.D
 

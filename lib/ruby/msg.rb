@@ -9,20 +9,6 @@ servants = Dir.glob(File.join(icon_path, 'servants', '*.png'))
 $icon = servants[rand(servants.length)]
 $title = '主人，提醒您一下：'
 
-case ARGV.length
-when 1
-    $text = ARGV[0]
-when 2
-    $title, $text = ARGV
-when 3
-    $icon = File.exist?(ARGV[0]) ? ARGV[0] : \
-        File.exist?(File.join( icon_path , ARGV[0])) ? File.join(icon_path,ARGV[0]) : icon
-    $title, $text = ARGV[1..-1]
-else
-    $title = '错误'
-    $text  = '参数无效'
-end
-
 def msg(kwds={})
     kwds = { :dbus => false, icon:$icon, title:$title, text:$text, :replace => 1 }.merge(kwds)
     cmd_prefix = "DISPLAY=:0.0 XAUTHORITY=#{ENV['HOME']}/.Xauthority"
@@ -49,5 +35,18 @@ def audio_msg(sound_file, kwds={})
 end
 
 if __FILE__==$0
-  audio_msg("#{ENV['HOME']}/.sounds/N9_ringtone/Email 1.mp3")
+  require 'optparse'
+  options = {}
+  OptionParser.new { |opts|
+    opts.banner = "Usage: #{$0} [options] MSG"
+    options[:quiet] = false
+    opts.on('-q','--quiet','Do not play notice sound') { options[:quiet] = true }
+    opts.on('-i','--icon ICON', 'Select icon for notice') {|a| options[:icon] = a }
+    opts.on('-t','--title TITLE', 'Specify a title') {|t| options[:title] = t }
+  }.parse!
+
+  notice_sound = "#{ENV['HOME']}/.sounds/N9_ringtone/Email 1.mp3"
+  kwds = options.merge( :text => ARGV.join(" ")) 
+
+  options[:quiet] ? msg(kwds) : audio_msg(notice_sound, kwds)
 end

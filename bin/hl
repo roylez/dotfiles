@@ -19,7 +19,9 @@ if __FILE__ == $0
         puts "Usage:    #{$0} <from> <to> <amount>"
         exit
     end
-    page = Net::HTTP.get( URI.parse "http://tw.money.yahoo.com/currency_exc_result?amt=#{m}&from=#{f}&to=#{t}" )
-    result = page.match(/=\s<em>(\d+(?:\.\d+)?)<\/em>/)[1]
+    #page = Net::HTTP.get( URI.parse "http://tw.money.yahoo.com/currency_exc_result?amt=#{m}&from=#{f}&to=#{t}" )
+    page = Net::HTTP.get( URI.parse "http://qq.ip138.com/hl.asp?from=#{f}&to=#{t}&q=#{m}" )
+    #result = page.match(/=\s<em>(\d+(?:\.\d+)?)<\/em>/)[1]
+    result = page.match(/<\/td><td>(\d+(?:\.\d+)?)<\/td><\/tr>/)[1]
     puts result
 end
