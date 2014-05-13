@@ -4,9 +4,15 @@
 " vim: ft=vim
 
 set nocompatible	" not vi compatible
-set mouse=""            " disable mouse
+let mapleader=","      " this is used a lot in plugin settings
+
+if filereadable( $HOME . '/.vimrc.bundle' )
+    source ~/.vimrc.bundle
+endif
+
 filetype plugin indent on 
 
+set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
 " keep record of editing information for cursor restore and more
 set viminfo='10,\"100,:20,%,n~/.viminfo 
@@ -146,8 +152,6 @@ set complete-=t
             "\\"\\<down>\" : \"\\<cr>\""
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
-
-let mapleader="," 
 
 "ascii art escape sequence for /etc/motd, ssh banner and etc
 imap ,e   <C-V><C-[>[
@@ -335,6 +339,3 @@ autocmd BufReadPost *
 "warn long lines
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
 
-if filereadable( $HOME . '/.vimrc.bundle' )
-    source ~/.vimrc.bundle
-endif
