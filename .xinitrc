@@ -28,7 +28,7 @@ wicd-client -t &
 xmodmap $HOME/.Xmodmap &
 xcape -e 'Super_R=Escape' &
 gtk-redshift -l 31.24:121.2 -t 6500:5500 -m vidmode &
-synergys -n bender --no-tray -c ~/.synergy.conf -a :30002 &
+#synergys -n bender --no-tray -c ~/.synergy.conf -a :30002 &
 
 DEFAULT_SESSION=awesome
 

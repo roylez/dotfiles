@@ -10,12 +10,12 @@ if filereadable( $HOME . '/.vimrc.bundle' )
     source ~/.vimrc.bundle
 endif
 
-filetype plugin indent on 
+filetype plugin indent on
 
 set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
 " keep record of editing information for cursor restore and more
-set viminfo='10,\"100,:20,%,n~/.viminfo 
+set viminfo='10,\"100,:20,%,n~/.viminfo
 
 " do incremental searching
 set incsearch hlsearch wrapscan
@@ -32,7 +32,7 @@ set wildmenu		" show possible command when pressing <TAB>
 set notitle             " do not set xterm dynamic title
 "set number
 
-set matchtime=5		
+set matchtime=5
 
 set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
@@ -107,8 +107,8 @@ set foldnestmax=1
 
 set background=dark
 
-syntax on 
-"maybe necessary for urxvt, because vim use ^H for backspace, 
+syntax on
+"maybe necessary for urxvt, because vim use ^H for backspace,
 "but urxvt can use both ^H and ^?
 "fixdel
 set backspace=2
@@ -117,7 +117,7 @@ set backspace=2
 "set cursorline
 "set cursorcolumn
 autocmd InsertLeave * set nocursorline
-autocmd InsertEnter * set cursorline 
+autocmd InsertEnter * set cursorline
 
 "---------------------encoding detection--------------------------------
 "set encoding&		    " terminal charset: follows current locale
@@ -133,8 +133,8 @@ autocmd InsertEnter * set cursorline
 "return e
 "endfunc
 
-"autocmd BufReadPre * 
-"\exec "set fileencodings+=" . GetEncoding(expand('<afile>')) 
+"autocmd BufReadPre *
+"\exec "set fileencodings+=" . GetEncoding(expand('<afile>'))
 
 set encoding=utf-8
 set fileencoding&
@@ -145,7 +145,7 @@ set completeopt=longest,menuone
 set complete-=i
 set complete-=t
 "inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-"inoremap <expr> <c-n> pumvisible() ? 
+"inoremap <expr> <c-n> pumvisible() ?
             "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
 "inoremap <expr> <m-;> pumvisible() ? 
             "\"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 

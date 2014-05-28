@@ -104,7 +104,7 @@ autocmd BufNewFile,BufRead *.coffee set ft=coffee
 Plugin 'Tabular'
 
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
- 
+
 function! s:align()
   let p = '^\s*|\s.*\s|\s*$'
   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -121,6 +121,7 @@ Plugin 'Syntastic'
 Plugin 'bling/vim-airline'
 let g:airline#extensions#tabline#enabled=1
 let g:airline_theme='murmur'
+"let g:airline_powerline_fonts=1
 
 " Unite
 Plugin 'Shougo/vimproc.vim'

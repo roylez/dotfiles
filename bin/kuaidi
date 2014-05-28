@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Author: Roy L Zuo (roylzuo at gmail dot com)
+#Description: 
+
+require 'open-uri'
+require 'mechanize'
+require 'json'
+
+def kuaidi_status(package_no)
+  url = 'http://www.kuaidi100.com/autonumber/auto?num=' + package_no
+  res = JSON.parse open(url).read
+  rec = res.sort_by{|i| i['noCount'] }.last
+  company_code = rec['comCode']
+  detail_url = "http://www.kuaidi100.com/query?type=#{company_code}&postid=#{package_no}&id=1&valicode=&temp=0.08001715072286408"
+  JSON.parse open(detail_url).read
+end
+
+def format_status_record(record, color = "\e[37m")
+  time = record['time']
+  context = record['context']
+  color + time + ' ' + context + "\e[m"
+end
+
+if __FILE__==$0
+  detail = kuaidi_status ARGV.first
+  data = detail['data'].reverse
+  data[1..-2].each {|i| puts format_status_record(i) }
+  puts format_status_record(data.last, "\e[33;1m")
+end
