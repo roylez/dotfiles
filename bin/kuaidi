@@ -24,6 +24,7 @@ end
 
 if __FILE__==$0
   detail = kuaidi_status ARGV.first
+  puts "\e[32;1m" + detail['com'] + "\t\e[31;1m" + ARGV.first + "\e[m\n"
   data = detail['data'].reverse
   data[1..-2].each {|i| puts format_status_record(i) }
   puts format_status_record(data.last, "\e[33;1m")

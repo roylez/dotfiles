@@ -10,7 +10,7 @@ export RUBYLIB=$HOME/lib/ruby
 PATH=$HOME/.rbenv/bin:$PATH # Add rbenv to PATH for scripting
 eval "$(rbenv init -)"
 
-PATH=$HOME/.python_env/bin:$PATH    # add python virutal env
+#PATH=$HOME/.python_env/bin:$PATH    # add python virutal env
 
 PATH=$HOME/.npm_modules/bin:$PATH
 
