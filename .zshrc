@@ -231,6 +231,46 @@ get_prompt_git() {
 }
 #}}}
 
+#{{{functions to display mercurial (hg) branch in prompt
+
+get_hg_status() {
+    unset __CURRENT_HG_BRANCH
+    unset __CURRENT_HG_BRANCH_STATUS
+    unset __CURRENT_HG_BRANCH_IS_DIRTY
+
+    # do not track hg branch info in ~
+    [[ "$PWD" = "$HOME" ]]  &&  return
+    local dir=$(hg root 2>/dev/null)
+    [[ "${dir}" = "$HOME" ]] && return
+
+    local br="$(hg branch 2>/dev/null)"
+    if [[ -n "$br" ]]; then
+            __CURRENT_HG_BRANCH="$br"
+    fi
+
+    local st="$(hg status 2>/dev/null)"
+    [[ -n "$st" ]] && __CURRENT_HG_BRANCH_IS_DIRTY='1'
+}
+
+hg_branch_precmd() { [[ "$(fc -l -1)" == *hg* ]] && get_hg_status }
+
+hg_branch_chpwd() { get_hg_status }
+
+#this one is to be used in prompt
+get_prompt_hg() {
+    if [[ -n $__CURRENT_HG_BRANCH ]]; then
+        local s=$__CURRENT_HG_BRANCH
+        case "$__CURRENT_HG_BRANCH_STATUS" in
+            ahead) s+="${pfg_green}+" ;;
+            diverged) s+="${pfg_red}=" ;;
+            behind) s+="${pfg_magenta}-" ;;
+        esac
+        [[ $__CURRENT_HG_BRANCH_IS_DIRTY = '1' ]] && s+="${pfg_blue}*"
+        echo " $pfg_black$pbg_white$pB $s $pR"
+    fi
+}
+#}}}
+
 #{{{ functions to set gnu screen title
 # active command as title in terminals
 if [[ -n $SSH_CONNECTION ]]; then
@@ -279,7 +319,7 @@ screen_preexec() {
         'ssh')          title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd";;
         'sudo')         title "#"$cmd[2]:t "$TERM $cmd[3,-1]";;
         'for')          title "()"$cmd[7] "$TERM $cmd";;
-        'svn'|'git')    title "$cmd[1,2]" "$TERM $cmd";;
+        'svn'|'git'|'hg')    title "$cmd[1,2]" "$TERM $cmd";;
         'ls'|'ll')      ;;
         *)              title $cmd[1]:t "$TERM $cmd[2,-1]";;
     esac
@@ -296,6 +336,7 @@ if ! (is-at-least 4.3); then
     function precmd() {
         screen_precmd 
         git_branch_precmd
+        hg_branch_precmd
     }
 
     function preexec() {
@@ -306,16 +347,19 @@ if ! (is-at-least 4.3); then
     function chpwd() {
         pwd_color_chpwd
         git_branch_chpwd
+        hg_branch_chpwd
     }
 else
     #this works with zsh 4.3.*, will remove the above ones when possible
     typeset -ga preexec_functions precmd_functions chpwd_functions
     precmd_functions+=screen_precmd
     precmd_functions+=git_branch_precmd
+    precmd_functions+=hg_branch_precmd
     preexec_functions+=screen_preexec
     preexec_functions+=pwd_color_preexec
     chpwd_functions+=pwd_color_chpwd
     chpwd_functions+=git_branch_chpwd
+    chpwd_functions+=hg_branch_chpwd
 fi
 
 #}}}
@@ -331,7 +375,7 @@ fi
 local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       #different color for privileged sessions
 local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
-PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$job$symbol'
+PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$(get_prompt_hg)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
 typeset -A altchar
