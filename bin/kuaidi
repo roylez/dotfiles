@@ -4,7 +4,6 @@
 #Description: 
 
 require 'open-uri'
-require 'mechanize'
 require 'json'
 
 def kuaidi_status(package_no)
@@ -22,10 +21,21 @@ def format_status_record(record, color = "\e[37m")
   color + time + ' ' + context + "\e[m"
 end
 
-if __FILE__==$0
-  detail = kuaidi_status ARGV.first
+def format_screen_detail(detail)
   puts "\e[32;1m" + detail['com'] + "\t\e[31;1m" + ARGV.first + "\e[m\n"
   data = detail['data'].reverse
   data[1..-2].each {|i| puts format_status_record(i) }
-  puts format_status_record(data.last, "\e[33;1m")
+  format_status_record(data.last, "\e[33;1m")
+end
+
+if __FILE__==$0
+  ARGV.each do |package|
+    begin 
+      detail = kuaidi_status package
+      puts format_screen_detail(detail)
+    rescue
+      puts "没找到有关快递单 #{package} 的信息"
+    end
+    puts "------------------------------"
+  end
 end

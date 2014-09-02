@@ -30,7 +30,7 @@ xcape -e 'Super_R=Escape' &
 gtk-redshift -l 31.24:121.2 -t 6500:5500 -m vidmode &
 udiskie --tray &
 #synergys -n bender --no-tray -c ~/.synergy.conf -a :30002 &
-/usr/bin/start-pulseaudio-x11
+#/usr/bin/start-pulseaudio-x11 &
 
 DEFAULT_SESSION=awesome
 

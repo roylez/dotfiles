@@ -21,6 +21,7 @@ PATH=$HOME/.npm_modules/bin:$PATH
 alias pw=' vim ~/.auth.bfa'
 
 alias mplayer=' mplayer'
+alias nohi='unset HISTFILE'
 
 source ~/lib/shell/z.sh
 source ~/lib/shell/bundle_exec.zsh
@@ -62,3 +63,5 @@ function accept-line-with-bundler() {
 }
 zle -N accept-line-with-bundler
 bindkey "\r" accept-line-with-bundler
+
+alias l=' locate -i -d /var/lib/mlocate/data.db'
