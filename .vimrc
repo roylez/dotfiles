@@ -6,10 +6,6 @@
 set nocompatible	" not vi compatible
 let mapleader=","      " this is used a lot in plugin settings
 
-if filereadable( $HOME . '/.vimrc.bundle' )
-    source ~/.vimrc.bundle
-endif
-
 filetype plugin indent on
 
 set mouse=""            " disable mouse
@@ -339,3 +335,6 @@ autocmd BufReadPost *
 "warn long lines
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
 
+if filereadable( $HOME . '/.vimrc.plug' )
+    source ~/.vimrc.plug
+endif

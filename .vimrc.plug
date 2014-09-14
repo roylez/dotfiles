@@ -1,0 +1,158 @@
+" vim: ft=vim
+"
+
+call plug#begin("~/.vim/plugged")
+"===================Plug loading starts========================================
+
+Plug 'The-NERD-tree'
+nmap <F3>   :NERDTreeToggle<CR>
+let g:NERDTreeWinPos="right"
+
+Plug 'The-NERD-Commenter'
+let g:NERDShutUp=1
+nmap <F9> <leader>c<SPACE>
+vmap <F9> <leader>c<SPACE>
+
+"Plug 'neocomplcache'
+"" Disable AutoComplPop.
+"let g:acp_enableAtStartup = 0
+"" Use neocomplcache.
+"let g:neocomplcache_enable_at_startup = 1
+"" Use smartcase.
+"let g:neocomplcache_enable_smart_case = 1
+"" Use camel case completion.
+"let g:neocomplcache_enable_camel_case_completion = 1
+"" Use underbar completion.
+"let g:neocomplcache_enable_underbar_completion = 1
+"" Set minimum syntax keyword length.
+"let g:neocomplcache_min_syntax_length = 3
+"let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+"" Enable heavy omni completion.
+"if !exists('g:neocomplcache_omni_patterns')
+  "let g:neocomplcache_omni_patterns = {}
+"endif
+""let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+""autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+""autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+""autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+""autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+""let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+""let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+""let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+
+"Plug 'rails.vim'
+
+Plug 'Tagbar'
+nmap <F2>   :TagbarToggle<CR>
+
+Plug 'Align'
+"Plug 'Tabular'
+"Plug 'simplefold'
+Plug 'delimitMate.vim'
+Plug 'openssl.vim'
+
+Plug 'rainbow_parentheses.vim'
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+"call :RainbowParenthesesToggle()
+nmap <leader>r  :RainbowParenthesesToggle<cr>
+au VimEnter * RainbowParenthesesToggle
+"au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+" syntax
+Plug 'fluxbox.vim'
+Plug 'Markdown'
+Plug 'bbcode'
+
+" status
+"Plug 'Lokaltog/vim-powerline'
+
+Plug 'vim-coffee-script'
+autocmd BufNewFile,BufRead *.coffee set ft=coffee
+
+"Plug 'EasyMotion'
+"let g:EasyMotion_leader_key='<Leader>'
+
+"Plug 'ctrlp.vim'
+
+Plug 'Tabular'
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+Plug 'Syntastic'
+
+Plug 'bling/vim-airline'
+let g:airline#extensions#tabline#enabled=1
+let g:airline_theme='murmur'
+"let g:airline_powerline_fonts=1
+
+" Unite
+Plug 'Shougo/vimproc.vim', {'dir': '~/.vim/plugged', 'do': 'make'}
+Plug 'Shougo/unite.vim'
+let g:unite_source_history_yank_enable = 1
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_grep_max_candidates = 200
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/async<cr>
+nnoremap <leader>/ :<C-u>Unite -no-split -buffer-name=code  -auto-preview -start-insert grep:.<cr>
+nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
+"nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+"nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+"nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+"nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+"nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+
+Plug 'tomasr/molokai'
+
+"===================Plug loading ends==========================================
+call plug#end()
+
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+"Plug 'Solarized'
+"Plug 'railscasts'
+"Plug 'Solarized'
+"if has 256 colour, use a 256 colour theme
+if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
+    if !has("gui_running")
+        set t_Co=256
+    endif
+    "colorscheme inkpot
+    "colorscheme leo
+    colorscheme molokai
+else
+    colorscheme tango
+endif
+
