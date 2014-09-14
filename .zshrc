@@ -7,6 +7,8 @@
 
 SHELL=`which zsh`
 
+[[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
+
 # 定义颜色 {{{
 if [[ ("$TERM" = *256color || "$TERM" = screen*) && -f $HOME/.lscolor256 ]]; then
     #use prefefined colors
