@@ -32,8 +32,12 @@ if __FILE__ == $0
     }
     opts.on('-t','--time',
             'Toggle if timestamps should be added to record',
-            'Records with timestamps always stand before those without'
+            'Records with timestamps always stand before those without.'
            ) { options[:time] = true }
+    opts.on('-p','--print',
+            'Toggle printing of the original message',
+            'Useful when this script is used as mutt :display_filter '
+           ) { options[:print] = true }
   end.parse!
   if options[:fetch]  # fetch
     mail_body = ARGF.read
@@ -47,6 +51,9 @@ if __FILE__ == $0
       contacts[a] ? contacts[a].merge(new_contacts[a]) : ( contacts[a] = new_contacts[a] )
     end
     open(CONTACTS_FILE, 'w'){|f| f.puts contacts.to_yaml}
+    if options[:print]
+      puts mail_body
+    end
   else  # query
     contacts = File.file?(CONTACTS_FILE) ? YAML.load_file(CONTACTS_FILE) : {}
     res = contacts.select{|k, v| k + v[:name].to_s =~ /#{ARGV.first}/i }.     # select matching results

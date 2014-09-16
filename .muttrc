@@ -185,6 +185,9 @@ set query_command = "~/bin/contact_query '%s'"     #;~/bin/mutt_ldap_query.py '%
 macro generic,index,pager A "<shell-escape>abook<return>"
 macro index,pager a "|abook --add-email<return>"
 
+#filter to collect email addresses
+set display_filter = "~/bin/contact_query -f from -p"
+
 #bogofilter
 macro index S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
 macro pager S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
