@@ -542,7 +542,7 @@ export READNULLCMD=less
 
 #for gnuplot, avoid locate!!!
 #export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
-[[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
+#[[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
 
 # redefine command not found
 (bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70; return 127;}
@@ -585,6 +585,7 @@ for i in rar zip 7z lzma;   alias -s $i="7z x"
 #no correct for mkdir mv and cp
 for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias find='noglob find'        # noglob for find
+alias rsync='noglob rsync'
 alias grep='grep -I --color=auto'
 alias egrep='egrep -I --color=auto'
 (bin-exist task) && alias cal='task cal' || alias cal='cal -3'
@@ -611,6 +612,7 @@ alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
+alias vim='vim -p'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients 
 #alias ssh="ssh -4 -C -c blowfish-cbc"

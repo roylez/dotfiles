@@ -1,12 +1,12 @@
 # Order to display the headers in
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description:
 #   mutt main configuration file
-# 
-# This configuration represents my current MUTT + offlineimap setup for 
+#
+# This configuration represents my current MUTT + offlineimap setup for
 # "inbox zero" practice. If you are looking for a fetchmail solution, look
-# for my muttrc BEFORE 2012-03-21. 
-#   
+# for my muttrc BEFORE 2012-03-21.
+#
 
 ignore *
 unignore From Subject Lines
@@ -16,7 +16,7 @@ set index_format="%[%b-%d] %?X?%X& ? %-18.18L [%4c] %s"
 set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]----%>-(%P)---"
 set status_on_top
 
-#set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s" 
+#set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s"
 #set editor="vim"
 set editor="vim -c 'norm O'"
 
@@ -123,7 +123,7 @@ alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au'
 
 #mailing list
 #subscribe china@lists.uq.edu.au
-subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au 
+subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au
 subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org todotxt@yahoogroups.com ruby-talk@ruby-lang.org
 
 #score "~s believe" -10
@@ -151,7 +151,7 @@ set locale='utf-8'
 #charset-hook ^iso-8859-1$ utf-8
 #charset-hook ^UTF-8$ utf-8
 #charset-hook !gb2312 utf-8
-#charset-hook ^gb2312$ utf-8                                        
+#charset-hook ^gb2312$ utf-8
 #set strict_mime=no  #這個要設成no, assumed_charset才會有用
 set assumed_charset="gb2312:utf-8:big5"
 set send_charset="utf-8:us-ascii:iso-8859-1:big5:gb2312"
@@ -181,7 +181,7 @@ my_hdr X-PGP-Key-ID:3038867F
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
-set query_command = "lbdbq '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
+set query_command = "~/bin/contact_query '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
 macro generic,index,pager A "<shell-escape>abook<return>"
 macro index,pager a "|abook --add-email<return>"
 
@@ -192,7 +192,7 @@ macro index H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham a
 macro pager H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham and save"
 
 #urlview
-macro pager \cu "|urlview \n" 
+macro pager \cu "|urlview \n"
 
 #identity selection
 #alias identity_1        Roy Zuo     <roylzuo@gmail.com>
@@ -238,7 +238,7 @@ set pgp_sign_as="3038867F"
 #During these time you will not needed to enter passparse again
 set pgp_timeout=1800
 # Let you see pgp signature infomation
-set pgp_verify_sig=yes 
+set pgp_verify_sig=yes
 set pgp_replyencrypt=yes
 
 # decode application/pgp
@@ -276,10 +276,10 @@ set pgp_export_command="gpg --no-verbose --export --armor %r"
 set pgp_verify_key_command="gpg --verbose --batch --fingerprint --check-sigs %r"
 
 # read in the public key ring
-set pgp_list_pubring_command="gpg --no-verbose --batch --quiet --with-colons --list-keys %r" 
+set pgp_list_pubring_command="gpg --no-verbose --batch --quiet --with-colons --list-keys %r"
 
 # read in the secret key ring
-set pgp_list_secring_command="gpg --no-verbose --batch --quiet --with-colons --list-secret-keys %r" 
+set pgp_list_secring_command="gpg --no-verbose --batch --quiet --with-colons --list-secret-keys %r"
 
 # fetch keys
 # set pgp_getkeys_command="pkspxycwrap %r"

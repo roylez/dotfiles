@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Author: Roy L Zuo (roylzuo at gmail dot com)
+#Description:
+#   remember mutt outgoing recipients as well as from whom I have read
+#   their emails
+#
+require 'mail'
+require 'yaml'
+
+CONTACTS_FILE = "#{ENV['HOME']}/.mutt.contacts.yml"
+
+def get_contacts(mail_text, fields = [:from])
+  m = Mail.new(mail_text)
+  fields.collect{|f| m[f]}.compact.collect{|f|
+    [f.addresses, f.display_names].transpose
+  }.inject(&:+).uniq
+end
+
+def load_contacts(file = CONTACTS_FILE )
+  YAML.load_file(file)
+end
+
+if __FILE__ == $0
+  require 'optparse'
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] [STRING]"
+    options[:fetch] = nil
+    opts.on('-f','--fetch FIELDS','Fetch addresses from email, FIELDS should be comma separated') { |fields|
+      options[:fetch] = fields.downcase.split(',').map(&:to_sym)
+    }
+    opts.on('-t','--time',
+            'Toggle if timestamps should be added to record',
+            'Records with timestamps always stand before those without'
+           ) { options[:time] = true }
+  end.parse!
+  if options[:fetch]  # fetch
+    mail_body = ARGF.read
+    new_contacts = get_contacts(mail_body, options[:fetch])
+    new_contacts = Hash[new_contacts.collect{|a,n| [a, {:name => n}.delete_if{|k,v| v.nil? }] } ]
+    if options[:time]
+      new_contacts.each{|_,v| v[:last] = Time.now}
+    end
+    contacts = File.file?(CONTACTS_FILE) ? YAML.load_file(CONTACTS_FILE) : {}
+    new_contacts.each_key do |a|
+      contacts[a] ? contacts[a].merge(new_contacts[a]) : ( contacts[a] = new_contacts[a] )
+    end
+    open(CONTACTS_FILE, 'w'){|f| f.puts contacts.to_yaml}
+  else  # query
+    contacts = File.file?(CONTACTS_FILE) ? YAML.load_file(CONTACTS_FILE) : {}
+    res = contacts.select{|k, v| k + v[:name].to_s =~ /#{ARGV.first}/i }.     # select matching results
+          sort{|a,b|
+            a_last = a.last[:last].to_s
+            b_last = b.last[:last].to_s
+            b_last <=> a_last
+          }       # order by last contact date, desceding
+    puts
+    res.each do |email, detail|
+      puts "#{email}\t#{detail[:name] || ' '}\t#{detail[:last] || ' '}"
+    end
+  end
+end

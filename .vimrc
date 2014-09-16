@@ -6,6 +6,10 @@
 set nocompatible	" not vi compatible
 let mapleader=","      " this is used a lot in plugin settings
 
+if filereadable( $HOME . '/.vimrc.plug' )
+    source ~/.vimrc.plug
+endif
+
 filetype plugin indent on
 
 set mouse=""            " disable mouse
@@ -114,6 +118,9 @@ set backspace=2
 "set cursorcolumn
 autocmd InsertLeave * set nocursorline
 autocmd InsertEnter * set cursorline
+
+" remove all trailing white spaces
+autocmd BufWritePre * :%s/\s\+$//e
 
 "---------------------encoding detection--------------------------------
 "set encoding&		    " terminal charset: follows current locale
@@ -299,6 +306,9 @@ autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
 
 "remind
 autocmd BufNewFile,BufRead *.rem set ft=remind
+
+"crontab hack for mac
+autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
 "-------------------special settings------------------------------------
 "big files?
 let g:LargeFile = 0.3	"in megabyte
@@ -334,7 +344,3 @@ autocmd BufReadPost *
 
 "warn long lines
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
-
-if filereadable( $HOME . '/.vimrc.plug' )
-    source ~/.vimrc.plug
-endif
