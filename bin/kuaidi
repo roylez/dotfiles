@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description:
 
 require 'open-uri'
 require 'json'
@@ -17,20 +17,20 @@ end
 
 def format_status_record(record, color = "\e[37m")
   time = record['time']
-  context = record['context']
+  context = record['context'].gsub(/\s+/, ' ')
   color + time + ' ' + context + "\e[m"
 end
 
 def format_screen_detail(detail)
   puts "\e[32;1m" + detail['com'] + "\t\e[31;1m" + ARGV.first + "\e[m\n"
   data = detail['data'].reverse
-  data[1..-2].each {|i| puts format_status_record(i) }
+  data[0..-2].each {|i| puts format_status_record(i) }
   format_status_record(data.last, "\e[33;1m")
 end
 
 if __FILE__==$0
   ARGV.each do |package|
-    begin 
+    begin
       detail = kuaidi_status package
       puts format_screen_detail(detail)
     rescue

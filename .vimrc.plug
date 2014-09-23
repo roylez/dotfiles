@@ -118,7 +118,7 @@ let g:airline_theme='murmur'
 "let g:airline_powerline_fonts=1
 
 " Unite
-Plug 'Shougo/vimproc', {'cd': '~/.vim/plugged', 'do': 'make'}
+Plug 'Shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite.vim'
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_grep_command = 'ag'
@@ -135,6 +135,8 @@ nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 
 Plug 'tomasr/molokai'
+
+Plug 'rodjek/vim-puppet'
 
 "===================Plug loading ends==========================================
 call plug#end()
