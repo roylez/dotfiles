@@ -1,0 +1,21 @@
+# word document
+#application/msword;antiword -f %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+#application/vnd.openxmlformats-officedocument.wordprocessingml.document; cat %s|/usr/bin/docx2txt.pl; copiousoutput
+##application/msword;catdoc %s | less ; nametemplate=%s.doc; copiousoutput
+#application/excel; xls2csv %s | less; copiousoutput
+#application/x-msexcel; xls2csv %s | less; copiousoutput
+##application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
+#text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
+
+# images
+#image/jpeg; display 'jpeg'; test=test -n "$DISPLAY"
+#image/pjpeg; display 'jpeg'; test=test -n "$DISPLAY"
+image/*; ~/.mutt/view_attachment.sh %s
+
+# portable document format
+#application/pdf; evince %s; test=test -n "DISPLAY"
+#application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
+
+video/*; mplayer %s
+text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+#text/html; elinks -force-html -dump-width `tput cols` -dump %s; copiousoutput

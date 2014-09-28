@@ -1,5 +1,5 @@
 "Author: Roy L Zuo (roylzuo at gmail dot com)
-"Description: vim runtime configure file 
+"Description: vim runtime configure file
 "source $VIMRUNTIME/vimrc_example.vim
 " vim: ft=vim
 
@@ -150,8 +150,8 @@ set complete-=t
 "inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 "inoremap <expr> <c-n> pumvisible() ?
             "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
-"inoremap <expr> <m-;> pumvisible() ? 
-            "\"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ? 
+"inoremap <expr> <m-;> pumvisible() ?
+            "\"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ?
             "\\"\\<down>\" : \"\\<cr>\""
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
@@ -194,8 +194,8 @@ nmap <F5>   :w<CR>:make<CR>
 nmap <F6>   :make test<CR>
 
 " tab navigation
-nmap tp :tabprevious<cr> 
-nmap tn :tabnext<cr>    
+nmap tp :tabprevious<cr>
+nmap tn :tabnext<cr>
 nmap to :tabnew<cr>
 nmap tc :tabclose<cr>
 nmap gf <C-W>gf
@@ -204,11 +204,11 @@ nmap gf <C-W>gf
 nmap <F5>   :noh<cr><ESC>
 
 "Auomatically add file head. NERO_commenter.vim needed.
-function! AutoHead()        
-    let fl = line(".") 
+function! AutoHead()
+    let fl = line(".")
     if getline(fl) !~ "^$"
         let fl += 1
-    endif 
+    endif
     let ll = fl+2
     call setline(fl,"Author: Roy L Zuo (roylzuo at gmail dot com)")
     "call append(fl,"Last Change: ")
@@ -227,8 +227,8 @@ set tags=tags;
 
 "Python
 "autocmd Filetype python setlocal omnifunc=pythoncomplete#Complete
-autocmd BufNewFile *.py 
-            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\" 
+autocmd BufNewFile *.py
+            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\"
             \|call AutoHead()
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
@@ -236,30 +236,31 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
 "no folding for comment block and if/do blocks
 let g:ruby_no_comment_fold=1
-let g:ruby_no_expensive=1       
+let g:ruby_no_expensive=1
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
+autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 
 " scss
 autocmd FileType scss,sass set shiftwidth=2 softtabstop=2
 
 "C/C++
 autocmd FileType cpp setlocal nofoldenable
-            \|nmap ,a :A<CR>      
+            \|nmap ,a :A<CR>
 autocmd FileType c setlocal cindent
 
 "Fortran
 "autocmd FileType fortran let b:fortran_free_source = 1
 
 "Txt, set syntax file and spell check
-"autocmd BufRead,BufNewFile *.txt set filetype=txt 
+"autocmd BufRead,BufNewFile *.txt set filetype=txt
 "autocmd BufRead *.txt setlocal spell spelllang=en_gb
 
-"Tex ''spelllang=en_gb 
+"Tex ''spelllang=en_gb
 "let g:tex_flavor="context"
 autocmd FileType tex,plaintex,context
             \|silent set spell
-            \|nmap <buffer> <F8> gwap	
+            \|nmap <buffer> <F8> gwap
 
 " shell script
 autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
@@ -267,9 +268,9 @@ autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call Aut
 "Gnuplot
 autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 
-"emails, 
+"emails,
 "delete old quotations, set spell and put cursor in the first line
-autocmd FileType mail 
+autocmd FileType mail
             \|:silent set spell
             "\|:silent 0put=''
             "\|:silent 0put=''
@@ -289,7 +290,7 @@ autocmd BufNewFile,BufRead *.mkd,*.mdown set ft=markdown comments=n:> nu nospell
 "coffee script
 autocmd BufNewFile,BufRead *.coffee set ft=coffee
 
-"RestructuredText 
+"RestructuredText
 autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
 
 "viki
@@ -337,9 +338,9 @@ augroup LargeFile
 augroup END
 
 "Restore cursor to file position in previous editing session
-autocmd BufReadPost * 
-    \if line("'\"") > 0 && line("'\"") <= line("$") 
-        \|exe "normal g`\"" 
+autocmd BufReadPost *
+    \if line("'\"") > 0 && line("'\"") <= line("$")
+        \|exe "normal g`\""
     \|endif
 
 "warn long lines

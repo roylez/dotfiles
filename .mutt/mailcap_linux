@@ -7,10 +7,10 @@ application/x-msexcel; xls2csv %s | less; copiousoutput
 #application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
 
-# images 
+# images
 #image/jpeg; display 'jpeg'; test=test -n "$DISPLAY"
 #image/pjpeg; display 'jpeg'; test=test -n "$DISPLAY"
-image/*; feh %s; test=test -n "$DISPLAY"
+image/*; display %s; test=test -n "$DISPLAY"
 
 # portable document format
 application/pdf; evince %s; test=test -n "DISPLAY"

@@ -21,7 +21,7 @@ set status_on_top
 set editor="vim -c 'norm O'"
 
 #set smtp agent
-set sendmail="~/bin/filtersend"
+set sendmail="~/.mutt/filter_send"
 set sendmail_wait = 5
 #set sendmail='msmtp -a uq'
 macro generic \Cx_ "<enter-command>set sendmail" "Internal macro from the MSMTP module"
@@ -54,8 +54,6 @@ set spoolfile="~/.mail/inbox"
 # get notified if new mail arrived in inbox
 mailboxes ! =inbox
 
-source ~/.muttrc.inbox_zero
-
 set quit=yes
 #move mail from spool to mailbox when quiting ?
 set move=no
@@ -70,7 +68,10 @@ unalternative_order *
 #alternative_order text/enriched text/plain text/html
 alternative_order text/*
 
+# auto view settings
 auto_view text/html application/pdf application/msword text/enriched text/rtf
+set mailcap_path=~/.mutt/mailcap_`uname -s|tr '[:upper:]' '[:lower:]'`
+
 
 # 回信时是否包含原文。
 set include=yes
@@ -181,12 +182,12 @@ my_hdr X-PGP-Key-ID:3038867F
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
-set query_command = "~/bin/contact_query '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
+set query_command = "~/.mutt/contact_query '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
 macro generic,index,pager A "<shell-escape>abook<return>"
 macro index,pager a "|abook --add-email<return>"
 
-#filter to collect email addresses
-set display_filter = "~/bin/contact_query -f from -p"
+#filter to collect email addresses, WARNING: it is low
+#set display_filter = "~/.mutt/contact_query -f from -p"
 
 #bogofilter
 macro index S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
@@ -312,4 +313,4 @@ send-hook "~t ^.*ibm\.com" "set from='Le Zuo <zuole@cn.ibm.com>';set signature=~
 
 # ---------------------color theme-----------------------------------
 #source `[[ "$TERM" == xterm-256color ]] && echo $HOME/.mutt.color256 || echo $HOME/.mutt.color8`
-source "$HOME/.mutt.color8"
+source "~/.mutt/muttrc.color8"

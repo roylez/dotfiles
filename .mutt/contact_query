@@ -8,7 +8,7 @@
 require 'mail'
 require 'yaml'
 
-CONTACTS_FILE = "#{ENV['HOME']}/.mutt.contacts.yml"
+CONTACTS_FILE = "#{ENV['HOME']}/.mutt/contacts.yml"
 
 def get_contacts(mail_text, fields = [:from])
   m = Mail.new(mail_text)
