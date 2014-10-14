@@ -81,7 +81,7 @@ au Syntax * RainbowParenthesesLoadBraces
 
 " syntax
 Plug 'fluxbox.vim'
-Plug 'Markdown'
+"Plug 'Markdown'
 Plug 'bbcode'
 
 " status
@@ -137,6 +137,9 @@ nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
 Plug 'tomasr/molokai'
 
 Plug 'rodjek/vim-puppet'
+
+Plug 'tangledhelix/vim-octopress'
+autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 
 "===================Plug loading ends==========================================
 call plug#end()
