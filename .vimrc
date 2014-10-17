@@ -338,10 +338,7 @@ augroup LargeFile
 augroup END
 
 "Restore cursor to file position in previous editing session
-autocmd BufReadPost *
-    \if line("'\"") > 0 && line("'\"") <= line("$")
-        \|exe "normal g`\""
-    \|endif
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 "warn long lines
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)

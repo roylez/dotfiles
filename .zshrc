@@ -257,6 +257,9 @@ else
                     #print -nP "\e]2;$1\a"
                     print -nP "\e]2;$1\a"
                 }
+            else
+                # fallback
+                function title() { print -nP "\ek$1\e\\" }
             fi
             ;;
         *)
