@@ -7,15 +7,13 @@
 ##application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 #text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
 
-# images
-#image/jpeg; display 'jpeg'; test=test -n "$DISPLAY"
-#image/pjpeg; display 'jpeg'; test=test -n "$DISPLAY"
-image/*; ~/.mutt/view_attachment.sh %s
-
-# portable document format
-#application/pdf; evince %s; test=test -n "DISPLAY"
-#application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
+image/gif ; open -a /Applications/Preview.app %s
+image/jpg ; open -a /Applications/Preview.app %s; needsterminal; description=JPEG Image; nametemplate=%s.jpg
+image/jpeg; open -a /Applications/Preview.app %s; needsterminal; description=JPEG Image; nametemplate=%s.jpg
+#image/*; ~/.mutt/view_attachment.sh %s
+#text/text; open -a BBEdit '%s'; needsterminal; description=Text Text; nametemplate=%s.txt
+#application/pdf; open -a /Applications/Preview.app '%s'; copiousoutput; test=test -n $DISPLAY
+application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput
 
 video/*; mplayer %s
 text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
-#text/html; elinks -force-html -dump-width `tput cols` -dump %s; copiousoutput

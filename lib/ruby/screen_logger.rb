@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 #Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description: 
+#Description:
 require 'logger'
 class ScreenLogger
     @use_color = true
@@ -9,7 +9,7 @@ class ScreenLogger
         attr_accessor :use_color
     end
 
-    def initialize(file)
+    def initialize(file='/dev/null')
         Logger.class_eval { alias :add_orig :add }
         @log = Logger.new(file)
         @log.datetime_format="%Y%m%d %H:%M:%S "
@@ -26,7 +26,7 @@ class ScreenLogger
             [ time.strftime(self.datetime_format) , $$, severity, progname, msg.to_s ]
         }
         class << @screen
-            LEVELCOLOR = { 
+            LEVELCOLOR = {
                 Logger::INFO => nil,
                 Logger::DEBUG => nil,
                 Logger::WARN => "\e[1;33m",
@@ -51,7 +51,7 @@ class ScreenLogger
                 message = "#{LEVELCOLOR[severity]}#{message}\e[m"    if ScreenLogger.use_color and LEVELCOLOR[severity]
                 @logdev.write( format_message(format_severity(severity), Time.now, progname, message))
                 true
-            end 
+            end
         end
     end
 

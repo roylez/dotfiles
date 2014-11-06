@@ -14,6 +14,7 @@ filetype plugin indent on
 
 set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
+set undolevels=1000	" lots and lots of undos
 " keep record of editing information for cursor restore and more
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
@@ -62,6 +63,9 @@ endif
 set formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
+if !isdirectory($HOME . "/.backup")
+    call mkdir($HOME . "/.backup", "p")
+endif
 set backupdir=$HOME/.backup
 set directory=$HOME/.backup     "swp
 
@@ -106,6 +110,7 @@ set foldmethod=syntax
 set foldnestmax=1
 
 set background=dark
+set cc=90
 
 syntax on
 "maybe necessary for urxvt, because vim use ^H for backspace,
