@@ -1,57 +1,20 @@
 " vim: ft=vim
 "
 
+let g:plug_url_format = 'git@github.com:%s.git'
+
 call plug#begin("~/.vim/plugged")
 "===================Plug loading starts========================================
 
+" ------------------  readability
 Plug 'The-NERD-tree'
 nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
 
-Plug 'The-NERD-Commenter'
-let g:NERDShutUp=1
-nmap <F9> <leader>c<SPACE>
-vmap <F9> <leader>c<SPACE>
-
-"Plug 'neocomplcache'
-"" Disable AutoComplPop.
-"let g:acp_enableAtStartup = 0
-"" Use neocomplcache.
-"let g:neocomplcache_enable_at_startup = 1
-"" Use smartcase.
-"let g:neocomplcache_enable_smart_case = 1
-"" Use camel case completion.
-"let g:neocomplcache_enable_camel_case_completion = 1
-"" Use underbar completion.
-"let g:neocomplcache_enable_underbar_completion = 1
-"" Set minimum syntax keyword length.
-"let g:neocomplcache_min_syntax_length = 3
-"let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-
-"" Enable heavy omni completion.
-"if !exists('g:neocomplcache_omni_patterns')
-  "let g:neocomplcache_omni_patterns = {}
-"endif
-""let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-""autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-""autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-""autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-""autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-""let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-""let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-""let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-
-"Plug 'rails.vim'
-
 Plug 'Tagbar'
 nmap <F2>   :TagbarToggle<CR>
 
-Plug 'Align'
-"Plug 'Tabular'
-"Plug 'simplefold'
 Plug 'delimitMate.vim'
-Plug 'openssl.vim'
 
 Plug 'rainbow_parentheses.vim'
 let g:rbpt_colorpairs = [
@@ -79,25 +42,24 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
-" syntax
-Plug 'fluxbox.vim'
-"Plug 'Markdown'
-Plug 'bbcode'
+Plug 'bling/vim-airline'
+let g:airline#extensions#tabline#enabled=1
+let g:airline_theme='murmur'
+"let g:airline_powerline_fonts=1
 
-" status
-"Plug 'Lokaltog/vim-powerline'
+Plug 'tomasr/molokai'
 
-Plug 'vim-coffee-script'
-autocmd BufNewFile,BufRead *.coffee set ft=coffee
+" ------------------  operability
 
-"Plug 'EasyMotion'
-"let g:EasyMotion_leader_key='<Leader>'
+Plug 'The-NERD-Commenter'
+let g:NERDShutUp=1
+nmap <F9> <leader>c<SPACE>
+vmap <F9> <leader>c<SPACE>
 
-"Plug 'ctrlp.vim'
+Plug 'Align'
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
 Plug 'Tabular'
-
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
 function! s:align()
   let p = '^\s*|\s.*\s|\s*$'
@@ -111,11 +73,6 @@ function! s:align()
 endfunction
 
 Plug 'Syntastic'
-
-Plug 'bling/vim-airline'
-let g:airline#extensions#tabline#enabled=1
-let g:airline_theme='murmur'
-"let g:airline_powerline_fonts=1
 
 " Unite
 Plug 'Shougo/vimproc', {'do': 'make'}
@@ -134,12 +91,20 @@ nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 
-Plug 'tomasr/molokai'
+" ------------------  syntax
+Plug 'bbcode', { 'for' : 'bbcode' }
 
-Plug 'rodjek/vim-puppet'
+autocmd BufNewFile,BufRead *.coffee set ft=coffee
+Plug 'vim-coffee-script', {'for': 'coffee'}
 
-Plug 'tangledhelix/vim-octopress'
+Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
+
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
+Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
+
+Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
+
+Plug 'openssl.vim'
 
 "===================Plug loading ends==========================================
 call plug#end()
