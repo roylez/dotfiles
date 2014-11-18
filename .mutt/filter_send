@@ -3,9 +3,11 @@
 #Last Change: Fri 13 Nov 2009 09:30:29 AM EST
 #Description: 发送邮件并将收件人地址记录在lbdb数据库
 
+BIN=~/.mutt
+
 #hn=$(host $(curl -s icanhazip.com)|awk '{print $NF}')
 #if [[ "$hn" = *.uq.* ]]; then
     #tee >(lbdb-fetchaddr -a) |/usr/bin/msmtp -a uq $@
 #else
-    tee >(~/bin/contact_query -f to,cc,bcc -t) |msmtp $@
+    tee >($BIN/contact_query -f to,cc,bcc -t) |msmtp $@
 #fi

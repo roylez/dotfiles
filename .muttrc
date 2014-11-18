@@ -182,7 +182,7 @@ my_hdr X-PGP-Key-ID:3038867F
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
-set query_command = "~/.mutt/contact_query '%s'"     #;~/bin/mutt_ldap_query.py '%s'"
+set query_command = "~/.mutt/contact_query"     #;~/bin/mutt_ldap_query.py '%s'"
 macro generic,index,pager A "<shell-escape>abook<return>"
 macro index,pager a "|abook --add-email<return>"
 
