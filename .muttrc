@@ -139,9 +139,9 @@ set ascii_chars=no
 # 当你按 "t" 或者 "D" 之类的标记操作时，是否自动把光标移动到下一封信件。
 set resolve=yes
 # 地址簿
-source ~/.mutt.alias
+source ~/.mutt/alias
 # 当你在 index 里按 "a" 为来信者取别名时，使用哪一个别名文件保存这个别名。
-set alias_file=~/.mutt.alias
+set alias_file=~/.mutt/alias
 
 # charset settings
 set allow_8bit
@@ -182,9 +182,12 @@ my_hdr X-PGP-Key-ID:3038867F
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
+set query_format = "%4c %t %-25.25a %-25.25n %?e?(%e)?"
+#set query_format = `~/.mutt/query_format`
 set query_command = "~/.mutt/contact_query"     #;~/bin/mutt_ldap_query.py '%s'"
-macro generic,index,pager A "<shell-escape>abook<return>"
-macro index,pager a "|abook --add-email<return>"
+# abook stuff
+#macro generic,index,pager A "<shell-escape>abook<return>"
+#macro index,pager a "|abook --add-email<return>"
 
 #filter to collect email addresses, WARNING: it is low
 #set display_filter = "~/.mutt/contact_query -f from -p"

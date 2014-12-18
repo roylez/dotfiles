@@ -14,7 +14,6 @@ filetype plugin indent on
 
 set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
-set undolevels=1000	" lots and lots of undos
 " keep record of editing information for cursor restore and more
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
@@ -72,7 +71,7 @@ set directory=$HOME/.backup     "swp
 if version >= 703
     set undodir=~/.vim/undo
     set undofile
-    set undolevels=100
+    set undolevels=1000
     set undoreload=1000
 endif
 

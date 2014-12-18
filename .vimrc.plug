@@ -56,21 +56,25 @@ let g:NERDShutUp=1
 nmap <F9> <leader>c<SPACE>
 vmap <F9> <leader>c<SPACE>
 
-Plug 'Align'
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+Plug 'junegunn/vim-easy-align'
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga      <Plug>(EasyAlign)
 
-Plug 'Tabular'
+"Plug 'Align'
+"inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
+"Plug 'Tabular'
+
+"function! s:align()
+  "let p = '^\s*|\s.*\s|\s*$'
+  "if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    "let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    "let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    "Tabularize/|/l1
+    "normal! 0
+    "call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  "endif
+"endfunction
 
 Plug 'Syntastic'
 
@@ -103,6 +107,7 @@ autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
 Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
+autocmd FileType elixir setlocal nofoldenable
 
 Plug 'openssl.vim'
 

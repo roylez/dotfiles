@@ -21,17 +21,19 @@
 #include /usr/share/doc/task/rc/dark-violets-256.theme
 #include /usr/share/doc/task/rc/dark-yellow-green.theme
 #include /usr/share/doc/task/rc/dark-gray-256.theme
-include /usr/share/doc/task/rc/solarized-dark-256.theme
+#include /usr/share/doc/task/rc/solarized-dark-256.theme
+include /usr/local/Cellar/task/2.3.0/share/doc/task/rc/solarized-dark-256.theme
 
 
 # Files
-data.location=/home/roylez/.task
+data.location=~/.task
 
 alias.a=add
 
 color=on
 
 #default.due=tom
+default.priority=M
 recurrence.limit=0
 
 due=3
@@ -55,5 +57,5 @@ report.today.dateformat=b.D
 default.command=today
 
 calendar.holidays=full
-include /home/roylez/.task/2013_holidays.rc
-include /usr/share/doc/task/rc/holidays.en-US.rc
+#include /home/roylez/.task/2013_holidays.rc
+#include /usr/share/doc/task/rc/holidays.en-US.rc
