@@ -11,6 +11,7 @@ if filereadable( $HOME . '/.vimrc.plug' )
 endif
 
 filetype plugin indent on
+syntax on
 
 set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
@@ -101,17 +102,11 @@ if &term =~ "xterm"
     "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
 endif
 
-let fortran_have_tabs=1	    " this line must be placed before syntax on
-let fortran_fold=1
-
-set foldenable
-set foldmethod=syntax
-set foldnestmax=1
+set foldenable foldmethod=syntax foldnestmax=1 foldlevelstart=1
 
 set background=dark
 set cc=90
 
-syntax on
 "maybe necessary for urxvt, because vim use ^H for backspace,
 "but urxvt can use both ^H and ^?
 "fixdel
@@ -127,36 +122,16 @@ autocmd InsertEnter * set cursorline
 autocmd BufWritePre * :%s/\s\+$//e
 
 "---------------------encoding detection--------------------------------
-"set encoding&		    " terminal charset: follows current locale
-"set termencoding=
-"set fileencodings-=latin1
-"set fileencoding&          " auto-sensed charset of current buffer
-"function GetEncoding(f)     "automatic update encoding
-"let e = system('enca -L none -Pm "' . a:f . '"')
-"let e = substitute(e, '/.*', '', '')
-"if e =~ 'unknown'
-"return 'utf-8'
-"endif
-"return e
-"endfunc
-
-"autocmd BufReadPre *
-"\exec "set fileencodings+=" . GetEncoding(expand('<afile>'))
-
 set encoding=utf-8
 set fileencoding&
 set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
+
 "---------------------completion settings-------------------------------
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
 set complete-=i
 set complete-=t
-"inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
-"inoremap <expr> <c-n> pumvisible() ?
-            "\"\<c-n>" : "\<c-n>\<c-r>=pumvisible() ? \"\\<down>\" : \"\\<cr>\""
-"inoremap <expr> <m-;> pumvisible() ?
-            "\"\<c-n>" : "\<c-x>\<c-o>\<c-n>\<c-p>\<c-r>=pumvisible() ?
-            "\\"\\<down>\" : \"\\<cr>\""
+
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
 
@@ -192,10 +167,6 @@ vmap / y/<C-R>"<CR>
 
 "insert time stamp in insert mode
 inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
-
-"Make and make test
-nmap <F5>   :w<CR>:make<CR>
-nmap <F6>   :make test<CR>
 
 " tab navigation
 nmap tp :tabprevious<cr>
@@ -241,6 +212,7 @@ autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |c
 "no folding for comment block and if/do blocks
 let g:ruby_no_comment_fold=1
 let g:ruby_no_expensive=1
+let ruby_fold=1
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
@@ -252,9 +224,6 @@ autocmd FileType scss,sass set shiftwidth=2 softtabstop=2
 autocmd FileType cpp setlocal nofoldenable
             \|nmap ,a :A<CR>
 autocmd FileType c setlocal cindent
-
-"Fortran
-"autocmd FileType fortran let b:fortran_free_source = 1
 
 "Txt, set syntax file and spell check
 "autocmd BufRead,BufNewFile *.txt set filetype=txt
@@ -344,5 +313,3 @@ augroup END
 "Restore cursor to file position in previous editing session
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-"warn long lines
-"au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
