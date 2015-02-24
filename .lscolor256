@@ -71,6 +71,7 @@ FILE   00       # normal file
 DIR    01;04;38;05;75  # directory
 LINK   01;38;05;51  # symbolic link.  (If you set this to 'target' instead of a
                     # numerical value, the color is as for the file pointed to.)
+MULTIHARDLINK 04
 FIFO 38;05;142;48;05;235   # pipe
 SOCK 01;38;05;176      # socket
 DOOR 01;38;05;176      # door
@@ -286,6 +287,8 @@ EXEC 01;38;05;46
 *Vagrantfile 01;38;05;148
 *Rakefile 01;38;05;148
 *Dockerfile 01;38;05;148
+*Gemfile 01;38;05;148
+*Procfile 01;38;05;148
 
 # base64
 .b64 00;38;05;79

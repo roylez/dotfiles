@@ -603,7 +603,6 @@ alias dud='du -s *(/)'
 #date for US and CN
 alias adate='for i in US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
-alias bloomberg='mplayer mms://media2.bloomberg.com/wbbr_sirus.asf'
 alias pyprof='python -m cProfile'
 alias python='nice python'
 alias info='info --vi-keys'
@@ -612,7 +611,6 @@ alias ri='ri -T -f ansi --width=$COLUMNS'
 alias history='history 1'       #zsh specific
 alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
-del() {mv -vif -- $* ~/.Trash}
 alias m='mutt'
 alias vim='vim -p'
 alias port='netstat -ntlp'      #opening ports
@@ -629,7 +627,7 @@ alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 alias tnethack='telnet nethack.alt.org'
 alias tslashem='telnet slashem.crash-override.net'
 
-alias forget='export HISTSIZE=0'
+alias forget='unset HISTFILE'
 
 #}}}
 

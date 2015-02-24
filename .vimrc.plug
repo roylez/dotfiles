@@ -87,6 +87,8 @@ Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
 
+Plug 'slim-template/vim-slim', {'for': 'slim'}
+
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
