@@ -25,7 +25,7 @@
     sb  = status -sb
     t   = tag
     untrack = rm -r --cached
-    merge-branch-file = checkout --merge 
+    merge-branch-file = checkout --merge
     rb  = rebase
 [merge]
     tool = vimdiff
@@ -35,3 +35,7 @@
     pager = cat
 [branch]
     ;autosetuprebase = remote
+[filter "hawser"]       # added by github
+    clean = git hawser clean %f
+    smudge = git hawser smudge %f
+    required = true

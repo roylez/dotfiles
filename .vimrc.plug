@@ -12,9 +12,12 @@ nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
 
 Plug 'Tagbar'
+let g:tagbar_left = 1
 nmap <F2>   :TagbarToggle<CR>
 
 Plug 'delimitMate.vim'
+
+Plug 'airblade/vim-gitgutter'
 
 Plug 'rainbow_parentheses.vim'
 let g:rbpt_colorpairs = [
@@ -62,6 +65,11 @@ nmap ga      <Plug>(EasyAlign)
 
 Plug 'Syntastic'
 
+Plug 'vim-misc'
+Plug 'xolox/vim-easytags'
+let g:easytags_dynamic_files = 2
+let g:easytags_events = ['BufWritePost']
+
 " Unite
 Plug 'Shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite.vim'
@@ -86,6 +94,8 @@ autocmd BufNewFile,BufRead *.coffee set ft=coffee
 Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
+
+Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
 
 Plug 'slim-template/vim-slim', {'for': 'slim'}
 

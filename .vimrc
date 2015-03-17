@@ -198,7 +198,7 @@ let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
 "--------------------------file type settings---------------------------
 "tags
 "use semicolon to seperate so that vim searches parent directories!
-set tags=tags;
+set tags=./.tags;
 
 "Python
 "autocmd Filetype python setlocal omnifunc=pythoncomplete#Complete
@@ -208,11 +208,12 @@ autocmd BufNewFile *.py
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
-autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># coding: utf-8\<nl>\" |call AutoHead()
+autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># encoding: utf-8\<nl>\" |call AutoHead()
+
 "no folding for comment block and if/do blocks
-let g:ruby_no_comment_fold=1
-let g:ruby_no_expensive=1
+let ruby_no_comment_fold=1
 let ruby_fold=1
+let ruby_operators=1
 "autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
