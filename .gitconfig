@@ -33,6 +33,7 @@
     user = roylez
 [core]
     pager = cat
+	excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
 [filter "hawser"]       # added by github

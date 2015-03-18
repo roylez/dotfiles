@@ -4,7 +4,7 @@
 " vim: ft=vim
 
 set nocompatible	" not vi compatible
-let mapleader=","      " this is used a lot in plugin settings
+let mapleader=" "      " this is used a lot in plugin settings
 
 if filereadable( $HOME . '/.vimrc.plug' )
     source ~/.vimrc.plug
