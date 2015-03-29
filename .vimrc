@@ -38,10 +38,18 @@ set matchtime=5
 set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
 
-set guifont=Monaco\ 10
-set guifontwide=WenQuanYi\ Micro\ Hei\ 12
 set guioptions-=T
 set guioptions-=r
+let s:uname = system("uname")
+if s:uname == "Darwin\n"
+    "Mac options here
+    set guifont=Monaco:h14
+    set lines=50
+    set columns=90
+else
+    set guifont=Monaco\ 10
+    set guifontwide=WenQuanYi\ Micro\ Hei\ 12
+endif
 
 set smartindent autoindent
 set expandtab
@@ -189,7 +197,7 @@ function! AutoHead()
     "call append(fl,"Last Change: ")
     call append(fl,"Description: ")
     call append(fl+1,"")
-    execute fl . ','. ll .'call NERDComment(0,"toggle")'
+    execute fl . ','. ll .'TComment'
 endfunc
 nmap ,h :call AutoHead()<cr>
 
@@ -252,9 +260,6 @@ autocmd FileType mail
             "\|:silent %s/^\s*>\s*--\_.\{-\}\_^\s*\_$//ge
             \|:silent 1
 
-"openGL shading language (glsl)
-au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
-
 "cuda
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
@@ -273,8 +278,9 @@ autocmd BufNewFile,BufRead *.viki set ft=viki
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 
-"pentadactyl
+"pentadactyl/vimperator
 autocmd BufNewFile,BufRead /tmp/pentadactyl*.tmp set textwidth=9999
+autocmd BufNewFile,BufRead *.vimperatorrc set ft=vimperator
 
 "bbcode
 autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode

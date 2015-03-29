@@ -11,10 +11,11 @@ Plug 'The-NERD-tree'
 nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
 
-Plug 'delimitMate.vim'
+" auto parentheses closing
+Plug 'cohama/lexima.vim'
 
-Plug 'airblade/vim-gitgutter'
-
+" Plug 'airblade/vim-gitgutter'
+"
 Plug 'rainbow_parentheses.vim'
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -50,10 +51,9 @@ Plug 'tomasr/molokai'
 
 " ------------------  operability
 
-Plug 'The-NERD-Commenter'
-let g:NERDShutUp=1
-nmap <F9> <leader>c<SPACE>
-vmap <F9> <leader>c<SPACE>
+Plug 'tomtom/tcomment_vim'
+vmap <F9> :TComment<CR>
+nmap <F9> :TComment<CR>
 
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
@@ -70,19 +70,29 @@ let g:easytags_events = ['BufWritePost']
 Plug 'Shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
+Plug 'Shougo/neomru.vim'
 let g:unite_source_history_yank_enable = 1
-let g:unite_source_grep_command = 'ag'
-let g:unite_source_grep_default_opts = '--nocolor --nogroup'
-let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_grep_command        = 'ag'
+let g:unite_source_grep_default_opts   = '--nocolor --nogroup'
+let g:unite_source_grep_recursive_opt  = ''
 let g:unite_source_grep_max_candidates = 200
-nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files -start-insert file_rec/async<cr>
-nnoremap <leader>/ :<C-u>Unite -no-split -buffer-name=code  -auto-preview -start-insert grep:.<cr>
-nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>n :<C-u>Unite -quick-match buffer<cr>
+let g:neomru#time_format               = "[%m-%d %H:%M] "
+nnoremap <leader>n :<C-u>Unite -quick-match         buffer<cr>
+nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
+nnoremap <leader>/ :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
+nnoremap <leader>o :<C-u>Unite -buffer-name=outline -start-insert -vertical -winwidth=40  outline<cr>
+nnoremap <leader>r :<C-u>Unite -buffer-name=mru     -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-"nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
 
 " ------------------  syntax
 Plug 'bbcode', { 'for' : 'bbcode' }
@@ -92,8 +102,8 @@ Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
 
-Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
-
+" Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
+"
 Plug 'slim-template/vim-slim', {'for': 'slim'}
 
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress

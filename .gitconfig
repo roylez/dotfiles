@@ -7,7 +7,7 @@
     status = auto
     grep   = always
 [push]
-	default = tracking
+    default = tracking
 [alias]
     a   = add
     b   = branch
@@ -33,7 +33,7 @@
     user = roylez
 [core]
     pager = cat
-	excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
 [filter "hawser"]       # added by github
