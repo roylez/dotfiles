@@ -52,11 +52,12 @@ javascript <<EOJS
 
     function proxy_toggle() {
         if ( options.getPref("network.proxy.type") == 0 ) {      // direct connect?
-            liberator.execute('proxy manual');
-            liberator.echo("PROXY ON");
+            " liberator.execute('proxy manual -http 192.168.1.222:2516');
+            liberator.execute('proxy manual -socks 127.0.0.1:7070');
+            liberator.echo("切换为使用代理");
         }else {
             liberator.execute("proxy direct");
-            liberator.echo("PROXY OFF");
+            liberator.echo("切换为直连");
         }
         update_proxy_status();
     }
