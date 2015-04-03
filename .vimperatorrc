@@ -39,29 +39,30 @@ loadplugins
 javascript <<EOJS
     e = document.createElement('label');
     e.id = 'liberator-status-proxy';
-    e.style.fontWeight = 'bold'
+    e.style.fontWeight = 'bold';
     document.getElementById('liberator-status').appendChild(e);
 
     statusline.addField("proxy", "Proxy status", "liberator-status-proxy",
-        function (node, state) { node.value = state ? " 🌐 " : " 🌏 " ; })
+        function (node, state) { node.value = state ? " 🌐 " : " 🌏 " ; });
 
     function update_proxy_status() {
         state = ( options.getPref("network.proxy.type") == 0 );
         statusline.updateField('proxy', state);
-    }
+    };
 
     function proxy_toggle() {
         if ( options.getPref("network.proxy.type") == 0 ) {      // direct connect?
-            " liberator.execute('proxy manual -http 192.168.1.222:2516');
+            // liberator.execute('proxy manual -http 192.168.1.222:2516');
             liberator.execute('proxy manual -socks 127.0.0.1:7070');
-            liberator.echo("切换为使用代理");
+            liberator.echo("已切换为代理连接");
         }else {
             liberator.execute("proxy direct");
-            liberator.echo("切换为直连");
+            liberator.echo("已切换为直连");
         }
         update_proxy_status();
-    }
+    };
+
 EOJS
 set status="input,location,bookmark,history,tabcount,position,proxy"
-map <leader>p :javascript proxy_toggle()<CR>
+map <leader>p :js proxy_toggle()<CR>
 

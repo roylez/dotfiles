@@ -1,7 +1,7 @@
 " vim: ft=vim
 "
 
-let g:plug_url_format = 'git@github.com:%s.git'
+let g:plug_url_format = 'git://github.com/%s.git'
 
 call plug#begin("~/.vim/plugged")
 "===================Plug loading starts========================================
@@ -11,10 +11,10 @@ Plug 'The-NERD-tree'
 nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
 
-" auto parentheses closing
-Plug 'cohama/lexima.vim'
+" auto parentheses closing (looks slow)
+" Plug 'cohama/lexima.vim'
 
-" Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 "
 Plug 'rainbow_parentheses.vim'
 let g:rbpt_colorpairs = [
@@ -51,16 +51,20 @@ Plug 'tomasr/molokai'
 
 " ------------------  operability
 
+" comment / uncomment
 Plug 'tomtom/tcomment_vim'
 vmap <F9> :TComment<CR>
 nmap <F9> :TComment<CR>
 
+" make stuff organized
 Plug 'junegunn/vim-easy-align'
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 
+" syntax checking
 Plug 'Syntastic'
 
+" automatic tag generation with easytags
 Plug 'vim-misc'
 Plug 'xolox/vim-easytags'
 let g:easytags_dynamic_files = 2
@@ -118,6 +122,18 @@ function! s:unite_settings()
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
 endfunction
+
+" snippets
+Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -s ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
+Plug 'honza/vim-snippets'
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+let g:UltiSnipsSnippetDirectories=["snips"]
+function! UltiSnipsCallUnite()
+    Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
+    return ''
+endfunction
+inoremap <silent> <F3> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+nnoremap <silent> <F3> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
 
 "===================Plug loading ends==========================================
 call plug#end()

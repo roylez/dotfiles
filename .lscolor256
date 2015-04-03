@@ -71,7 +71,6 @@ FILE   00       # normal file
 DIR    01;04;38;05;75  # directory
 LINK   01;38;05;51  # symbolic link.  (If you set this to 'target' instead of a
                     # numerical value, the color is as for the file pointed to.)
-MULTIHARDLINK 04
 FIFO 38;05;142;48;05;235   # pipe
 SOCK 01;38;05;176      # socket
 DOOR 01;38;05;176      # door
@@ -87,6 +86,7 @@ STICKY 01;38;05;254;48;05;21	# dir with the sticky bit set (+t) and not other-wr
 
 # This is for files with execute permission:
 EXEC 01;38;05;46
+MULTIHARDLINK 04
 
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.

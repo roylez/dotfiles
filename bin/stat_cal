@@ -1,0 +1,140 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+# Description:
+#
+#   Print a calendar in like github commit history view. Inspired by git-cal
+#
+#     https://github.com/k4rthik/git-cal
+#
+require 'date'
+
+def git_stat
+  res = %x{ git log --no-merges --pretty=format:"%at" --since="13 months"}
+  res = res.split("\n").map{|i| Time.at(i.to_i).to_date }
+  res.uniq.collect{|d| [d,res.count(d)] }
+end
+
+class String
+  def color(code)
+    "\e[#{code}m" + self + "\e[m"
+  end
+end
+
+class YearStat
+  MONTHS = %w{Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
+  WDAYHEADINGS = {1 => 'M', 3 => 'W', 5 => 'F'}
+  BLOCK_CHAR = %w{◼  ⬚  ⬜  ▤  ▣  ⬛  }
+  BLOCK_COLOR = %w{30 38;5;157 38;5;155 38;5;47 38;5;2}
+
+  def initialize(data, opts = {})
+    data.map! { |d, v|
+      d = Date.parse(d) unless d.is_a? Date
+      v = v.to_i  unless v.is_a? Fixnum
+      [d, v]
+    }
+    @opts = { padding: 4, summary: false }.merge opts
+    @today = Date.today
+    @data = data
+  end
+
+  def to_s
+    # color code each block
+    lines = transposed_weeks.map do |line|
+      line.map { |d| block(d) }.join
+    end
+    # add vertical weekday title
+    lines = lines.map.with_index{|l, i|
+      heading = WDAYHEADINGS.fetch(i, nil)
+      ( heading || ' ') + ' ' + l
+    }
+    # add month heading title
+    month_heading = ''
+    sundays = transposed_weeks.first
+    sundays.each_index do |i|
+      day = sundays[i]
+      next if (day - 7).mon == day.mon
+      col_num = 2 + i * 2
+      month_heading << ' ' * (col_num - month_heading.size) + MONTHS[day.mon - 1]
+    end
+    lines.unshift month_heading
+    # apply prefix padding
+    lines.map!{|l| ' ' * @opts[:padding] + l }   if @opts[:padding]
+    lines.join("\n")
+  end
+
+  def summary
+    "\tTotoal count: #{@data.map(&:last).inject(:+)}"
+  end
+
+  def self.format(data, opts = {})
+    summary = opts.delete(:summary)
+    s = YearStat.new(data, opts)
+    summary ? [s.to_s, s.summary].join("\n\n") : s.to_s
+  end
+
+  private
+
+  def first_day
+    @first_day ||= @today - 365
+  end
+
+  def first_block
+    return @first_block   if @first_block
+    first_wday = first_day.wday
+    @first_block = ( first_wday == 0 ? first_day : ( first_day - first_wday ) )
+  end
+
+  def transposed_weeks
+    return @transposed_weeks if @transposed_weeks
+    @transposed_weeks = [ ]
+    7.times do |i|
+      @transposed_weeks[i] = []
+      day = first_block + i
+      until day > @today
+        @transposed_weeks[i] << day
+        day += 7
+      end
+    end
+    @transposed_weeks
+  end
+
+  def block(day)
+    # a space must be added to the char, otherwise it is fucked up in iterm
+    (block_char(day) + ' ').color(day_color day )
+  end
+
+  def fourth
+    return @fourth  if @fourth
+    f = @data.map(&:last).max / 4.0
+    @fourth = f.zero? ? 1.0 : f
+  end
+
+  def block_char(day)
+    day < first_day ? ' ' : BLOCK_CHAR.first
+  end
+
+  def day_color(day)
+    c = BLOCK_COLOR[quartile(day)]
+    day.next.mon != day.mon ? "#{c};4" : c
+  end
+
+  def quartile(day)
+    return 0  if data(day).zero?
+    q = data(day) / fourth + 1
+    q == 5 ? 4 : q.to_i
+  end
+
+  def data(d)
+    @data_hash ||= Hash[@data]
+    @data_hash.fetch(d, 0)
+  end
+end
+
+if __FILE__ == $0
+  if ARGF.filename != "-" or (not STDIN.tty? and not STDIN.closed?)
+    data = ARGF.readlines.map{|l| l.split(/\s+/)}
+  else
+    data = git_stat
+  end
+  puts YearStat.format(data, summary: true)
+end
