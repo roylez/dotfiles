@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
-# Description:
-#
-#   Print a calendar in like github commit history view. Inspired by git-cal
+# Description: Print a calendar in like github commit history view. Inspired by git-cal
 #
 #     https://github.com/k4rthik/git-cal
 #

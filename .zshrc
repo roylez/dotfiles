@@ -152,6 +152,22 @@ calc()  { awk "BEGIN{ print $* }" ; }
 #check if a binary exists in path
 bin-exist() {[[ -n ${commands[$1]} ]]}
 
+# use stat_cal to generate github style commit log
+(bin-exist stat_cal) && \
+    git_cal_view() {
+        pwd=$PWD
+        for i in $*; do
+            cd $i
+            git log --no-merges --pretty=format:"%ai" --since="13 months"
+            echo    # an "\n" is missing at the end of git log command
+        done \
+            |awk '{ a[$1] ++ }; END {for (i in a) {print i " " a[i]}}' \
+            |sort \
+            |stat_cal
+        cd $pwd
+    }
+
+
 #recalculate track db gain with mp3gain
 (bin-exist mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
 
