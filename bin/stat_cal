@@ -56,7 +56,12 @@ class YearStat
     end
     lines.unshift month_heading
     # apply prefix padding
-    lines.map!{|l| ' ' * @opts[:padding] + l }   if @opts[:padding]
+    if @opts[:columns]
+      padding = ( @opts[:columns] - lines[1].gsub(/\e[^m]*m/,'').size ) / 2
+    else
+      padding = @opts[:padding]
+    end
+    lines.map!{|l| ' ' * padding + l }
     lines.join("\n")
   end
 
@@ -129,10 +134,18 @@ class YearStat
 end
 
 if __FILE__ == $0
+  require 'optparse'
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options]"
+    opts.on('-s','--shell COLUMNS', Integer,
+            'Centeralize in terminal') {|i| options[:columns] = i }
+  end.parse!
+
   if ARGF.filename != "-" or (not STDIN.tty? and not STDIN.closed?)
     data = ARGF.readlines.map{|l| l.split(/\s+/)}
   else
     data = git_stat
   end
-  puts YearStat.format(data, summary: true)
+  puts YearStat.format(data, summary: true, columns: options[:columns])
 end

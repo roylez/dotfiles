@@ -163,7 +163,7 @@ bin-exist() {[[ -n ${commands[$1]} ]]}
         done \
             |awk '{ a[$1] ++ }; END {for (i in a) {print i " " a[i]}}' \
             |sort \
-            |stat_cal
+            |stat_cal -s $COLUMNS
         cd $pwd
     }
 
