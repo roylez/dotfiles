@@ -4,7 +4,7 @@ doctor
 tap homebrew/dupes
 install homebrew/dupes/screen
 install grep
-install vim --with-clipboard --with-xterm-clipboard
+install vim --with-clipboard --with-xterm-clipboard --with-lua
 install coreutils --default-names
 install gnu-sed --default-names
 

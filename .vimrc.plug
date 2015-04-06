@@ -1,4 +1,4 @@
-" vim: ft=vim
+" vim: ft=vim foldmethod=marker
 "
 
 let g:plug_url_format = 'git://github.com/%s.git'
@@ -7,16 +7,17 @@ call plug#begin("~/.vim/plugged")
 "===================Plug loading starts========================================
 
 " ------------------  readability
-Plug 'The-NERD-tree'
+Plug 'The-NERD-tree' "{{{
 nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
+" }}}
 
 " auto parentheses closing (looks slow)
 " Plug 'cohama/lexima.vim'
 
 Plug 'airblade/vim-gitgutter'
 "
-Plug 'rainbow_parentheses.vim'
+Plug 'rainbow_parentheses.vim' "{{{
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -41,36 +42,41 @@ au VimEnter * RainbowParenthesesToggle
 "au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+" }}}
 
-Plug 'bling/vim-airline'
+Plug 'bling/vim-airline' "{{{
 let g:airline#extensions#tabline#enabled=1
 let g:airline_theme='murmur'
 "let g:airline_powerline_fonts=1
+" }}}
 
 Plug 'tomasr/molokai'
 
 " ------------------  operability
 
 " comment / uncomment
-Plug 'tomtom/tcomment_vim'
+Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
 nmap <F9> :TComment<CR>
+" }}}
 
 " make stuff organized
-Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align' "{{{
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
+" }}}
 
 " syntax checking
 Plug 'Syntastic'
 
 " automatic tag generation with easytags
+Plug 'xolox/vim-easytags' " {{{
 Plug 'vim-misc'
-Plug 'xolox/vim-easytags'
 let g:easytags_dynamic_files = 2
 let g:easytags_events = ['BufWritePost']
+" }}}
 
-" ------------------  syntax
+" ------------------  syntax {{{
 Plug 'bbcode', { 'for' : 'bbcode' }
 
 autocmd BufNewFile,BufRead *.coffee set ft=coffee
@@ -90,9 +96,20 @@ autocmd FileType elixir setlocal nofoldenable
 
 Plug 'openssl.vim'
 
-" ----------------- Unite gang
+" }}}
+
+Plug 'Shougo/neocomplete.vim' "{{{
+let g:neocomplete#enable_at_startup=1
+let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+let g:neocomplete#enable_auto_delimiter=1
+Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -s ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
+Plug 'honza/vim-snippets'
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+let g:UltiSnipsSnippetDirectories=["snips"]
+" }}}
+
+Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}
-Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-outline'
 Plug 'Shougo/neomru.vim'
 let g:unite_source_history_yank_enable = 1
@@ -122,18 +139,7 @@ function! s:unite_settings()
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
 endfunction
-
-" snippets
-Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -s ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
-Plug 'honza/vim-snippets'
-" add personal snippet directory to search path, note that snippets is reserved and could not be used
-let g:UltiSnipsSnippetDirectories=["snips"]
-function! UltiSnipsCallUnite()
-    Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
-    return ''
-endfunction
-inoremap <silent> <F3> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-nnoremap <silent> <F3> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+" }}}
 
 "===================Plug loading ends==========================================
 call plug#end()
@@ -156,4 +162,3 @@ if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
 else
     colorscheme tango
 endif
-
