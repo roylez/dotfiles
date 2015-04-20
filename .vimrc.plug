@@ -102,7 +102,7 @@ Plug 'Shougo/neocomplete.vim' "{{{
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
 let g:neocomplete#enable_auto_delimiter=1
-Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -s ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
+Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 Plug 'honza/vim-snippets'
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
 let g:UltiSnipsSnippetDirectories=["snips"]
@@ -126,7 +126,8 @@ let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
 nnoremap <leader>n :<C-u>Unite -quick-match -tab buffer<cr>
 nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split -tab file_rec/async<cr>
 nnoremap <leader>/ :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
-nnoremap <leader>o :<C-u>Unite -buffer-name=outline -start-insert -vertical -winwidth=40  outline<cr>
+nnoremap <leader>o :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
+nnoremap <F3>      :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
 nnoremap <leader>r :<C-u>Unite -buffer-name=mru     -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>

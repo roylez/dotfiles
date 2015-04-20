@@ -7,6 +7,8 @@
 
 SHELL=`which zsh`
 
+export PATH=$HOME/bin:$PATH
+
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # 定义颜色 {{{
@@ -534,7 +536,6 @@ export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
-export PATH=$HOME/bin:$PATH
 export EDITOR=vim
 export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '

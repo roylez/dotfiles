@@ -53,7 +53,8 @@ javascript <<EOJS
     function proxy_toggle() {
         if ( options.getPref("network.proxy.type") == 0 ) {      // direct connect?
             // liberator.execute('proxy manual -http 192.168.1.222:2516');
-            liberator.execute('proxy manual -socks 127.0.0.1:7070');
+            // liberator.execute('proxy manual -socks 127.0.0.1:7070');
+            liberator.execute('proxy manual');
             liberator.echo("已切换为代理连接");
         }else {
             liberator.execute("proxy direct");

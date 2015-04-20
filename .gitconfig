@@ -41,3 +41,5 @@
     required = true
 [status]
     submoduleSummary = true
+[url "ssh://git@heroku.com/"]
+    insteadOf = https://git.heroku.com/
