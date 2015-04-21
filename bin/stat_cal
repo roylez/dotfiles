@@ -21,8 +21,12 @@ end
 class YearStat
   MONTHS = %w{Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
   WDAYHEADINGS = {1 => 'M', 3 => 'W', 5 => 'F'}
-  BLOCK_CHAR = %w{◼  ⬚  ⬜  ▤  ▣  ⬛  }
-  BLOCK_COLOR = %w{30 38;5;157 38;5;155 38;5;47 38;5;2}
+  BLOCK_CHAR = %w{◼  ▣  ⬚  ⬜  ▤  ⬛  }
+  if ENV['BLOCK_COLOR']
+    BLOCK_COLOR = ENV['BLOCK_COLOR'].split(" ")
+  else
+    BLOCK_COLOR = %w{30 38;5;157 38;5;155 38;5;47 38;5;2}
+  end
 
   def initialize(data, opts = {})
     data.map! { |d, v|
@@ -62,6 +66,13 @@ class YearStat
       padding = @opts[:padding]
     end
     lines.map!{|l| ' ' * padding + l }
+    # remove redudant color code
+    lines.map!{|l|
+      while %r{(\e\[[^m]+m)([^\e]+?)\e\[m\1}.match l
+        l = l.gsub(%r{(\e\[[^m]+m)([^\e]+?)\e\[m\1},'\1\2')
+      end
+      l
+    }
     lines.join("\n")
   end
 
@@ -106,10 +117,14 @@ class YearStat
     (block_char(day) + ' ').color(day_color day )
   end
 
-  def fourth
-    return @fourth  if @fourth
-    f = @data.map(&:last).max / 4.0
-    @fourth = f.zero? ? 1.0 : f
+  def step_size
+    return @step_size  if @step_size
+    f = @data.map(&:last).max / step.to_f
+    @step_size = f.zero? ? 1.0 : f
+  end
+
+  def step
+    @step ||= BLOCK_COLOR.size - 1
   end
 
   def block_char(day)
@@ -123,8 +138,8 @@ class YearStat
 
   def quartile(day)
     return 0  if data(day).zero?
-    q = data(day) / fourth + 1
-    q == 5 ? 4 : q.to_i
+    q = data(day) / step_size + 1
+    q == (step + 1) ? step : q.to_i
   end
 
   def data(d)
