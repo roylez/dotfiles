@@ -84,6 +84,8 @@ Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
 
+Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
+
 " Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
 "
 Plug 'slim-template/vim-slim', {'for': 'slim'}

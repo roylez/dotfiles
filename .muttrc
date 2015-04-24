@@ -19,6 +19,7 @@ set status_on_top
 #set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s"
 #set editor="vim"
 set editor="vim -c 'norm O'"
+set text_flowed=yes
 
 #set smtp agent
 set sendmail="~/.mutt/filter_send"

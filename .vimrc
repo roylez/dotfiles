@@ -253,6 +253,7 @@ autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 "emails,
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail
+            \|:silent setlocal fo+=aw       " http://wcm1.web.rice.edu/mutt-tips.html
             \|:silent set spell
             "\|:silent 0put=''
             "\|:silent 0put=''
@@ -317,6 +318,15 @@ augroup LargeFile
         \|endif
 augroup END
 
-"Restore cursor to file position in previous editing session
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
+" restore views
+set viewoptions=cursor,folds,slash,unix
+augroup vimrc
+    autocmd BufWritePost *
+    \   if expand('%') != '' && &buftype !~ 'nofile'
+    \|      mkview!
+    \|  endif
+    autocmd BufRead *
+    \   if expand('%') != '' && &buftype !~ 'nofile'
+    \|      silent loadview
+    \|  endif
+augroup END

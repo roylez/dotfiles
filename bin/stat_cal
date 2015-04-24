@@ -88,8 +88,17 @@ class YearStat
 
   private
 
+  def days
+    return @days  if @days
+    @days = 365
+    if @opts[:columns]
+      avail_days = ( @opts[:columns] - @opts[:padding]*2 - 4 )/2 * 7
+      @days = avail_days > 365 ? 365 : avail_days
+    end
+  end
+
   def first_day
-    @first_day ||= @today - 365
+    @first_day ||= @today - days
   end
 
   def first_block
