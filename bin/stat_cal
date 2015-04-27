@@ -162,6 +162,7 @@ if __FILE__ == $0
   options = {}
   OptionParser.new do |opts|
     opts.banner = "Usage: #{$0} [options]"
+    options[:columns] = `tput cols`.to_i
     opts.on('-s','--shell COLUMNS', Integer,
             'Centeralize in terminal') {|i| options[:columns] = i }
   end.parse!

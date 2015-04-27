@@ -15,8 +15,6 @@ let g:NERDTreeWinPos="right"
 " auto parentheses closing (looks slow)
 " Plug 'cohama/lexima.vim'
 
-Plug 'airblade/vim-gitgutter'
-"
 Plug 'rainbow_parentheses.vim' "{{{
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -101,6 +99,11 @@ Plug 'openssl.vim'
 " }}}
 
 Plug 'Shougo/neocomplete.vim' "{{{
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
 let g:neocomplete#enable_auto_delimiter=1
