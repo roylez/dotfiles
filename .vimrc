@@ -1,7 +1,5 @@
-"Author: Roy L Zuo (roylzuo at gmail dot com)
-"Description: vim runtime configure file
-"source $VIMRUNTIME/vimrc_example.vim
-" vim: ft=vim
+" Description: vim runtime configure file
+" vim: ft=vim foldmethod=marker
 
 set nocompatible	" not vi compatible
 let mapleader=" "      " this is used a lot in plugin settings
@@ -34,7 +32,6 @@ set notitle             " do not set xterm dynamic title
 "set number
 
 set matchtime=5
-
 set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
 
@@ -51,12 +48,10 @@ else
     set guifontwide=WenQuanYi\ Micro\ Hei\ 12
 endif
 
-set smartindent autoindent
-set expandtab
+set smartindent autoindent expandtab smarttab
 set shiftwidth=4
 set softtabstop=4 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
-set smarttab
 
 map Q gq
 set wrap
@@ -78,10 +73,10 @@ set backupdir=$HOME/.backup
 set directory=$HOME/.backup     "swp
 
 if version >= 703
-    set undodir=~/.vim/undo
-    set undofile
-    set undolevels=1000
-    set undoreload=1000
+    if !isdirectory($HOME . "/.vim/undo")
+        call mkdir($HOME . "/.vim/undo", "p")
+    endif
+    set undodir=~/.vim/undo undofile undolevels=1000 undoreload=1000
 endif
 
 set commentstring=#%s       " default comment style
@@ -97,19 +92,6 @@ set listchars=nbsp:¬,eol:¶,tab:>-,extends:»,precedes:«,trail:•
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
 
-"dynamic cursor color for xterm \033=>\e  007=>\a (BEL)
-if &term =~ "xterm"
-    :silent !echo -ne "\e]12;IndianRed2\007"
-    let &t_SI = "\e]12;RoyalBlue1\007"
-    let &t_EI = "\e]12;IndianRed2\007"
-    autocmd VimLeave * :!echo -ne "\e]12;green\007"
-"elseif &term =~ "screen"    " screen in urxvt or xterm
-    ":silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
-    "let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
-    "let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
-    "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
-endif
-
 set foldenable foldmethod=syntax foldnestmax=1 foldlevelstart=1
 
 set background=dark
@@ -119,6 +101,9 @@ set cc=90
 "but urxvt can use both ^H and ^?
 "fixdel
 set backspace=2
+
+"tags, use semicolon to seperate so that vim searches parent directories!
+set tags=./.tags;
 
 " 高亮当前行
 "set cursorline
@@ -164,18 +149,6 @@ inoremap <m-k> <C-o>gk
 " search for visual-mode selected text
 vmap / y/<C-R>"<CR>
 
-" taglist.vim
-"let g:Tlist_GainFocus_On_ToggleOpen=1
-"let g:Tlist_Exit_OnlyWindow=1
-""let g:Tlist_Use_Right_Window=1
-"let g:Tlist_Show_One_File=1
-"let g:Tlist_Enable_Fold_Column=0
-"let g:Tlist_Auto_Update=1
-"nmap <F2>   :TlistToggle<CR>
-
-"insert time stamp in insert mode
-inoremap <F5> <C-R>=strftime("%Y-%m-%d %T %Z")<CR>
-
 " tab navigation
 nmap tp :tabprevious<cr>
 nmap tn :tabnext<cr>
@@ -186,53 +159,27 @@ nmap gf <C-W>gf
 " clear search highlight with F5
 nmap <F5>   :noh<cr><ESC>
 
-"Auomatically add file head. NERO_commenter.vim needed.
-function! AutoHead()
-    let fl = line(".")
-    if getline(fl) !~ "^$"
-        let fl += 1
-    endif
-    let ll = fl+2
-    call setline(fl,"Author: Roy L Zuo (roylzuo at gmail dot com)")
-    "call append(fl,"Last Change: ")
-    call append(fl,"Description: ")
-    call append(fl+1,"")
-    execute fl . ','. ll .'TComment'
-endfunc
-nmap ,h :call AutoHead()<cr>
-
-let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
-
 "--------------------------file type settings---------------------------
-"tags
-"use semicolon to seperate so that vim searches parent directories!
-set tags=./.tags;
-
 "Python
-"autocmd Filetype python setlocal omnifunc=pythoncomplete#Complete
-autocmd BufNewFile *.py
-            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\"
-            \|call AutoHead()
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
-autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># encoding: utf-8\<nl>\" |call AutoHead()
 
 "no folding for comment block and if/do blocks
 let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
-"autocmd FileType ruby set omnifunc=rubycomplete#Complete
+autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 
 " scss
-autocmd FileType scss,sass set shiftwidth=2 softtabstop=2
+autocmd FileType scss,sass setl shiftwidth=2 softtabstop=2
 
 "C/C++
-autocmd FileType cpp setlocal nofoldenable
+autocmd FileType cpp setl nofoldenable
             \|nmap ,a :A<CR>
-autocmd FileType c setlocal cindent
+autocmd FileType c setl cindent
 
 "Txt, set syntax file and spell check
 "autocmd BufRead,BufNewFile *.txt set filetype=txt
@@ -244,34 +191,20 @@ autocmd FileType tex,plaintex,context
             \|silent set spell
             \|nmap <buffer> <F8> gwap
 
-" shell script
-autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
-
-"Gnuplot
-autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
-
 "emails,
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail
             \|:silent setlocal fo+=aw       " http://wcm1.web.rice.edu/mutt-tips.html
             \|:silent set spell
             "\|:silent 0put=''
-            "\|:silent 0put=''
             \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
-            "\|:silent %s/^\s*>\s*--\_.\{-\}\_^\s*\_$//ge
             \|:silent 1
 
 "cuda
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufNewFile,BufRead *.mkd,*.mdown set ft=markdown comments=n:> nu nospell textwidth=0
-
-"coffee script
-autocmd BufNewFile,BufRead *.coffee set ft=coffee
-
-"RestructuredText
-autocmd BufNewFile,BufRead *.rst  set ft=rest ai formatoptions=tcroqn2
+autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
 
 "viki
 autocmd BufNewFile,BufRead *.viki set ft=viki
@@ -291,8 +224,9 @@ autocmd BufNewFile,BufRead *.rem set ft=remind
 
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
+
 "-------------------special settings------------------------------------
-"big files?
+" {{{ big files?
 let g:LargeFile = 0.3	"in megabyte
 augroup LargeFile
     au!
@@ -317,8 +251,9 @@ augroup LargeFile
             \|echomsg "***note*** handling a large file"
         \|endif
 augroup END
+" }}}
 
-" restore views
+" {{{ restore views
 set viewoptions=cursor,folds,slash,unix
 augroup vimrc
     autocmd BufWritePost *
@@ -330,3 +265,18 @@ augroup vimrc
     \|      silent loadview
     \|  endif
 augroup END
+" }}}
+
+" {{{ dynamic cursor color for xterm \033=>\e  007=>\a (BEL)
+if &term =~ "xterm"
+    :silent !echo -ne "\e]12;IndianRed2\007"
+    let &t_SI = "\e]12;RoyalBlue1\007"
+    let &t_EI = "\e]12;IndianRed2\007"
+    autocmd VimLeave * :!echo -ne "\e]12;green\007"
+"elseif &term =~ "screen"    " screen in urxvt or xterm
+    ":silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
+    "let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
+    "let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
+    "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
+endif
+" }}}

@@ -88,7 +88,7 @@ zstyle ':completion:*' menu select=2
 #zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match #_user_expand
 zstyle ':completion:*:match:*' original only
-#zstyle ':completion:*' user-expand _pinyin
+zstyle ':completion:*' user-expand #_pinyin
 zstyle ':completion:*:approximate:*' max-errors 1 numeric
 ## case-insensitive (uppercase from lowercase) completion
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
@@ -557,9 +557,6 @@ export READNULLCMD=less
 (bin-exist src-hilite-lesspipe.sh) && export LESSOPEN="| src-hilite-lesspipe.sh %s"
 [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
-#for ConTeX
-#source $HOME/.context_env /home/roylez/soft/ConTeXt/tex
-
 #for gnuplot, avoid locate!!!
 #export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
 #[[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
@@ -596,9 +593,7 @@ alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 
 #file types
-(bin-exist apvlv) && alias -s pdf=apvlv
 alias -s ps=gv
-for i in jpg png;           alias -s $i=sxiv
 for i in avi rmvb wmv;      alias -s $i=mplayer
 for i in rar zip 7z lzma;   alias -s $i="7z x"
 
@@ -621,7 +616,6 @@ alias dud='du -s *(/)'
 alias adate='for i in US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias pyprof='python -m cProfile'
-alias python='nice python'
 alias info='info --vi-keys'
 alias rsync='rsync --progress --partial'
 alias ri='ri -T -f ansi --width=$COLUMNS'
@@ -632,10 +626,7 @@ alias m='mutt'
 alias vim='vim -p'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients
-#alias ssh="ssh -4 -C -c blowfish-cbc"
-#alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac mp3lame -lameopts aq=7:mode=0:vol=1.2:vbr=2:q=6 -srate 32000'
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
-#alias tree="tree --dirsfirst"
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 #alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"

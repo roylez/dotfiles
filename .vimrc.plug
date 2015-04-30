@@ -56,6 +56,26 @@ Plug 'tomasr/molokai'
 Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
 nmap <F9> :TComment<CR>
+"Auomatically add file head. NERO_commenter.vim needed.
+function! AutoHead()
+    let fl = line(".")
+    if getline(fl) !~ "^$"
+        let fl += 1
+    endif
+    let ll = fl+2
+    "call append(fl,"Last Change: ")
+    call append(fl,"Description: ")
+    call append(fl+1,"")
+    execute fl . ','. ll .'TComment'
+endfunc
+nmap ,h :call AutoHead()<cr>
+
+autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
+autocmd BufNewFile *.py
+            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\"
+            \|call AutoHead()
+autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># encoding: utf-8\<nl>\" |call AutoHead()
+autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 " }}}
 
 " make stuff organized
@@ -110,7 +130,7 @@ let g:neocomplete#enable_auto_delimiter=1
 Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 Plug 'honza/vim-snippets'
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
-let g:UltiSnipsSnippetDirectories=["snips"]
+let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 " }}}
 
 Plug 'Shougo/unite.vim' " {{{
@@ -133,7 +153,7 @@ nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split -tab
 nnoremap <leader>/ :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
 nnoremap <leader>o :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
 nnoremap <F3>      :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
-nnoremap <leader>r :<C-u>Unite -buffer-name=mru     -start-insert -no-split file_mru<cr>
+nnoremap <leader>r :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
