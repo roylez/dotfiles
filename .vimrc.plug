@@ -6,7 +6,10 @@ let g:plug_url_format = 'git://github.com/%s.git'
 call plug#begin("~/.vim/plugged")
 "===================Plug loading starts========================================
 
-" ------------------  readability
+"-------------------------------------------------------------------------------
+"                                 readability                                  "
+"-------------------------------------------------------------------------------
+
 Plug 'The-NERD-tree' "{{{
 nmap <F3>   :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
@@ -44,13 +47,17 @@ au Syntax * RainbowParenthesesLoadBraces
 
 Plug 'bling/vim-airline' "{{{
 let g:airline#extensions#tabline#enabled=1
-let g:airline_theme='murmur'
-"let g:airline_powerline_fonts=1
+let g:airline_theme='luna'
+" powerline fonts does not work well with Chinese fonts which I would put higher
+" priority
+let g:airline_powerline_fonts=1
 " }}}
 
 Plug 'tomasr/molokai'
 
-" ------------------  operability
+"-------------------------------------------------------------------------------
+"                                 operability                                  "
+"-------------------------------------------------------------------------------
 
 " comment / uncomment
 Plug 'tomtom/tcomment_vim' " {{{
@@ -87,6 +94,9 @@ nmap ga      <Plug>(EasyAlign)
 " syntax checking
 Plug 'Syntastic'
 
+" parentheses
+Plug 'tpope/vim-surround'
+
 " automatic tag generation with easytags
 Plug 'xolox/vim-easytags' " {{{
 Plug 'vim-misc'
@@ -94,10 +104,10 @@ let g:easytags_dynamic_files = 2
 let g:easytags_events = ['BufWritePost']
 " }}}
 
-" ------------------  syntax {{{
+" syntax definitions {{{
 Plug 'bbcode', { 'for' : 'bbcode' }
 
-autocmd BufNewFile,BufRead *.coffee set ft=coffee
+" autocmd BufNewFile,BufRead *.coffee set ft=coffee
 Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
@@ -167,6 +177,11 @@ function! s:unite_settings()
 endfunction
 " }}}
 
+"-------------------------------------------------------------------------------
+"                                  file types                                  "
+"-------------------------------------------------------------------------------
+Plug 'othree/html5.vim'
+
 "===================Plug loading ends==========================================
 call plug#end()
 
@@ -174,9 +189,6 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 " call unite#filters#sorter_default#use(['sorter_length'])
 
-"Plug 'Solarized'
-"Plug 'railscasts'
-"Plug 'Solarized'
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")

@@ -4,8 +4,8 @@
 set nocompatible	" not vi compatible
 let mapleader=" "      " this is used a lot in plugin settings
 
-if filereadable( $HOME . '/.vimrc.plug' )
-    source ~/.vimrc.plug
+if filereadable( $HOME . '/.vimrc.plug'  )
+    source  $HOME/.vimrc.plug
 endif
 
 filetype plugin indent on
@@ -21,6 +21,7 @@ set incsearch hlsearch wrapscan
 set ignorecase smartcase
 
 set showmatch		" show the matching brackets when typing
+" set ambiwidth=double     " set this if terminal has similar setting
 
 set showcmd		" display incomplete commands
 set ruler		" show the cursor position all the time in statusline
