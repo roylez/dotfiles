@@ -205,7 +205,14 @@ autocmd FileType mail
 au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
-autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
+autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
+autocmd FileType markdown set comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
+
+"yaml
+autocmd FileType yaml set softtabstop=2 shiftwidth=2 noautoindent nosmartindent
+
+"coffee
+autocmd FileType coffee set softtabstop=2 shiftwidth=2
 
 "viki
 autocmd BufNewFile,BufRead *.viki set ft=viki

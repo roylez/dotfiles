@@ -159,7 +159,7 @@ let g:unite_source_rec_max_cache_files = 5000
 let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
 
 nnoremap <leader>n :<C-u>Unite -quick-match -tab buffer<cr>
-nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split -tab file_rec/async<cr>
+nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
 nnoremap <leader>/ :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
 nnoremap <leader>o :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
 nnoremap <F3>      :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
