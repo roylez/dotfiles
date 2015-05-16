@@ -270,13 +270,8 @@ else
                     #print -nPR $'\033]0;'$2$'\a'
                 }
             elif [[ -n $TMUX ]]; then       # actually in tmux !
-                function title()
-                {
-                    #print -nP "\e]2;$1\a"
-                    print -nP "\e]2;$1\a"
-                }
-            else
-                # fallback
+                function title() { print -nP "\e]2;$1\a" }
+            else                            # fallback
                 function title() { print -nP "\ek$1\e\\" }
             fi
             ;;

@@ -34,14 +34,16 @@ fi
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Dynamic xterm title as user@host:dir
-case "$TERM" in
-    xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-    ;;
-    screen)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-    ;;
-esac
+if [[ -z $SSH_CONNECTION ]]; then
+    case "$TERM" in
+        xterm*|rxvt*)
+        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+        ;;
+        screen)
+        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+        ;;
+    esac
+fi
 
 eval $(dircolors -b $HOME/.lscolor256)
 
@@ -93,7 +95,7 @@ export GTK2_RC_FILES=$HOME/.gtkrc-2.0
 #export PS1="\[\e[32;1m\]\u@\H:\[\e[36;1m\]\w\[\e[33;1m\]$ \[\e[0m\]"
 #else
 #we're not on the console, assume an xterm
-#export PS1="\[\e]2;\u@\H \w\a\[\e[32;1m\]\u@\H:\[\e[36;1m\]\w\[\e[33;1m\]$ \[\e[0m\]" 
+#export PS1="\[\e]2;\u@\H \w\a\[\e[32;1m\]\u@\H:\[\e[36;1m\]\w\[\e[33;1m\]$ \[\e[0m\]"
 #fi
 
 export PATH=$PATH:$HOME/bin
