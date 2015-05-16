@@ -27,7 +27,9 @@ print_status() {
 }
 
 case $commits in
-    [0-4] )
+    0 )         # print sys load as a fallback
+        w | awk -F: 'NR==1 {print $NF}';;
+    [1-4] )
         print_status $void_star " " $commits;;
     [5..10] )
         solid=$((commits-5))

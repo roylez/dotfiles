@@ -45,7 +45,7 @@ if [[ -z $SSH_CONNECTION ]]; then
     esac
 fi
 
-eval $(dircolors -b $HOME/.lscolor256)
+[[ -f $HOME/.lscolor256 ]] && eval $(dircolors -b $HOME/.lscolor256)
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
