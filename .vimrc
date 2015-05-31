@@ -27,7 +27,8 @@ set showcmd		" display incomplete commands
 set ruler		" show the cursor position all the time in statusline
 set laststatus=2        " always display a nicer status bar
 set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
-set wildmenu		" show possible command when pressing <TAB>
+" set wildmenu		" show possible command when pressing <TAB>
+set wildmode=longest:list,full
 "set cmdheight=2
 set notitle             " do not set xterm dynamic title
 "set number
@@ -41,7 +42,7 @@ set guioptions-=r
 let s:uname = system("uname")
 if s:uname == "Darwin\n"
     "Mac options here
-    set guifont=Monaco:h14
+    set guifont=Monaco\ for\ Powerline:h14
     set lines=50
     set columns=90
 else
@@ -270,7 +271,7 @@ augroup vimrc
     \|  endif
     autocmd BufRead *
     \   if expand('%') != '' && &buftype !~ 'nofile'
-    \|      silent loadview
+    \|      silent! loadview
     \|  endif
 augroup END
 " }}}

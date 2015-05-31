@@ -7,7 +7,7 @@ repo=~/workspace/new2email/
 
 full_star="★"
 void_star="☆"
-commits=$(cd $repo; git log --pretty=oneline --since="1 day"|wc -l)
+commits=$(cd $repo; git log --pretty=oneline --since="00:00" --all|wc -l)
 
 print_status() {
     char1=$1
@@ -28,7 +28,7 @@ print_status() {
 
 case $commits in
     0 )         # print sys load as a fallback
-        w | awk -F: 'NR==1 {print $NF}';;
+        w | awk -F: 'NR==1 {print $NF}' |xargs ;;
     [1-4] )
         print_status $void_star " " $commits;;
     [5..10] )

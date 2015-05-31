@@ -11,19 +11,7 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Color theme (uncomment one to use)
-#include /usr/share/doc/task/rc/light-16.theme
-#include /usr/share/doc/task/rc/light-256.theme
-#include /usr/share/doc/task/rc/dark-16.theme
-#include /usr/share/doc/task/rc/dark-256.theme
-#include /usr/share/doc/task/rc/dark-red-256.theme
-#include /usr/share/doc/task/rc/dark-green-256.theme
-#include /usr/share/doc/task/rc/dark-blue-256.theme
-#include /usr/share/doc/task/rc/dark-violets-256.theme
-#include /usr/share/doc/task/rc/dark-yellow-green.theme
-#include /usr/share/doc/task/rc/dark-gray-256.theme
-#include /usr/share/doc/task/rc/solarized-dark-256.theme
-include /usr/local/Cellar/task/2.3.0/share/doc/task/rc/solarized-dark-256.theme
-
+include /usr/local/Cellar/task/2.4.4/share/doc/task/rc/dark-gray-blue-256.theme
 
 # Files
 data.location=~/.task
@@ -32,7 +20,7 @@ alias.a=add
 
 color=on
 
-#default.due=tom
+# default.due=tom
 default.priority=M
 recurrence.limit=0
 
@@ -44,9 +32,9 @@ report.list.description=Lists all tasks matching the specified criteria
 report.list.columns=id,project,priority,due,recur,tags,description
 report.list.labels=ID,Project,Pri,Due,Recur,Tags,Description & Annotation
 report.list.sort=due+,priority-,project+
-report.ls.sort=due+,priority-,project+
 report.list.filter=status:pending
 report.list.dateformat=b.D
+alias.ls=list
 
 report.today.description=Lists all tasks matching the specified criteria
 report.today.columns=id,project,priority,due,tags,description

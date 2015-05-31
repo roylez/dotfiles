@@ -17,7 +17,7 @@
     des = describe --tags
     l   = log
     lc  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative
-    lg  = log --graph
+    la  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative --all
     m   = merge
     pl  = pull
     pu  = push

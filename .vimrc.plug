@@ -46,8 +46,8 @@ au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
 Plug 'bling/vim-airline' "{{{
-let g:airline#extensions#tabline#enabled=1
-let g:airline_theme='luna'
+" let g:airline#extensions#tabline#enabled=1
+let g:airline_theme='dark'
 " powerline fonts does not work well with Chinese fonts which I would put higher
 " priority
 let g:airline_powerline_fonts=1
@@ -113,6 +113,9 @@ Plug 'vim-coffee-script', {'for': 'coffee'}
 Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
+autocmd FileType ledger nnoremap j jzz
+autocmd FileType ledger nnoremap k kzz
+autocmd FileType ledger nnoremap G Gzz
 
 " Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
 "
@@ -123,6 +126,8 @@ Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
 Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
 autocmd FileType elixir setlocal nofoldenable
+
+Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
 Plug 'openssl.vim'
 
@@ -158,12 +163,12 @@ let g:unite_source_rec_max_cache_files = 5000
 " shows up, refresh unite cache in with <C-l> in any unite window
 let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
 
-nnoremap <leader>n :<C-u>Unite -quick-match -tab buffer<cr>
-nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
-nnoremap <leader>/ :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
-nnoremap <leader>o :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
-nnoremap <F3>      :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
-nnoremap <leader>r :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
+nnoremap <leader><space> :<C-u>Unite -quick-match buffer<cr>
+nnoremap <leader>f       :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
+nnoremap <leader>/       :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
+nnoremap <leader>o       :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
+nnoremap <F3>            :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
+nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
