@@ -198,9 +198,7 @@ pwd_color_preexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 #{{{functions to display git branch in prompt
 
 get_git_status() {
-    unset __CURRENT_GIT_BRANCH
-    unset __CURRENT_GIT_BRANCH_STATUS
-    unset __CURRENT_GIT_BRANCH_IS_DIRTY
+    unset -m '__CURRENT_GIT_BRANCH*'
 
     # do not track git branch info in ~
     [[ "$PWD" = "$HOME" ]]  &&  return
@@ -219,16 +217,18 @@ get_git_status() {
         fi
 
         if [[ $arr[2] =~ 'Your branch is' ]]; then
-            if [[ $arr[2] =~ 'ahead' ]]; then
-                __CURRENT_GIT_BRANCH_STATUS='ahead'
-            elif [[ $arr[2] =~ 'diverged' ]]; then
-                __CURRENT_GIT_BRANCH_STATUS='diverged'
-            else
-                __CURRENT_GIT_BRANCH_STATUS='behind'
-            fi
+            case $arr[2] in
+                *ahead*      ) __CURRENT_GIT_BRANCH_STATUS=ahead ;;
+                *diverged*   ) __CURRENT_GIT_BRANCH_STATUS=diverged ;;
+                *up-to-date* ) __CURRENT_GIT_BRANCH_STATUS=up-to-date ;;
+                *            ) __CURRENT_GIT_BRANCH_STATUS=behind ;;
+            esac
         fi
 
+        # has something new?
         [[ ! $st =~ "nothing to commit" ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
+        # has unstaged changes?
+        [[ $st =~ "not staged for commit" ]] && __CURRENT_GIT_BRANCH_HAS_UNSTAGED='1'
     fi
 }
 
@@ -245,7 +245,13 @@ get_prompt_git() {
             diverged) s+="${pfg_red}=" ;;
             behind) s+="${pfg_magenta}-" ;;
         esac
-        [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]] && s+="${pfg_blue}*"
+        if [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]]; then
+            if [[ $__CURRENT_GIT_BRANCH_HAS_UNSTAGED = '1' ]]; then
+                s+="${pfg_red}*"
+            else
+                s+="${pfg_green}*"
+            fi
+        fi
         echo " $pfg_black$pbg_white$pB $s $pR"
     fi
 }

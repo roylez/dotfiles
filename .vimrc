@@ -1,8 +1,8 @@
 " Description: vim runtime configure file
 " vim: ft=vim foldmethod=marker
 
-set nocompatible	" not vi compatible
-let mapleader=" "      " this is used a lot in plugin settings
+set nocompatible	    " not vi compatible
+let mapleader="\<Space>"    " this is used a lot in plugin settings
 
 if filereadable( $HOME . '/.vimrc.plug'  )
     source  $HOME/.vimrc.plug
@@ -161,6 +161,14 @@ nmap gf <C-W>gf
 " clear search highlight with F5
 nmap <F5>   :noh<cr><ESC>
 
+" use <leader>y/p to interact with clipboard
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
 "--------------------------file type settings---------------------------
 "Python
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -289,3 +297,15 @@ if &term =~ "xterm"
     "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
 endif
 " }}}
+
+" visual p does not replace paste buffer {{{ "
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+function! s:Repl()
+  let s:restore_reg = @"
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+vmap <silent> <expr> p <sid>Repl()
+" }}} visual p does not replace paste buffer "
