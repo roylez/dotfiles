@@ -22,8 +22,8 @@ set editor="vim -c 'norm O'"
 set text_flowed=yes
 
 #set smtp agent
-set sendmail="~/.mutt/filter_send"
-set sendmail_wait = 5
+set sendmail="~/.mutt/do_sendmail msmtp"
+set sendmail_wait = 10
 #set sendmail='msmtp -a uq'
 macro generic \Cx_ "<enter-command>set sendmail" "Internal macro from the MSMTP module"
 macro generic \Cx| "\Cx_ = \"/usr/bin/msmtp" "Internal macro from the MSMTP module"
