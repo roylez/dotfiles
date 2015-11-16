@@ -29,22 +29,34 @@ monthsperline=3
 calendar.holidays=full
 
 report.list.description=Lists all tasks matching the specified criteria
-report.list.columns=id,project,priority,due,recur,tags,description
-report.list.labels=ID,Project,Pri,Due,Recur,Tags,Description & Annotation
-report.list.sort=due+,priority-,project+
+report.list.columns=id,project,priority,due,depends,recur,tags,description
+report.list.labels=ID,Project,Pri,Due,Depends,Recur,Tags,Description & Annotation
+report.list.sort=urgency-
+# report.list.sort=due+,priority-,project+
 report.list.filter=status:pending
-report.list.dateformat=b.D
+report.list.dateformat=Y b.D H:M
 alias.ls=list
 
-report.today.description=Lists all tasks matching the specified criteria
-report.today.columns=id,project,priority,due,tags,description
-report.today.labels=ID,Proj,Pri,Due,Tags,Description & Annotation
-report.today.sort=due+,priority-,project+
-report.today.filter=status:pending '( scheduled.before:tomorrow or due.before:tom )'
-report.today.dateformat=b.D
-
-default.command=today
+default.command=due:today list
 
 calendar.holidays=full
 #include /home/roylez/.task/2013_holidays.rc
 #include /usr/share/doc/task/rc/holidays.en-US.rc
+
+urgency.next.coefficient=15.0                   # +next tag
+urgency.due.coefficient=12.0                    # overdue or near due date
+urgency.blocking.coefficient=8.0                # blocking other tasks
+urgency.priority.coefficient=6.0                # priority
+urgency.active.coefficient=4.0                  # already started tasks
+urgency.scheduled.coefficient=4.0               # scheduled tasks
+urgency.age.coefficient=0.0                     # Urgency coefficient for age
+urgency.annotations.coefficient=1.0             # has annotations
+urgency.tags.coefficient=1.0                    # has tags
+urgency.project.coefficient=1.0                 # assigned to any project
+urgency.blocked.coefficient=-50.0               # blocked by other tasks
+urgency.waiting.coefficient=-100.0                # waiting task
+urgency.user.tag.waiting.coefficient=-20.0       # specific project
+
+# urgency.user.project.<project>.coefficient=5.0  # specific project
+# urgency.user.tag.<tag>.coefficient=5.0          # specific tag
+# urgency.uda.<name>.coefficient=5.0              # specific UDA

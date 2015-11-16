@@ -592,6 +592,7 @@ alias -g T="|tail -n $(($LINES-2))"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
+alias -g YJ="| ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))'"
 
 #file types
 alias -s ps=gv

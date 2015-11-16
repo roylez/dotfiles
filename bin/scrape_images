@@ -5,25 +5,29 @@ require 'open-uri'
 require 'nokogiri'
 require 'parallel'
 
-MATCHERS = {
-  :imgevenue => lambda { |doc| doc.at_css("img#thepic").attr('src') },
-  :imgchili  => lambda { |doc| doc.at_css("img#show_image").attr('src') },
+MATCHER_CSS = {
+  :imgevenue => "img#thepic",
+  :imgchili  => "img#show_image",
+  :imgor     => "#container img[alt='image']",
 }
 
-def fetch_image(url, dir = '.')
+def get_img_url( url )
   host = URI.parse(url).host
   base_url = "http://" + host
-  matcher = MATCHERS.to_a.select{|k,_| host =~ /#{k}/i }.first.last
+  css = MATCHER_CSS.find{|k,_| host =~ /#{k}/i }.last
   io = open(url)
   type = io.content_type
-  if type == 'text/html'
-    page = io.read
-    doc = Nokogiri.parse(page)
-    img_url = matcher.call(doc)
-    url = URI.join(base_url, img_url)
-    io = open(url)
-  end
-  file_name = File.join(dir, url.to_s.split('/').last )
+  return nil unless type == 'text/html'
+  page = io.read
+  doc = Nokogiri.parse(page)
+  img_url = doc.at_css(css).attr('src')
+  URI.join(base_url, img_url)
+end
+
+def fetch_image(url, dir = '.')
+  return unless img_url = get_img_url(url)
+  io = open(img_url)
+  file_name = File.join(dir, img_url.to_s.split('/').last )
   file = io.read
   open(file_name, 'wb') {|f| f.puts file }
 end
@@ -31,17 +35,21 @@ end
 def get_all_images(url, dir)
   page = open(url).read
   doc = Nokogiri.parse(page)
-  img_urls = doc.xpath("//@href").map(&:value).grep(/venue|chili/)
+  img_urls = doc.xpath("//@href").map(&:value).grep(/venue|chili|imgor/)
   Dir.mkdir(dir)  unless File.directory?(dir)
+  img_urls.first(3).each{|u| puts u }
+  print "确认下载？Ctl-C取消"
+  STDIN.gets
   Parallel.map(img_urls, :in_threads => 3) do |img_url|
     puts "Getting \e[32m#{img_url}\e[m"
-    fetch_image(img_url, dir) rescue puts "Error retrieving \e[31;1m#{img_url}\e[m"
+    fetch_image(img_url, dir) # rescue puts "Error retrieving \e[31;1m#{img_url}\e[m"
   end
 end
 
 if __FILE__==$0
-  dir, target = ARGV
+  target, dir = ARGV
+  dir = '.' unless dir
   abort "usage: #{$0} dir url"  unless dir and target
-  target = "http://girlsreleased.com/?setid=#{target}" if target =~ /\d+/  # girlsreleased.com sets
+  target = "http://girlsreleased.com/?setid=#{target}" if target =~ /^\d+$/  # girlsreleased.com sets
   get_all_images(target, dir)
 end

@@ -233,9 +233,6 @@ autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 autocmd BufNewFile,BufRead /tmp/pentadactyl*.tmp set textwidth=9999
 autocmd BufNewFile,BufRead *.vimperatorrc set ft=vimperator
 
-"bbcode
-autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
-
 "remind
 autocmd BufNewFile,BufRead *.rem set ft=remind
 

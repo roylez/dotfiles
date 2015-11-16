@@ -14,7 +14,7 @@ set nextpattern=\s*下一页|下一张|下一篇|下页|后页\s*,^\\bnext\\b,\\
 set previouspattern=\s*上一页|上一张|上一篇|上页|前页\s*,^\\bprev|previous\\b,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$
 set titlestring=Firefox
 set novb
-set defsearch=gg
+set defsearch=g
 set showstatuslinks=2
 " Make Firefox run faster by using JIT
 set! javascript.options.jit.chrome=true
@@ -32,8 +32,8 @@ set hintchars="hjklasdfgyuiopqwertnmzxcvb"
 
 loadplugins
 "set flashblock
-set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com,acfun.tv
-nmap \w \fbwhitelist
+" set fbw=youtube.com,hfest.net,youku.com,google.com,bloomberg.com,adobe.com,github.com,ku6.com,rescuetime.com,acfun.tv
+" nmap \w \fbwhitelist
 
 " http://seesaawiki.jp/w/shin_yan/d/liberator
 javascript <<EOJS
