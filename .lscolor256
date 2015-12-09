@@ -132,6 +132,7 @@ MULTIHARDLINK 04
 .img 01;38;05;100
 .gho 01;38;05;100
 .yml 01;38;05;100
+.yaml 01;38;05;100
 .bib 01;38;05;100
 
 # image formats

@@ -28,7 +28,7 @@ print_status() {
 
 case $commits in
     0 )         # print sys load as a fallback
-        w | awk -F: 'NR==1 {print $NF}' |xargs ;;
+        w | awk -F: 'NR==1 {print $NF}' |tr -d , |xargs ;;
     [1-4] )
         print_status $void_star " " $commits;;
     [5..10] )
