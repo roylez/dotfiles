@@ -1,5 +1,5 @@
-keycode 234 = XF86Back
-keycode 233 = XF86Forward
+! keycode 234 = XF86Back
+! keycode 233 = XF86Forward
 !keycode 66 = Super_L
 clear lock
 remove lock = Caps_Lock
@@ -10,4 +10,8 @@ keycode 66 = Super_R
 !keycode 113 = Alt_R
 !add mod4 = Super_L
 
-pointer = 3 2 1
+! F9 for insert
+keycode 75 = Insert
+
+! pointer = 3 2 1
+pointer = 1 2 3

@@ -60,8 +60,10 @@ def format_screen_detail(detail)
   format_status_record(data.last, "\e[33;1m")
 end
 
-def format_detail(detail, output)
+def format_detail(output, detail)
   send("format_#{output}_detail", detail)
+rescue
+  puts detail[:message]
 end
 
 def decode_company(code)
@@ -135,7 +137,7 @@ if __FILE__==$0
     detail[:data] = detail[:data][0..0]
   end
 
-  puts format_detail(detail, options[:output])
+  puts format_detail(options[:output], detail)
 
   if options[:output] == :alfred
     # record query list

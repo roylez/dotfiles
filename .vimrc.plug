@@ -192,6 +192,8 @@ Plug 'othree/html5.vim'
 
 Plug 'tpope/vim-haml'
 
+Plug 'openssl.vim'
+
 "===================Plug loading ends==========================================
 call plug#end()
 
