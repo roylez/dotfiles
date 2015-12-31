@@ -306,3 +306,8 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 " }}} visual p does not replace paste buffer "
+
+" Highlight keywords like TODO BUG HACK INFO and etc {{{ "
+autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
+autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
+" }}} Highlight keywords like TODO BUG HACK INFO and etc "

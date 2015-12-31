@@ -2,3 +2,5 @@
 .irssi
 .lftp
 .tags
+.gitignore
+*

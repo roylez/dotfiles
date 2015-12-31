@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#Author: Roy L Zuo (roylzuo at gmail dot com)
-#Description:
+#Description: 通过kuaidi100查询快递
 
 require 'open-uri'
 require 'json'
@@ -9,41 +8,66 @@ require 'json'
 COMPANY_FILE = 'company.json'
 SAVE_FILE = 'query.json'
 
-$company_list = []
-if File.file? COMPANY_FILE
-  $company_list = JSON.parse( open(COMPANY_FILE).read.force_encoding('UTF-8'), :symbolize_names => true )
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:41.0) Gecko/20100101 Firefox/41.0'
+
+# opens a url or a file and convert result to json
+def json_open( io_or_uri )
+  if io_or_uri.is_a? String
+    opts = io_or_uri =~ /^http/ ? { "User-Agent" => USER_AGENT, "Referer" => "http://www.kuaidi100.com" } : { }
+    io = open( io_or_uri, opts)
+  else
+    io = io_or_uri
+  end
+  JSON.parse( io.read.force_encoding('utf-8'), :symbolize_names => true)
 end
 
-def record_query(save_file, detail)
+$company_list = [ ]
+if File.file? COMPANY_FILE
+  $company_list = json_open COMPANY_FILE
+elsif defined? DATA
+  $company_list = json_open DATA
+end
+
+def record_query(save_file, package, detail)
   begin
-    saves = JSON.parse(open(save_file).read.force_encoding('UTF-8'), :symbolize_names => true)
+    saves = json_open save_file
   rescue
     saves = {}
   end
-  saves[detail[:nu]] = {
+  saves[package] = {
     :company => decode_company(detail[:com]),
     :code => detail[:com],
     :last_query => Time.now.to_s,
-    :status  => detail[:data][0]
+    :status  => detail[:data] ? detail[:data][0] : nil
   }
   # delete older then 30 day records
-  one_month = 30*24*3600
-  saves = saves.delete_if {|_,v| Time.now - Time.parse(v[:last_query]) > one_month }
+  day = 24*3600
+  saves = saves.delete_if {|_,v|
+    query_time_delta = Time.now - Time.parse(v[:last_query])
+    query_time_delta > 30*day or ( query_time_delta > 3*day and not v[:status] )
+  }
+  # delete partial tracking numbers
+  numbers = saves.keys
+  partial_keys = numbers.select{|k| numbers.any?{|i| i.to_s != k.to_s and i.to_s.include? k.to_s } }
+  partial_keys.each{|k| saves.delete(k) }
+  # delete the ones that completes to "clean"
+  saves.delete_if{|k, v| "clean".include? k.to_s }
 
   open(save_file, 'w') {|f| f.puts saves.to_json}
 end
 
 def company_code(package_no)
   url = 'http://www.kuaidi100.com/autonumber/auto?num=' + package_no
-  res = JSON.parse open(url).read
-  rec = res.sort_by{|i| i['noCount'] }.last
-  rec['comCode']
+  res = json_open( url )
+  res = res.sort_by{|i| i[:noCount] }
+  res.empty? ? nil : res.last[:comCode]
 end
 
 def kuaidi_status(package_no, com_code = nil)
-  company_code ||= company_code(package_no)
-  detail_url     = "http://www.kuaidi100.com/query?type=#{company_code}&postid=#{package_no}&id=1&valicode=&temp=0.08001715072286408"
-  JSON.parse( open(detail_url).read, :symbolize_names => true )
+  com_code ||= company_code(package_no)
+  return  nil   unless com_code
+  detail_url     = "http://www.kuaidi100.com/query?type=#{com_code}&postid=#{package_no}&id=1&valicode=&temp=0.08001715072286408"
+  json_open detail_url
 end
 
 def format_status_record(record, color = "\e[37m")
@@ -54,62 +78,33 @@ def format_status_record(record, color = "\e[37m")
 end
 
 def format_screen_detail(detail)
-  puts "\e[32;1m" + detail[:com] + "\t\e[31;1m" + ARGV.first + "\e[m\n"
+  p detail if $DEBUG
+  if detail[:message] != 'ok'
+    puts detail[:message]
+    return
+  end
+  res = ''
+  res <<  "\e[32;1m" + "%15s" % [decode_company(detail[:com])] + "   \e[31;1m" + ARGV.first + "\e[m\n"
   data = detail[:data].reverse
-  data[0..-2].each {|i| puts format_status_record(i) }
-  format_status_record(data.last, "\e[33;1m")
+  data[0..-2].each {|i| res << format_status_record(i) + "\n" }
+  res << format_status_record(data.last, "\e[33;1m")
+  res
 end
 
-def format_detail(output, detail)
+def format_detail(detail, output)
   send("format_#{output}_detail", detail)
-rescue
-  puts detail[:message]
 end
 
 def decode_company(code)
   if com = $company_list.find{|i| i[:code] == code }
-    com[:companyname]
-  else
-    code
+    return com[:companyname]
   end
+  code
 end
 
-def format_alfred_detail(detail)
-  require 'rexml/document'
-  include REXML
-  root = Element.new('items')
-
-  # heading item
-  item = Element.new('item')
-  item.add_attribute('arg', detail[:data].collect{|r| format_status_record(r,nil)}.join(";") )
-  title = Element.new('title')
-  company = decode_company( detail[:com])
-  title.text = company + '    ' + detail[:nu]
-  icon = Element.new('icon')
-  subtitle = Element.new('subtitle')
-  subtitle.text = '按 Enter 将快递状态复制到剪切板'
-  icon.text = 'package-x-generic.png'
-  [title, icon, subtitle].each {|i| item << i }
-  root << item
-
-  # detail tracking status
-  total = detail[:data].size
-  detail[:data].each.with_index do |record, ind|
-    item = Element.new('item')
-    item.add_attribute('valid', 'no')
-    title = Element.new('title')
-    title.text = "[%02d]" %[ total - ind ] + ' ' + record[:context].gsub(/\s+/, ' ')
-    subtitle = Element.new('subtitle')
-    subtitle.text = record[:time]
-    icon = Element.new('icon')
-    icon.text = 'go-up.png'
-    if title.text =~ /签收/
-      icon.text = 'pass.png'
-    end
-    [title, icon, subtitle].each {|i| item << i }
-    root << item
-  end
-  root.to_s
+def saved_pacakge_detail(package, attr)
+  $saves ||= File.file?(SAVE_FILE) ? json_open(SAVE_FILE) : {}
+  $saves[package] ? $saves[package][attr.to_s] : nil
 end
 
 if __FILE__==$0
@@ -117,30 +112,211 @@ if __FILE__==$0
 
   options = {}
   OptionParser.new do |opts|
-    opts.banner = "Usage: #{$0} [options] [STRING]"
-    opts.on('-s','--short','Show only last status') { options[:short] = true }
+    opts.banner = "用法: #{$0} [options] <STRING>"
+    opts.on('-s','--short','只显示最后结果') { options[:short] = true }
     options[:output] = :screen
-    opts.on('-f','--format OUT','How the results should be output :screen or :alfred XML') {|o|
-      options[:output] = o.to_sym
-    }
   end.parse!
 
-  package, com_code = ARGV.first.split(':')
-  begin
-    detail = kuaidi_status(package, com_code)
-  rescue
-    puts "没找到有关快递单 #{package} 的信息"
-    exit
-  end
+  abort "请输入快递号： #{$0} <快递单号>"  if  ARGV.empty?
+
+  package = ARGV.first
+
+  detail = kuaidi_status(package, saved_pacakge_detail(package, :code))
+
+  detail ||= {:status => 'error', :message => "没找到有关快递单 #{package} 的信息"}
 
   if options[:short]
     detail[:data] = detail[:data][0..0]
   end
 
-  puts format_detail(options[:output], detail)
-
-  if options[:output] == :alfred
-    # record query list
-    record_query(SAVE_FILE, detail)
-  end
+  puts format_detail(detail, options[:output])
 end
+
+
+__END__
+[
+{"companyname":"申通快递","code":"shentong"}
+{"companyname":"EMS","code":"ems"}
+{"companyname":"顺丰速运","code":"shunfeng"}
+{"companyname":"韵达快递","code":"yunda"}
+{"companyname":"圆通速递","code":"yuantong"}
+{"companyname":"中通速递","code":"zhongtong"}
+{"companyname":"汇通快运","code":"huitongkuaidi"}
+{"companyname":"天天快递","code":"tiantian"}
+{"companyname":"宅急送","code":"zhaijisong"}
+{"companyname":"鑫飞鸿","code":"xinhongyukuaidi"}
+{"companyname":"CCES(国通快递)","code":"cces"}
+{"companyname":"全一快递","code":"quanyikuaidi"}
+{"companyname":"彪记快递","code":"biaojikuaidi"}
+{"companyname":"星晨急便","code":"xingchengjibian"}
+{"companyname":"亚风速递","code":"yafengsudi"}
+{"companyname":"源伟丰","code":"yuanweifeng"}
+{"companyname":"全日通","code":"quanritongkuaidi"}
+{"companyname":"安信达","code":"anxindakuaixi"}
+{"companyname":"民航快递","code":"minghangkuaidi"}
+{"companyname":"凤凰快递","code":"fenghuangkuaidi"}
+{"companyname":"京广速递","code":"jinguangsudikuaijian"}
+{"companyname":"配思货运","code":"peisihuoyunkuaidi"}
+{"companyname":"中铁物流","code":"ztky"}
+{"companyname":"UPS","code":"ups"}
+{"companyname":"FedEx-国际件","code":"fedex"}
+{"companyname":"TNT","code":"tnt"}
+{"companyname":"DHL-中国件","code":"dhl"}
+{"companyname":"AAE-中国件","code":"aae"}
+{"companyname":"大田物流","code":"datianwuliu"}
+{"companyname":"德邦物流","code":"debangwuliu"}
+{"companyname":"新邦物流","code":"xinbangwuliu"}
+{"companyname":"龙邦速递","code":"longbanwuliu"}
+{"companyname":"一邦速递","code":"yibangwuliu"}
+{"companyname":"速尔快递","code":"suer"}
+{"companyname":"联昊通","code":"lianhaowuliu"}
+{"companyname":"广东邮政","code":"guangdongyouzhengwuliu"}
+{"companyname":"中邮物流","code":"zhongyouwuliu"}
+{"companyname":"天地华宇","code":"tiandihuayu"}
+{"companyname":"盛辉物流","code":"shenghuiwuliu"}
+{"companyname":"长宇物流","code":"changyuwuliu"}
+{"companyname":"飞康达","code":"feikangda"}
+{"companyname":"元智捷诚","code":"yuanzhijiecheng"}
+{"companyname":"包裹/平邮","code":"youzhengguonei"}
+{"companyname":"国际包裹","code":"youzhengguoji"}
+{"companyname":"万家物流","code":"wanjiawuliu"}
+{"companyname":"远成物流","code":"yuanchengwuliu"}
+{"companyname":"信丰物流","code":"xinfengwuliu"}
+{"companyname":"文捷航空","code":"wenjiesudi"}
+{"companyname":"全晨快递","code":"quanchenkuaidi"}
+{"companyname":"佳怡物流","code":"jiayiwuliu"}
+{"companyname":"优速物流","code":"youshuwuliu"}
+{"companyname":"快捷速递","code":"kuaijiesudi"}
+{"companyname":"D速快递","code":"dsukuaidi"}
+{"companyname":"全际通","code":"quanjitong"}
+{"companyname":"能达速递","code":"ganzhongnengda"}
+{"companyname":"青岛安捷快递","code":"anjiekuaidi"}
+{"companyname":"越丰物流","code":"yuefengwuliu"}
+{"companyname":"DPEX","code":"dpex"}
+{"companyname":"急先达","code":"jixianda"}
+{"companyname":"百福东方","code":"baifudongfang"}
+{"companyname":"BHT","code":"bht"}
+{"companyname":"伍圆速递","code":"wuyuansudi"}
+{"companyname":"蓝镖快递","code":"lanbiaokuaidi"}
+{"companyname":"COE","code":"coe"}
+{"companyname":"南京100","code":"nanjing"}
+{"companyname":"恒路物流","code":"hengluwuliu"}
+{"companyname":"金大物流","code":"jindawuliu"}
+{"companyname":"华夏龙","code":"huaxialongwuliu"}
+{"companyname":"运通中港","code":"yuntongkuaidi"}
+{"companyname":"佳吉快运","code":"jiajiwuliu"}
+{"companyname":"盛丰物流","code":"shengfengwuliu"}
+{"companyname":"源安达","code":"yuananda"}
+{"companyname":"加运美","code":"jiayunmeiwuliu"}
+{"companyname":"万象物流","code":"wanxiangwuliu"}
+{"companyname":"宏品物流","code":"hongpinwuliu"}
+{"companyname":"GLS","code":"gls"}
+{"companyname":"上大物流","code":"shangda"}
+{"companyname":"中铁快运","code":"zhongtiewuliu"}
+{"companyname":"原飞航","code":"yuanfeihangwuliu"}
+{"companyname":"海外环球","code":"haiwaihuanqiu"}
+{"companyname":"三态速递","code":"santaisudi"}
+{"companyname":"晋越快递","code":"jinyuekuaidi"}
+{"companyname":"联邦快递","code":"lianbangkuaidi"}
+{"companyname":"飞快达","code":"feikuaida"}
+{"companyname":"全峰快递","code":"quanfengkuaidi"}
+{"companyname":"如风达","code":"rufengda"}
+{"companyname":"乐捷递","code":"lejiedi"}
+{"companyname":"忠信达","code":"zhongxinda"}
+{"companyname":"芝麻开门","code":"zhimakaimen"}
+{"companyname":"赛澳递","code":"saiaodi"}
+{"companyname":"海红网送","code":"haihongwangsong"}
+{"companyname":"共速达","code":"gongsuda"}
+{"companyname":"嘉里大通","code":"jialidatong"}
+{"companyname":"OCS","code":"ocs"}
+{"companyname":"USPS","code":"usps"}
+{"companyname":"美国快递","code":"meiguokuaidi"}
+{"companyname":"立即送","code":"lijisong"}
+{"companyname":"银捷速递","code":"yinjiesudi"}
+{"companyname":"门对门","code":"menduimen"}
+{"companyname":"递四方","code":"disifang"}
+{"companyname":"郑州建华","code":"zhengzhoujianhua"}
+{"companyname":"河北建华","code":"hebeijianhua"}
+{"companyname":"微特派","code":"weitepai"}
+{"companyname":"DHL-德国件","code":"dhlde"}
+{"companyname":"通和天下","code":"tonghetianxia"}
+{"companyname":"EMS-国际件","code":"emsguoji"}
+{"companyname":"FedEx-美国件","code":"fedexus"}
+{"companyname":"风行天下","code":"fengxingtianxia"}
+{"companyname":"康力物流","code":"kangliwuliu"}
+{"companyname":"跨越速递","code":"kuayue"}
+{"companyname":"海盟速递","code":"haimengsudi"}
+{"companyname":"圣安物流","code":"shenganwuliu"}
+{"companyname":"一统飞鸿","code":"yitongfeihong"}
+{"companyname":"中速快递","code":"zhongsukuaidi"}
+{"companyname":"新蛋奥硕","code":"neweggozzo"}
+{"companyname":"OnTrac","code":"ontrac"}
+{"companyname":"七天连锁","code":"sevendays"}
+{"companyname":"明亮物流","code":"mingliangwuliu"}
+{"companyname":"凡客配送","code":"vancl"}
+{"companyname":"华企快运","code":"huaqikuaiyun"}
+{"companyname":"城市100","code":"city100"}
+{"companyname":"红马甲物流","code":"sxhongmajia"}
+{"companyname":"穗佳物流","code":"suijiawuliu"}
+{"companyname":"飞豹快递","code":"feibaokuaidi"}
+{"companyname":"传喜物流","code":"chuanxiwuliu"}
+{"companyname":"捷特快递","code":"jietekuaidi"}
+{"companyname":"隆浪快递","code":"longlangkuaidi"}
+{"companyname":"EMS-英文","code":"emsen"}
+{"companyname":"中天万运","code":"zhongtianwanyun"}
+{"companyname":"香港邮政","code":"hkpost"}
+{"companyname":"邦送物流","code":"bangsongwuliu"}
+{"companyname":"国通快递","code":"guotongkuaidi"}
+{"companyname":"澳大利亚邮政","code":"auspost"}
+{"companyname":"加拿大邮政-英文版","code":"canpost"}
+{"companyname":"加拿大邮政-法文版","code":"canpostfr"}
+{"companyname":"UPS-全球件","code":"upsen"}
+{"companyname":"TNT-全球件","code":"tnten"}
+{"companyname":"DHL-全球件","code":"dhlen"}
+{"companyname":"顺丰-美国件","code":"shunfengen"}
+{"companyname":"汇强快递","code":"huiqiangkuaidi"}
+{"companyname":"希优特","code":"xiyoutekuaidi"}
+{"companyname":"昊盛物流","code":"haoshengwuliu"}
+{"companyname":"尚橙物流","code":"shangcheng"}
+{"companyname":"亿领速运","code":"yilingsuyun"}
+{"companyname":"大洋物流","code":"dayangwuliu"}
+{"companyname":"递达速运","code":"didasuyun"}
+{"companyname":"易通达","code":"yitongda"}
+{"companyname":"邮必佳","code":"youbijia"}
+{"companyname":"亿顺航","code":"yishunhang"}
+{"companyname":"飞狐快递","code":"feihukuaidi"}
+{"companyname":"潇湘晨报","code":"xiaoxiangchenbao"}
+{"companyname":"巴伦支","code":"balunzhi"}
+{"companyname":"Aramex","code":"aramex"}
+{"companyname":"闽盛快递","code":"minshengkuaidi"}
+{"companyname":"佳惠尔","code":"syjiahuier"}
+{"companyname":"民邦速递","code":"minbangsudi"}
+{"companyname":"上海快通","code":"shanghaikuaitong"}
+{"companyname":"北青小红帽","code":"xiaohongmao"}
+{"companyname":"GSM","code":"gsm"}
+{"companyname":"安能物流","code":"annengwuliu"}
+{"companyname":"KCS","code":"kcs"}
+{"companyname":"City-Link","code":"citylink"}
+{"companyname":"店通快递","code":"diantongkuaidi"}
+{"companyname":"凡宇快递","code":"fanyukuaidi"}
+{"companyname":"平安达腾飞","code":"pingandatengfei"}
+{"companyname":"广东通路","code":"guangdongtonglu"}
+{"companyname":"中睿速递","code":"zhongruisudi"}
+{"companyname":"快达物流","code":"kuaidawuliu"}
+{"companyname":"佳吉快递","code":"jiajikuaidi"}
+{"companyname":"ADP国际快递","code":"adp"}
+{"companyname":"颿达国际快递","code":"fardarww"}
+{"companyname":"颿达国际快递(英文)","code":"fandaguoji"}
+{"companyname":"林道国际快递","code":"shlindao"}
+{"companyname":"中外运速递(中文)","code":"sinoex"}
+{"companyname":"中外运速递","code":"zhongwaiyun"}
+{"companyname":"深圳德创物流","code":"dechuangwuliu"}
+{"companyname":"林道国际快递(英文)","code":"ldxpres"}
+{"companyname":"瑞典邮政包裹小包","code":"ruidianyouzheng"}
+{"companyname":"Posten AB","code":"postenab"}
+{"companyname":"偌亚奥国际快递","code":"nuoyaao"}
+{"companyname":"城际速递","code":"chengjisudi"}
+{"companyname":"祥龙运通物流","code":"xianglongyuntong"}
+{"companyname":"品速心达快递","code":"pinsuxinda"}
+{"companyname":"宇鑫物流","code":"yuxinwuliu"}
+]

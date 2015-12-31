@@ -40,6 +40,7 @@ alias.ls=list
 default.command=due:today list
 
 calendar.holidays=full
+include ~/.task/holidays.en-AU.rc
 #include /home/roylez/.task/2013_holidays.rc
 #include /usr/share/doc/task/rc/holidays.en-US.rc
 
