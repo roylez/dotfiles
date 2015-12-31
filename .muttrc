@@ -12,41 +12,34 @@ ignore *
 unignore From Subject Lines
 hdr_order From Subject Lines
 
-set index_format="%[%b-%d] %?X?%X& ? %-18.18L [%4c] %s"
-set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]----%>-(%P)---"
+set index_format="%[%b-%d] %?X?%2X&  ? %-18.18L [%4c] %s"
+set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="
 set status_on_top
 
-#set editor="vim +':set spell' +\`awk '/^$/ {print i+2; exit} {i++}' %s\` %s"
-#set editor="vim"
 set editor="vim -c 'norm O'"
 set text_flowed=yes
 
-#set smtp agent
-set sendmail="~/.mutt/do_sendmail msmtp"
 set sendmail_wait = 10
-#set sendmail='msmtp -a uq'
-macro generic \Cx_ "<enter-command>set sendmail" "Internal macro from the MSMTP module"
-macro generic \Cx| "\Cx_ = \"/usr/bin/msmtp" "Internal macro from the MSMTP module"
-macro generic \Cx& "<enter-command>macro compose \\t \"\\Cx" "Internal macro from the MSMTP module"
-macro compose <tab> "\Cx1" "Change the current MSMTP account"
-macro compose = "\Cx_\n" "Show the current MSMTP account"
-macro generic \Cx0 "\Cx| -a ibm\"\n\Cx&1\" \"Change the current MSMTP account\"\n\Cx_\n" "Switch to account n° 0 for MSMTP"
-macro generic \Cx1 "\Cx| -a sina\"\n\Cx&2\" \"Change the current MSMTP account\"\n\Cx_\n" "Switch to account n° 1 for MSMTP"
-macro generic \Cx2 "\Cx| -a gmail\"\n\Cx&3\" \"Change the current MSMTP account\"\n\Cx_\n" "Switch to account n° 2 for MSMTP"
-macro generic \Cx3 "\Cx| -a default: gmail\"\n\Cx&0\" \"Change the current MSMTP account\"\n\Cx_\n" "Switch to default account for MSMTP"
-
-#set print_command="enscript -Email -2 -r -G"
 set print_command="enscript -v -Email -G --word-wrap -f Palatino-Roman@11"
 
 # Use Maildir instead of mbox
 set mbox_type=Maildir
-set folder="~/.mail"
 set mask="!^\\.[^.]"
-set mbox="+inbox"
-set record="+inbox"
-#set postponed="+drafts"
-set postponed="+inbox"
-set spoolfile="~/.mail/inbox"
+
+# make c contextual according to archlinux wiki
+macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
+
+source ~/.mutt/account.canonical
+macro index <f2> '<enter-command>source ~/.mutt/account.default<enter><change-folder>!<enter>'
+macro index <f3> '<enter-command>source ~/.mutt/account.canonical<enter><change-folder>!<enter>'
+
+# use tab to switch between accounts, inspired by
+#  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
+macro generic \Cx| "<enter-command>source"
+macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
+macro index <tab> "\Cx1"    # default change to account 1, this will be redefined once pressed
+macro generic \Cx0 "\Cx| ~/.mutt/account.default\"\n\Cx&1\"<enter><change-folder>!<enter>"
+macro generic \Cx1 "\Cx| ~/.mutt/account.canonical\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
 # Use as from the address mail was sent to
 # You'd have to define $alternates for this
@@ -72,6 +65,8 @@ alternative_order text/*
 # auto view settings
 auto_view text/html application/pdf application/msword text/enriched text/rtf
 set mailcap_path=~/.mutt/mailcap_`uname -s|tr '[:upper:]' '[:lower:]'`
+# this may fix some long url problems in html emails
+set pipe_decode=yes
 
 
 # 回信时是否包含原文。
@@ -110,11 +105,6 @@ set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 # important?
 #set quote_regexp="^( {0,4}-?[>|:}]| {0,4}[a-z0-9]+[>}|]+)+"
 
-# 设置你自己的邮件头。
-#my_hdr From: Zuo Le<lzuo@graduate.hku.hk>
-#set hdrs
-#my_hdr Reply-To: Zuo Le<lzuo@hkusua.hku.hk>
-set from='Roy Zuo <roylzuo@gmail.com>'
 #set different from information when replying according to accounts
 set use_from
 set envelope_from=yes       #add -f <from> to sendmail command line
@@ -173,12 +163,13 @@ set pager_index_lines=4
 # 如果翻到最后，再按往下翻也不会翻到下一封信件
 set pager_stop
 #set pager=vim
-# 保留列表头
+# caching
 set header_cache=~/.mutt-headercache
 set maildir_header_cache_verify=no
+set message_cachedir=~/.mutt/cache
 
 #headers:
-my_hdr X-PGP-Key-ID:3038867F
+# my_hdr X-PGP-Key-ID:3038867F
 #backup everything sent to gmail's sent box
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
@@ -307,13 +298,8 @@ set pgp_auto_decode=yes
 # cannot be used with set signature=..., which overwrites the hook
 # setting.
 #send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
-send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
+# send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
 #send-hook "%C lst" "set from='Roy Zuo <roylzuo@gmail.com>'"
-#send-hook "~t ^.*edu\.au" "set from='Roy Zuo <z.le@uq.edu.au>';set signature=~/.mutt.sign"
-send-hook "~t ^.*ibm\.com" "set from='Le Zuo <zuole@cn.ibm.com>';set signature=~/.mutt.sign"
-#send-hook moleculardynamics@lists.uq.edu.au "set from='Roy Zuo <roylzuo@gmail.com>;set signature=~/.mutt.sign'"
-#send-hook "~C jennifer@rylance.com.au" "set from='Roy Zuo <roylzuo@gmail.com>';set signature="
-#send2-hook "!(~f z.le@uq.edu.au)" "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 
 # ---------------------color theme-----------------------------------
 #source `[[ "$TERM" == xterm-256color ]] && echo $HOME/.mutt.color256 || echo $HOME/.mutt.color8`

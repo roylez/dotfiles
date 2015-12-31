@@ -1,0 +1,15 @@
+# vim: ft=muttrc
+set folder    = "~/.canonical"
+set mbox      = "+inbox"
+set record    = "+sent"
+#set postponed="+drafts"
+set postponed = "+inbox"
+set spoolfile = "~/.canonical/inbox"
+set from      = 'Roy Zuo <roy.zuo@canonical.com>'
+
+set sendmail  = "~/.mutt/do_sendmail msmtp -a canonical"
+
+set signature = ~/.mutt/canonical_sign
+
+macro index,pager d "<save-message>=trash<enter>" "Trash"
+macro index,pager y "<save-message>=all<enter>" "Archive"
