@@ -9,8 +9,8 @@
 #
 
 ignore *
-unignore From Subject Lines
-hdr_order From Subject Lines
+unignore from subject reply-to list-id user-agent x-mailer lines
+hdr_order from subject reply-to list-id user-agent x-mailer lines
 
 set index_format="%[%b-%d] %?X?%2X&  ? %-18.18L [%4c] %s"
 set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="
@@ -37,7 +37,7 @@ macro index <f3> '<enter-command>source ~/.mutt/account.canonical<enter><change-
 #  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
 macro generic \Cx| "<enter-command>source"
 macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
-macro index <tab> "\Cx1"    # default change to account 1, this will be redefined once pressed
+macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
 macro generic \Cx0 "\Cx| ~/.mutt/account.default\"\n\Cx&1\"<enter><change-folder>!<enter>"
 macro generic \Cx1 "\Cx| ~/.mutt/account.canonical\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
@@ -203,7 +203,7 @@ bind    index   gg      first-entry
 bind    index   G       last-entry
 bind    index   \cf     next-page
 bind    index   \cb     previous-page
-bind    index   ,g      group-reply
+bind    index,pager   ,g      group-reply
 bind    pager   j       next-line
 bind    pager   k       previous-line
 bind    pager   <Up>    previous-line
