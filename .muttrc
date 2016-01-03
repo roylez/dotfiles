@@ -174,8 +174,8 @@ set message_cachedir=~/.mutt/cache
 #my_hdr Bcc: roylzuo+sent@gmail.com
 
 #address book related
-set query_format = "%4c %t %-25.25a %-25.25n %?e?(%e)?"
-#set query_format = `~/.mutt/query_format`
+set query_format = "%4c %t %-30.30n %-51.51a %?e?(%e)?"
+# set query_format = `~/.mutt/query_format`
 set query_command = "~/.mutt/contact_query"     #;~/bin/mutt_ldap_query.py '%s'"
 # abook stuff
 #macro generic,index,pager A "<shell-escape>abook<return>"
