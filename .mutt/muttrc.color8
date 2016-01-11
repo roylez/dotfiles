@@ -1,12 +1,12 @@
 # vim: ft=muttrc
 
 color normal    white default
-color attachment magenta default
+color attachment brightblack default
 color hdrdefault cyan default
 color indicator brightblack white
 color markers   blue default
 color signature cyan default
-color status    brightcyan black
+color status    brightgreen black
 color tilde     blue default
 color tree      red default
 color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
@@ -15,7 +15,7 @@ color body red default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # email
 color body yellow default "(http|ftp)://[\-\.\,/+=&%~_:?\#a-zA-Z0-9]+" # URL
 color body green default "(^| |[-.[:alnum:]]+:+)~?\(/[-_.'[:alnum:]]+\)+/?" # Unix file path
 color body green default "(^| +)[[:alpha:]]:[-_.[:alnum:]\]+" # DOS file path
-color body magenta default "(^|[ '\"]+)\\$[[:alpha:]][-_[:alpha:]]+" # variable
+color body brightblack default "(^|[ '\"]+)\\$[[:alpha:]][-_[:alpha:]]+" # variable
 color body brightred default "(^| )[*_]+[-&[:alnum:]]+[*_]( |$)" # bold/underline
 color body red default "[!?]{3,}" # exclamation
 color body green default "^ *[-+*o] +" # list item
@@ -27,10 +27,9 @@ color body cyan default "((Sun(day)?|Mon(day)?|Tue(sday)?|Wed(nesday)?|Thu(sday)
 color quoted  green default
 color quoted1 yellow default
 color quoted2 red default
-color hdrdefault cyan default
 #color header   brightred blue ^Subject:
 #color header   brightgreen blue ^(From|To|Cc|Subject|X-Bogosity):
-color header  brightblack cyan  .*
+color header  black blue  .*
 color header  black magenta ^(From|To|Cc|Subject|X-Bogosity):
 color signature cyan default
 
@@ -39,5 +38,5 @@ color index blue default ~P                # From me
 color index brightyellow default ~N          # New
 color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
-color index magenta default ~D              # Deleted
+color index brightblack default ~D              # Deleted
 color index black cyan ~F               # flaged

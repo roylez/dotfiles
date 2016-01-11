@@ -9,8 +9,8 @@
 #
 
 ignore *
-unignore from subject reply-to list-id user-agent x-mailer lines
-hdr_order from subject reply-to list-id user-agent x-mailer lines
+unignore from subject reply-to to cc list-id user-agent x-mailer lines
+hdr_order from subject reply-to to cc list-id user-agent x-mailer lines
 
 set index_format="%[%b-%d] %?X?%2X&  ? %-18.18L [%4c] %s"
 set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="

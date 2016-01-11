@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+#
+# Description: grab pronounciation from dictionary.com
+#
+
+require 'open-uri'
+require 'nokogiri'
+
+def pronounciation_url(word)
+  url = "http://dictionary.reference.com/browse/#{word}"
+
+  doc = Nokogiri.parse open(url)
+  doc.at_css(".header-row .speaker").attr('href')
+rescue
+  nil
+end
+
+if __FILE__ == $0
+  require 'mkmf'
+  mplayer = find_executable0('mpv') || find_executable0('mplayer')
+
+  if url = pronounciation_url(ARGV.first)
+    system( "#{mplayer} --no-video -really-quiet #{url} " )
+  end
+end

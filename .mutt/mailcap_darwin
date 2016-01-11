@@ -4,7 +4,7 @@
 ##application/msword;catdoc %s | less ; nametemplate=%s.doc; copiousoutput
 #application/excel; xls2csv %s | less; copiousoutput
 #application/x-msexcel; xls2csv %s | less; copiousoutput
-##application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
+application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 #text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
 
 image/gif ; open -a /Applications/Preview.app %s
