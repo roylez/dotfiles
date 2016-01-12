@@ -35,8 +35,8 @@ color signature cyan default
 
 color index yellow default ~p                 # To me
 color index blue default ~P                # From me
-color index brightyellow default ~N          # New
-color index brightgreen default "~N ~p"     # New to me
+color index brightwhite default ~N          # New
+color index brightyellow default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
 color index brightblack default ~D              # Deleted
 color index black cyan ~F               # flaged
