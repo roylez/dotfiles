@@ -3,10 +3,10 @@
 color normal    white default
 color attachment brightblack default
 color hdrdefault cyan default
-color indicator brightblack white
+color indicator black white
 color markers   blue default
 color signature cyan default
-color status    brightgreen black
+color status    black green
 color tilde     blue default
 color tree      red default
 color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
@@ -36,7 +36,7 @@ color signature cyan default
 color index yellow default ~p                 # To me
 color index blue default ~P                # From me
 color index brightwhite default ~N          # New
-color index brightyellow default "~N ~p"     # New to me
+color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
 color index brightblack default ~D              # Deleted
 color index black cyan ~F               # flaged

@@ -615,7 +615,7 @@ alias dmesg='dmesg -H'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
-alias adate='for i in US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+alias adate='for i in GMT US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias pyprof='python -m cProfile'
 alias info='info --vi-keys'
