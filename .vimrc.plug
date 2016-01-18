@@ -198,7 +198,7 @@ Plug 'openssl.vim'
 call plug#end()
 
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#matcher_default#use(['matcher_regexp, matcher_hide_current_file'])
+call unite#filters#matcher_default#use(['matcher_regexp', 'matcher_hide_current_file'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 " call unite#filters#sorter_default#use(['sorter_length'])
 
