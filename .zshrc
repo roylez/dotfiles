@@ -85,8 +85,9 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" "ma=${${use_256color+1;7
 zstyle ':completion:*' ignore-parents parent pwd directory
 #menu selection in completion
 zstyle ':completion:*' menu select=2
+zstyle ':completion:*' rehash true          # auto rehash
 #zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match #_user_expand
+zstyle ':completion:*' completer _oldlist _expand _complete _match #_user_expand
 zstyle ':completion:*:match:*' original only
 zstyle ':completion:*' user-expand #_pinyin
 zstyle ':completion:*:approximate:*' max-errors 1 numeric
@@ -119,13 +120,6 @@ zstyle ':completion:*:history-words' menu yes select
 #autoload -U compinit
 autoload -Uz compinit
 compinit
-
-#force rehash when command not found
-#  http://zshwiki.org/home/examples/compsys/general
-_force_rehash() {
-    (( CURRENT == 1 )) && rehash
-    return 1    # Because we did not really complete anything
-}
 
 # }}}
 

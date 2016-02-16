@@ -10,9 +10,12 @@ call plug#begin("~/.vim/plugged")
 "                                 readability                                  "
 "-------------------------------------------------------------------------------
 
-Plug 'The-NERD-tree' "{{{
+Plug 'scrooloose/nerdtree' "{{{
 nmap <F4>   :NERDTreeToggle<CR>
-let g:NERDTreeWinPos="right"
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " }}}
 
 Plug 'rainbow_parentheses.vim' "{{{
@@ -161,20 +164,28 @@ let g:neomru#time_format               = "[%m-%d %H:%M] "
 let g:unite_source_rec_max_cache_files = 5000
 " reenable ag to ignore files defined in .gitignore, if unwanted files still
 " shows up, refresh unite cache in with <C-l> in any unite window
-let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
+let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', '']
 
 nnoremap <leader><space> :<C-u>Unite -quick-match buffer<cr>
-nnoremap <leader>f       :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
-nnoremap <leader>/       :<C-u>Unite -buffer-name=code    -start-insert -no-split -auto-preview grep:.<cr>
-nnoremap <leader>o       :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
-nnoremap <F4>            :<C-u>Unite -buffer-name=outline -vertical -winwidth=40  outline<cr>
-nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
+" It has issues to ignore files defined in .gitignore
+" nnoremap <leader>f       :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
+nnoremap <leader>f       :<C-u>Unite -buffer-name=files buffer file_mru file_rec/git:--cached:--others:--exclude-standard<cr>
+nnoremap <leader>/       :<C-u>Unite -buffer-name=code -auto-preview grep:.<cr>
+nnoremap <leader>o       :<C-u>Unite -buffer-name=outline outline<cr>
+nnoremap <F4>            :<C-u>Unite -buffer-name=outline outline<cr>
+nnoremap <leader>l       :<C-u>Unite<cr>
+" nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 autocmd FileType unite call s:unite_settings()
 "# Q: I want the strength of the match to overpower the order in which I list sources.
 autocmd FileType unite call unite#custom#profile('files', 'filters', 'sorter_rank')
+autocmd FileType unite call unite#custom#profile('default','context',{
+            \   'start_insert': 1,
+            \   'winheight': 15,
+            \   'direction': 'botright',
+            \   })
 
 function! s:unite_settings()
   " Play nice with supertab
@@ -191,6 +202,8 @@ endfunction
 Plug 'othree/html5.vim'
 
 Plug 'tpope/vim-haml'
+
+Plug 'chase/vim-ansible-yaml'
 
 Plug 'openssl.vim'
 

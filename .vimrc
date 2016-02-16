@@ -37,6 +37,9 @@ set matchtime=5
 set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
 
+" make spell suggest faster
+set spellsuggest=fast
+
 set guioptions-=T
 set guioptions-=r
 let s:uname = system("uname")
@@ -311,3 +314,4 @@ vmap <silent> <expr> p <sid>Repl()
 autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
 autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 " }}} Highlight keywords like TODO BUG HACK INFO and etc "
+
