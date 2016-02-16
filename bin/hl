@@ -1,16 +1,26 @@
 #!/usr/bin/env ruby
 # coding: utf-8
-#Author: Roy L Zuo (roylzuo at gmail dot com)
 #Last Change: Mon 14 Sep 2009 11:19:34 PM EST
 #Description: get exchange rate from yahoo
-require 'net/http'
-require 'uri'
+
+require 'rest-client'
+require 'json'
+require 'ostruct'
+
+def rate(from, to, amount=1)
+  res  = RestClient.get 'http://apilayer.net/api/live', params:
+    { :access_key => '6f1462e3e8a1cb7cfb2d81742ced72ac',
+      :currencies => ['usd', from, to].compact.join(',') }
+  q = JSON.parse(res)['quotes']
+  r = q["USD#{to}".upcase] / q["USD#{from}".upcase]
+  amount * r
+end
 
 if __FILE__ == $0
     if ARGV.length == 3
         f = ARGV[0].upcase
         t = ARGV[1].upcase
-        m = ARGV[2]
+        m = ARGV[2].to_f
     elsif ARGV.length == 2
         f = ARGV[0].upcase
         t = ARGV[1].upcase
@@ -19,9 +29,5 @@ if __FILE__ == $0
         puts "Usage:    #{$0} <from> <to> <amount>"
         exit
     end
-    #page = Net::HTTP.get( URI.parse "http://tw.money.yahoo.com/currency_exc_result?amt=#{m}&from=#{f}&to=#{t}" )
-    page = Net::HTTP.get( URI.parse "http://qq.ip138.com/hl.asp?from=#{f}&to=#{t}&q=#{m}" )
-    #result = page.match(/=\s<em>(\d+(?:\.\d+)?)<\/em>/)[1]
-    result = page.match(/<\/td><td>(\d+(?:\.\d+)?)<\/td><\/tr>/)[1]
-    puts result
+    puts rate( f, t , m )
 end
