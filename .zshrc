@@ -111,7 +111,7 @@ zstyle ':completion:*:descriptions' format $'\e[33m == \e[1;7;36m %d \e[m\e[33m 
 zstyle ':completion:*:messages' format $'\e[33m == \e[1;7;36m %d \e[m\e[0;33m ==\e[m'
 zstyle ':completion:*:warnings' format $'\e[33m == \e[1;7;31m No Matches Found \e[m\e[0;33m ==\e[m'
 zstyle ':completion:*:corrections' format $'\e[33m == \e[1;7;37m %d (errors: %e) \e[m\e[0;33m ==\e[m'
-# dabbrev for zsh!! M-/ M-,
+# dabbrev for zsh!! M-p M-n
 zstyle ':completion:*:history-words' stop yes
 zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
@@ -418,6 +418,10 @@ fi
 # }}}
 
 # 键绑定  {{{
+# history search can be implemented with the following widgets
+#   history-search-end
+#   up-line-or-beginning-search / down-line-or-beginning-search
+# but history-search-end provides better compatibility with older zsh versions
 autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
@@ -431,6 +435,10 @@ bindkey '[1;5C' forward-word      # C-right
 autoload -U edit-command-line
 zle -N      edit-command-line
 bindkey '\ee' edit-command-line
+
+# dabbrev for zsh!! M-p M-n
+bindkey '\ep' _history-complete-older
+bindkey '\en' _history-complete-newer
 # }}}
 
 # }}}
@@ -602,7 +610,8 @@ alias egrep='egrep -I --color=auto'
 alias freeze='kill -STOP'
 alias ls=$'ls -h --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
-alias ll='ls -li -ctr'
+# alias ll='ls -li -ctr'
+alias ll='ls -li'
 alias df='df -Th'
 alias du='du -h'
 alias dmesg='dmesg -H'

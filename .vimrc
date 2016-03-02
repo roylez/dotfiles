@@ -38,7 +38,8 @@ set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
 
 " make spell suggest faster
-set spellsuggest=fast
+set spellsuggest=best
+set spelllang=en_gb,cjk
 
 set guioptions-=T
 set guioptions-=r
@@ -111,10 +112,10 @@ set backspace=2
 set tags=./.tags;
 
 " 高亮当前行
-"set cursorline
+set cursorline
 "set cursorcolumn
-autocmd InsertLeave * set nocursorline
-autocmd InsertEnter * set cursorline
+" autocmd InsertLeave * set nocursorline
+" autocmd InsertEnter * set cursorline
 
 " remove all trailing white spaces
 autocmd BufWritePre * :%s/\s\+$//e
@@ -184,6 +185,8 @@ let ruby_fold=1
 let ruby_operators=1
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
 autocmd FileType ruby set shiftwidth=2 softtabstop=2
+autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
+autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 
 " scss
@@ -196,9 +199,7 @@ autocmd FileType c setl cindent
 
 "Txt, set syntax file and spell check
 "autocmd BufRead,BufNewFile *.txt set filetype=txt
-"autocmd BufRead *.txt setlocal spell spelllang=en_gb
 
-"Tex ''spelllang=en_gb
 "let g:tex_flavor="context"
 autocmd FileType tex,plaintex,context
             \|silent set spell

@@ -16,7 +16,8 @@ set index_format="%[%b-%d %H:%m] %?X?%2X&  ? %-18.18L [%4c] %s"
 set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="
 set status_on_top
 
-set editor="vim -c 'norm O'"
+# set editor="vim -c 'norm O'"
+set editor='vim + -c "setlocal wrapmargin=0 textwidth=0 wrap nocp linebreak nohlsearch"  -c "?^$"'
 set text_flowed=yes
 
 set sendmail_wait = 10
@@ -109,8 +110,8 @@ set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 set use_from
 set envelope_from=yes       #add -f <from> to sendmail command line
 set realname='Roy Zuo'
-set reverse_name=yes
-set reverse_realname=yes
+set reverse_name=no         # I prefer to use my tailed "from"
+set reverse_realname=no     # I prefer to use my own "realname"
 alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au|me@roylez.info'
 
 #mailing list
