@@ -3,15 +3,15 @@
 # Author:  Eric Gebhart
 #
 # Purpose:  To be called by mutt as indicated by .mailcap to handle mail attachments.
-#            
+#
 # Function: Copy the given file to a temporary directory so mutt
 #           Won't delete it before it is read by the application.
 #
-#           Along the way, discern the file type or use the type 
+#           Along the way, discern the file type or use the type
 #           That is given.
 #
 #           Finally use 'open' or 'open -a' if the third argument is
-#           given. 
+#           given.
 #
 #
 # Arguments:
@@ -20,13 +20,13 @@
 #     $2 is the type - for those times when file magic isn't enough.
 #                      I frequently get html mail that has no extension
 #                      and file can't figure out what it is.
-#    
+#
 #                      Set to '-' if you don't want the type to be discerned.
 #                      Many applications can sniff out the type on their own.
 #                      And they do a better job of it too.
-#                      
+#
 #                      Open Office and MS Office for example.
-#                      
+#
 #     $3 is open with.  as in open -a 'open with this .app' foo.xls
 #
 # Examples:  These are typical .mailcap entries which use this program.
@@ -34,21 +34,21 @@
 #     Image/JPEG; /Users/vdanen/.mutt/view_attachment %s
 #     Image/PNG; /Users/vdanen/.mutt/view_attachment %s
 #     Image/GIF; /Users/vdanen/.mutt/view_attachment %s
-# 
+#
 #     Application/PDF; /Users/vdanen/.mutt/view_attachment %s
 #
-#         #This HTML example passes the type because file doesn't always work and 
+#         #This HTML example passes the type because file doesn't always work and
 #         #there aren't always extensions.
 #
 #     text/html; /Users/vdanen/.mutt/view_attachment %s html
 #
 #         # If your Start OpenOffice.org.app is spelled with a space like this one, <--
 #         # then you'll need to precede the space with a \ .  I found that too painful
-#         # and renamed it with an _.   
+#         # and renamed it with an _.
 #
 #     Application/vnd.ms-excel; /Users/vdanen/.mutt/view_attachment %s "-" '/Applications/OpenOffice.org1.1.2/Start_OpenOffice.org.app'
 #     Application/msword; /Users/vdanen/.mutt/view_attachment %s "-" '/Applications/OpenOffice.org1.1.2/Start_OpenOffice.org.app'
-# 
+#
 #
 # Debugging:  If you have problems set debug to 'yes'.  That will cause a debug file
 #             be written to /tmp/mutt_attach/debug so you can see what is going on.
@@ -56,13 +56,15 @@
 # See Also:  The man pages for open, file, basename
 #
 
+set -x
+
 # the tmp directory to use.
 tmpdir="$HOME/.mutt/tmp/mutt_attach"
 
 # the name of the debug file if debugging is turned on.
 debug_file=$tmpdir/debug
 
-# debug.  yes or no.  
+# debug.  yes or no.
 #debug="no"
 debug="yes"
 
@@ -76,7 +78,7 @@ mkdir -p $tmpdir
 # to accumulate attachment files.
 rm -rf $tmpdir/*
 
-# Mutt puts everything in /tmp by default. 
+# Mutt puts everything in /tmp by default.
 # This gets the basic filename from the full pathname.
 filename=`basename $1`
 
@@ -92,15 +94,16 @@ if [ $debug = "yes" ]; then
 fi
 
 # if the type is empty then try to figure it out.
-if [ -z $type ]; then
+if [[ -z $type ]]; then
     #type=`file -bi $1 | cut -d"/" -f2`
     type=`file -bi $1 | sed -e 's/^[^\/]*\///' -e 's/;.*$//'`
+    [[ $type = "regular file" ]] && type="-"
 fi
 
 # if the type is '-' then we don't want to mess with type.
 # Otherwise we are rebuilding the name.  Either from the
 # type that was passed in or from the type we discerned.
-if [ $type = "-" ]; then
+if [[ $type = "-" ]]; then
     newfile=$filename
 else
     newfile=$file.$type

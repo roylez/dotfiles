@@ -17,7 +17,7 @@ set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? �
 set status_on_top
 
 # set editor="vim -c 'norm O'"
-set editor='vim + -c "setlocal wrapmargin=0 textwidth=0 wrap nocp linebreak nohlsearch"  -c "?^$"'
+set editor='vim + -c "setlocal wrapmargin=0 textwidth=0 wrap nocp linebreak nohlsearch spell"  -c "?^$"'
 set text_flowed=yes
 
 set sendmail_wait = 10
@@ -177,7 +177,7 @@ set message_cachedir=~/.mutt/cache
 #address book related
 set query_format = "%4c %t %-30.30n %-51.51a %?e?(%e)?"
 # set query_format = `~/.mutt/query_format`
-set query_command = "~/.mutt/contact_query"     #;~/bin/mutt_ldap_query.py '%s'"
+set query_command = "echo ; run-parts -a '%s' ~/.mutt/contacts/|grep '@'"
 # abook stuff
 #macro generic,index,pager A "<shell-escape>abook<return>"
 #macro index,pager a "|abook --add-email<return>"

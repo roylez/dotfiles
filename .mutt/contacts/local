@@ -7,21 +7,30 @@
 require 'mail'
 require 'yaml'
 
-MUTT_DIR = "#{ENV['HOME']}/.mutt"
-CONTACTS_FILE = File.join(MUTT_DIR, "contacts.yml")
-LDAP_ENV_FILE = File.join(MUTT_DIR, ".env")
+BASE_DIR = "#{ENV['HOME']}/.mutt/contacts"
+CONTACTS_FILE = File.join(BASE_DIR, "contacts.yml")
+LDAP_ENV_FILE = File.join(BASE_DIR, ".env")
 
 require 'dotenv'  rescue abort "Please install net-ldap gem!"
 Dotenv.load!(LDAP_ENV_FILE)
 
 module Contacts
+  ALIASES = %w{ ldap local }.freeze
+
   def self.save_mail_contacts(mail_body, fields=[ :from ], with_timestamp = true )
     a = LocalContacts.new
-    a.from_mail(mail_body, options[:fetch], options[:time]).save
+    a.from_mail(mail_body, fields, with_timestamp).save
   end
 
   def self.query(filter)
-    agents = constants.select{|c| Class === const_get(c)}.map{|c| const_get(c) }
+    cmd = File.basename($0)
+    unless ALIASES.include? cmd
+      agents = constants.select{|c| Class === const_get(c)}.map{|c| const_get(c) }
+    else
+      agents = constants.
+        select{|c| Class === const_get(c) and c.to_s =~ /#{cmd}/i }.
+        map{|c| const_get(c) }
+    end
     agents.map{|c| c.new.query(filter) }.inject(&:+)
   end
 
@@ -86,14 +95,14 @@ module Contacts
       new_contacts.each{|_,v| v[:last] = Time.now}  if with_timestamp
 
       new_contacts.each_key do |a|
-        @contacts[a] ? contacts[a].merge(new_contacts[a]) : ( contacts[a] = new_contacts[a] )
+        @contacts[a] ? @contacts[a].merge(new_contacts[a]) : ( @contacts[a] = new_contacts[a] )
       end
 
       self
     end
 
     def save
-      open(@file, 'w'){|f| f.puts @file.to_yaml}
+      open(@file, 'w'){|f| f.puts @contacts.to_yaml}
     end
 
     def query(filter)
