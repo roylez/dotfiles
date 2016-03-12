@@ -30,9 +30,9 @@ set mask="!^\\.[^.]"
 # make c contextual according to archlinux wiki
 macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
 
-source ~/.mutt/account.canonical
+source ~/.mutt/account.business
 macro index <f2> '<enter-command>source ~/.mutt/account.default<enter><change-folder>!<enter>'
-macro index <f3> '<enter-command>source ~/.mutt/account.canonical<enter><change-folder>!<enter>'
+macro index <f3> '<enter-command>source ~/.mutt/account.business<enter><change-folder>!<enter>'
 
 # use tab to switch between accounts, inspired by
 #  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
@@ -40,7 +40,7 @@ macro generic \Cx| "<enter-command>source"
 macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
 macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
 macro generic \Cx0 "\Cx| ~/.mutt/account.default\"\n\Cx&1\"<enter><change-folder>!<enter>"
-macro generic \Cx1 "\Cx| ~/.mutt/account.canonical\"\n\Cx&0\"<enter><change-folder>!<enter>"
+macro generic \Cx1 "\Cx| ~/.mutt/account.business\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
 # Use as from the address mail was sent to
 # You'd have to define $alternates for this

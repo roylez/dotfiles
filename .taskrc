@@ -11,7 +11,7 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Color theme (uncomment one to use)
-include /usr/local/Cellar/task/2.5.0/share/doc/task/rc/dark-gray-blue-256.theme
+# include /usr/local/Cellar/task/2.5.0/share/doc/task/rc/dark-gray-blue-256.theme
 
 # Files
 data.location=~/.task

@@ -98,7 +98,8 @@ set listchars=nbsp:¬,eol:¶,tab:>-,extends:»,precedes:«,trail:•
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
 
-set foldenable foldmethod=syntax foldnestmax=1 foldlevelstart=1
+set foldenable foldnestmax=1 foldlevelstart=1
+set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocomplete
 
 set background=dark
 set cc=90

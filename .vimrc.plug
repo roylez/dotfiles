@@ -15,7 +15,8 @@ nmap <F4>   :NERDTreeToggle<CR>
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" auto start nerd tree when no file is open, conflicts with startify
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " }}}
 
 Plug 'rainbow_parentheses.vim' "{{{
@@ -97,6 +98,17 @@ Plug 'Syntastic'
 " parentheses
 Plug 'tpope/vim-surround'
 
+" start screen
+Plug 'mhinz/vim-startify'
+let g:startify_bookmarks=[ '~/.vimrc', '~/.vimrc.plug' ]
+let g:startify_custom_header =
+      \ map(split(system('fortune -s|cowsay -f small -W 90'), '\n'), '"   ". v:val') + ['']
+let g:startify_list_order = [
+      \ ['   最近打开:' ], 'dir', 'files',
+      \ ['   已保存情景:'], 'sessions',
+      \ ['   书签:'], 'bookmarks',
+      \ ]
+
 " automatic tag generation with easytags
 Plug 'xolox/vim-easytags' " {{{
 Plug 'vim-misc'
@@ -106,21 +118,16 @@ let g:easytags_events = ['BufWritePost']
 
 " syntax definitions {{{
 " autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
-Plug 'bbcode', { 'for' : 'bbcode' }
-
+" Plug 'bbcode', { 'for' : 'bbcode' }
 
 " autocmd BufNewFile,BufRead *.coffee set ft=coffee
 Plug 'vim-coffee-script', {'for': 'coffee'}
-
-Plug 'rodjek/vim-puppet', { 'for' : 'puppet' }
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
-" Plug 'bruno-/vim-ruby-fold', { 'for': 'ruby' }
-"
 Plug 'slim-template/vim-slim', {'for': 'slim'}
 
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
@@ -146,6 +153,7 @@ let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
 let g:neocomplete#enable_auto_delimiter=1
 Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 Plug 'honza/vim-snippets'
+Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 " }}}
