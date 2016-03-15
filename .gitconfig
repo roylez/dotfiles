@@ -1,6 +1,6 @@
 [user]
     name  = roylez
-    email = roylzuo@gmail.com
+    email = me@roylez.info
 [color]  # Ensure we get color
     diff   = always
     branch = auto
