@@ -344,10 +344,11 @@ fi
 if [ "$SSH_TTY" = "" ]; then
     local host="$pB$pfg_magenta%m$pR"
 else
-    local host="$pB$pfg_red%m$pR"
+    local host="$pB$pU$pfg_magenta%m$pR"            # underline for remote hostname
 fi
-local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       #different color for privileged sessions
-local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
+local user="%(!:$pfg_red:$pfg_green)%n$pR"       # red for root user name
+# local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
+local symbol="$pB$pfg_yellow> $pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
 PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "

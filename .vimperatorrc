@@ -10,7 +10,7 @@ nmap <F12> gt
 vmap <F11> gT
 vmap <F12> gt
 set complete=l
-set editor='~/bin/mvim -g -f '
+set editor='~/bin/mvim -c "setlocal wrapmargin=0 textwidth=0 wrap linebreak nohlsearch spell" -g -f '
 " set editor='bash -lc "mvim -f \$*" mvim '
 set nextpattern=\s*下一页|下一张|下一篇|下页|后页\s*,^\\bnext\\b,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b
 set previouspattern=\s*上一页|上一张|上一篇|上页|前页\s*,^\\bprev|previous\\b,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$

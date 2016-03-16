@@ -17,7 +17,7 @@ set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? �
 set status_on_top
 
 # set editor="vim -c 'norm O'"
-set editor='vim + -c "setlocal wrapmargin=0 textwidth=0 wrap nocp linebreak nohlsearch spell" -c "norm ggO"'
+set editor='vim -c "setlocal wrapmargin=0 textwidth=0 wrap linebreak nohlsearch spell" -c "norm ggO"'
 set text_flowed=yes
 
 set sendmail_wait = 10

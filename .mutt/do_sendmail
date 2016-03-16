@@ -6,7 +6,7 @@ t=`mktemp -t mutt_message.XXXXXX` || exit 3
 cat > "$t"
 
 # save email addresses in contacts.yml
-contacts/local -f to,cc,bcc -t "$t"
+~/.mutt/contacts/local -f to,cc,bcc -t "$t"
 
 ## Attachment keywords that the message body will be searched for:
 KEYWORDS='attach|patch|附件|文件'
