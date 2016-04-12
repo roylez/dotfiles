@@ -609,7 +609,7 @@ alias rsync='noglob rsync'
 alias grep='grep -I --color=auto'
 alias egrep='egrep -I --color=auto'
 alias freeze='kill -STOP'
-alias ls=$'ls -h --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
+alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
 # alias ll='ls -li -ctr'
 alias ll='ls -li'
@@ -619,7 +619,7 @@ alias dmesg='dmesg -H'
 #show directories size
 alias dud='du -s *(/)'
 #date for US and CN
-alias adate='for i in GMT US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
+alias adate='for i in GMT US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} UK/London Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias pyprof='python -m cProfile'
 alias info='info --vi-keys'
@@ -630,6 +630,7 @@ alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias m='mutt'
 alias vim='vim -p'
+alias tar='GZIP=-9 XZ=-9 tar'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'

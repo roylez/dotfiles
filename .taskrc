@@ -22,9 +22,9 @@ color=on
 
 # default.due=tom
 default.priority=M
-recurrence.limit=0
+recurrence.limit=1
 
-due=3
+due=1
 monthsperline=3
 calendar.holidays=full
 
@@ -37,7 +37,7 @@ report.list.filter=status:pending
 report.list.dateformat=Y b.D H:M
 alias.ls=list
 
-default.command=due:today list
+default.command=list
 
 calendar.holidays=full
 include ~/.task/holidays.en-AU.rc

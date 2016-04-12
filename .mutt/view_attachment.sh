@@ -56,9 +56,6 @@
 # See Also:  The man pages for open, file, basename
 #
 
-set -x
-
-# the tmp directory to use.
 tmpdir="$HOME/.mutt/tmp/mutt_attach"
 
 # the name of the debug file if debugging is turned on.
