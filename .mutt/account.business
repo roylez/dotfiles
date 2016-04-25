@@ -14,3 +14,5 @@ set status_format="===[ 公司 | @canonical.com | %f ]---[ 邮件:%?M?%M/?%m%?n?
 
 macro index,pager d "<save-message>=trash<enter>" "Trash"
 macro index,pager y "<save-message>=all<enter>" "Archive"
+
+color status    black magenta

@@ -15,3 +15,5 @@ set status_format="===[ 个人 | @roylez.info | %f ]---[ 邮件:%?M?%M/?%m%?n? �
 
 macro index,pager d "<save-message>=trash<enter>" "Trash"
 macro index,pager y "<save-message>=all<enter>" "Archive"
+
+color status    black green

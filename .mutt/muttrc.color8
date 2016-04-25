@@ -6,7 +6,7 @@ color hdrdefault cyan default
 color indicator black white
 color markers   blue default
 color signature cyan default
-color status    black green
+color status    black magenta
 color tilde     blue default
 color tree      red default
 color body brightgreen black "[;:]-*[)>(<|PD]"     # :-) etc...
