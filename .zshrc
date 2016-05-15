@@ -353,11 +353,11 @@ local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
 PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
-typeset -A altchar
-set -A altchar ${(s..)terminfo[acsc]}
-PR_SET_CHARSET="%{$terminfo[enacs]%}"
-PR_SHIFT_IN="%{$terminfo[smacs]%}"
-PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
+# typeset -A altchar
+# set -A altchar ${(s..)terminfo[acsc]}
+# PR_SET_CHARSET="%{$terminfo[enacs]%}"
+# PR_SHIFT_IN="%{$terminfo[smacs]%}"
+# PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
 #PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
 local prompt_time="%(?:$pfg_green:$pfg_red)%*$pR"
 RPROMPT='$__PROMPT_PWD'

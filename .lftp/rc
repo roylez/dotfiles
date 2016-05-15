@@ -76,6 +76,8 @@ set xfer:max-redirections 10
 # set at-exit "bo a last"
 # open last
 
+set file:charset "utf-8"
+
 ## Terminal strings to set titlebars for terminals that don't
 ## properly specify tsl and fsl capabilities.
 ## Use cmd:set-term-status to enable this.
