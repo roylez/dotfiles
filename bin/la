@@ -1,0 +1,38 @@
+#!/bin/bash
+# description: 用ledger xact添加记录，支持ING Direct rebate
+
+ledger_file=~/doc/finance/data/`date +%Y`
+draft=$(ledger xact -- $*)
+
+abort_exit() {
+    echo "$*"; exit 1
+}
+
+create_transaction() {
+    echo -e "\n$*" >> "$ledger_file"
+    [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
+}
+
+[ -z "$draft" ] && abort_exit "无法自动生成交易记录"
+
+echo -e "\n$draft\n"
+
+read -r -p "上述记录是否正确(i添加ING Rebate)？ [Y/i/n] " response
+if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
+    abort_exit "放弃编辑"
+elif [[ $response =~ ^([iI])$ ]]; then
+    amount=${!#}
+    rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
+    new_draft=$(ledger xact -- $* rebate $rebate)
+    [ -z "$new_draft" ] && abort_exit "无法自动生成交易记录"
+
+    echo -e "\n$new_draft\n"
+    read -r -p "上述记录是否正确？ [Y/n] " response
+    if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
+        abort_exit "放弃编辑"
+    else
+        create_transaction "$new_draft"
+    fi
+else
+    create_transaction "$draft"
+fi

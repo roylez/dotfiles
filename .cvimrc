@@ -1,0 +1,55 @@
+
+let configpath = "/Users/roylez/.cvimrc"
+set localconfig
+
+" Settings
+set nohud
+set nosmoothscroll
+set noautofocus " The opposite of autofocus; this setting stops
+                " sites from focusing on an input box when they load
+set typelinkhints
+let searchlimit = 30
+let scrollstep = 70
+let barposition = "bottom"
+
+let locale = "uk" " Current choices are 'jp' and 'uk'. This allows cVim to use sites like google.co.uk
+                  " or google.co.jp to search rather than google.com. Support is currently limited.
+                  " Let me know if you need a different locale for one of the completion/search engines
+let hintcharacters = "hjklasdfgyuiopqwertnmzxcvb"
+
+let completionengines = ["google"]
+
+let searchalias g = "google" " Create a shortcut for search engines.
+                             " For example, typing ':tabnew g example'
+                             " would act the same way as ':tabnew google example'
+
+" Open all of these in a tab with `gnb` or open one of these with <N>goa where <N>
+let qmark a = ["http://www.reddit.com", "http://www.google.com", "http://twitter.com"]
+
+let blacklists = ["https://mail.google.com/*", "*://mail.google.com/*", "@https://mail.google.com/mail/*"]
+" blacklists prefixed by '@' act as a whitelist
+
+let mapleader = ","
+
+unmap d x X u a
+
+map a createBookmark
+map d closeTab
+map u lastClosedTab
+map <F11> previousTab
+map <F12> nextTab
+
+" Code blocks (see below for more info)
+getIP() -> {{
+httpRequest({url: 'http://api.ipify.org/?format=json', json: true},
+            function(res) { Status.setMessage('IP: ' + res.ip); });
+}}
+" Displays your public IP address in the status bar
+map ci :call getIP<CR>
+
+" Script hints
+echo(link) -> {{
+  alert(link.href);
+}}
+map <C-f> createScriptHint(echo)
+
