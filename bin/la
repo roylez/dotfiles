@@ -1,9 +1,6 @@
 #!/bin/bash
 # description: 用ledger xact添加记录，支持ING Direct rebate
 
-ledger_file=~/doc/finance/data/`date +%Y`
-draft=$(ledger xact -- $*)
-
 abort_exit() {
     echo "$*"; exit 1
 }
@@ -13,25 +10,50 @@ create_transaction() {
     [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
 }
 
-[ -z "$draft" ] && abort_exit "无法自动生成交易记录"
+create_draft() {
+    cmd="ledger xact -- $*"
+    draft=$($cmd)
+    [ -z "$draft" ] && abort_exit "无法自动生成交易记录"
+    echo -e "$draft"
+}
+
+ledger_file=~/doc/finance/data/`date +%Y`
+xact_cmdline="$*"
+
+# the first argument is not a date, prepend current date
+if [[ ! $1 =~ ^[0-9][0-9.\-]+[0-9] ]]; then
+    xact_cmdline="$(date +%m.%d) $xact_cmdline"
+fi
+
+draft=$(create_draft $xact_cmdline)
 
 echo -e "\n$draft\n"
 
-read -r -p "上述记录是否正确(i添加ING Rebate)？ [Y/i/n] " response
+read -r -p "确定添加此记录(i添加ING Rebate)？ [Y/i/n] " response
 if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
     abort_exit "放弃编辑"
 elif [[ $response =~ ^([iI])$ ]]; then
-    amount=${!#}
-    rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
-    new_draft=$(ledger xact -- $* rebate $rebate)
-    [ -z "$new_draft" ] && abort_exit "无法自动生成交易记录"
+    read -r -a a <<< "$xact_cmdline"        # turn in to array
+    if [[ ${a[@]: -1} =~ ^([0-9.])+ ]]; then
+        amount=${!#}            # last argument
+        rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
+        rebate_cmdline="rebate $rebate"
+        xact_cmdline="$xact_cmdline $rebate_cmdline"
+    else
+        amount=${a[@]: -2:1}        # second last argument
+        rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
+        rebate_cmdline="rebate $rebate"
+        xact_cmdline="${a[@]:0:$((${#a[@]}-1))} $rebate_cmdline ${a[@]: -1}"
+    fi
+    draft=$(create_draft "$xact_cmdline")
 
-    echo -e "\n$new_draft\n"
-    read -r -p "上述记录是否正确？ [Y/n] " response
+    echo -e "\n$draft\n"
+    read -r -p "确定添加此记录？ [Y/n] " response
+
     if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
         abort_exit "放弃编辑"
     else
-        create_transaction "$new_draft"
+        create_transaction "$draft"
     fi
 else
     create_transaction "$draft"

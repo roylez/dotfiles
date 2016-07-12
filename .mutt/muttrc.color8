@@ -3,7 +3,7 @@
 color normal    white default
 color attachment brightblack default
 color hdrdefault cyan default
-color indicator black white
+color indicator black blue
 color markers   blue default
 color signature cyan default
 color status    black magenta
@@ -39,4 +39,6 @@ color index brightwhite default ~N          # New
 color index brightgreen default "~N ~p"     # New to me
 color index brightcyan default ~T               # Tagged
 color index brightblack default ~D              # Deleted
-color index black cyan ~F               # flaged
+color index black yellow ~F               # flaged
+
+color index black white "~s 'Roy Zuo'"

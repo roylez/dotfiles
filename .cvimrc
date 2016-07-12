@@ -8,9 +8,10 @@ set nosmoothscroll
 set noautofocus " The opposite of autofocus; this setting stops
                 " sites from focusing on an input box when they load
 set typelinkhints
-let searchlimit = 30
+let searchlimit = 15
 let scrollstep = 70
 let barposition = "bottom"
+set nodimhintcharacters
 
 let locale = "uk" " Current choices are 'jp' and 'uk'. This allows cVim to use sites like google.co.uk
                   " or google.co.jp to search rather than google.com. Support is currently limited.

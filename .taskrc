@@ -34,7 +34,7 @@ report.list.labels=ID,Project,Pri,Score,Due,Depends,Recur,Tags,Description & Ann
 report.list.sort=urgency-
 # report.list.sort=due+,priority-,project+
 report.list.filter=status:pending
-report.list.dateformat= b.D H:M
+report.list.dateformat= a M-D
 alias.ls=list
 
 default.command=list

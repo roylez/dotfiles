@@ -629,7 +629,6 @@ alias history='history 1'       #zsh specific
 alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias m='mutt'
-alias vim='vim -p'
 alias tar='GZIP=-9 XZ=-9 tar'
 alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients
