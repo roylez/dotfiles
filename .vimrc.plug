@@ -180,9 +180,9 @@ nnoremap <leader><space> :<C-u>Unite -quick-match buffer<cr>
 " nnoremap <leader>f       :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
 nnoremap <leader>f       :<C-u>Unite -buffer-name=files buffer file_mru file_rec/git:--cached:--others:--exclude-standard<cr>
 nnoremap <leader>/       :<C-u>Unite -buffer-name=code -auto-preview grep:.<cr>
-nnoremap <leader>o       :<C-u>Unite -buffer-name=outline outline<cr>
+nnoremap <leader>o       :<C-u>Unite -buffer-name=outline -no-start-insert outline<cr>
 nnoremap <leader>l       :<C-u>Unite<cr>
-" nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
+nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 "nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 "nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>

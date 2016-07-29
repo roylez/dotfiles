@@ -634,7 +634,7 @@ alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-#alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 (bin-exist pal) && alias pal="pal -r 0-7 --color"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"

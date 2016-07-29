@@ -61,3 +61,4 @@ urgency.user.tag.waiting.coefficient=-20.0       # specific project
 # urgency.user.project.<project>.coefficient=5.0  # specific project
 # urgency.user.tag.<tag>.coefficient=5.0          # specific tag
 # urgency.uda.<name>.coefficient=5.0              # specific UDA
+
