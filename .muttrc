@@ -65,7 +65,7 @@ unalternative_order *
 alternative_order text/*
 
 # auto view settings
-auto_view text/html application/pdf application/msword text/enriched text/rtf
+auto_view text/html application/msword text/enriched text/rtf
 set mailcap_path=~/.mutt/mailcap_`uname -s|tr '[:upper:]' '[:lower:]'`
 # this may fix some long url problems in html emails
 set pipe_decode=yes

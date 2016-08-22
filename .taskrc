@@ -16,8 +16,6 @@ include ~/.task/theme/antiglare.theme
 # Files
 data.location=~/.task
 
-alias.a=add
-
 color=on
 
 # default.due=tom
@@ -29,15 +27,15 @@ monthsperline=3
 calendar.holidays=full
 
 report.list.description=Lists all tasks matching the specified criteria
-report.list.columns=id,project,priority,urgency,due,depends,recur,tags,description
-report.list.labels=ID,Project,Pri,Score,Due,Depends,Recur,Tags,Description & Annotation
+report.list.columns=id,project,priority,due.relative,due,depends,recur,urgency,tags,description
+report.list.labels=ID,Project,Pri,Rel,Due,Depends,Recur,Score,Tags,Description & Annotation
 report.list.sort=urgency-
 # report.list.sort=due+,priority-,project+
 report.list.filter=status:pending
 report.list.dateformat= a M-D
 alias.ls=list
 
-default.command=list
+default.command=(due.before:4d or due: ) and status:pending list
 
 calendar.holidays=full
 include ~/.task/holidays.en-AU.rc

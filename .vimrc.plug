@@ -93,6 +93,9 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 " }}}
 
+" distraction free writing
+Plug 'junegunn/goyo.vim'
+
 " syntax checking
 Plug 'Syntastic'
 
