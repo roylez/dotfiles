@@ -1,5 +1,5 @@
 [user]
-    name  = roylez
+    name = roylez
     email = me@roylez.info
 [color]  # Ensure we get color
     diff   = always

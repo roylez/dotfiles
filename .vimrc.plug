@@ -10,13 +10,21 @@ call plug#begin("~/.vim/plugged")
 "                                 readability                                  "
 "-------------------------------------------------------------------------------
 
+Plug 'ryanoasis/vim-devicons'
+
 Plug 'scrooloose/nerdtree' "{{{
 nmap <F4>   :NERDTreeToggle<CR>
+autocmd StdinReadPre * let s:std_in=1
+
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-autocmd StdinReadPre * let s:std_in=1
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+
 " auto start nerd tree when no file is open, conflicts with startify
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " }}}
 
 Plug 'rainbow_parentheses.vim' "{{{
@@ -46,12 +54,8 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
-Plug 'bling/vim-airline' "{{{
-" let g:airline#extensions#tabline#enabled=1
-let g:airline_theme='dark'
-" powerline fonts does not work well with Chinese fonts which I would put higher
-" priority
-let g:airline_powerline_fonts=1
+Plug 'itchyny/lightline.vim' "{{{
+let g:lightline = { 'colorscheme': 'wombat' }
 " }}}
 
 Plug 'tomasr/molokai'
@@ -179,9 +183,7 @@ let g:unite_source_rec_max_cache_files = 5000
 let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', '']
 
 nnoremap <leader><space> :<C-u>Unite -quick-match buffer<cr>
-" It has issues to ignore files defined in .gitignore
-" nnoremap <leader>f       :<C-u>Unite -buffer-name=files   -start-insert -no-split file_rec/async<cr>
-nnoremap <leader>f       :<C-u>Unite -buffer-name=files buffer file_mru file_rec/git:--cached:--others:--exclude-standard<cr>
+nnoremap <leader>f       :<C-u>Unite -no-split -start-insert -buffer-name=FILES buffer file_rec/git:--cached:--others:--exclude-standard<cr>
 nnoremap <leader>/       :<C-u>Unite -buffer-name=code -auto-preview grep:.<cr>
 nnoremap <leader>o       :<C-u>Unite -buffer-name=outline -no-start-insert outline<cr>
 nnoremap <leader>l       :<C-u>Unite<cr>
@@ -195,7 +197,6 @@ autocmd FileType unite call unite#custom#profile('files', 'filters', 'sorter_ran
 autocmd FileType unite call unite#custom#profile('default','context',{
             \   'start_insert': 1,
             \   'winheight': 15,
-            \   'direction': 'botright',
             \   })
 
 function! s:unite_settings()
