@@ -16,4 +16,4 @@ application/pdf; open -a /Applications/Preview.app '%s'; copiousoutput; test=tes
 # application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput
 
 video/*; mplayer %s
-text/html; w3m -o display_link_number=1 -dump -cols $((COLUMNS-8)) -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|sed -e "s:^:   :"|cat -s; copiousoutput
+text/html; w3m -o display_link_number=1 -dump -cols $((COLUMNS-6)) -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|sed -e "s:^: :"|cat -s; copiousoutput

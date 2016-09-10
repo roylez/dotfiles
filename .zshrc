@@ -287,7 +287,7 @@ screen_precmd() {
     #a bell, urgent notification trigger
     #echo -ne '\a'
     #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
-    title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1...:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
+    title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1..:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
     echo -ne '\033[?17;0;127c'
 }
 
@@ -306,36 +306,13 @@ screen_preexec() {
 #}}}
 
 #{{{define magic function arrays
-if ! (is-at-least 4.3); then
-    #the following solution should work on older version <4.3 of zsh.
-    #The "function" keyword is essential for it to work with the old zsh.
-    #NOTE these function fails dynamic screen title, not sure why
-    #CentOS stinks.
-    function precmd() {
-        screen_precmd
-        git_branch_precmd
-    }
-
-    function preexec() {
-        screen_preexec
-        pwd_color_preexec
-    }
-
-    function chpwd() {
-        pwd_color_chpwd
-        git_branch_chpwd
-    }
-else
-    #this works with zsh 4.3.*, will remove the above ones when possible
-    typeset -ga preexec_functions precmd_functions chpwd_functions
-    precmd_functions+=screen_precmd
-    precmd_functions+=git_branch_precmd
-    preexec_functions+=screen_preexec
-    preexec_functions+=pwd_color_preexec
-    chpwd_functions+=pwd_color_chpwd
-    chpwd_functions+=git_branch_chpwd
-fi
-
+# typeset -ga preexec_functions precmd_functions chpwd_functions
+precmd_functions+=( screen_precmd )
+precmd_functions+=( git_branch_precmd )
+preexec_functions+=( screen_preexec )
+preexec_functions+=( pwd_color_preexec )
+chpwd_functions+=( pwd_color_chpwd )
+chpwd_functions+=( git_branch_chpwd )
 #}}}
 
 # }}}
@@ -347,10 +324,10 @@ else
     local host="$pB$pU$pfg_magenta%m$pR"            # underline for remote hostname
 fi
 local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       # red for root user name
-# local symbol="$pB%(!:$pfg_red# :$pfg_yellow> )$pR"
-local symbol="$pB$pfg_yellow> $pR"
+local symbol="$pB%(!:$pfg_red# :$pfg_yellow > )$pR"
+# local symbol="$pB$pfg_yellow> $pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
-PROMPT='$user$pfg_yellow@$pR$host$(get_prompt_git)$job$symbol'
+PROMPT='$host $user$(get_prompt_git)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
 #NOTE  **DO NOT** use double quote , it does not work
 # typeset -A altchar
@@ -577,6 +554,7 @@ export READNULLCMD=less
 #   置于PATH最前以便下面的配置所调用的命令是linux的版本
 [[ -f $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST
 [[ -f $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+[[ -d $HOME/.zsh_misc ]] && for i in $HOME/.zsh_misc/*.{sh,zsh}; source $i
 # }}}
 
 # 命令别名 {{{

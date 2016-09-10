@@ -102,7 +102,7 @@ set foldenable foldnestmax=1 foldlevelstart=1
 set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocomplete
 
 set background=dark
-set cc=90
+" set colorcolumn=90
 
 "maybe necessary for urxvt, because vim use ^H for backspace,
 "but urxvt can use both ^H and ^?
@@ -185,7 +185,7 @@ let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby set shiftwidth=2 softtabstop=2
+autocmd FileType ruby set shiftwidth=2 softtabstop=2 colorcolumn=100
 autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
@@ -201,11 +201,6 @@ autocmd FileType c setl cindent
 "Txt, set syntax file and spell check
 "autocmd BufRead,BufNewFile *.txt set filetype=txt
 
-"let g:tex_flavor="context"
-autocmd FileType tex,plaintex,context
-            \|silent set spell
-            \|nmap <buffer> <F8> gwap
-
 "emails,
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail
@@ -214,9 +209,6 @@ autocmd FileType mail
             "\|:silent 0put=''
             \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
             \|:silent 1
-
-"cuda
-au BufNewFile,BufRead *.cu set ft=cuda |setlocal cindent
 
 "markdown
 autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown

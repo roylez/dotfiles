@@ -16,6 +16,21 @@ Plug 'scrooloose/nerdtree' "{{{
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
+" auto start nerd tree when no file is open, conflicts with startify
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" automatically close vim when last window is NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Automatically delete the buffer of the file you just deleted with NerdTree:
+let NERDTreeAutoDeleteBuffer = 1
+
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+" find current file
+nnoremap <silent> <Leader>z :NERDTreeFind<CR>
+
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -23,8 +38,6 @@ let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
 
-" auto start nerd tree when no file is open, conflicts with startify
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " }}}
 
 Plug 'rainbow_parentheses.vim' "{{{
