@@ -116,8 +116,19 @@ Plug 'junegunn/goyo.vim'
 " syntax checking
 Plug 'Syntastic'
 
+" Split in tmux
+Plug 'benmills/vimux'   " {{{
+map tr :VimuxPromptCommand<CR>
+map tl :VimuxRunLastCommand<CR>
+map tz :VimuxZoomRunner<CR>
+
+" use c-h/j/k/l for split navigation, no matter in vim or tmux
+Plug 'christoomey/vim-tmux-navigator'
+" }}}
+
 " parentheses
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 
 " start screen
 " Plug 'mhinz/vim-startify'

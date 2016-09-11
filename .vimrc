@@ -58,6 +58,7 @@ set smartindent autoindent expandtab smarttab
 set shiftwidth=4
 set softtabstop=4 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
+set relativenumber
 
 map Q gq
 set wrap
@@ -129,8 +130,9 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 "---------------------completion settings-------------------------------
 "make completion menu usable even when some characters are typed.
 set completeopt=longest,menuone
-set complete-=i
-set complete-=t
+" set complete-=i
+" set complete-=t
+set complete+=kspell
 
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
@@ -142,10 +144,11 @@ imap ,e   <C-V><C-[>[
 imap <F8> <C-R>=strftime("%Y-%m-%d %H:%M")<CR>
 
 "move among windows
-nmap <C-h>   <C-W>h
-nmap <C-l>  <C-W>l
-nmap <C-j>   <C-W>j
-nmap <C-k>   <C-W>k
+" replaced by vim-tmux-navigator
+" nmap <C-h>   <C-W>h
+" nmap <C-l>  <C-W>l
+" nmap <C-j>   <C-W>j
+" nmap <C-k>   <C-W>k
 
 "move in insert mode
 inoremap <m-h> <left>
@@ -179,7 +182,6 @@ vmap <Leader>P "+P
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "ruby
-
 "no folding for comment block and if/do blocks
 let ruby_no_comment_fold=1
 let ruby_fold=1
