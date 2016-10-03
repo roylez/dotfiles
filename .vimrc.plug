@@ -3,7 +3,7 @@
 
 let g:plug_url_format = 'git://github.com/%s.git'
 
-call plug#begin("~/.vim/plugged")
+call plug#begin( $VIMHOME."/plugged")
 "===================Plug loading starts========================================
 
 "-------------------------------------------------------------------------------
@@ -71,6 +71,8 @@ Plug 'itchyny/lightline.vim' "{{{
 let g:lightline = { 'colorscheme': 'wombat' }
 " }}}
 
+Plug 'airblade/vim-gitgutter'
+
 Plug 'tomasr/molokai'
 " Plug 'hhff/SpacegrayEighties.vim'
 
@@ -110,11 +112,17 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 " }}}
 
+" easymotion
+Plug 'easymotion/vim-easymotion'
+
 " distraction free writing
 Plug 'junegunn/goyo.vim'
 
 " syntax checking
 Plug 'Syntastic'
+
+" grammar checking
+Plug 'rhysd/vim-grammarous'
 
 " Split in tmux
 Plug 'benmills/vimux'   " {{{
@@ -124,22 +132,21 @@ map tz :VimuxZoomRunner<CR>
 
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
+if has('nvim')
+    nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+endif
 " }}}
 
 " parentheses
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
-" start screen
-" Plug 'mhinz/vim-startify'
-" let g:startify_bookmarks=[ '~/.vimrc', '~/.vimrc.plug' ]
-" let g:startify_custom_header =
-"       \ map(split(system('fortune -s|cowsay -f small -W 90'), '\n'), '"   ". v:val') + ['']
-" let g:startify_list_order = [
-"       \ ['   最近打开:' ], 'dir', 'files',
-"       \ ['   已保存情景:'], 'sessions',
-"       \ ['   书签:'], 'bookmarks',
-"       \ ]
+" git interoperability
+Plug 'tpope/vim-fugitive'
+
+" indentation guide
+Plug 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_start_level = 2
 
 " automatic tag generation with easytags
 Plug 'xolox/vim-easytags' " {{{
@@ -147,10 +154,6 @@ Plug 'vim-misc'
 let g:easytags_dynamic_files = 2
 let g:easytags_events = ['BufWritePost']
 " }}}
-
-" syntax definitions {{{
-" autocmd BufNewFile,BufRead /tmp/*forum.ubuntu.org.cn* set ft=bbcode
-" Plug 'bbcode', { 'for' : 'bbcode' }
 
 " autocmd BufNewFile,BufRead *.coffee set ft=coffee
 Plug 'vim-coffee-script', {'for': 'coffee'}
@@ -174,21 +177,29 @@ Plug 'openssl.vim'
 
 " }}}
 
-Plug 'Shougo/neocomplete.vim' "{{{
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
+if has("nvim")
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#omni#input_patterns={}
+    let g:deoplete#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+    let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
+    let g:deoplete='~/.config/nvim/.cache/deoplete'
+    let g:deoplete#enable_auto_delimiter=1
+    Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
+else
+    Plug 'Shougo/neocomplete.vim'
+    let g:neocomplete#enable_at_startup=1
+    let g:neocomplete#sources#omni#input_patterns = {}
+    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
+    let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+    let g:neocomplete#enable_auto_delimiter=1
+    Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
-let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
-let g:neocomplete#enable_auto_delimiter=1
-Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 Plug 'honza/vim-snippets'
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
-" }}}
 
 Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}
@@ -235,9 +246,21 @@ endfunction
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
+
+" rails stuff {{{ "
+Plug 'tpope/vim-rails'
 Plug 'othree/html5.vim'
 
-Plug 'tpope/vim-haml'
+Plug 'thoughtbot/vim-rspec'
+Plug 'tpope/vim-dispatch'
+
+let g:rspec_command = 'Dispatch rspec {spec}'
+
+nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
+nnoremap <Leader>s :call RunNearestSpec()<CR>
+nnoremap <Leader>l :call RunLastSpec()<CR>
+
+" }}} rails stuff "
 
 Plug 'chase/vim-ansible-yaml'
 

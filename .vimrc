@@ -1,11 +1,27 @@
-" Description: vim runtime configure file
+" Description: nvim runtime configure file
 " vim: ft=vim foldmethod=marker
 
-set nocompatible	    " not vi compatible
-let mapleader="\<Space>"    " this is used a lot in plugin settings
+set nocompatible
+let mapleader=","    " this is used a lot in plugin settings
 
-if filereadable( $HOME . '/.vimrc.plug'  )
-    source  $HOME/.vimrc.plug
+"---------------------vim/neovim only stuff------------------------------
+if has('nvim')
+    " support for truecolor
+    set termguicolors
+    " support for cursor shapes
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+    let $VIMHOME=$HOME.'/.config/nvim'
+else
+    set backspace=2
+    set encoding=utf-8
+    " keep record of editing information for cursor restore and more
+    set viminfo='10,\"100,:20,%,n~/.viminfo
+    let $VIMHOME=$HOME.'/.vim'
+endif
+"------------------------------------------------------------------------
+
+if filereadable( $HOME . '/.vimrc.plug' )
+    source $HOME/.vimrc.plug
 endif
 
 filetype plugin indent on
@@ -13,46 +29,10 @@ syntax on
 
 set mouse=""            " disable mouse
 set history=50		" keep 50 lines of command line history
-" keep record of editing information for cursor restore and more
-set viminfo='10,\"100,:20,%,n~/.viminfo
 
 " do incremental searching
 set incsearch hlsearch wrapscan
 set ignorecase smartcase
-
-set showmatch		" show the matching brackets when typing
-" set ambiwidth=double     " set this if terminal has similar setting
-
-set showcmd		" display incomplete commands
-set ruler		" show the cursor position all the time in statusline
-set laststatus=2        " always display a nicer status bar
-set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
-" set wildmenu		" show possible command when pressing <TAB>
-set wildmode=longest:list,full
-"set cmdheight=2
-set notitle             " do not set xterm dynamic title
-"set number
-
-set matchtime=5
-set lazyredraw          " faster for macros
-set ttyfast             " better for xterm
-
-" make spell suggest faster
-set spellsuggest=best
-set spelllang=en_gb,cjk
-
-set guioptions-=T
-set guioptions-=r
-let s:uname = system("uname")
-if s:uname == "Darwin\n"
-    "Mac options here
-    set guifont=Monaco\ for\ Powerline:h14
-    set lines=50
-    set columns=90
-else
-    set guifont=Monaco\ 10
-    set guifontwide=WenQuanYi\ Micro\ Hei\ 12
-endif
 
 set smartindent autoindent expandtab smarttab
 set shiftwidth=4
@@ -79,12 +59,10 @@ endif
 set backupdir=$HOME/.backup
 set directory=$HOME/.backup     "swp
 
-if version >= 703
-    if !isdirectory($HOME . "/.vim/undo")
-        call mkdir($HOME . "/.vim/undo", "p")
-    endif
-    set undodir=~/.vim/undo undofile undolevels=1000 undoreload=1000
+if !isdirectory($HOME . "/.vim/undo")
+    call mkdir($HOME . "/.vim/undo", "p")
 endif
+set undodir=~/.vim/undo undofile undolevels=1000 undoreload=1000
 
 set commentstring=#%s       " default comment style
 set sps=best,10             " only show 10 best spell suggestions
@@ -92,8 +70,40 @@ set dictionary+=/usr/share/dict/words
 
 set magic
 
+set showmatch          " show the matching brackets when typing
+" set ambiwidth=double     " set this if terminal has similar setting
+
+set showcmd            " display incomplete commands
+set ruler              " show the cursor position all the time in statusline
+set laststatus=2        " always display a nicer status bar
+set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %-14.(%l/%L,%c%V%)\ %P
+" set wildmenu         " show possible command when pressing <TAB>
+set wildmode=longest:list,full
+"set cmdheight=2
+set notitle             " do not set xterm dynamic title
+"set number
+
+set matchtime=5
+set lazyredraw          " faster for macros
+set ttyfast             " better for xterm
+
+" make spell suggest faster
+set spellsuggest=best
+set spelllang=en_gb,cjk
+
+set guioptions-=T
+set guioptions-=r
+
+let s:uname = system("uname")
+if s:uname == "Darwin\n"
+    "Mac options here
+    set guifont=Monaco\ for\ Powerline:h14
+else
+    set guifont=Monaco\ 10
+    set guifontwide=WenQuanYi\ Micro\ Hei\ 12
+endif
+
 " 输入:set list命令是应该显示些啥？
-"set listchars=tab:>-,eol:<
 set listchars=nbsp:¬,eol:¶,tab:>-,extends:»,precedes:«,trail:•
 
 " 光标移动到buffer的顶部和底部时保持3行距离
@@ -105,25 +115,13 @@ set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocompl
 set background=dark
 " set colorcolumn=90
 
-"maybe necessary for urxvt, because vim use ^H for backspace,
-"but urxvt can use both ^H and ^?
-"fixdel
-set backspace=2
-
 "tags, use semicolon to seperate so that vim searches parent directories!
 set tags=./.tags;
 
 " 高亮当前行
 set cursorline
-"set cursorcolumn
-" autocmd InsertLeave * set nocursorline
-" autocmd InsertEnter * set cursorline
-
-" remove all trailing white spaces
-autocmd BufWritePre * :%s/\s\+$//e
 
 "---------------------encoding detection--------------------------------
-set encoding=utf-8
 set fileencoding&
 set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 
@@ -136,19 +134,6 @@ set complete+=kspell
 
 "---------------------keyboard mappings---------------------------------
 set winaltkeys=no
-
-"ascii art escape sequence for /etc/motd, ssh banner and etc
-imap ,e   <C-V><C-[>[
-
-"insert time stamp
-imap <F8> <C-R>=strftime("%Y-%m-%d %H:%M")<CR>
-
-"move among windows
-" replaced by vim-tmux-navigator
-" nmap <C-h>   <C-W>h
-" nmap <C-l>  <C-W>l
-" nmap <C-j>   <C-W>j
-" nmap <C-k>   <C-W>k
 
 "move in insert mode
 inoremap <m-h> <left>
@@ -187,7 +172,7 @@ let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby set shiftwidth=2 softtabstop=2 colorcolumn=100
+autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
@@ -281,7 +266,7 @@ augroup END
 " }}}
 
 " {{{ dynamic cursor color for xterm \033=>\e  007=>\a (BEL)
-if &term =~ "xterm"
+if &term =~ "xterm" && !has('nvim')
     :silent !echo -ne "\e]12;IndianRed2\007"
     let &t_SI = "\e]12;RoyalBlue1\007"
     let &t_EI = "\e]12;IndianRed2\007"
