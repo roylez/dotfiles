@@ -12,6 +12,7 @@ application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 #image/*; ~/.mutt/view_attachment.sh %s
 #text/text; open -a BBEdit '%s'; needsterminal; description=Text Text; nametemplate=%s.txt
 application/pdf; open -a /Applications/Preview.app '%s'; copiousoutput; test=test -n $DISPLAY
+image/*; open -a /Applications/Preview.app '%s'; copiousoutput; test=test -n $DISPLAY
 # application/pdf; open %s; copiousoutput
 # application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput
 

@@ -307,12 +307,13 @@ screen_preexec() {
 
 #{{{define magic function arrays
 # typeset -ga preexec_functions precmd_functions chpwd_functions
-precmd_functions+=( screen_precmd )
-precmd_functions+=( git_branch_precmd )
-preexec_functions+=( screen_preexec )
-preexec_functions+=( pwd_color_preexec )
-chpwd_functions+=( pwd_color_chpwd )
-chpwd_functions+=( git_branch_chpwd )
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd  screen_precmd
+add-zsh-hook precmd  git_branch_precmd
+add-zsh-hook preexec screen_preexec
+add-zsh-hook preexec pwd_color_preexec
+add-zsh-hook chpwd   pwd_color_chpwd
+add-zsh-hook chpwd   git_branch_chpwd
 #}}}
 
 # }}}
@@ -475,9 +476,6 @@ zle -N self-insert check-cmd-self-insert
 zle -N backward-delete-char check-cmd-backward-delete-char
 # }}}
 
-# 拼音补全
-function _pinyin() { reply=($($HOME/bin/chsdir 0 $*)) }
-
 # {{{ double ESC to prepend "sudo"
 sudo-command-line() {
     [[ -z $BUFFER ]] && zle up-history
@@ -517,8 +515,8 @@ export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR=nvim
+export VISUAL=nvim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
 
@@ -563,7 +561,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|wc"
 alias -g E="|sed"
-alias -g G='|GREP_COLOR=$(echo 3$[$(date +%N)%6+1]'\'';1;7'\'') egrep -i --color=always'
+alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less"
 alias -g P="|column -t"

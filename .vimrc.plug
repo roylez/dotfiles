@@ -73,7 +73,8 @@ let g:lightline = { 'colorscheme': 'wombat' }
 
 Plug 'airblade/vim-gitgutter'
 
-Plug 'tomasr/molokai'
+" Plug 'tomasr/molokai'
+Plug 'chriskempson/vim-tomorrow-theme'
 " Plug 'hhff/SpacegrayEighties.vim'
 
 "-------------------------------------------------------------------------------
@@ -186,6 +187,7 @@ if has("nvim")
     let g:deoplete='~/.config/nvim/.cache/deoplete'
     let g:deoplete#enable_auto_delimiter=1
     Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
+    autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 else
     Plug 'Shougo/neocomplete.vim'
     let g:neocomplete#enable_at_startup=1
@@ -279,7 +281,7 @@ if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme molokai
+    colorscheme Tomorrow-Night-Eighties
     " colorscheme SpacegrayEighties
 else
     colorscheme tango

@@ -47,16 +47,16 @@ bind b:${hyper}  ${bottomleft}
 bind n:${hyper}  ${bottomright}
 
 ## Layouts
-layout 1mon ${terminal}     ${lefthalf}
-layout 1mon ${browser}      ${righthalf}
+layout 1mon ${terminal} ${lefthalf}
+layout 1mon ${browser}  ${righthalf}
 
 layout maxall ${terminal}   ${full}
 layout maxall ${browser}    ${full}
 
 ## App bindings
 # These are laid out on the left hand
-bind f:${hyper}     focus  ${browser}
-bind t:${hyper}     focus  ${terminal}
+bind f:${hyper} focus ${browser}
+bind t:${hyper} focus ${terminal}
 
 # Layout bindings
 bind 1:${hyper}     layout 1mon
