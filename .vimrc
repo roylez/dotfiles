@@ -10,13 +10,13 @@ if has('nvim')
     set termguicolors
     " support for cursor shapes
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-    let $VIMHOME=$HOME.'/.config/nvim'
+    let g:vim_home=$HOME.'/.config/nvim'
 else
     set backspace=2
     set encoding=utf-8
     " keep record of editing information for cursor restore and more
     set viminfo='10,\"100,:20,%,n~/.viminfo
-    let $VIMHOME=$HOME.'/.vim'
+    let g:vim_home=$HOME.'/.vim'
 endif
 "------------------------------------------------------------------------
 
@@ -24,6 +24,7 @@ if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug
 endif
 
+" have to be after loadding pluggins 
 filetype plugin indent on
 syntax on
 
@@ -67,6 +68,9 @@ set undodir=~/.vim/undo undofile undolevels=1000 undoreload=1000
 set commentstring=#%s       " default comment style
 set sps=best,10             " only show 10 best spell suggestions
 set dictionary+=/usr/share/dict/words
+
+" make fuzzy find in :find command possible
+set path+=**
 
 set magic
 

@@ -41,10 +41,10 @@ bind p:${hyper}  throw next
 bind i:${hyper}  ${full}
 bind ;:${hyper}  ${lefthalf}
 bind ':${hyper}  ${righthalf}
-bind y:${hyper}  ${topleft}
-bind u:${hyper}  ${topright}
-bind b:${hyper}  ${bottomleft}
-bind n:${hyper}  ${bottomright}
+# bind y:${hyper}  ${topleft}
+# bind u:${hyper}  ${topright}
+# bind b:${hyper}  ${bottomleft}
+# bind n:${hyper}  ${bottomright}
 
 ## Layouts
 layout 1mon ${terminal} ${lefthalf}

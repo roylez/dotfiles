@@ -3,7 +3,7 @@
 
 let g:plug_url_format = 'git://github.com/%s.git'
 
-call plug#begin( $VIMHOME."/plugged")
+call plug#begin( g:vim_home . "/plugged")
 "===================Plug loading starts========================================
 
 "-------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ if has("nvim")
     let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     let g:deoplete='~/.config/nvim/.cache/deoplete'
     let g:deoplete#enable_auto_delimiter=1
-    Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
+    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
     autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 else
     Plug 'Shougo/neocomplete.vim'
@@ -196,12 +196,15 @@ else
     let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
     let g:neocomplete#enable_auto_delimiter=1
-    Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
+    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
 Plug 'honza/vim-snippets'
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
+Plug 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
+let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
+let g:UltiSnipsEditSplit= 'vertical'
 
 Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}
