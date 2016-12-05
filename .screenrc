@@ -34,6 +34,7 @@ terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #terminfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #dynamic title
 termcapinfo xterm* 'Co#256:XT:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+term screen-256color
 
 # Automatically detach on hangup, or the screen will keep eating your memory after the terminal emulator has been terminated.
 autodetach on		# default: on

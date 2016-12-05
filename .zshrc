@@ -253,33 +253,29 @@ get_prompt_git() {
 
 #{{{ functions to set gnu screen title
 # active command as title in terminals
-if [[ -n $SSH_CONNECTION ]]; then
-    function title() {}
-else
-    case $TERM in
-        xterm*|rxvt*)
-            function title() { print -nP "\e]0;$1\a" }
-            ;;
-        screen*)
-            if [[ -n $STY ]] && (screen -ls |grep $STY &>/dev/null); then
-                function title()
-                {
-                    #modify screen title
-                    print -nP "\ek$1\e\\"
-                    #modify window title bar
-                    #print -nPR $'\033]0;'$2$'\a'
-                }
-            elif [[ -n $TMUX ]]; then       # actually in tmux !
-                function title() { print -nP "\e]2;$1\a" }
-            else                            # fallback
-                function title() { print -nP "\ek$1\e\\" }
-            fi
-            ;;
-        *)
-            function title() {}
-            ;;
-    esac
-fi
+case $TERM in
+    xterm*|rxvt*)
+        function title() { print -nP "\e]0;$1\a" }
+        ;;
+    screen*)
+        if [[ -n $STY ]] && (screen -ls |grep $STY &>/dev/null); then
+            function title()
+            {
+                #modify screen title
+                print -nP "\ek$1\e\\"
+                #modify window title bar
+                #print -nPR $'\033]0;'$2$'\a'
+            }
+        elif [[ -n $TMUX ]]; then       # actually in tmux !
+            function title() { print -nP "\e]2;$1\a" }
+        else                            # fallback
+            function title() { print -nP "\ek$1\e\\" }
+        fi
+        ;;
+    *)
+        function title() {}
+        ;;
+esac
 
 #set screen title if not connected remotely
 #if [ "$STY" != "" ]; then
@@ -515,8 +511,8 @@ export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
 
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR=vim
+export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
 
