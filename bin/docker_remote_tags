@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+[[ $@ = */* ]] && repo=$@ || repo=library/$@
+
+curl -s -S "https://registry.hub.docker.com/v2/repositories/$repo/tags/" | jq '."results"[]["name"]' |sort
