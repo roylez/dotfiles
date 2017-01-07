@@ -73,6 +73,8 @@ let g:lightline = { 'colorscheme': 'wombat' }
 
 Plug 'airblade/vim-gitgutter'
 
+Plug 'tpope/vim-endwise'
+
 " Plug 'tomasr/molokai'
 Plug 'chriskempson/vim-tomorrow-theme'
 " Plug 'hhff/SpacegrayEighties.vim'
@@ -178,14 +180,16 @@ Plug 'openssl.vim'
 
 " }}}
 
+Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
+
 if has("nvim")
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#omni#input_patterns={}
-    let g:deoplete#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+    let g:deoplete#enable_at_startup          = 1
+    let g:deoplete#omni#input_patterns        = {}
+    let g:deoplete#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
     let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-    let g:deoplete='~/.config/nvim/.cache/deoplete'
-    let g:deoplete#enable_auto_delimiter=1
+    let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
+    let g:deoplete#enable_auto_delimiter      = 1
     " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
     autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 else
@@ -199,8 +203,8 @@ else
     " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
 Plug 'honza/vim-snippets'
-Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
+
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
@@ -209,12 +213,30 @@ let g:UltiSnipsEditSplit= 'vertical'
 Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}
 Plug 'Shougo/unite-outline'
+Plug 'tacroe/unite-mark'
+Plug 'osyo-manga/vim-anzu' " {{{
+" mapping
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)
+nmap # <Plug>(anzu-sharp-with-echo)
+
+" clear status
+nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+
+
+" statusline
+set statusline=%{anzu#search_status()}
+" }}}
 Plug 'Shougo/neomru.vim'
+if executable('ag')
+    let g:unite_source_grep_command        = 'ag'
+    let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
+    let g:unite_source_grep_default_opts   = '--nocolor --nogroup --hidden'
+    let g:unite_source_grep_recursive_opt  = ''
+    let g:unite_source_grep_max_candidates = 200
+endif
 let g:unite_source_history_yank_enable = 1
-let g:unite_source_grep_command        = 'ag'
-let g:unite_source_grep_default_opts   = '--nocolor --nogroup'
-let g:unite_source_grep_recursive_opt  = ''
-let g:unite_source_grep_max_candidates = 200
 let g:unite_source_file_mru_limit      = 100
 let g:neomru#time_format               = "[%m-%d %H:%M] "
 let g:unite_source_rec_max_cache_files = 5000
