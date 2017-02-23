@@ -121,6 +121,9 @@ Plug 'easymotion/vim-easymotion'
 " distraction free writing
 Plug 'junegunn/goyo.vim'
 
+" drawings
+Plug 'DrawIt'
+
 " syntax checking
 Plug 'Syntastic'
 
@@ -198,7 +201,7 @@ else
     let g:neocomplete#sources#omni#input_patterns = {}
     let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
     let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-    let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
+    " let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
     let g:neocomplete#enable_auto_delimiter=1
     " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
@@ -290,6 +293,8 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 " }}} rails stuff "
 
 Plug 'chase/vim-ansible-yaml'
+
+Plug 'hashivim/vim-terraform'
 
 Plug 'openssl.vim'
 
