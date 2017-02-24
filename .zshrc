@@ -512,6 +512,7 @@ export SAVEHIST=10000
 export HISTFILE=$HOME/.zsh_history
 
 export EDITOR=vim
+export SYSTEMD_EDITOR=vim
 export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
