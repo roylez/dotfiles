@@ -281,7 +281,7 @@ Plug 'othree/html5.vim'
 Plug 'thoughtbot/vim-rspec'
 Plug 'tpope/vim-dispatch'
 
-let g:rspec_command = 'Dispatch rspec {spec}'
+let g:rspec_command = "Dispatch rspec {spec}"
 
 nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
 nnoremap <Leader>s :call RunNearestSpec()<CR>
@@ -290,6 +290,7 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 " }}} rails stuff "
 
 Plug 'chase/vim-ansible-yaml'
+Plug 'hashivim/vim-terraform'
 
 Plug 'openssl.vim'
 
