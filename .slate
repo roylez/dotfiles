@@ -47,8 +47,8 @@ bind ':${hyper}  ${righthalf}
 # bind n:${hyper}  ${bottomright}
 
 ## Layouts
-layout 1mon ${terminal} ${lefthalf}
-layout 1mon ${browser}  ${righthalf}
+layout 1mon ${terminal} ${righthalf}
+layout 1mon ${browser}  ${lefthalf}
 
 layout maxall ${terminal}   ${full}
 layout maxall ${browser}    ${full}

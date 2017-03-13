@@ -1,6 +1,9 @@
 #!/bin/bash
 # description: 用ledger xact添加记录，支持ING Direct rebate
 
+ledger_file=~/workspace/doc/finance/data/`date +%Y`
+xact_cmdline="$*"
+
 abort_exit() {
     echo "$*"; exit 1
 }
@@ -16,9 +19,6 @@ create_draft() {
     [ -z "$draft" ] && abort_exit "无法自动生成交易记录"
     echo -e "$draft"
 }
-
-ledger_file=~/doc/finance/data/`date +%Y`
-xact_cmdline="$*"
 
 # the first argument is not a date, prepend current date
 if [[ ! $1 =~ ^[0-9][0-9.\-]+[0-9] ]]; then
