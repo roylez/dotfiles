@@ -1,0 +1,16 @@
+snippet dow "do with |...| "
+do |$1|
+  $0
+end
+endsnippet
+
+snippet iff "if __FILE__ == $0 ..." b
+if __FILE__ == \$0
+  $0
+end
+endsnippet
+
+snippet byebug "debug with byebug and pry"
+require 'pry-byebug'; binding.pry
+endsnippet
+

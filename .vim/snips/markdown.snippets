@@ -1,0 +1,22 @@
+snippet blog "Blog post heading for Middleman" b
+---
+title:  ${1:blog title}
+date:   ${2:`date +%Y-%m-%d`}
+layout: post
+tags:   [$3]
+---
+
+$0
+
+endsnippet
+
+snippet jekyll "Blog post heading for Octopress" b
+---
+title:      ${1:blog title}
+layout:     post
+categories: [$2]
+---
+
+$0
+
+endsnippet

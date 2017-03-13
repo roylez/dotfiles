@@ -1,0 +1,58 @@
+global !p
+def ing_paywave_rebate(amount):
+    return round(float(amount) * 2.0 / 100, 2)
+endglobal
+
+snippet exp "Expense" b
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+    Expenses:${5:Grocery}	    ${6:$} ${7:value}
+    ${8:Assets}:$9
+endsnippet
+
+snippet tran "Transaction" b
+${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Transaction title}
+    $0
+endsnippet
+
+snippet inc "Income" b
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+    Assets:${5:title}	    ${6:$} ${7:value}
+    Income:$8
+endsnippet
+
+snippet din "Dining" b
+${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Restaurant}
+    Dinning	    ${4:$} ${5:value}
+    ${6:Cash}
+endsnippet
+
+snippet with "Withdraw" b
+${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:ING Direct}
+    ${4:Assets:Cash}	    $ ${5:value}
+    Assets:${6:ING:Everyday}
+endsnippet
+
+snippet ing "INGRebate"
+Income:INGRebate		$ -$1
+endsnippet
+
+snippet pay "Expense paid with ING Paypass" b
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+    ${5:Expenses}:${6:Grocery}	    ${7:$} ${8:0}
+    Income:INGRebate		$ -`!p snip.rv=ing_paywave_rebate(t[8])`
+    Assets:ING:Everyday
+endsnippet
+
+snippet int "每月利息" b
+${1:`date +%Y-%m`}-${2:01} * Interest
+    Assets:ING:Savings      $3
+    Assets:Alipay           CNY $4
+    Assets:HSBC:Savings     USD $5
+    Assets:HSBC:Access      $ -35
+    Expenses:Service:Banking    $ 35
+    Income:Interest
+
+$1-$2 * Amy Wang
+    Expenses:Child Support	CNY 4000
+    Assets:HSBC:CN
+endsnippet

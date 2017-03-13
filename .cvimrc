@@ -18,11 +18,15 @@ let locale = "uk" " Current choices are 'jp' and 'uk'. This allows cVim to use s
                   " Let me know if you need a different locale for one of the completion/search engines
 let hintcharacters = "hjklasdfgyuiopqwertnmzxcvb"
 
-let completionengines = ["google"]
+let searchengine startpage = "https://www.startpage.com/do/dsearch?query=%s&cat=web&pl=opensearch&language=english&prf=9e201b0e8c18fbb3335712bebac66e20"
+
+let defaultengine = "startpage"
+let completionengines = ["google", "startpage"]
 
 let searchalias g = "google" " Create a shortcut for search engines.
                              " For example, typing ':tabnew g example'
                              " would act the same way as ':tabnew google example'
+let searchalias s = "startpage"
 
 " Open all of these in a tab with `gnb` or open one of these with <N>goa where <N>
 let qmark a = ["http://www.reddit.com", "http://www.google.com", "http://twitter.com"]
