@@ -1,6 +1,12 @@
 global !p
 def ing_paywave_rebate(amount):
     return round(float(amount) * 2.0 / 100, 2)
+
+def creditcard_insurance(amount):
+    # try:
+    return round(float(amount) * 0.0055, 2)
+    # except:
+        # return "ERR"
 endglobal
 
 snippet exp "Expense" b
@@ -12,6 +18,12 @@ endsnippet
 snippet tran "Transaction" b
 ${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Transaction title}
     $0
+endsnippet
+
+snippet ingt "ING Direct transfer" b
+${1:`date +%Y-%m-`}${2:`date +%d`} * ING Direct
+    Assets:ING:Everyday	    $ $3
+    Assets:ING:Savings
 endsnippet
 
 snippet inc "Income" b
@@ -43,6 +55,10 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     Assets:ING:Everyday
 endsnippet
 
+snippet cred "CreditCard" b
+Liabilities:CreditCard:BankWest
+endsnippet
+
 snippet int "每月利息" b
 ${1:`date +%Y-%m`}-${2:01} * Interest
     Assets:ING:Savings      $3
@@ -55,4 +71,11 @@ ${1:`date +%Y-%m`}-${2:01} * Interest
 $1-$2 * Amy Wang
     Expenses:Child Support	CNY 4000
     Assets:HSBC:CN
+endsnippet
+
+snippet rep "Credit Card Repayment" b
+${1:`date +%Y-%m-`}${2:`date +%d`} * BankWest
+    Liabilities:CreditCard:BankWest         $ ${3:0.0}
+    Expenses:Insurance                      $ `!p snip.rv=creditcard_insurance(t[3])`
+    Assets:ING:Everyday
 endsnippet

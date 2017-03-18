@@ -1,0 +1,4 @@
+--file ~/workspace/doc/finance/accounting
+--price-db  ~/workspace/doc/finance/prices.db
+--date-format %Y-%m-%d
+--wide
