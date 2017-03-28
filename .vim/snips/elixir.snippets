@@ -1,3 +1,29 @@
 snippet debug "Use IEx to pry"
 require IEx; IEx.pry
 endsnippet
+
+snippet defs "Genserver" b
+defmodule ${1:Server} do
+  use GenServer
+
+  def init( params) do
+    { :ok, state }
+  end
+
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: ${2:__MODULE__})
+  end
+end
+endsnippet
+
+snippet definit "def init ..." b
+@spec init( ${1:args} )  :: { :ok, state :: term } | { :stop, reason :: term }
+def init( ${2:args} ) do
+  $0
+  { :ok, state }
+end
+endsnippet 
+
+snippet puts "IO.inspect" b
+IO.inspect $1
+endsnippet
