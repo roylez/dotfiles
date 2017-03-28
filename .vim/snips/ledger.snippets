@@ -15,11 +15,6 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     ${8:Assets}:$9
 endsnippet
 
-snippet tran "Transaction" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Transaction title}
-    $0
-endsnippet
-
 snippet ingt "ING Direct transfer" b
 ${1:`date +%Y-%m-`}${2:`date +%d`} * ING Direct
     Assets:ING:Everyday	    $ $3
@@ -78,4 +73,15 @@ ${1:`date +%Y-%m-`}${2:`date +%d`} * BankWest
     Liabilities:CreditCard:BankWest         $ ${3:0.0}
     Expenses:Insurance                      $ `!p snip.rv=creditcard_insurance(t[3])`
     Assets:ING:Everyday
+endsnippet
+
+snippet deb "Debit Card" b
+Assets:ING:Everyday
+endsnippet
+
+snippet tran "Transfer" b
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:transfer title}
+    Assets:${5:ING:Everyday}          $ $6
+    Assets:$7
+
 endsnippet
