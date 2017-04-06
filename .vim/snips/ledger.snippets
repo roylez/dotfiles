@@ -61,16 +61,13 @@ endsnippet
 
 snippet int "每月利息" b
 ${1:`date +%Y-%m`}-${2:01} * Interest
-    Assets:ING:Savings      $3
+    Assets:ING:Savings      $ $3
     Assets:Alipay           CNY $4
-    Assets:HSBC:Savings     USD $5
-    Assets:HSBC:Access      $ -35
-    Expenses:Service:Banking    $ 35
     Income:Interest
 
 $1-$2 * Amy Wang
     Expenses:Child Support	CNY 4000
-    Assets:HSBC:CN
+    Assets:Alipay
 endsnippet
 
 snippet rep "Credit Card Repayment" b
