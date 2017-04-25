@@ -27,7 +27,7 @@
     untrack = rm -r --cached
     merge-branch-file = checkout --merge
     rb  = rebase
-    undo = reset --soft HEAD^
+    undo = reset HEAD --hard
 [merge]
     tool = vimdiff
 [github]

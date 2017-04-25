@@ -211,9 +211,6 @@ autocmd FileType yaml set softtabstop=2 shiftwidth=2 noautoindent nosmartindent
 "coffee
 autocmd FileType coffee set softtabstop=2 shiftwidth=2
 
-"viki
-autocmd BufNewFile,BufRead *.viki set ft=viki
-
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
 
@@ -299,4 +296,3 @@ vmap <silent> <expr> p <sid>Repl()
 autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
 autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 " }}} Highlight keywords like TODO BUG HACK INFO and etc "
-

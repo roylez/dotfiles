@@ -68,7 +68,68 @@ au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
 Plug 'itchyny/lightline.vim' "{{{
-let g:lightline = { 'colorscheme': 'wombat' }
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive'],[ 'dir', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LLFugitive',
+      \   'readonly': 'LLReadonly',
+      \   'modified': 'LLModified',
+      \   'filename': 'LLFilename',
+      \   'mode':     'LLMode',
+      \   'dir':      'LLDir',
+      \ }
+      \ }
+
+function! LLMode()
+  let fname = expand('%:t')
+  return fname == '__Tagbar__' ? 'Tagbar' :
+        \ fname == 'ControlP' ? 'CtrlP' :
+        \ lightline#mode() == 'NORMAL' ? 'N' :
+        \ lightline#mode() == 'INSERT' ? 'I' :
+        \ lightline#mode() == 'VISUAL' ? 'V' :
+        \ lightline#mode() == 'V-LINE' ? 'VL' :
+        \ lightline#mode() == 'V-BLOCK' ? 'VB' :
+        \ lightline#mode() == 'REPLACE' ? 'R' : lightline#mode()
+endfunction
+
+function! LLModified()
+  if &filetype == "help"
+    return ""
+  elseif &modified
+    return "+"
+  elseif &modifiable
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! LLReadonly()
+  if &filetype == "help"
+    return ""
+  elseif &readonly
+    return "!"
+  else
+    return ""
+  endif
+endfunction
+
+function! LLFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
+
+function! LLDir()
+    return pathshorten(substitute(getcwd(), $HOME, "~", ""))
+endfunction
+
+function! LLFilename()
+  return ('' != LLReadonly() ? LLReadonly() . ' ' : '') .
+       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+       \ ('' != LLModified() ? ' ' . LLModified() : '')
+endfunction
 " }}}
 
 Plug 'airblade/vim-gitgutter'
