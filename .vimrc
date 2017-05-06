@@ -119,11 +119,14 @@ set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocompl
 set background=dark
 " set colorcolumn=90
 
+" get rid of the delay while switching between normal mode and insert mode
+set timeoutlen=1000 ttimeoutlen=0
+
 "tags, use semicolon to seperate so that vim searches parent directories!
 set tags=./.tags;
 
-" 高亮当前行
-set cursorline
+" 高亮当前位置
+set cursorline cursorcolumn
 
 "---------------------encoding detection--------------------------------
 set fileencoding&
@@ -266,17 +269,21 @@ augroup vimrc
 augroup END
 " }}}
 
-" {{{ dynamic cursor color for xterm \033=>\e  007=>\a (BEL)
-if &term =~ "xterm" && !has('nvim')
-    :silent !echo -ne "\e]12;IndianRed2\007"
-    let &t_SI = "\e]12;RoyalBlue1\007"
-    let &t_EI = "\e]12;IndianRed2\007"
-    autocmd VimLeave * :!echo -ne "\e]12;green\007"
-"elseif &term =~ "screen"    " screen in urxvt or xterm
-    ":silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
-    "let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
-    "let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
-    "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
+" {{{ Changing cursor shape per mode
+" NOTE does not work over ssh
+" 1 or 0 -> blinking block
+" 2 -> solid block
+" 3 -> blinking underscore
+" 4 -> solid underscore
+if exists('$TMUX')
+    " tmux will only forward escape sequences to the terminal if surrounded by a DCS sequence
+    let &t_SI .= "\<Esc>Ptmux;\<Esc>\<Esc>[4 q\<Esc>\\"
+    let &t_EI .= "\<Esc>Ptmux;\<Esc>\<Esc>[2 q\<Esc>\\"
+    autocmd VimLeave * silent !echo -ne "\033Ptmux;\033\033[0 q\033\\"
+else
+    let &t_SI .= "\<Esc>[4 q"
+    let &t_EI .= "\<Esc>[2 q"
+    autocmd VimLeave * silent !echo -ne "\033[0 q"
 endif
 " }}}
 
