@@ -148,26 +148,6 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
 nmap <F9> :TComment<CR>
-"Auomatically add file head. NERO_commenter.vim needed.
-function! AutoHead()
-    let fl = line(".")
-    if getline(fl) !~ "^$"
-        let fl += 1
-    endif
-    let ll = fl+2
-    "call append(fl,"Last Change: ")
-    call append(fl,"Description: ")
-    call append(fl+1,"")
-    execute fl . ','. ll .'TComment'
-endfunc
-nmap ,h :call AutoHead()<cr>
-
-autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
-autocmd BufNewFile *.py
-            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\"
-            \|call AutoHead()
-autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># encoding: utf-8\<nl>\" |call AutoHead()
-autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 " }}}
 
 " make stuff organized
@@ -251,7 +231,6 @@ if has("nvim")
     let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
     let g:deoplete#enable_auto_delimiter      = 1
-    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
     autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 else
     Plug 'Shougo/neocomplete.vim'
@@ -261,19 +240,15 @@ else
     let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     " let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
     let g:neocomplete#enable_auto_delimiter=1
-    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
-Plug 'honza/vim-snippets'
-" add personal snippet directory to search path, note that snippets is reserved and could not be used
 
-Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips' " {{{ 
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+Plug 'honza/vim-snippets'
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
 let g:UltiSnipsEditSplit= 'vertical'
-" Plug 'Shougo/neosnippet' 
-" Plug 'Shougo/neosnippet-snippets'
-" let g:neosnippet#enable_snipmate_compatibility = 1
-" let g:neosnippet#snippets_directory= g:vim_home . '/snips'
+" }}} Plug 'SirVer/ultisnips' "
 
 Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}

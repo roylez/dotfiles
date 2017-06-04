@@ -183,14 +183,6 @@ autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 
-"C/C++
-autocmd FileType cpp setl nofoldenable
-            \|nmap ,a :A<CR>
-autocmd FileType c setl cindent
-
-"Txt, set syntax file and spell check
-"autocmd BufRead,BufNewFile *.txt set filetype=txt
-
 "emails,
 "delete old quotations, set spell and put cursor in the first line
 autocmd FileType mail
@@ -204,18 +196,14 @@ autocmd FileType mail
 autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
 autocmd FileType markdown set comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
 
-"fcron
-autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
-
-"pentadactyl/vimperator
-autocmd BufNewFile,BufRead /tmp/pentadactyl*.tmp set textwidth=9999
-autocmd BufNewFile,BufRead *.vimperatorrc set ft=vimperator
-
 "remind
 autocmd BufNewFile,BufRead *.rem set ft=remind
 
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
+
+"Auomatically add file head defined in ~/.vim/templates/
+au BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
 
 "-------------------special settings------------------------------------
 " {{{ big files?
