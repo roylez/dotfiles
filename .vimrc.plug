@@ -40,7 +40,7 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 
 " }}}
 
-Plug 'rainbow_parentheses.vim' "{{{
+Plug 'kien/rainbow_parentheses.vim' "{{{
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -183,10 +183,10 @@ Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 
 " drawings
-Plug 'DrawIt'
+Plug 'vim-scripts/DrawIt'
 
 " syntax checking
-Plug 'Syntastic'
+Plug 'vim-syntastic/syntastic'
 
 " grammar checking
 Plug 'rhysd/vim-grammarous'
@@ -217,13 +217,10 @@ let g:indent_guides_start_level = 2
 
 " automatic tag generation with easytags
 Plug 'xolox/vim-easytags' " {{{
-Plug 'vim-misc'
+Plug 'xolox/vim-misc'
 let g:easytags_dynamic_files = 2
 let g:easytags_events = ['BufWritePost']
 " }}}
-
-" autocmd BufNewFile,BufRead *.coffee set ft=coffee
-Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
@@ -240,7 +237,7 @@ autocmd FileType elixir setlocal nofoldenable
 
 Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
-Plug 'openssl.vim'
+Plug 'vim-scripts/openssl.vim'
 
 " }}}
 
@@ -361,8 +358,6 @@ Plug 'chase/vim-ansible-yaml'
 Plug 'hashivim/vim-terraform'
 
 Plug 'hashivim/vim-terraform'
-
-Plug 'openssl.vim'
 
 "===================Plug loading ends==========================================
 call plug#end()

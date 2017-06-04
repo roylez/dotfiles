@@ -3,6 +3,7 @@
 
 set nocompatible
 let mapleader=","    " this is used a lot in plugin settings
+set background=dark
 
 "---------------------vim/neovim only stuff------------------------------
 if has('nvim')
@@ -36,8 +37,8 @@ set incsearch hlsearch wrapscan
 set ignorecase smartcase
 
 set smartindent autoindent expandtab smarttab
-set shiftwidth=4
-set softtabstop=4 	" replace <tab> with 4 blank space.
+set shiftwidth=2
+set softtabstop=2 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
 set relativenumber
 
@@ -116,7 +117,6 @@ set scrolloff=3
 set foldenable foldnestmax=1 foldlevelstart=1
 set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocomplete
 
-set background=dark
 " set colorcolumn=90
 
 " get rid of the delay while switching between normal mode and insert mode
@@ -179,13 +179,9 @@ let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
-
-" scss
-autocmd FileType scss,sass setl shiftwidth=2 softtabstop=2
 
 "C/C++
 autocmd FileType cpp setl nofoldenable
@@ -207,12 +203,6 @@ autocmd FileType mail
 "markdown
 autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
 autocmd FileType markdown set comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
-
-"yaml
-autocmd FileType yaml set softtabstop=2 shiftwidth=2 noautoindent nosmartindent
-
-"coffee
-autocmd FileType coffee set softtabstop=2 shiftwidth=2
 
 "fcron
 autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
