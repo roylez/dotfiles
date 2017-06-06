@@ -86,10 +86,10 @@ endsnippet
 
 snippet eth "Buy Ethereum"
 ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * BTCMarkets
-    Assets:Ethereum             ( ETH $4 - ETH 0.001 )
+    Assets:Coin:Ethereum             ( ETH $4 - ETH 0.001 )
     Expenses:Service:Banking     $ 3.3
-    Assets:ING:Everyday         $ -2000
-    Income:Investment
+    Assets:ING:Savings         $ -2000
+    Currency:Crypto
 
 endsnippet
 

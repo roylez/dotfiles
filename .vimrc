@@ -1,14 +1,8 @@
 " Description: nvim runtime configure file
 " vim: ft=vim foldmethod=marker
 
-set nocompatible
-let mapleader=","    " this is used a lot in plugin settings
-set background=dark
-
 "---------------------vim/neovim only stuff------------------------------
 if has('nvim')
-    " support for truecolor
-    set termguicolors
     " support for cursor shapes
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     let g:vim_home=$HOME.'/.config/nvim'
@@ -20,6 +14,11 @@ else
     let g:vim_home=$HOME.'/.vim'
 endif
 "------------------------------------------------------------------------
+set background=dark
+" support for truecolor
+set termguicolors
+set nocompatible
+let mapleader=","    " this is used a lot in plugin settings
 
 if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug
