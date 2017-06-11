@@ -133,12 +133,11 @@ endfunction
 " }}}
 
 Plug 'airblade/vim-gitgutter'
+let g:gitgutter_max_signs = 200
 
 Plug 'tpope/vim-endwise'
 
-" Plug 'tomasr/molokai'
-" Plug 'chriskempson/vim-tomorrow-theme'
-" Plug 'hhff/SpacegrayEighties.vim'
+" theme
 Plug 'morhetz/gruvbox'
 
 "-------------------------------------------------------------------------------
