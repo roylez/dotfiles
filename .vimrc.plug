@@ -133,12 +133,12 @@ endfunction
 " }}}
 
 Plug 'airblade/vim-gitgutter'
+let g:gitgutter_max_signs = 200
 
 Plug 'tpope/vim-endwise'
 
-" Plug 'tomasr/molokai'
-Plug 'chriskempson/vim-tomorrow-theme'
-" Plug 'hhff/SpacegrayEighties.vim'
+" theme
+Plug 'morhetz/gruvbox'
 
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
@@ -332,8 +332,6 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 Plug 'chase/vim-ansible-yaml'
 Plug 'hashivim/vim-terraform'
 
-Plug 'hashivim/vim-terraform'
-
 "===================Plug loading ends==========================================
 call plug#end()
 
@@ -347,7 +345,10 @@ if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme Tomorrow-Night-Eighties
+    set t_8f=[38;2;%lu;%lu;%lum
+    set t_8b=[48;2;%lu;%lu;%lum
+    colorscheme gruvbox
+    " colorscheme Tomorrow-Night-Eighties
     " colorscheme SpacegrayEighties
 else
     colorscheme tango
