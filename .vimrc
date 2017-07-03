@@ -1,13 +1,8 @@
 " Description: nvim runtime configure file
 " vim: ft=vim foldmethod=marker
 
-set nocompatible
-let mapleader=","    " this is used a lot in plugin settings
-
 "---------------------vim/neovim only stuff------------------------------
 if has('nvim')
-    " support for truecolor
-    set termguicolors
     " support for cursor shapes
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
     let g:vim_home=$HOME.'/.config/nvim'
@@ -19,6 +14,11 @@ else
     let g:vim_home=$HOME.'/.vim'
 endif
 "------------------------------------------------------------------------
+set background=dark
+" support for truecolor
+set termguicolors
+set nocompatible
+let mapleader=","    " this is used a lot in plugin settings
 
 if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug
@@ -36,8 +36,8 @@ set incsearch hlsearch wrapscan
 set ignorecase smartcase
 
 set smartindent autoindent expandtab smarttab
-set shiftwidth=4
-set softtabstop=4 	" replace <tab> with 4 blank space.
+set shiftwidth=2
+set softtabstop=2 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
 set relativenumber
 
@@ -116,14 +116,16 @@ set scrolloff=3
 set foldenable foldnestmax=1 foldlevelstart=1
 set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocomplete
 
-set background=dark
 " set colorcolumn=90
+
+" get rid of the delay while switching between normal mode and insert mode
+set timeoutlen=1000 ttimeoutlen=0
 
 "tags, use semicolon to seperate so that vim searches parent directories!
 set tags=./.tags;
 
-" 高亮当前行
-set cursorline
+" 高亮当前位置
+set cursorline cursorcolumn
 
 "---------------------encoding detection--------------------------------
 set fileencoding&
@@ -176,21 +178,9 @@ let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
 autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby set shiftwidth=2 softtabstop=2
 autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
-
-" scss
-autocmd FileType scss,sass setl shiftwidth=2 softtabstop=2
-
-"C/C++
-autocmd FileType cpp setl nofoldenable
-            \|nmap ,a :A<CR>
-autocmd FileType c setl cindent
-
-"Txt, set syntax file and spell check
-"autocmd BufRead,BufNewFile *.txt set filetype=txt
 
 "emails,
 "delete old quotations, set spell and put cursor in the first line
@@ -205,27 +195,14 @@ autocmd FileType mail
 autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
 autocmd FileType markdown set comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
 
-"yaml
-autocmd FileType yaml set softtabstop=2 shiftwidth=2 noautoindent nosmartindent
-
-"coffee
-autocmd FileType coffee set softtabstop=2 shiftwidth=2
-
-"viki
-autocmd BufNewFile,BufRead *.viki set ft=viki
-
-"fcron
-autocmd BufNewFile,BufRead /tmp/fcr-* set ft=crontab
-
-"pentadactyl/vimperator
-autocmd BufNewFile,BufRead /tmp/pentadactyl*.tmp set textwidth=9999
-autocmd BufNewFile,BufRead *.vimperatorrc set ft=vimperator
-
 "remind
 autocmd BufNewFile,BufRead *.rem set ft=remind
 
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
+
+"Auomatically add file head defined in ~/.vim/templates/
+au BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
 
 "-------------------special settings------------------------------------
 " {{{ big files?
@@ -269,17 +246,21 @@ augroup vimrc
 augroup END
 " }}}
 
-" {{{ dynamic cursor color for xterm \033=>\e  007=>\a (BEL)
-if &term =~ "xterm" && !has('nvim')
-    :silent !echo -ne "\e]12;IndianRed2\007"
-    let &t_SI = "\e]12;RoyalBlue1\007"
-    let &t_EI = "\e]12;IndianRed2\007"
-    autocmd VimLeave * :!echo -ne "\e]12;green\007"
-"elseif &term =~ "screen"    " screen in urxvt or xterm
-    ":silent !echo -ne "\eP\e]12;IndianRed2\007\e\\"
-    "let &t_SI = "\eP\e]12;RoyalBlue1\007\e\\"
-    "let &t_EI = "\eP\e]12;IndianRed2\007\e\\"
-    "autocmd VimLeave * :!echo -ne "\eP\e]12;green\007\e\\"
+" {{{ Changing cursor shape per mode
+" NOTE does not work over ssh
+" 1 or 0 -> blinking block
+" 2 -> solid block
+" 3 -> blinking underscore
+" 4 -> solid underscore
+if exists('$TMUX')
+    " tmux will only forward escape sequences to the terminal if surrounded by a DCS sequence
+    let &t_SI .= "\<Esc>Ptmux;\<Esc>\<Esc>[4 q\<Esc>\\"
+    let &t_EI .= "\<Esc>Ptmux;\<Esc>\<Esc>[2 q\<Esc>\\"
+    autocmd VimLeave * silent !echo -ne "\033Ptmux;\033\033[0 q\033\\"
+else
+    let &t_SI .= "\<Esc>[4 q"
+    let &t_EI .= "\<Esc>[2 q"
+    autocmd VimLeave * silent !echo -ne "\033[0 q"
 endif
 " }}}
 
@@ -299,4 +280,3 @@ vmap <silent> <expr> p <sid>Repl()
 autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
 autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 " }}} Highlight keywords like TODO BUG HACK INFO and etc "
-

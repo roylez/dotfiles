@@ -7,12 +7,13 @@ def creditcard_insurance(amount):
     return round(float(amount) * 0.0055, 2)
     # except:
         # return "ERR"
+
 endglobal
 
 snippet exp "Expense" b
 ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     Expenses:${5:Grocery}	    ${6:$} ${7:value}
-    ${8:Assets}:$9
+    ${8:Assets:}$9
 endsnippet
 
 snippet ingt "ING Direct transfer" b
@@ -56,16 +57,13 @@ endsnippet
 
 snippet int "每月利息" b
 ${1:`date +%Y-%m`}-${2:01} * Interest
-    Assets:ING:Savings      $3
+    Assets:ING:Savings      $ $3
     Assets:Alipay           CNY $4
-    Assets:HSBC:Savings     USD $5
-    Assets:HSBC:Access      $ -35
-    Expenses:Service:Banking    $ 35
     Income:Interest
 
 $1-$2 * Amy Wang
     Expenses:Child Support	CNY 4000
-    Assets:HSBC:CN
+    Assets:Alipay
 endsnippet
 
 snippet rep "Credit Card Repayment" b
@@ -85,3 +83,13 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:transfer title}
     Assets:$7
 
 endsnippet
+
+snippet eth "Buy Ethereum"
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * BTCMarkets
+    Assets:Coin:Ethereum             ( ETH $4 - ETH 0.001 )
+    Expenses:Service:Banking     $ 3.3
+    Assets:ING:Savings         $ -2000
+    Currency:Crypto
+
+endsnippet
+

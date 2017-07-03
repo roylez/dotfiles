@@ -40,7 +40,7 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 
 " }}}
 
-Plug 'rainbow_parentheses.vim' "{{{
+Plug 'kien/rainbow_parentheses.vim' "{{{
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -68,16 +68,77 @@ au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
 Plug 'itchyny/lightline.vim' "{{{
-let g:lightline = { 'colorscheme': 'wombat' }
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive'],[ 'dir', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LLFugitive',
+      \   'readonly': 'LLReadonly',
+      \   'modified': 'LLModified',
+      \   'filename': 'LLFilename',
+      \   'mode':     'LLMode',
+      \   'dir':      'LLDir',
+      \ }
+      \ }
+
+function! LLMode()
+  let fname = expand('%:t')
+  return fname == '__Tagbar__' ? 'Tagbar' :
+        \ fname == 'ControlP' ? 'CtrlP' :
+        \ lightline#mode() == 'NORMAL' ? 'N' :
+        \ lightline#mode() == 'INSERT' ? 'I' :
+        \ lightline#mode() == 'VISUAL' ? 'V' :
+        \ lightline#mode() == 'V-LINE' ? 'VL' :
+        \ lightline#mode() == 'V-BLOCK' ? 'VB' :
+        \ lightline#mode() == 'REPLACE' ? 'R' : lightline#mode()
+endfunction
+
+function! LLModified()
+  if &filetype == "help"
+    return ""
+  elseif &modified
+    return "+"
+  elseif &modifiable
+    return ""
+  else
+    return ""
+  endif
+endfunction
+
+function! LLReadonly()
+  if &filetype == "help"
+    return ""
+  elseif &readonly
+    return "!"
+  else
+    return ""
+  endif
+endfunction
+
+function! LLFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
+
+function! LLDir()
+    return pathshorten(substitute(getcwd(), $HOME, "~", ""))
+endfunction
+
+function! LLFilename()
+  return ('' != LLReadonly() ? LLReadonly() . ' ' : '') .
+       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+       \ ('' != LLModified() ? ' ' . LLModified() : '')
+endfunction
 " }}}
 
 Plug 'airblade/vim-gitgutter'
+let g:gitgutter_max_signs = 200
 
 Plug 'tpope/vim-endwise'
 
-" Plug 'tomasr/molokai'
-Plug 'chriskempson/vim-tomorrow-theme'
-" Plug 'hhff/SpacegrayEighties.vim'
+" theme
+Plug 'morhetz/gruvbox'
 
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
@@ -87,26 +148,6 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
 nmap <F9> :TComment<CR>
-"Auomatically add file head. NERO_commenter.vim needed.
-function! AutoHead()
-    let fl = line(".")
-    if getline(fl) !~ "^$"
-        let fl += 1
-    endif
-    let ll = fl+2
-    "call append(fl,"Last Change: ")
-    call append(fl,"Description: ")
-    call append(fl+1,"")
-    execute fl . ','. ll .'TComment'
-endfunc
-nmap ,h :call AutoHead()<cr>
-
-autocmd BufNewFile *.sh 0put=\"#!/bin/bash\<nl># vim:fdm=marker\<nl>\" |call AutoHead()
-autocmd BufNewFile *.py
-            \0put=\"#!/usr/bin/env python\<nl># -*- coding: UTF-8 -*-\<nl>\"
-            \|call AutoHead()
-autocmd BufNewFile *.rb 0put=\"#!/usr/bin/env ruby\<nl># encoding: utf-8\<nl>\" |call AutoHead()
-autocmd BufNewFile *.gpi 0put='#!/usr/bin/gnuplot -persist' |call AutoHead()
 " }}}
 
 " make stuff organized
@@ -122,10 +163,10 @@ Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 
 " drawings
-Plug 'DrawIt'
+Plug 'vim-scripts/DrawIt'
 
 " syntax checking
-Plug 'Syntastic'
+Plug 'vim-syntastic/syntastic'
 
 " grammar checking
 Plug 'rhysd/vim-grammarous'
@@ -156,13 +197,10 @@ let g:indent_guides_start_level = 2
 
 " automatic tag generation with easytags
 Plug 'xolox/vim-easytags' " {{{
-Plug 'vim-misc'
+Plug 'xolox/vim-misc'
 let g:easytags_dynamic_files = 2
 let g:easytags_events = ['BufWritePost']
 " }}}
-
-" autocmd BufNewFile,BufRead *.coffee set ft=coffee
-Plug 'vim-coffee-script', {'for': 'coffee'}
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
@@ -179,7 +217,7 @@ autocmd FileType elixir setlocal nofoldenable
 
 Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
-Plug 'openssl.vim'
+Plug 'vim-scripts/openssl.vim'
 
 " }}}
 
@@ -193,7 +231,6 @@ if has("nvim")
     let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
     let g:deoplete#enable_auto_delimiter      = 1
-    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.config/nvim/ftdetect; ln -sf ~/.config/nvim/plugged/ultisnips/ftdetect/* ~/.config/nvim/ftdetect/'}
     autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 else
     Plug 'Shougo/neocomplete.vim'
@@ -203,19 +240,15 @@ else
     let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
     " let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
     let g:neocomplete#enable_auto_delimiter=1
-    " Plug 'SirVer/ultisnips', {'do': 'mkdir -p ~/.vim/ftdetect; ln -sf ~/.vim/plugged/ultisnips/ftdetect/* ~/.vim/ftdetect/'}
 endif
-Plug 'honza/vim-snippets'
-" add personal snippet directory to search path, note that snippets is reserved and could not be used
 
-Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips' " {{{ 
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+Plug 'honza/vim-snippets'
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
 let g:UltiSnipsEditSplit= 'vertical'
-" Plug 'Shougo/neosnippet' 
-" Plug 'Shougo/neosnippet-snippets'
-" let g:neosnippet#enable_snipmate_compatibility = 1
-" let g:neosnippet#snippets_directory= g:vim_home . '/snips'
+" }}} Plug 'SirVer/ultisnips' "
 
 Plug 'Shougo/unite.vim' " {{{
 Plug 'Shougo/vimproc', {'do': 'make'}
@@ -299,10 +332,6 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 Plug 'chase/vim-ansible-yaml'
 Plug 'hashivim/vim-terraform'
 
-Plug 'hashivim/vim-terraform'
-
-Plug 'openssl.vim'
-
 "===================Plug loading ends==========================================
 call plug#end()
 
@@ -316,7 +345,10 @@ if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme Tomorrow-Night-Eighties
+    set t_8f=[38;2;%lu;%lu;%lum
+    set t_8b=[48;2;%lu;%lu;%lum
+    colorscheme gruvbox
+    " colorscheme Tomorrow-Night-Eighties
     " colorscheme SpacegrayEighties
 else
     colorscheme tango
