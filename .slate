@@ -41,10 +41,10 @@ bind p:${hyper}  throw next
 bind i:${hyper}  ${full}
 bind ;:${hyper}  ${lefthalf}
 bind ':${hyper}  ${righthalf}
-# bind y:${hyper}  ${topleft}
-# bind u:${hyper}  ${topright}
-# bind b:${hyper}  ${bottomleft}
-# bind n:${hyper}  ${bottomright}
+bind y:${hyper}  ${topleft}
+bind u:${hyper}  ${topright}
+bind n:${hyper}  ${bottomleft}
+bind m:${hyper}  ${bottomright}
 
 ## Layouts
 layout 1mon ${terminal} ${righthalf}
@@ -53,11 +53,17 @@ layout 1mon ${browser}  ${lefthalf}
 layout maxall ${terminal}   ${full}
 layout maxall ${browser}    ${full}
 
+layout webdev ${browser} ${righthalf}
+layout webdev ${terminal} ${topleft}
+layout webdev Firefox ${bottomleft}
+
 ## App bindings
 # These are laid out on the left hand
 bind f:${hyper} focus ${browser}
 bind t:${hyper} focus ${terminal}
+bind z:${hyper} toggle 'Firefox'
 
 # Layout bindings
+bind 2:${hyper}     layout webdev
 bind 1:${hyper}     layout 1mon
 bind 0:${hyper}     layout maxall
