@@ -58,7 +58,8 @@ endsnippet
 snippet int "每月利息" b
 ${1:`date +%Y-%m`}-${2:01} * Interest
     Assets:ING:Savings      $ $3
-    Assets:Alipay           CNY $4
+    Assets:NAB:Savings      $ $4
+    Assets:Alipay           CNY $5
     Income:Interest
 
 $1-$2 * Amy Wang
@@ -93,3 +94,14 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * BTCMarkets
 
 endsnippet
 
+snippet milk "牛奶代购"
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${3: 2 Health}
+    Assets:ING:Everyday     $ -${4}
+    Assets:Alipay           CNY ${5}
+    Currency
+
+endsnippet
+
+snippet nab "NAB Debit Card" b
+Assets:NAB:Access
+endsnippet

@@ -41,6 +41,7 @@ set softtabstop=2 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
 set relativenumber
 
+set hidden              " hide instead of abandon buffer
 map Q gq
 set wrap
 set whichwrap=b,s,<,>,[,],h,l
@@ -126,6 +127,8 @@ set tags=./.tags;
 
 " 高亮当前位置
 set cursorline cursorcolumn
+
+set noautochdir
 
 "---------------------encoding detection--------------------------------
 set fileencoding&

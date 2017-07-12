@@ -208,6 +208,7 @@ autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
 Plug 'slim-template/vim-slim', {'for': 'slim'}
+autocmd FileType slim setlocal textwidth=999
 
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
@@ -222,7 +223,6 @@ Plug 'vim-scripts/openssl.vim'
 " }}}
 
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
-
 if has("nvim")
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     let g:deoplete#enable_at_startup          = 1
@@ -244,71 +244,56 @@ endif
 
 Plug 'SirVer/ultisnips' " {{{ 
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
-Plug 'honza/vim-snippets'
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
 let g:UltiSnipsEditSplit= 'vertical'
 " }}} Plug 'SirVer/ultisnips' "
 
-Plug 'Shougo/unite.vim' " {{{
-Plug 'Shougo/vimproc', {'do': 'make'}
-Plug 'Shougo/unite-outline'
-Plug 'tacroe/unite-mark'
-Plug 'osyo-manga/vim-anzu' " {{{
-" mapping
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <Plug>(anzu-N-with-echo)
-nmap * <Plug>(anzu-star-with-echo)
-nmap # <Plug>(anzu-sharp-with-echo)
+" Plug fzf {{{
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim' 
 
-" clear status
-nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>/ :call SearchWordWithAg()<CR>
+vnoremap <silent> <leader>/ :call SearchSelectionWithAg()<CR>
 
+imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+imap <C-x><C-l> <plug>(fzf-complete-line)
 
-" statusline
-set statusline=%{anzu#search_status()}
-" }}}
-Plug 'Shougo/neomru.vim'
-if executable('ag')
-    let g:unite_source_grep_command        = 'ag'
-    let g:unite_source_rec_async_command   = 'ag --nocolor --nogroup --hidden -g ""'
-    let g:unite_source_grep_default_opts   = '--nocolor --nogroup --hidden'
-    let g:unite_source_grep_recursive_opt  = ''
-    let g:unite_source_grep_max_candidates = 200
-endif
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_file_mru_limit      = 100
-let g:neomru#time_format               = "[%m-%d %H:%M] "
-let g:unite_source_rec_max_cache_files = 5000
-" reenable ag to ignore files defined in .gitignore, if unwanted files still
-" shows up, refresh unite cache in with <C-l> in any unite window
-let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', '']
-
-nnoremap <leader><space> :<C-u>Unite -quick-match buffer<cr>
-nnoremap <leader>f       :<C-u>Unite -no-split -start-insert -buffer-name=FILES buffer file_rec/git:--cached:--others:--exclude-standard<cr>
-nnoremap <leader>/       :<C-u>Unite -buffer-name=code -auto-preview grep:.<cr>
-nnoremap <leader>o       :<C-u>Unite -buffer-name=outline -no-start-insert outline<cr>
-nnoremap <leader>l       :<C-u>Unite<cr>
-nnoremap <leader>r       :<C-u>Unite -buffer-name=file_mru -start-insert -no-split file_mru<cr>
-"nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-"nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-"nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
-autocmd FileType unite call s:unite_settings()
-"# Q: I want the strength of the match to overpower the order in which I list sources.
-autocmd FileType unite call unite#custom#profile('files', 'filters', 'sorter_rank')
-autocmd FileType unite call unite#custom#profile('default','context',{
-            \   'start_insert': 1,
-            \   'winheight': 15,
-            \   })
-
-function! s:unite_settings()
-  " Play nice with supertab
-  let b:SuperTabDisabled=1
-  " Enable navigation with control-j and control-k in insert mode
-  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+function! SearchWordWithAg()
+  execute 'Ag' expand('<cword>')
 endfunction
+
+function! SearchSelectionWithAg() range
+  let old_reg = getreg('"')
+  let old_regtype = getregtype('"')
+  let old_clipboard = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', old_reg, old_regtype)
+  let &clipboard = old_clipboard
+  execute 'Ag' selection
+endfunction
+
+let g:fzf_colors =
+      \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
 " }}}
+
+Plug 'jiangmiao/auto-pairs'
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
@@ -332,13 +317,11 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 Plug 'chase/vim-ansible-yaml'
 Plug 'hashivim/vim-terraform'
 
+Plug 'posva/vim-vue'
+Plug 'digitaltoad/vim-pug'
+
 "===================Plug loading ends==========================================
 call plug#end()
-
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#matcher_default#use(['matcher_regexp', 'matcher_hide_current_file'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-" call unite#filters#sorter_default#use(['sorter_length'])
 
 "if has 256 colour, use a 256 colour theme
 if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
