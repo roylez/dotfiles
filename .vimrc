@@ -39,7 +39,7 @@ set smartindent autoindent expandtab smarttab
 set shiftwidth=2
 set softtabstop=2 	" replace <tab> with 4 blank space.
 set textwidth=80	" wrap text for 78 letters
-set relativenumber
+" set relativenumber
 
 set hidden              " hide instead of abandon buffer
 map Q gq

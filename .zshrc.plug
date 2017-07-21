@@ -5,6 +5,9 @@ zplug "rupa/z",         use:z.sh
 # zplug "supercrabtree/k"
 
 zplug "Tarrasch/zsh-autoenv"
+export AUTOENV_FILE_ENTER=.env
+export AUTOENV_FILE_LEAVE=.out
+export AUTOENV_HANDLE_LEAVE=1
 
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
