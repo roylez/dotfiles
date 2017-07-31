@@ -293,6 +293,11 @@ let g:fzf_colors =
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
 
+let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
+if !isdirectory( g:fzf_history_dir )
+    call mkdir( g:fzf_history_dir , "p")
+endif
+
 " }}}
 
 Plug 'jiangmiao/auto-pairs'
