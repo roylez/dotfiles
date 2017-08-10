@@ -35,6 +35,9 @@ set history=50		" keep 50 lines of command line history
 set incsearch hlsearch wrapscan
 set ignorecase smartcase
 
+" disable bell all together
+set noeb vb t_vb=
+
 set smartindent autoindent expandtab smarttab
 set shiftwidth=2
 set softtabstop=2 	" replace <tab> with 4 blank space.
