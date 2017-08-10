@@ -30,3 +30,21 @@ class rename_images(Command):
             self.fm.run( renamecmd )
         else:
             self.fm.notify("Not a directory!")
+
+class grename(Command):
+    """:grename
+
+    Rename gallery directory
+    """
+
+    def execute(self):
+        from ranger import MACRO_DELIMITER, MACRO_DELIMITER_ESC
+
+        d = self.fm.thisfile
+
+        if d.is_directory:
+            basename = d.basename.replace(MACRO_DELIMITER, MACRO_DELIMITER_ESC)
+            new_name = "-".join(basename.split()[4:-1]).lower()
+            self.fm.open_console("rename " + new_name)
+        else:
+            self.fm.notify("Not a directory")
