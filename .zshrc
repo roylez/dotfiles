@@ -511,11 +511,13 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
-
 export EDITOR=vim
 export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 #MOST like colored man pages
 export PAGER=less
