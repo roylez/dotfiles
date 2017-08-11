@@ -135,8 +135,6 @@ endfunction
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_max_signs = 200
 
-Plug 'tpope/vim-endwise'
-
 " theme
 Plug 'morhetz/gruvbox'
 
@@ -159,7 +157,7 @@ nmap ga      <Plug>(EasyAlign)
 " }}}
 
 " easymotion
-Plug 'easymotion/vim-easymotion'
+" Plug 'easymotion/vim-easymotion'
 
 " distraction free writing
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
@@ -186,9 +184,10 @@ if has('nvim')
 endif
 " }}}
 
-" parentheses
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
+" parentheses and ends
+Plug 'jiangmiao/auto-pairs'
+let g:AutoPairsShortcutFastWrap = '<C-y>'
+Plug 'tpope/vim-endwise'
 
 " git interoperability
 Plug 'tpope/vim-fugitive'
@@ -299,8 +298,6 @@ if !isdirectory( g:fzf_history_dir )
 endif
 
 " }}}
-
-Plug 'jiangmiao/auto-pairs'
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
