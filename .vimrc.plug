@@ -144,6 +144,8 @@ Plug 'blueyed/vim-diminactive'
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
 
+Plug 'airblade/vim-rooter'
+
 " comment / uncomment
 Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
@@ -169,13 +171,13 @@ Plug 'vim-scripts/DrawIt'
 Plug 'vim-syntastic/syntastic'
 
 " grammar checking
-Plug 'rhysd/vim-grammarous'
+" Plug 'rhysd/vim-grammarous'
 
 " Split in tmux
-Plug 'benmills/vimux'   " {{{
-map tr :VimuxPromptCommand<CR>
-map tl :VimuxRunLastCommand<CR>
-map tz :VimuxZoomRunner<CR>
+" Plug 'benmills/vimux'   " {{{
+" map tr :VimuxPromptCommand<CR>
+" map tl :VimuxRunLastCommand<CR>
+" map tz :VimuxZoomRunner<CR>
 
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
@@ -197,10 +199,10 @@ Plug 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_start_level = 2
 
 " automatic tag generation with easytags
-Plug 'xolox/vim-easytags' " {{{
-Plug 'xolox/vim-misc'
-let g:easytags_dynamic_files = 2
-let g:easytags_events = ['BufWritePost']
+" Plug 'xolox/vim-easytags' " {{{
+" Plug 'xolox/vim-misc'
+" let g:easytags_dynamic_files = 2
+" let g:easytags_events = ['BufWritePost']
 " }}}
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
@@ -304,7 +306,7 @@ endif
 "-------------------------------------------------------------------------------
 
 " rails stuff {{{ "
-Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'othree/html5.vim', { 'for': 'html' }
 
 Plug 'thoughtbot/vim-rspec'

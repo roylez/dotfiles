@@ -546,6 +546,11 @@ export READNULLCMD=less
 
 # 读入其他配置 {{{
 
+# fzf
+export FZF_DEFAULT_COMMAND='ag -g ""'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
 #   例如在aix主机，需要把 /usr/linux/bin
 #   置于PATH最前以便下面的配置所调用的命令是linux的版本
