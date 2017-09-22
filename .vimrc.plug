@@ -194,10 +194,6 @@ Plug 'tpope/vim-endwise'
 " git interoperability
 Plug 'tpope/vim-fugitive'
 
-" indentation guide
-Plug 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_start_level = 2
-
 " automatic tag generation with easytags
 " Plug 'xolox/vim-easytags' " {{{
 " Plug 'xolox/vim-misc'
