@@ -167,8 +167,8 @@ Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 " drawings
 Plug 'vim-scripts/DrawIt'
 
-" syntax checking
-Plug 'vim-syntastic/syntastic'
+" syntax checking, slow
+" Plug 'vim-syntastic/syntastic'
 
 " grammar checking
 " Plug 'rhysd/vim-grammarous'

@@ -561,6 +561,8 @@ if [[ -d $HOME/.zplug ]]; then
 fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
+
+(bin-exist kubectl) && source <(kubectl completion zsh)
 # }}}
 
 # 命令别名 {{{
