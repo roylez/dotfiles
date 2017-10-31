@@ -7,7 +7,7 @@ alias hyper ctrl;shift;alt;cmd
 
 ## Application aliases
 alias browser   'Google Chrome'
-alias terminal  'iTerm2'
+alias terminal  'Terminal'
 
 ## Position aliases
 alias full        move   screenOriginX;screenOriginY               screenSizeX;screenSizeY
