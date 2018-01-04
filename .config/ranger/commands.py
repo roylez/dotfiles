@@ -1,3 +1,4 @@
+# encoding: utf-8
 # This is a sample commands.py.  You can add your own commands here.
 #
 # Please refer to commands_full.py for all the default commands and a complete
@@ -44,7 +45,7 @@ class grename(Command):
 
         if d.is_directory:
             basename = d.basename.replace(MACRO_DELIMITER, MACRO_DELIMITER_ESC)
-            new_name = "-".join(basename.split()[4:-1]).lower()
+            new_name = "-".join(basename.split("–")[-1].strip().split()[0:-1]).lower()
             self.fm.open_console("rename " + new_name)
         else:
             self.fm.notify("Not a directory")
