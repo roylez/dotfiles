@@ -12,7 +12,7 @@ call plug#begin( g:vim_home . "/plugged")
 
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'scrooloose/nerdtree' "{{{
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
@@ -68,6 +68,17 @@ au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
 Plug 'itchyny/lightline.vim' "{{{
+
+" https://apw-bash-settings.readthedocs.io/en/latest/tipstricks.html
+if ! has('gui_running')
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
+endif
+
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
@@ -132,7 +143,7 @@ function! LLFilename()
 endfunction
 " }}}
 
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'for': ['elixir', 'ruby'] }
 let g:gitgutter_max_signs = 200
 
 " theme
@@ -165,7 +176,7 @@ nmap ga      <Plug>(EasyAlign)
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 
 " drawings
-Plug 'vim-scripts/DrawIt'
+Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 
 " syntax checking, slow
 " Plug 'vim-syntastic/syntastic'
@@ -192,7 +203,7 @@ let g:AutoPairsShortcutFastWrap = '<C-y>'
 Plug 'tpope/vim-endwise'
 
 " git interoperability
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 
 " automatic tag generation with easytags
 " Plug 'xolox/vim-easytags' " {{{

@@ -129,7 +129,7 @@ set timeoutlen=1000 ttimeoutlen=0
 set tags=./.tags;
 
 " 高亮当前位置
-set cursorline cursorcolumn
+" set cursorline cursorcolumn
 
 set noautochdir
 
@@ -290,3 +290,4 @@ vmap <silent> <expr> p <sid>Repl()
 autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
 autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 " }}} Highlight keywords like TODO BUG HACK INFO and etc "
+

@@ -52,19 +52,19 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
 endsnippet
 
 snippet cred "CreditCard" b
-Liabilities:CreditCard:BankWest
+Liabilities:CreditCard:Coles
 endsnippet
 
 snippet int "每月利息" b
 ${1:`date +%Y-%m`}-${2:01} * Interest
     Assets:ING:Savings      $ $3
     Assets:NAB:Savings      $ $4
-    Assets:Alipay           CNY $5
+    Assets:NAB:Access	    $ ${5:0}
     Income:Interest
 
-$1-$2 * Amy Wang
-    Expenses:Child Support	CNY 4000
-    Assets:Alipay
+$1-$2 * NAB -> NAB
+    Assets:NAB:Savings	    $ 1
+    Assets:NAB:Access
 endsnippet
 
 snippet rep "Credit Card Repayment" b
