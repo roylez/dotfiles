@@ -2,6 +2,7 @@ global !p
 def ing_paywave_rebate(amount):
     return round(float(amount) * 2.0 / 100, 2)
 
+# Expenses:Insurance        $ `!p snip.rv=creditcard_insurance(t[3])`
 def creditcard_insurance(amount):
     # try:
     return round(float(amount) * 0.0055, 2)
@@ -12,7 +13,7 @@ endglobal
 
 snippet exp "Expense" b
 ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
-    Expenses:${5:Grocery}	    ${6:$} ${7:value}
+    Expenses:${5:Grocery}   ${6:$} ${7:value}
     ${8:Assets:}$9
 endsnippet
 
@@ -30,8 +31,8 @@ endsnippet
 
 snippet din "Dining" b
 ${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Restaurant}
-    Dinning	    ${4:$} ${5:value}
-    ${6:Cash}
+    Expenses:Dinning      ${4:$} ${5:value}
+    ${6:Assets:Cash}
 endsnippet
 
 snippet with "Withdraw" b
@@ -68,10 +69,9 @@ $1-$2 * NAB -> NAB
 endsnippet
 
 snippet rep "Credit Card Repayment" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * BankWest
-    Liabilities:CreditCard:BankWest         $ ${3:0.0}
-    Expenses:Insurance                      $ `!p snip.rv=creditcard_insurance(t[3])`
-    Assets:ING:Everyday
+${1:`date +%Y-%m-`}${2:`date +%d`} * CreditCard Payment
+    Liabilities:CreditCard:${3:Coles}     $ ${4:0.0}
+    Assets:${5:NAB:Access}
 endsnippet
 
 snippet deb "Debit Card" b
