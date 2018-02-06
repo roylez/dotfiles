@@ -38,9 +38,9 @@ set ignorecase smartcase
 " disable bell all together
 set noeb vb t_vb=
 
-set smartindent autoindent expandtab smarttab
-set shiftwidth=2
-set softtabstop=2 	" replace <tab> with 4 blank space.
+set smartindent autoindent 
+" replace <tab> with 2 blank space.
+set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=4
 set textwidth=80	" wrap text for 78 letters
 " set relativenumber
 
