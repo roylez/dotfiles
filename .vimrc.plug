@@ -210,20 +210,6 @@ Plug 'tpope/vim-endwise'
 " let g:easytags_events = ['BufWritePost']
 " }}}
 
-Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
-autocmd FileType ledger nnoremap j jzz
-autocmd FileType ledger nnoremap k kzz
-autocmd FileType ledger nnoremap G Gzz
-
-Plug 'slim-template/vim-slim', {'for': 'slim'}
-autocmd FileType slim setlocal textwidth=999
-
-autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
-Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
-
-Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
-autocmd FileType elixir setlocal nofoldenable
-
 Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
 Plug 'vim-scripts/openssl.vim'
@@ -328,7 +314,21 @@ Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'posva/vim-vue'
 Plug 'digitaltoad/vim-pug'
 
+Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
+autocmd FileType ledger nnoremap j jzz
+autocmd FileType ledger nnoremap k kzz
+autocmd FileType ledger nnoremap G Gzz
+
+Plug 'slim-template/vim-slim', {'for': 'slim'}
+autocmd FileType slim setlocal textwidth=999
+
+autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
+Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
+
 " Elixir {{{
+Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
+autocmd FileType elixir setlocal nofoldenable
+
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 " }}}
 
