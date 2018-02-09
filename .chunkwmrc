@@ -101,12 +101,25 @@ chunkc set focused_border_skip_floating  0
 
 chunkc core::load tiling.so
 chunkc core::load border.so
-chunkc core::load ffm.so
+# focus follow mouse 
+# chunkc core::load ffm.so
 
 #
 # NOTE: shell commands require escaped quotes
 #       to pass value containing a whitespace.
 #
 
-chunkc tiling::rule --owner Finder --name Copy --state float
-chunkc tiling::rule --owner \"App Store\" --state float
+chunkc tiling::rule --owner "^Tweetbot$"        --state float   --except "Main Window"
+chunkc tiling::rule --owner "^Xcode$"           --state float
+chunkc tiling::rule --owner "^Photoshop CC$"    --state float
+chunkc tiling::rule --owner "^Fantastical 2$"   --state float
+chunkc tiling::rule --owner "^Fantastical$"     --state float
+chunkc tiling::rule --owner "^App Store$"       --state float
+chunkc tiling::rule --owner "^The Unarchiver$"  --state float
+chunkc tiling::rule --owner "^CleanMyMac 3$"    --state float
+chunkc tiling::rule --owner "^Spotify$"         --state float
+chunkc tiling::rule --owner "^Airmail$"         --state float
+chunkc tiling::rule --owner "^LeagueClientUx$"  --state float
+chunkc tiling::rule --owner "^Dash$"            --state float
+chunkc tiling::rule --owner "^Finder$"          --name "Trash"  --state float
+chunkc tiling::rule --owner "^Finder$"          --name "Copy"   --state float

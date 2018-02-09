@@ -85,17 +85,15 @@ ctrl + cmd - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::moni
 ctrl + cmd - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 ctrl + cmd - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
 
-# increase region size
-shift + alt - a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-shift + alt - s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
-shift + alt - w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
-shift + alt - d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
-
-# decrease region size
-shift + cmd - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
-shift + cmd - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
-shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
-shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
+# increase/decrease region size
+ctrl + cmd + alt - left  : chunkc tiling::window --use-temporary-ratio 0.04 --adjust-window-edge west;\
+                           chunkc tiling::window --use-temporary-ratio -0.04 --adjust-window-edge east
+ctrl + cmd + alt - right : chunkc tiling::window --use-temporary-ratio 0.04 --adjust-window-edge east;\
+                           chunkc tiling::window --use-temporary-ratio -0.04 --adjust-window-edge west
+ctrl + cmd + alt - down  : chunkc tiling::window --use-temporary-ratio 0.04 --adjust-window-edge south;\
+                           chunkc tiling::window --use-temporary-ratio -0.04 --adjust-window-edge north
+ctrl + cmd + alt - up    : chunkc tiling::window --use-temporary-ratio 0.04 --adjust-window-edge north;\
+                           chunkc tiling::window --use-temporary-ratio -0.04 --adjust-window-edge south
 
 # set insertion point for focused container
 ctrl + alt - f : chunkc tiling::window --use-insertion-point cancel
