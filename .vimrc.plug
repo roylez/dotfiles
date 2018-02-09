@@ -10,8 +10,6 @@ call plug#begin( g:vim_home . "/plugged")
 "                                 readability                                  "
 "-------------------------------------------------------------------------------
 
-Plug 'ryanoasis/vim-devicons'
-
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
@@ -155,7 +153,7 @@ Plug 'blueyed/vim-diminactive'
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
 
-Plug 'airblade/vim-rooter'
+" Plug 'airblade/vim-rooter'
 
 " comment / uncomment
 Plug 'tomtom/tcomment_vim' " {{{
@@ -234,23 +232,20 @@ Plug 'vim-scripts/openssl.vim'
 
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 if has("nvim")
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    let g:deoplete#enable_at_startup          = 1
-    let g:deoplete#omni#input_patterns        = {}
-    let g:deoplete#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
-    let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-    let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
-    let g:deoplete#enable_auto_delimiter      = 1
-    autocmd FileType eruby let b:deoplete_disable_auto_complete=1
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-    Plug 'Shougo/neocomplete.vim'
-    let g:neocomplete#enable_at_startup=1
-    let g:neocomplete#sources#omni#input_patterns = {}
-    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplete#sources#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-    " let g:neocomplete#data_directory='~/.vim/.cache/neocomplete'
-    let g:neocomplete#enable_auto_delimiter=1
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup          = 1
+let g:deoplete#omni#input_patterns        = {}
+let g:deoplete#omni#input_patterns.ruby   = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+let g:deoplete#omni#input_patterns.ruby   = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
+let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
+let g:deoplete#enable_auto_delimiter      = 1
+autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 
 Plug 'SirVer/ultisnips' " {{{ 
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
@@ -313,25 +308,29 @@ endif
 "-------------------------------------------------------------------------------
 
 " rails stuff {{{ "
-Plug 'tpope/vim-rails', { 'for': 'ruby' }
-Plug 'othree/html5.vim', { 'for': 'html' }
+" Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
-Plug 'thoughtbot/vim-rspec'
-Plug 'tpope/vim-dispatch'
-
-let g:rspec_command = "Dispatch rspec {spec}"
-
-nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
-nnoremap <Leader>s :call RunNearestSpec()<CR>
-nnoremap <Leader>l :call RunLastSpec()<CR>
+" Plug 'thoughtbot/vim-rspec'
+" Plug 'tpope/vim-dispatch'
+"
+" let g:rspec_command = "Dispatch rspec {spec}"
+"
+" nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
+" nnoremap <Leader>s :call RunNearestSpec()<CR>
+" nnoremap <Leader>l :call RunLastSpec()<CR>
 
 " }}} rails stuff "
 
-Plug 'chase/vim-ansible-yaml'
-Plug 'hashivim/vim-terraform'
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
+Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 
 Plug 'posva/vim-vue'
 Plug 'digitaltoad/vim-pug'
+
+" Elixir {{{
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+" }}}
 
 "===================Plug loading ends==========================================
 call plug#end()
