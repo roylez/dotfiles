@@ -30,8 +30,8 @@
 #                                  an EOL character signifies the end of the bind.
 
 
-# open terminal, blazingly fast compared to iTerm/Hyper
-ctrl + cmd + alt - return : open -na ~/Applications/Kitty.app
+# open terminal
+ctrl + cmd + alt - return : open -na /Applications/iTerm.app
 
 # close focused window
 alt - w : chunkc tiling::window --close
@@ -61,15 +61,9 @@ shift + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1
 shift + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
 
 # send window to desktop
-shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-shift + alt - z : chunkc tiling::window --send-to-desktop prev
-shift + alt - c : chunkc tiling::window --send-to-desktop next
-shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
-shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
-shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
-shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
-shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
-shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
+# shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
+shift + cmd + alt + ctrl - left : chunkc tiling::window --send-to-desktop prev
+shift + cmd + alt + ctrl - right: chunkc tiling::window --send-to-desktop next
 
 # focus monitor
 ctrl + alt - z  : chunkc tiling::monitor -f prev
@@ -106,7 +100,7 @@ ctrl + alt - l : chunkc tiling::window --use-insertion-point east
 ctrl + alt + cmd - space : chunkc tiling::desktop --rotate 90
 
 # toggle desktop offset
-alt - a : chunkc tiling::desktop --toggle offset
+# alt - a : chunkc tiling::desktop --toggle offset
 
 # toggle window fullscreen
 ctrl + alt + cmd - f : chunkc tiling::window --toggle fullscreen
@@ -118,8 +112,8 @@ ctrl + alt + cmd - p : chunkc tiling::window --toggle parent
 alt - e : chunkc tiling::window --toggle split
 
 # float / unfloat window and center on screen
-alt - t : chunkc tiling::window --toggle float;\
-          chunkc tiling::window --grid-layout 4:4:1:1:2:2
+ctrl + cmd + alt - i : chunkc tiling::window --toggle float;\
+                       chunkc tiling::window --grid-layout 4:4:1:1:2:2
 
 # toggle sticky, float and resize to picture-in-picture size
 alt - s : chunkc tiling::window --toggle sticky;\
@@ -129,8 +123,8 @@ alt - s : chunkc tiling::window --toggle sticky;\
 shift + alt - t : chunkc set window_float_next 1
 
 # change layout of desktop
-ctrl + alt - a : chunkc tiling::desktop --layout bsp
-ctrl + alt - s : chunkc tiling::desktop --layout monocle
+ctrl + alt + cmd - a : chunkc tiling::desktop --layout bsp
+ctrl + alt + cmd - s : chunkc tiling::desktop --layout monocle
 ctrl + alt - d : chunkc tiling::desktop --layout float
 
 ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_1
