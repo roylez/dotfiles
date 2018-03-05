@@ -157,6 +157,8 @@ Plug 'blueyed/vim-diminactive'
 
 Plug 'airblade/vim-rooter'
 
+Plug 'lfv89/vim-interestingwords'
+
 " comment / uncomment
 Plug 'tomtom/tcomment_vim' " {{{
 vmap <F9> :TComment<CR>
