@@ -325,17 +325,9 @@ local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       # red for root user name
 local symbol="$pB%(!:$pfg_red# :$pfg_yellow > )$pR"
 # local symbol="$pB$pfg_yellow> $pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
-PROMPT='$host $user$(get_prompt_git)$job$symbol'
+PROMPT='$host $user $__PROMPT_PWD$(get_prompt_git)$job$symbol'
 PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
-#NOTE  **DO NOT** use double quote , it does not work
-# typeset -A altchar
-# set -A altchar ${(s..)terminfo[acsc]}
-# PR_SET_CHARSET="%{$terminfo[enacs]%}"
-# PR_SHIFT_IN="%{$terminfo[smacs]%}"
-# PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-#PR_RSEP=$PR_SET_CHARSET$PR_SHIFT_IN${altchar[\`]:-|}$PR_SHIFT_OUT
-local prompt_time="%(?:$pfg_green:$pfg_red)%*$pR"
-RPROMPT='$__PROMPT_PWD'
+# RPROMPT='$__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
 SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
@@ -573,7 +565,7 @@ alias -g C="|wc"
 alias -g E="|sed"
 alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
-alias -g L="|less"
+alias -g L="|less -R"
 alias -g P="|column -t"
 alias -g R="|tac"
 alias -g S="|sort"

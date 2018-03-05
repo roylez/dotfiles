@@ -153,7 +153,7 @@ Plug 'blueyed/vim-diminactive'
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
 
-" Plug 'airblade/vim-rooter'
+Plug 'airblade/vim-rooter'
 
 " comment / uncomment
 Plug 'tomtom/tcomment_vim' " {{{
@@ -246,11 +246,16 @@ Plug 'junegunn/fzf.vim'
 
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>/ :call SearchWordWithAg()<CR>
+" nnoremap <silent> <leader>/ :call SearchWordWithAg()<CR>
+nnoremap <silent> <leader>/ :Ag<CR>
 vnoremap <silent> <leader>/ :call SearchSelectionWithAg()<CR>
+nnoremap <silent> <leader>s :Snippets<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
+
+autocmd VimEnter * command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, <bang>0)
 
 function! SearchWordWithAg()
   execute 'Ag' expand('<cword>')

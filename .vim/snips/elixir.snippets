@@ -24,6 +24,12 @@ def init( ${2:args} ) do
 end
 endsnippet 
 
-snippet puts "IO.inspect" b
+snippet ins "IO.inspect" b
 IO.inspect $1
+endsnippet
+
+snippet	defm "defmodule" b
+defmodule ${1:AppModule} do
+$0
+end
 endsnippet
