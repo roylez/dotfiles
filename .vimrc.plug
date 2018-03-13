@@ -143,10 +143,11 @@ endfunction
 
 Plug 'airblade/vim-gitgutter', { 'for': ['elixir', 'ruby'] }
 let g:gitgutter_max_signs = 200
-
+let g:gitgutter_map_keys = 0
 " theme
 Plug 'morhetz/gruvbox'
 
+" dim inactive window
 Plug 'blueyed/vim-diminactive'
 
 "-------------------------------------------------------------------------------
@@ -155,12 +156,13 @@ Plug 'blueyed/vim-diminactive'
 
 Plug 'airblade/vim-rooter'
 
+" multiple highlights <leader>k, clear with <leader>K
 Plug 'lfv89/vim-interestingwords'
 
 " comment / uncomment
-Plug 'tomtom/tcomment_vim' " {{{
-vmap <F9> :TComment<CR>
-nmap <F9> :TComment<CR>
+Plug 'tpope/vim-commentary' " {{{
+vmap <F9> :Commentary<CR>
+nmap <F9> :Commentary<CR>
 " }}}
 
 " make stuff organized
@@ -169,20 +171,11 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 " }}}
 
-" easymotion
-" Plug 'easymotion/vim-easymotion'
-
 " distraction free writing
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
-
-" syntax checking, slow
-" Plug 'vim-syntastic/syntastic'
-
-" grammar checking
-" Plug 'rhysd/vim-grammarous'
 
 " Split in tmux
 " Plug 'benmills/vimux'   " {{{
@@ -202,17 +195,11 @@ Plug 'jiangmiao/auto-pairs'
 let g:AutoPairsShortcutFastWrap = '<C-y>'
 Plug 'tpope/vim-endwise'
 
-" git interoperability
-" Plug 'tpope/vim-fugitive'
-
-" automatic tag generation with easytags
-" Plug 'xolox/vim-easytags' " {{{
-" Plug 'xolox/vim-misc'
-" let g:easytags_dynamic_files = 2
-" let g:easytags_events = ['BufWritePost']
+Plug 'janko-m/vim-test' " {{{
+Plug 'tpope/vim-dispatch'
+nmap <silent> <leader>t :TestFile<CR>
+let test#stratgy = 'dispatch_background'
 " }}}
-
-Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
 Plug 'vim-scripts/openssl.vim'
 
@@ -246,6 +233,10 @@ let g:UltiSnipsEditSplit= 'vertical'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim' 
 
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+endif
+
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 " nnoremap <silent> <leader>/ :call SearchWordWithAg()<CR>
@@ -256,7 +247,7 @@ nnoremap <silent> <leader>s :Snippets<CR>
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
-autocmd VimEnter * command! -bang -nargs=* Ag
+command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, <bang>0)
 
 function! SearchWordWithAg()
@@ -300,44 +291,22 @@ endif
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
 
-" rails stuff {{{ "
-" Plug 'tpope/vim-rails', { 'for': 'ruby' }
+" support for ansible, html5, elixir, vue file types and more
+Plug 'sheerun/vim-polyglot'
 
-" Plug 'thoughtbot/vim-rspec'
-" Plug 'tpope/vim-dispatch'
-"
-" let g:rspec_command = "Dispatch rspec {spec}"
-"
-" nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
-" nnoremap <Leader>s :call RunNearestSpec()<CR>
-" nnoremap <Leader>l :call RunLastSpec()<CR>
-
-" }}} rails stuff "
-
-Plug 'othree/html5.vim', { 'for': 'html' }
-Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-
-Plug 'posva/vim-vue'
-Plug 'digitaltoad/vim-pug'
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
-Plug 'slim-template/vim-slim', {'for': 'slim'}
-autocmd FileType slim setlocal textwidth=999
-
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
-" Elixir {{{
-Plug 'elixir-lang/vim-elixir', { 'for' : 'elixir' }
-autocmd FileType elixir setlocal nofoldenable
+Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
 
-Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
-" }}}
+Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 
 "===================Plug loading ends==========================================
 call plug#end()
