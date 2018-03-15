@@ -67,6 +67,8 @@ au Syntax * RainbowParenthesesLoadBraces
 
 Plug 'itchyny/lightline.vim' "{{{
 
+set noshowmode
+
 " https://apw-bash-settings.readthedocs.io/en/latest/tipstricks.html
 if ! has('gui_running')
   set ttimeoutlen=10
@@ -80,7 +82,7 @@ endif
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'fugitive'],[ 'dir', 'filename' ] ]
+      \             [ 'filename' ], [ 'dir' ] ]
       \ },
       \ 'component_function': {
       \   'fugitive': 'LLFugitive',
@@ -105,25 +107,11 @@ function! LLMode()
 endfunction
 
 function! LLModified()
-  if &filetype == "help"
-    return ""
-  elseif &modified
-    return "+"
-  elseif &modifiable
-    return ""
-  else
-    return ""
-  endif
+  return &modified && &filetype !~# '\v(help|vimfiler|unite)' ? '+' : ''
 endfunction
 
 function! LLReadonly()
-  if &filetype == "help"
-    return ""
-  elseif &readonly
-    return "!"
-  else
-    return ""
-  endif
+  return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
 endfunction
 
 function! LLFugitive()
@@ -141,9 +129,6 @@ function! LLFilename()
 endfunction
 " }}}
 
-Plug 'airblade/vim-gitgutter', { 'for': ['elixir', 'ruby'] }
-let g:gitgutter_max_signs = 200
-let g:gitgutter_map_keys = 0
 " theme
 Plug 'morhetz/gruvbox'
 
