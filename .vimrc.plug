@@ -65,68 +65,27 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
-Plug 'itchyny/lightline.vim' "{{{
-
+Plug 'vim-airline/vim-airline' " {{{
 set noshowmode
-
-" https://apw-bash-settings.readthedocs.io/en/latest/tipstricks.html
-if ! has('gui_running')
-  set ttimeoutlen=10
-  augroup FastEscape
-    autocmd!
-    au InsertEnter * set timeoutlen=0
-    au InsertLeave * set timeoutlen=1000
-  augroup END
-endif
-
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'filename' ], [ 'dir' ] ]
-      \ },
-      \ 'component_function': {
-      \   'fugitive': 'LLFugitive',
-      \   'readonly': 'LLReadonly',
-      \   'modified': 'LLModified',
-      \   'filename': 'LLFilename',
-      \   'mode':     'LLMode',
-      \   'dir':      'LLDir',
-      \ }
-      \ }
-
-function! LLMode()
-  let fname = expand('%:t')
-  return fname == '__Tagbar__' ? 'Tagbar' :
-        \ fname == 'ControlP' ? 'CtrlP' :
-        \ lightline#mode() == 'NORMAL' ? 'N' :
-        \ lightline#mode() == 'INSERT' ? 'I' :
-        \ lightline#mode() == 'VISUAL' ? 'V' :
-        \ lightline#mode() == 'V-LINE' ? 'VL' :
-        \ lightline#mode() == 'V-BLOCK' ? 'VB' :
-        \ lightline#mode() == 'REPLACE' ? 'R' : lightline#mode()
-endfunction
-
-function! LLModified()
-  return &modified && &filetype !~# '\v(help|vimfiler|unite)' ? '+' : ''
-endfunction
-
-function! LLReadonly()
-  return &readonly && &filetype !~# '\v(help|vimfiler|unite)' ? 'RO' : ''
-endfunction
-
-function! LLFugitive()
-  return exists('*fugitive#head') ? fugitive#head() : ''
-endfunction
-
-function! LLDir()
-    return pathshorten(substitute(getcwd(), $HOME, "~", ""))
-endfunction
-
-function! LLFilename()
-  return ('' != LLReadonly() ? LLReadonly() . ' ' : '') .
-       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-       \ ('' != LLModified() ? ' ' . LLModified() : '')
-endfunction
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'INSERT',
+    \ 'R'  : 'REPLACE',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'VL',
+    \ '' : 'VB',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S',
+    \ }
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline_section_x='%{&filetype}'
+let g:airline_section_z='%l,%c%V %3p%%'
+let g:airline_section_error=''
+let g:airline_section_warning=''
+let g:airline_theme='dark'
 " }}}
 
 " theme
@@ -191,6 +150,8 @@ Plug 'vim-scripts/openssl.vim'
 " }}}
 
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
+
+" Plug deoplete {{{
 if has("nvim")
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -199,15 +160,16 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup          = 1
+let g:deoplete#omni#min_pattern_length    = 3
 let g:deoplete#omni#input_patterns        = {}
-let g:deoplete#omni#input_patterns.ruby   = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 let g:deoplete#omni#input_patterns.ruby   = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
 let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter      = 1
 autocmd FileType eruby let b:deoplete_disable_auto_complete=1
+" }}}
 
-Plug 'SirVer/ultisnips' " {{{ 
+Plug 'SirVer/ultisnips' " {{{
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
@@ -216,7 +178,7 @@ let g:UltiSnipsEditSplit= 'vertical'
 
 " Plug fzf {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim' 
+Plug 'junegunn/fzf.vim'
 
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
@@ -269,6 +231,8 @@ let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
 if !isdirectory( g:fzf_history_dir )
     call mkdir( g:fzf_history_dir , "p")
 endif
+
+let g:fzf_layout = { 'window': 'enew' }
 
 " }}}
 
