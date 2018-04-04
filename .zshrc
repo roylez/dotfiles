@@ -24,7 +24,7 @@ fi
 #color defined for prompts and etc
 autoload colors
 [[ $terminfo[colors] -ge 8 ]] && colors
-pR="%{$reset_color%}%u%b" pB="%B" pU="%U"
+pR="%{$reset_color%}%u%b" pB="%B" pU="%U" pS="%S" pSS="%s"
 for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
 #}}}
 #}}}
@@ -208,15 +208,16 @@ get_git_status() {
         if [[ $arr[1] =~ 'Not currently on any branch.' ]]; then
             __CURRENT_GIT_BRANCH='no-branch'
         else
-            __CURRENT_GIT_BRANCH="${arr[1][(w)4]}";
+            __CURRENT_GIT_BRANCH="${arr[1][(w)4]}"
+            [[ $__CURRENT_GIT_BRANCH == "master" ]] && __CURRENT_GIT_BRANCH=M
         fi
 
         if [[ $arr[2] =~ 'Your branch is' ]]; then
             case $arr[2] in
-                *ahead*      ) __CURRENT_GIT_BRANCH_STATUS=ahead ;;
-                *diverged*   ) __CURRENT_GIT_BRANCH_STATUS=diverged ;;
-                *up-to-date* ) __CURRENT_GIT_BRANCH_STATUS=up-to-date ;;
-                *            ) __CURRENT_GIT_BRANCH_STATUS=behind ;;
+                *ahead*    ) __CURRENT_GIT_BRANCH_STATUS=ahead      ;;
+                *diverged* ) __CURRENT_GIT_BRANCH_STATUS=diverged   ;;
+                *date*     ) __CURRENT_GIT_BRANCH_STATUS=up-to-date ;;
+                *          ) __CURRENT_GIT_BRANCH_STATUS=behind     ;;
             esac
         fi
 
@@ -236,18 +237,18 @@ get_prompt_git() {
     if [[ -n $__CURRENT_GIT_BRANCH ]]; then
         local s=$__CURRENT_GIT_BRANCH
         case "$__CURRENT_GIT_BRANCH_STATUS" in
-            ahead) s+="${pfg_green}+" ;;
-            diverged) s+="${pfg_red}=" ;;
-            behind) s+="${pfg_magenta}-" ;;
+            ahead) s+="${pbg_green}+" ;;
+            diverged) s+="${pbg_red}=" ;;
+            behind) s+="${pbg_magenta}-" ;;
         esac
         if [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]]; then
             if [[ $__CURRENT_GIT_BRANCH_HAS_UNSTAGED = '1' ]]; then
-                s+="${pfg_red}*"
+                s+="${pbg_red}*"
             else
-                s+="${pfg_green}*"
+                s+="${pbg_green}*"
             fi
         fi
-        echo " $pfg_black$pbg_white$pB $s $pR"
+        echo " $pfg_black$pbg_white$pS$pB $s $pR$pSS"
     fi
 }
 #}}}
@@ -539,7 +540,8 @@ export READNULLCMD=less
 # 读入其他配置 {{{
 
 # fzf
-export FZF_DEFAULT_COMMAND='ag -g ""'
+# export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
