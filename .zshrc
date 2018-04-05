@@ -255,28 +255,23 @@ get_prompt_git() {
 
 #{{{ functions to set gnu screen title
 # active command as title in terminals
+function title() {}
 case $TERM in
-    xterm*|rxvt*)
-        function title() { print -nP "\e]0;$1\a" }
-        ;;
-    screen*)
-        if [[ -n $STY ]] && (screen -ls |grep $STY &>/dev/null); then
-            function title()
-            {
-                #modify screen title
-                print -nP "\ek$1\e\\"
-                #modify window title bar
-                #print -nPR $'\033]0;'$2$'\a'
-            }
-        elif [[ -n $TMUX ]]; then       # actually in tmux !
-            function title() { print -nP "\e]2;$1\a" }
-        else                            # fallback
-            function title() { print -nP "\ek$1\e\\" }
-        fi
-        ;;
-    *)
-        function title() {}
-        ;;
+  xterm*|rxvt*)
+    [[ -z $SSH_CONNECTION ]] && function title() { print -nP "\e]0;$1\a" }
+    ;;
+  screen*)
+    if [[ -n $TMUX ]]; then
+      function title() { print -nP "\e]2;$1\a" }
+    else
+      function title() {
+        #modify screen title
+        print -nP "\ek$1\e\\"
+        #modify window title bar
+        #print -nPR $'\033]0;'$2$'\a'
+      }
+    fi
+    ;;
 esac
 
 #set screen title if not connected remotely
