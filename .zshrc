@@ -291,7 +291,7 @@ screen_precmd() {
 screen_preexec() {
     local -a cmd; cmd=(${(z)1})
     case $cmd[1]:t in
-        'ssh')          title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd";;
+        'ssh'|'mosh')   title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd";;
         'sudo')         title "#"$cmd[2]:t "$TERM $cmd[3,-1]";;
         'for')          title "()"$cmd[7] "$TERM $cmd";;
         'svn'|'git')    title "$cmd[1,2]" "$TERM $cmd";;
