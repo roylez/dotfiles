@@ -2,10 +2,7 @@
     name = roylez
     email = me@roylez.info
 [color]  # Ensure we get color
-    diff   = always
-    branch = auto
-    status = auto
-    grep   = always
+    ui = always
 [push]
     default = simple
     followTags = true
@@ -33,15 +30,9 @@
 [github]
     user = roylez
 [core]
-    pager = cat
+    pager = /usr/share/git/diff-highlight/diff-highlight
     excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
-[filter "hawser"]       # added by github
-    clean = git hawser clean %f
-    smudge = git hawser smudge %f
-    required = true
 [status]
     submoduleSummary = true
-[url "ssh://git@heroku.com/"]
-    insteadOf = https://git.heroku.com/

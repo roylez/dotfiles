@@ -180,38 +180,36 @@ let g:UltiSnipsEditSplit= 'vertical'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+  command! -bang -nargs=* Rg
+        \ call fzf#vim#grep(
+        \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
+        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
+        \       <bang>0)
+
+  function! SearchSelectionWithRg() range
+    let old_reg = getreg('"')
+    let old_regtype = getregtype('"')
+    let old_clipboard = &clipboard
+    set clipboard&
+    normal! ""gvy
+    let selection = getreg('"')
+    call setreg('"', old_reg, old_regtype)
+    let &clipboard = old_clipboard
+    execute 'Rg' selection
+  endfunction
+
+  nnoremap <silent> <leader>/ :Rg<CR>
+  vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
 endif
 
-nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-" nnoremap <silent> <leader>/ :call SearchWordWithAg()<CR>
-nnoremap <silent> <leader>/ :Ag<CR>
-vnoremap <silent> <leader>/ :call SearchSelectionWithAg()<CR>
+nnoremap <silent> <leader>f :GFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
 
-imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-imap <C-x><C-l> <plug>(fzf-complete-line)
-
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>, <bang>0)
-
-function! SearchWordWithAg()
-  execute 'Ag' expand('<cword>')
-endfunction
-
-function! SearchSelectionWithAg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
-  execute 'Ag' selection
-endfunction
+" imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+" imap <C-x><C-l> <plug>(fzf-complete-line)
 
 let g:fzf_colors =
       \ { 'fg':      ['fg', 'Normal'],
@@ -228,22 +226,30 @@ let g:fzf_colors =
       \ 'header':  ['fg', 'Comment'] }
 
 let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
+let g:fzf_layout = { 'window': 'enew' }
 if !isdirectory( g:fzf_history_dir )
-    call mkdir( g:fzf_history_dir , "p")
+  call mkdir( g:fzf_history_dir , "p")
 endif
 
-let g:fzf_layout = { 'window': 'enew' }
 
+" }}}
+
+Plug 'mhinz/vim-startify' " {{{
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': [   'MRU']            },
+      \ { 'type': 'sessions',  'header': [   'Sessions']       },
+      \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
+      \ ]
+let g:startify_bookmarks = [ '~/.vimrc.plug' ]
 " }}}
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
 
-" support for ansible, html5, elixir, vue file types and more
+" support for ansible, html5, elixir, vue, terraform file types and more
 Plug 'sheerun/vim-polyglot'
-
-Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
