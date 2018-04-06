@@ -200,7 +200,7 @@ get_git_status() {
     local dir=$(git rev-parse --git-dir 2>/dev/null)
     [[ "${dir:h}" = "$HOME" ]] && return
 
-    local st="$(git status 2>/dev/null)"
+    local st="$(git -c color.status=false status 2>/dev/null)"
     if [[ -n "$st" ]]; then
         local -a arr
         arr=(${(f)st})
@@ -215,7 +215,7 @@ get_git_status() {
         if [[ $arr[2] =~ 'Your branch is' ]]; then
             case $arr[2] in
                 *ahead*    ) __CURRENT_GIT_BRANCH_STATUS=ahead      ;;
-                *diverged* ) __CURRENT_GIT_BRANCH_STATUS=diverged   ;;
+                *diverged* ) ""__CURRENT_GIT_BRANCH_STATUS=diverged   ;;
                 *date*     ) __CURRENT_GIT_BRANCH_STATUS=up-to-date ;;
                 *          ) __CURRENT_GIT_BRANCH_STATUS=behind     ;;
             esac
