@@ -33,3 +33,40 @@ defmodule ${1:AppModule} do
   $0
 end
 endsnippet
+
+snippet	config "Mix config" b
+use Mix.Config
+
+config :$0
+endsnippet
+
+snippet defsup "Supervisor" b
+defmodule ${1:App.Supervisor} do
+  use Supervisor
+
+  def start_link(arg) do
+    Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
+  end
+
+  def init(_) do
+
+    children = [
+      # Worker  ( { Worker, [] } )
+      # { Worker, [args] }
+      # %{ id: Worker, 
+      #    type: :worker, 
+      #    start: { Worker, :start_lin, [[]] },
+      #    restart: ..., shutdown: ... }
+      ${2:Module},
+    ]
+    Supervisor.init(children, strategy: :one_for_one)
+  end
+  
+end
+endsnippet
+
+snippet	foldp "folded code block" b
+# ${1:comment} {{{
+$0
+# }}}
+endsnippet
