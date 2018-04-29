@@ -62,8 +62,8 @@ shift + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
 
 # send window to desktop and follow focus
 # shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-shift + cmd + alt + ctrl - left : chunkc tiling::window --send-to-desktop prev; chunkc tiling::monitor -f prev
-shift + cmd + alt + ctrl - right: chunkc tiling::window --send-to-desktop next; chunkc tiling::monitor -f next
+shift + cmd + alt + ctrl - right: chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
+shift + cmd + alt + ctrl - left : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
 
 # focus monitor
 ctrl + alt - z  : chunkc tiling::monitor -f prev
