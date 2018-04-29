@@ -1,4 +1,6 @@
 
+zplug "junegunn/fzf", as:command, hook-build:"./install --bin", use:"bin/{fzf-tmux,fzf}"
+
 zplug "changyuheng/fz", defer:1
 
 zplug "agkozak/z",      use:z.sh
