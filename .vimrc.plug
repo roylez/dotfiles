@@ -38,33 +38,6 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 
 " }}}
 
-Plug 'kien/rainbow_parentheses.vim' "{{{
-let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
-"call :RainbowParenthesesToggle()
-nmap <leader>r  :RainbowParenthesesToggle<cr>
-au VimEnter * RainbowParenthesesToggle
-"au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-" }}}
-
 Plug 'vim-airline/vim-airline' " {{{
 set noshowmode
 let g:airline_mode_map = {
@@ -135,8 +108,7 @@ endif
 " }}}
 
 " parentheses and ends
-Plug 'jiangmiao/auto-pairs'
-let g:AutoPairsShortcutFastWrap = '<C-y>'
+Plug 'kana/vim-smartinput'
 Plug 'tpope/vim-endwise'
 
 Plug 'janko-m/vim-test' " {{{
@@ -177,35 +149,62 @@ let g:UltiSnipsEditSplit= 'vertical'
 " }}} Plug 'SirVer/ultisnips' "
 
 " Plug fzf {{{
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug '~/.zplug/repos/junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
-if executable('rg')
-  set grepprg=rg\ --vimgrep\ --no-heading
-  command! -bang -nargs=* Rg
-        \ call fzf#vim#grep(
-        \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
-        \       {'options': '--no-hscroll --delimiter : --nth 4..'},
-        \       <bang>0)
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+command! ProjectFiles execute 'Files' s:find_git_root()
 
-  function! SearchSelectionWithRg() range
-    let old_reg = getreg('"')
-    let old_regtype = getregtype('"')
-    let old_clipboard = &clipboard
-    set clipboard&
-    normal! ""gvy
-    let selection = getreg('"')
-    call setreg('"', old_reg, old_regtype)
-    let &clipboard = old_clipboard
-    execute 'Rg' selection
-  endfunction
+" if executable('rg')
+"   set grepprg=rg\ --vimgrep\ --no-heading
+"   command! -bang -nargs=* Rg
+"         \ call fzf#vim#grep(
+"         \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
+"         \       {'options': '--no-hscroll --delimiter : --nth 4..'},
+"         \       <bang>0)
 
-  nnoremap <silent> <leader>/ :Rg<CR>
-  vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
-endif
+"   function! SearchSelectionWithRg() range
+"     let old_reg = getreg('"')
+"     let old_regtype = getregtype('"')
+"     let old_clipboard = &clipboard
+"     set clipboard&
+"     normal! ""gvy
+"     let selection = getreg('"')
+"     call setreg('"', old_reg, old_regtype)
+"     let &clipboard = old_clipboard
+"     execute 'Rg' selection
+"   endfunction
 
+"   nnoremap <silent> <leader>/ :Rg<CR>
+"   vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
+" endif
+
+set grepprg=ag\ --nogroup\ --nocolor 
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
+
+function! SearchWordWithAg()
+  execute 'Ag' expand('<cword>')
+endfunction
+
+function! SearchSelectionWithAg() range
+  let old_reg = getreg('"')
+  let old_regtype = getregtype('"')
+  let old_clipboard = &clipboard
+  set clipboard&
+  normal! ""gvy
+  let selection = getreg('"')
+  call setreg('"', old_reg, old_regtype)
+  let &clipboard = old_clipboard
+  execute 'Ag' selection
+endfunction
+
+nnoremap <silent> <leader>/ :Ag<CR>
+vnoremap <silent> <leader>/ :call SearchSelectionWithAg()<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>f :GFiles<CR>
+nnoremap <silent> <leader>f :ProjectFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
