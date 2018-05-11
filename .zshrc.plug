@@ -19,7 +19,7 @@ zplug "asdf-vm/asdf", use:asdf.sh
 
 zplug "zsh-users/zsh-autosuggestions", use:zsh-autosuggestions.zsh
 
-zplug "knqyf263/pet", from:gh-r, as:command, use:"*linux*amd64.tar.gz"
+zplug "knqyf263/pet", from:gh-r, as:command, use:"*${$(uname):l}*amd64.tar.gz"
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
