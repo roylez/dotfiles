@@ -12,11 +12,10 @@ export PATH=$HOME/bin:$PATH
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # 定义颜色 {{{
-if [[ ("$TERM" = *256color || "$TERM" = screen*) && -f $HOME/.lscolor256 ]]; then
+if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = *kitty ) && -f $HOME/.lscolor256 ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
     use_256color=1
-    export TERMCAP=${TERMCAP/Co\#8/Co\#256}
 else
     [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
 fi
