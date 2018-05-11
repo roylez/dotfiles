@@ -31,7 +31,7 @@
 
 
 # open terminal
-ctrl + cmd + alt - return : open -na /Applications/iTerm.app
+ctrl + cmd + alt - return : open -na Kitty.app
 
 # close focused window
 alt - w : chunkc tiling::window --close
