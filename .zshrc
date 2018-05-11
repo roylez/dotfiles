@@ -473,7 +473,17 @@ bindkey "\e\e" sudo-command-line
 # }}}
 
 # {{{ c-z to continue
-bindkey -s "" "fg\n"
+fancy-ctrl-z () {
+if [[ $#BUFFER -eq 0 ]]; then
+  BUFFER="fg"
+  zle accept-line
+else
+  zle push-input
+  zle clear-screen
+fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 # }}}
 
 # {{{ esc-enter to run program in screen split region

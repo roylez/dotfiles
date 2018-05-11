@@ -70,3 +70,40 @@ snippet	foldp "folded code block" b
 $0
 # }}}
 endsnippet
+
+snippet context "Context methods create/list/update/delete" b
+# ${1:Module} {{{
+def create_${1/\w+/\l$0/}(attrs \\\\ %{}) do
+  %$1{}
+  |> $1.changeset(attrs)
+  |> Repo.insert()
+end
+
+def list_${1/\w+/\l$0/} do
+  $1 |> Repo.all
+end
+
+def get_${1/\w+/\l$0/}!(id), do: Repo.get!($1, id)
+
+def update_${1/\w+/\l$0/}(%$1{}=${1/\w+/\l$0/}, attrs) do
+  ${1/\w+/\l$0/}
+  |> $1.changeset(attrs)
+  |> Repo.update()
+end
+
+def delete_${1/\w+/\l$0/}(%$1{} = ${1/\w+/\l$0/}) do
+  Repo.delete(${1/\w+/\l$0/})
+end
+# }}}
+endsnippet
+
+snippet defjson "define implementation for Poison.Encoder"
+defimpl Poison.Encoder, for: ${1:Module} do
+  def encode(${2:mod}, opts \\\\ []) do
+    %{
+      id: $2.id,
+      $0
+    } |> Poison.Encoder.encode(opts)
+  end
+end
+endsnippet
