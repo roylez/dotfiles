@@ -76,10 +76,11 @@ Plug 'airblade/vim-rooter'
 " multiple highlights <leader>k, clear with <leader>K
 Plug 'lfv89/vim-interestingwords'
 
-" comment / uncomment
-Plug 'tpope/vim-commentary' " {{{
-vmap <F9> :Commentary<CR>
-nmap <F9> :Commentary<CR>
+" comment / uncomment, context aware
+Plug 'Shougo/context_filetype.vim'
+Plug 'tyru/caw.vim' " {{{
+vmap <F9> gcb
+nmap <F9> gcc
 " }}}
 
 " make stuff organized
@@ -251,6 +252,11 @@ Plug 'csexton/trailertrash.vim'
 
 " support for ansible, html5, elixir, vue, terraform file types and more
 Plug 'sheerun/vim-polyglot'
+" prevent syntax from stop working randomly
+autocmd FileType vue syntax sync fromstart
+" prevent vim from slowing down when editing vue
+let g:vue_disable_pre_processors=1
+
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz

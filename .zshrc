@@ -543,15 +543,6 @@ export READNULLCMD=less
 
 # 读入其他配置 {{{
 
-# fzf
-# export FZF_DEFAULT_COMMAND='ag -g ""'
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# 主机特定的配置，前置的主要原因是有可能需要提前设置PATH等环境变量
-#   例如在aix主机，需要把 /usr/linux/bin
-#   置于PATH最前以便下面的配置所调用的命令是linux的版本
 if [[ -d $HOME/.zplug ]]; then
   # git clone https://github.com/zplug/zplug ~/.zplug
   source $HOME/.zplug/init.zsh
@@ -567,7 +558,7 @@ fi
 # alias and listing colors
 alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
-alias -g C="|wc"
+alias -g C="|cut -d' '"
 alias -g E="|sed"
 alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
@@ -576,6 +567,7 @@ alias -g P="|column -t"
 alias -g R="|tac"
 alias -g S="|sort"
 alias -g T="|tail -n $(($LINES-2))"
+alias -g W="|wc"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory

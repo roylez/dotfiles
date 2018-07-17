@@ -29,32 +29,32 @@ draft=$(create_draft $xact_cmdline)
 
 echo -e "\n$draft\n"
 
-read -r -p "确定添加此记录(i添加ING Rebate)？ [Y/i/n] " response
+read -r -p "确定添加此记录(i添加ING Rebate)？ [Y/n] " response
 if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
     abort_exit "放弃编辑"
-elif [[ $response =~ ^([iI])$ ]]; then
-    read -r -a a <<< "$xact_cmdline"        # turn in to array
-    if [[ ${a[@]: -1} =~ ^([0-9.])+ ]]; then
-        amount=${!#}            # last argument
-        rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
-        rebate_cmdline="rebate $rebate"
-        xact_cmdline="$xact_cmdline $rebate_cmdline"
-    else
-        amount=${a[@]: -2:1}        # second last argument
-        rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
-        rebate_cmdline="rebate $rebate"
-        xact_cmdline="${a[@]:0:$((${#a[@]}-1))} $rebate_cmdline ${a[@]: -1}"
-    fi
-    draft=$(create_draft "$xact_cmdline")
+# elif [[ $response =~ ^([iI])$ ]]; then
+#     read -r -a a <<< "$xact_cmdline"        # turn in to array
+#     if [[ ${a[@]: -1} =~ ^([0-9.])+ ]]; then
+#         amount=${!#}            # last argument
+#         rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
+#         rebate_cmdline="rebate $rebate"
+#         xact_cmdline="$xact_cmdline $rebate_cmdline"
+#     else
+#         amount=${a[@]: -2:1}        # second last argument
+#         rebate=$(ruby -e "puts ($amount * -0.02).round(2)")
+#         rebate_cmdline="rebate $rebate"
+#         xact_cmdline="${a[@]:0:$((${#a[@]}-1))} $rebate_cmdline ${a[@]: -1}"
+#     fi
+#     draft=$(create_draft "$xact_cmdline")
 
-    echo -e "\n$draft\n"
-    read -r -p "确定添加此记录？ [Y/n] " response
+#     echo -e "\n$draft\n"
+#     read -r -p "确定添加此记录？ [Y/n] " response
 
-    if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
-        abort_exit "放弃编辑"
-    else
-        create_transaction "$draft"
-    fi
+#     if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
+#         abort_exit "放弃编辑"
+#     else
+#         create_transaction "$draft"
+#     fi
 else
     create_transaction "$draft"
 fi
