@@ -16,7 +16,9 @@ endif
 "------------------------------------------------------------------------
 set background=dark
 " support for truecolor
-set termguicolors
+if v:version > 800
+  set termguicolors
+endif
 set nocompatible
 let mapleader=","    " this is used a lot in plugin settings
 
