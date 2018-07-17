@@ -24,7 +24,7 @@ if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug
 endif
 
-" have to be after loadding pluggins 
+" have to be after loadding pluggins
 filetype plugin indent on
 syntax on
 
@@ -38,7 +38,7 @@ set ignorecase smartcase
 " disable bell all together
 set noeb vb t_vb=
 
-set smartindent autoindent 
+set smartindent autoindent
 " replace <tab> with 2 blank space.
 set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=8
 set textwidth=80	" wrap text for 78 letters

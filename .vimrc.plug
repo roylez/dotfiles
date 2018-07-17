@@ -79,7 +79,7 @@ Plug 'lfv89/vim-interestingwords'
 " comment / uncomment, context aware
 Plug 'Shougo/context_filetype.vim'
 Plug 'tyru/caw.vim' " {{{
-vmap <F9> gcb
+vmap <F9> gcc
 nmap <F9> gcc
 " }}}
 
@@ -109,7 +109,7 @@ endif
 " }}}
 
 " parentheses and ends
-Plug 'kana/vim-smartinput'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 
 Plug 'janko-m/vim-test' " {{{
@@ -158,30 +158,6 @@ function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
-
-" if executable('rg')
-"   set grepprg=rg\ --vimgrep\ --no-heading
-"   command! -bang -nargs=* Rg
-"         \ call fzf#vim#grep(
-"         \       'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 0,
-"         \       {'options': '--no-hscroll --delimiter : --nth 4..'},
-"         \       <bang>0)
-
-"   function! SearchSelectionWithRg() range
-"     let old_reg = getreg('"')
-"     let old_regtype = getregtype('"')
-"     let old_clipboard = &clipboard
-"     set clipboard&
-"     normal! ""gvy
-"     let selection = getreg('"')
-"     call setreg('"', old_reg, old_regtype)
-"     let &clipboard = old_clipboard
-"     execute 'Rg' selection
-"   endfunction
-
-"   nnoremap <silent> <leader>/ :Rg<CR>
-"   vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
-" endif
 
 set grepprg=ag\ --nogroup\ --nocolor 
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
@@ -254,8 +230,9 @@ Plug 'csexton/trailertrash.vim'
 Plug 'sheerun/vim-polyglot'
 " prevent syntax from stop working randomly
 autocmd FileType vue syntax sync fromstart
+autocmd FileType graphql set fdm=syntax
 " prevent vim from slowing down when editing vue
-let g:vue_disable_pre_processors=1
+" let g:vue_disable_pre_processors=1
 
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
@@ -274,7 +251,7 @@ Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
 call plug#end()
 
 "if has 256 colour, use a 256 colour theme
-if $TERM =~ '^\(xterm\|screen\)' || $TERM =~ '256color$' || has("gui_running")
+if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_running")
     if !has("gui_running")
         set t_Co=256
     endif

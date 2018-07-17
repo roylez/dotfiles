@@ -12,7 +12,7 @@ export PATH=$HOME/bin:$PATH
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # 定义颜色 {{{
-if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = *kitty ) && -f $HOME/.lscolor256 ]]; then
+if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = *kitty || "$TERM" = tmux ) && -f $HOME/.lscolor256 ]]; then
     #use prefefined colors
     eval $(dircolors -b $HOME/.lscolor256)
     use_256color=1
@@ -258,6 +258,9 @@ function title() {}
 case $TERM in
   xterm*|rxvt*)
     [[ -z $SSH_CONNECTION ]] && function title() { print -nP "\e]0;$1\a" }
+    ;;
+  tmux)
+    function title() { print -nP "\e]2;$1\a" }
     ;;
   screen*)
     if [[ -n $TMUX ]]; then
@@ -552,6 +555,11 @@ fi
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
 (bin-exist kubectl) && source <(kubectl completion zsh)
+if ( bin-exist docker-compose ); then
+  alias dc=docker-compose
+  compdef dc=docker-compose
+fi
+
 # }}}
 
 # 命令别名 {{{
@@ -571,7 +579,6 @@ alias -g W="|wc"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
-alias -g YJ="| ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))'"
 
 #file types
 alias -s ps=gv
@@ -597,26 +604,19 @@ alias dud='du -s *(/)'
 #date for US and CN
 alias adate='for i in GMT US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} UK/London Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
-alias pyprof='python -m cProfile'
 alias info='info --vi-keys'
 alias rsync='rsync --progress --partial'
-alias ri='ri -T -f ansi --width=$COLUMNS'
 alias history='history 1'       #zsh specific
-alias zhcon='zhcon --utf8'
 alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias m='mutt'
-alias tar='GZIP=-9 XZ=-9 tar'
-alias port='netstat -ntlp'      #opening ports
 #Terminal - Harder, Faster, Stronger SSH clients
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
 alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
-(bin-exist pal) && alias pal="pal -r 0-7 --color"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
 alias tnethack='telnet nethack.alt.org'
 alias tslashem='telnet slashem.crash-override.net'
-
 alias forget='unset HISTFILE'
 
 #}}}
