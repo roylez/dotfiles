@@ -112,6 +112,8 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 
+Plug 'tpope/vim-fugitive'
+
 Plug 'janko-m/vim-test' " {{{
 Plug 'tpope/vim-dispatch'
 nmap <silent> <leader>t :TestFile<CR>
