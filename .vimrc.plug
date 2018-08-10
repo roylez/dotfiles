@@ -72,6 +72,8 @@ Plug 'blueyed/vim-diminactive'
 "-------------------------------------------------------------------------------
 
 Plug 'airblade/vim-rooter'
+let g:rooter_targets = '*'
+let g:rooter_silent_chdir = 1
 
 " multiple highlights <leader>k, clear with <leader>K
 Plug 'lfv89/vim-interestingwords'

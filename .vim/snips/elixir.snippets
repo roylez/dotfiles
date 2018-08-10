@@ -107,3 +107,15 @@ defimpl Poison.Encoder, for: ${1:Module} do
   end
 end
 endsnippet
+
+snippet	defget "get_object(id, preloads \\ [])" b
+def get_${1:object}(id, preloads \\\\ ${2:[]}) do
+  { :ok, ${1/\w+/\u$0/} |> preload(^preloads) |> Repo.get(id) }
+end
+endsnippet
+
+snippet	deflist "list_object(preloads \\ [])" b
+def list_${1:object}(preloads \\\\ ${2:[]}) do
+  { :ok, ${1/\w+/\u$0/} |> preload(^preloads) |> Repo.all() }
+end
+endsnippet
