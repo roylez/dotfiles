@@ -238,6 +238,8 @@ autocmd FileType graphql set fdm=syntax
 " prevent vim from slowing down when editing vue
 " let g:vue_disable_pre_processors=1
 
+Plug 'amadeus/vim-mjml', { 'for': 'mjml' }
+
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger nnoremap j jzz
@@ -250,6 +252,8 @@ Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
 
 Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
+
+Plug 'ekalinin/Dockerfile.vim'
 
 "===================Plug loading ends==========================================
 call plug#end()

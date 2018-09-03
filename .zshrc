@@ -557,7 +557,9 @@ fi
 (bin-exist kubectl) && source <(kubectl completion zsh)
 if ( bin-exist docker-compose ); then
   alias dc=docker-compose
+  alias d=docker
   compdef dc=docker-compose
+  compdef d=docker
 fi
 
 # }}}

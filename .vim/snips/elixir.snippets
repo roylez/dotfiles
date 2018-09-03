@@ -109,13 +109,33 @@ end
 endsnippet
 
 snippet	defget "get_object(id, preloads \\ [])" b
-def get_${1:object}(id, preloads \\\\ ${2:[]}) do
+def get_${1:object}(id, preloads \\\\ ${2:[]})
+def get_$1(id, preloads) do
   { :ok, ${1/\w+/\u$0/} |> preload(^preloads) |> Repo.get(id) }
 end
 endsnippet
 
-snippet	deflist "list_object(preloads \\ [])" b
-def list_${1:object}(preloads \\\\ ${2:[]}) do
-  { :ok, ${1/\w+/\u$0/} |> preload(^preloads) |> Repo.all() }
+snippet	deflist "list_object(filters \\ [])" b
+def list_${1:object}(filters \\\\ ${2:[]}) do
+  { :ok, ${1/\w+/\u$0/} |> where(^filters) |> Repo.all() }
 end
+endsnippet
+
+snippet defu "defmacro __using__(_)" b
+defmacro __using__(${1:_}) do
+  quote do
+    $0
+  end
+end
+endsnippet
+
+snippet defver "defp version()" b
+defp version() do
+  String.trim( File.read!("VERSION") ) <> "+" <> git_sha()
+end
+
+defp git_sha() do
+  {result, _exit_code} = System.cmd("git", ["rev-parse", "HEAD"])
+  String.slice(result, 0, 5)
+end$0
 endsnippet
