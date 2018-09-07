@@ -1,7 +1,8 @@
-#!/usr/bin/env ruby
+#!/home/roy/.rbenv/shims/ruby
 # encoding: utf-8
 
 require 'json'
+require 'gemoji-parser'
 
 def get_status(params)
   `uptime`.strip
@@ -22,7 +23,7 @@ def toggle_weechat(params)
 end
 
 def to_payload(msg)
-  { fulfillmentText: msg }.to_json
+  { fulfillmentText: EmojiParser.detokenize(":dog: " + msg) }.to_json
 end
 
 def get_params(payload)
