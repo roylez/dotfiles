@@ -554,7 +554,11 @@ fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
-(bin-exist kubectl) && source <(kubectl completion zsh)
+if (bin-exist kubectl); then
+  source <(kubectl completion zsh)
+  alias k=kubectl
+  compdef k=kubectl
+fi
 if ( bin-exist docker-compose ); then
   alias dc=docker-compose
   alias d=docker
