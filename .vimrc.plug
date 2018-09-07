@@ -138,15 +138,19 @@ elseif version > 800
 else
   Plug 'Shougo/neocomplete.vim'
 endif
-let g:deoplete#enable_at_startup          = 1
-let g:deoplete#omni#min_pattern_length    = 3
-let g:deoplete#omni#input_patterns        = {}
-let g:deoplete#omni#input_patterns.ruby   = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
-let g:deoplete#omni#input_patterns.ledger = '^\s\+\(\S \S\|\S\|:\)\+'
-let g:deoplete                            = '~/.config/nvim/.cache/deoplete'
-let g:deoplete#enable_auto_delimiter      = 1
-let g:neocomplete#enable_at_startup       = 1
-let g:neocomplete#enable_smart_case       = 1
+let g:deoplete#enable_at_startup              = 1
+let g:deoplete#omni#min_pattern_length        = 3
+let g:deoplete#omni#input_patterns            = {}
+let g:deoplete#omni#input_patterns.ruby       = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+let g:deoplete#omni#input_patterns.ledger     = '^\s\+\(\S \S\|\S\|:\)\+'
+let g:deoplete                                = '~/.config/nvim/.cache/deoplete'
+let g:deoplete#enable_auto_delimiter          = 1
+let g:neocomplete#enable_at_startup           = 1
+let g:neocomplete#enable_smart_case           = 1
+let g:deoplete#omni#min_pattern_length        = 2
+let g:neocomplete#sources#omni#input_patterns = {}
+let g:neocomplete#data_directory              = '~/.vim/.cache/neocomplete'
+let g:neocomplete#enable_auto_delimiter       = 1
 autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 " }}}
 
