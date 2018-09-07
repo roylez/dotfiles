@@ -353,3 +353,20 @@ initContainers:
   - name: ${4:data}
     mountPath: ${5:/data}}$0
 endsnippet
+
+snippet pod "Pod" !b
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ${1:name}
+  namespace: default
+spec:
+  containers:
+  - name: $1
+    image: ${2:busybox}
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+endsnippet
