@@ -268,11 +268,20 @@ snippet env "Environment template" !b
   value: ${2:value}
 endsnippet
 
-snippet secref "env SecretRef" !b
-valueFrom:
-  secretKeyRef:
-    name: ${1:secret-name}
-    key: ${2:key-name}
+snippet envsec "env SecretRef" !b
+- name: ${1:VAR_NAME}
+  valueFrom:
+    secretKeyRef:
+      name: ${2:secret-name}
+      key: $1
+endsnippet
+
+snippet envcfg "env ConfigMap Ref" !b
+- name: ${1:VAR_NAME}
+  valueFrom:
+    configMapKeyRef:
+      name: ${2:cfg-name}
+      key: $1
 endsnippet
 
 snippet pvol "Pod Volume Object"
@@ -369,4 +378,31 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
   restartPolicy: Always
+endsnippet
+
+snippet rs "RepliaSet" !b
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: ${1:nginx}
+  labels:
+    app: $1
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: ${2:1}
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: $1
+        tier: frontend
+    spec:
+      containers:
+      - name: $1
+        image: $1
+        ports:
+        - containerPort: 80
 endsnippet
