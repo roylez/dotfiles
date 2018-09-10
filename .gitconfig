@@ -30,7 +30,7 @@
 [github]
     user = roylez
 [core]
-    pager = /usr/share/git/diff-highlight/diff-highlight
+    pager = cat
     excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
