@@ -29,7 +29,7 @@ draft=$(create_draft $xact_cmdline)
 
 echo -e "\n$draft\n"
 
-read -r -p "确定添加此记录(i添加ING Rebate)？ [Y/n] " response
+read -r -p "确定添加此记录？ [Y/n] " response
 if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
     abort_exit "放弃编辑"
 # elif [[ $response =~ ^([iI])$ ]]; then

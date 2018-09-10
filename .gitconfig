@@ -4,7 +4,7 @@
 [color]  # Ensure we get color
     ui = always
 [push]
-    default = simple
+    default = current
     followTags = true
 [alias]
     a   = add

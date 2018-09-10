@@ -20,13 +20,17 @@ if v:version > 800
   set termguicolors
 endif
 set nocompatible
-let mapleader=","    " this is used a lot in plugin settings
+
+" this is used a lot in plugin settings, and its default 1s timeout is too short
+let mapleader="\<space>"
+let maplocalleader="\<space>"
+set timeoutlen=2000 ttimeoutlen=0
 
 if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug
 endif
 
-" have to be after loadding pluggins 
+" have to be after loadding pluggins
 filetype plugin indent on
 syntax on
 
@@ -40,7 +44,7 @@ set ignorecase smartcase
 " disable bell all together
 set noeb vb t_vb=
 
-set smartindent autoindent 
+set smartindent autoindent
 " replace <tab> with 2 blank space.
 set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=8
 set textwidth=80	" wrap text for 78 letters
@@ -123,9 +127,6 @@ set foldenable foldnestmax=1 foldlevelstart=1
 set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocomplete
 
 " set colorcolumn=90
-
-" get rid of the delay while switching between normal mode and insert mode
-set timeoutlen=1000 ttimeoutlen=0
 
 "tags, use semicolon to seperate so that vim searches parent directories!
 set tags=./.tags;
