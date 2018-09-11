@@ -416,6 +416,9 @@ metadata:
   labels:
     app: $1
 spec:
+  selector:
+    matchLabels:
+      app: $1
   template:
     metadata:
       labels:
