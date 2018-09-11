@@ -406,3 +406,22 @@ spec:
         ports:
         - containerPort: 80
 endsnippet
+
+snippet ds "DaemonSet" !b
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ${1:nginx}
+  namespace: ${2:default}
+  labels:
+    app: $1
+spec:
+  template:
+    metadata:
+      labels:
+        app: $1
+    spec:
+      containers:
+      - name: $1
+        image: $1
+endsnippet
