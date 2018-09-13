@@ -22,6 +22,18 @@ def toggle_weechat(params)
   end
 end
 
+def get_ip(params)
+  require 'socket'
+
+  addresses = Socket.ip_address_list.map(&:ip_address).grep(/^(?!(127\.0.*)|(172\.*))/)
+
+  if addresses.length == 1
+    "My address is #{addresses.first}."
+  else
+    "My addresses are #{addresses.join(", ")}."
+  end
+end
+
 def to_payload(msg)
   { fulfillmentText: EmojiParser.detokenize(":dog: " + msg) }.to_json
 end
