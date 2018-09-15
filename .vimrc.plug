@@ -156,6 +156,9 @@ autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 
 Plug 'SirVer/ultisnips' " {{{
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
 let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
 let g:UltiSnipsEditSplit= 'vertical'
@@ -171,7 +174,7 @@ function! s:find_git_root()
 endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
 
-set grepprg=ag\ --nogroup\ --nocolor 
+set grepprg=ag\ --nogroup\ --nocolor
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
 
 function! SearchWordWithAg()
