@@ -562,7 +562,7 @@ fi
 if ( bin-exist docker-compose ); then
   alias dc=docker-compose
   alias d=docker
-  compdef dc=docker-compose
+  ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
   compdef d=docker
 fi
 
