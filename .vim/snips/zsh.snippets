@@ -1,0 +1,30 @@
+# vim: ft=snippets
+snippet ssl "generate a ssl key pair" b
+cat > ${1:admin}-csr.json <<EOF
+{
+  "CN": "$1",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "${2:system:masters}",
+      "OU": "Blah Blah",
+      "ST": "Void"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  $1-csr.json | cfssljson -bare $1
+
+}
+endsnippet
