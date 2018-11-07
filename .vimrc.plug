@@ -115,14 +115,16 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 Plug 'janko-m/vim-test' " {{{
-Plug 'tpope/vim-dispatch'
 nmap <silent> <leader>t :TestFile<CR>
-let test#stratgy = 'dispatch_background'
+" Plug 'tpope/vim-dispatch'
+" let test#stratgy = 'dispatch_background'
 " }}}
 
-Plug 'vim-scripts/openssl.vim'
+Plug 'w0rp/ale'
+let g:ale_open_list = 1
 
 " }}}
 
@@ -225,14 +227,14 @@ endif
 
 " }}}
 
-Plug 'mhinz/vim-startify' " {{{
-let g:startify_lists = [
-      \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
-      \ { 'type': 'files',     'header': [   'MRU']            },
-      \ { 'type': 'sessions',  'header': [   'Sessions']       },
-      \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
-      \ ]
-let g:startify_bookmarks = [ '~/.vimrc.plug' ]
+" Plug 'mhinz/vim-startify' " {{{
+" let g:startify_lists = [
+"      \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
+"      \ { 'type': 'files',     'header': [   'MRU']            },
+"      \ { 'type': 'sessions',  'header': [   'Sessions']       },
+"      \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
+"      \ ]
+" let g:startify_bookmarks = [ '~/.vimrc.plug' ]
 " }}}
 
 Plug 'csexton/trailertrash.vim'
