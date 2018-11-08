@@ -24,9 +24,9 @@ cfssl gencert \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
+  ${3:-hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \ }
   $1-csr.json | cfssljson -bare $1
 
-}
 endsnippet
 
 snippet kubeconfig-kubelet "kubeconfig for a kubelet" b
