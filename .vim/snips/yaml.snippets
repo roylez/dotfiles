@@ -33,6 +33,9 @@ metadata:
   namespace: ${2:default}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: $1
   template:
     metadata:
       labels:
@@ -192,14 +195,16 @@ metadata:
     # insert any desired labels to identify your claim
     app: ${2:app}
     tier: ${3:tier}
+  annotations:
+    # disable dynamic binding
+    volume.beta.kubernetes.io/storage-class: ""
 spec:
-  ${4:storageClassName: ${5:standard}}
   accessModes:
-    - ${6:ReadWriteOnce}
+    - ${4:ReadWriteMany}
   resources:
     requests:
       # The amount of the volume's storage to request
-      storage: ${7:20Gi}
+      storage: ${5:1Gi}
 endsnippet
 
 snippet ing "Ingress" !b
@@ -326,12 +331,10 @@ apiVersion: extensions/v1beta1
 metadata:
   namespace: ${1:default}
   name: ${2:policyname}
-  spec:
-  ${4:podSelector:
-      matchLabels:
-        ${3:{}}
-} ingress:
-      - {}
+spec:
+  podSelector: {}
+  ingress:
+    - {}
 endsnippet
 
 snippet probe "Liveness/Readiness Probes" !b
@@ -481,4 +484,35 @@ clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kubeconfig"
 mode: "iptables"
 clusterCIDR: "10.200.0.0/16"
+endsnippet
+
+snippet limitrange "LimitRange" b
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limit-range
+spec:
+  limits:
+  - default:
+      memory: 512Mi
+    defaultRequest:
+      memory: 256Mi
+    type: Container
+endsnippet
+
+snippet quota "ResourceQuota" b
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ${1:quota-obj}
+spec:
+  hard:
+    cpu: "0.5"
+    memory: "500Gi"
+    configmaps: "10"
+    persistentvolumeclaims: "4"
+    replicationcontrollers: "20"
+    secrets: "10"
+    services: "10"
+    services.loadbalancers: "2"
 endsnippet
