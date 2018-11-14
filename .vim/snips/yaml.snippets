@@ -516,3 +516,22 @@ spec:
     services: "10"
     services.loadbalancers: "2"
 endsnippet
+
+snippet cron "CronJob" b
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ${1:recur}
+spec:
+  schedule: "${2:*/3 * * * *}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: $1
+            image: ${3:busybox}
+            imagePullPolicy: IfNotPresent
+            command: ["${4:date}"]
+          restartPolicy: Never
+endsnippet
