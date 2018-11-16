@@ -30,10 +30,10 @@ cfssl gencert \
 endsnippet
 
 snippet kubeconfig-kubelet "kubeconfig for a kubelet" b
-kubectl config set-cluster ${3:cluster} \
+kubectl config set-cluster ${1:cluster} \
   --certificate-authority=ca.pem \
   --embed-certs=true \
-  --server=https://${1:KUBERNETES_PUBLIC_ADDRESS}:6443 \
+  --server=https://${3:KUBERNETES_PUBLIC_ADDRESS}:6443 \
   --kubeconfig=${2:instance}.kubeconfig
 
 kubectl config set-credentials system:node:$2 \
