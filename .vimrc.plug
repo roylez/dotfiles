@@ -97,16 +97,10 @@ Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 
-" Split in tmux
-" Plug 'benmills/vimux'   " {{{
-" map tr :VimuxPromptCommand<CR>
-" map tl :VimuxRunLastCommand<CR>
-" map tz :VimuxZoomRunner<CR>
-
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
 if has('nvim')
-    nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 endif
 " }}}
 
@@ -123,14 +117,19 @@ nmap <silent> <leader>t :TestFile<CR>
 " let test#stratgy = 'dispatch_background'
 " }}}
 
-Plug 'w0rp/ale'
-let g:ale_open_list = 1
+if has("nvim") || version > 800
+  Plug 'w0rp/ale'
+  let g:ale_open_list = 1
+  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_lint_on_enter = 0
+endif
 
 " }}}
 
 Plug 'Konfekt/FastFold'         " fix for vim's slow fdm=syntax
 
 " Plug deoplete {{{
+Plug 'wellle/tmux-complete.vim'
 if has("nvim")
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 elseif version > 800
