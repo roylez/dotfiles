@@ -99,9 +99,6 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
-if has('nvim')
-  nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
-endif
 " }}}
 
 " parentheses and ends

@@ -259,7 +259,7 @@ case $TERM in
   xterm*|rxvt*)
     [[ -z $SSH_CONNECTION ]] && function title() { print -nP "\e]0;$1\a" }
     ;;
-  tmux)
+  tmux*)
     function title() { print -nP "\e]2;$1\a" }
     ;;
   screen*)
