@@ -12,12 +12,12 @@ export PATH=$HOME/bin:$PATH
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # 定义颜色 {{{
-if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = *kitty || "$TERM" = tmux ) && -f $HOME/.lscolor256 ]]; then
-    #use prefefined colors
-    eval $(dircolors -b $HOME/.lscolor256)
-    use_256color=1
+if [[ "$TERM" = *(256color|kitty) && -f $HOME/.lscolor256 ]]; then
+  #use prefefined colors
+  eval $(dircolors -b $HOME/.lscolor256)
+  use_256color=1
 else
-    [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
+  [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
 fi
 
 #color defined for prompts and etc
