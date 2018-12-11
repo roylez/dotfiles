@@ -168,6 +168,7 @@ nmap gf <C-W>gf
 
 " clear search highlight with F5
 nmap <F5>   :noh<cr><ESC>
+set pastetoggle=<F1>
 
 " use <leader>y/p to interact with clipboard
 vmap <Leader>y "+y

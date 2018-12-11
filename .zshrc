@@ -5,19 +5,17 @@
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 #if [[  "$-" != *i* ]]; then return 0; fi
 
-SHELL=`which zsh`
-
 export PATH=$HOME/bin:$PATH
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # 定义颜色 {{{
-if [[ ("$TERM" = *256color || "$TERM" = screen* || "$TERM" = *kitty || "$TERM" = tmux ) && -f $HOME/.lscolor256 ]]; then
-    #use prefefined colors
-    eval $(dircolors -b $HOME/.lscolor256)
-    use_256color=1
+if [[ "$TERM" = *(256color|kitty) && -f $HOME/.lscolor256 ]]; then
+  #use prefefined colors
+  eval $(dircolors -b $HOME/.lscolor256)
+  use_256color=1
 else
-    [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
+  [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
 fi
 
 #color defined for prompts and etc
@@ -148,6 +146,9 @@ calc()  { awk "BEGIN{ print $* }" ; }
 #check if a binary exists in path
 bin-exist() {[[ -n ${commands[$1]} ]]}
 
+#check if is a local shell
+is-local() { [[ -z "$SSH_CONNECTION" || -f ~/.tty.local ]] }
+
 # use stat_cal to generate github style commit log
 (bin-exist stat_cal) && \
     git_cal_view() {
@@ -255,26 +256,13 @@ get_prompt_git() {
 #{{{ functions to set gnu screen title
 # active command as title in terminals
 function title() {}
-case $TERM in
-  xterm*|rxvt*)
-    [[ -z $SSH_CONNECTION ]] && function title() { print -nP "\e]0;$1\a" }
-    ;;
-  tmux)
-    function title() { print -nP "\e]2;$1\a" }
-    ;;
-  screen*)
-    if [[ -n $TMUX ]]; then
-      function title() { print -nP "\e]2;$1\a" }
-    else
-      function title() {
-        #modify screen title
-        print -nP "\ek$1\e\\"
-        #modify window title bar
-        #print -nPR $'\033]0;'$2$'\a'
-      }
-    fi
-    ;;
-esac
+if is-local; then
+  case $TERM in
+    xterm*|rxvt*) function title() { print -nP "\e]0;$1\a" } ;;
+    tmux*)        function title() { print -nP "\e]2;$1\a" } ;;
+    screen*)      function title() { print -nP "\ek$1\e\\" } ;;
+  esac
+fi
 
 #set screen title if not connected remotely
 #if [ "$STY" != "" ]; then
@@ -289,7 +277,7 @@ screen_precmd() {
 screen_preexec() {
     local -a cmd; cmd=(${(z)1})
     case $cmd[1]:t in
-        'ssh'|'mosh')   title "@""`echo $cmd[2]|sed 's:.*@::'`" "$TERM $cmd";;
+        'ssh'|'mosh')   title "@""`echo $cmd[-1]|sed 's:.*@::'`" "$TERM $cmd";;
         'sudo')         title "#"$cmd[2]:t "$TERM $cmd[3,-1]";;
         'for')          title "()"$cmd[7] "$TERM $cmd";;
         'svn'|'git')    title "$cmd[1,2]" "$TERM $cmd";;
@@ -562,7 +550,7 @@ fi
 if ( bin-exist docker-compose ); then
   alias dc=docker-compose
   alias d=docker
-  compdef dc=docker-compose
+  ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
   compdef d=docker
 fi
 

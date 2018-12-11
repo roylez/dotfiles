@@ -1,6 +1,8 @@
 #!/home/roy/.rbenv/shims/ruby
 # encoding: utf-8
 
+TMUX_SESSION="capitan"
+
 require 'json'
 require 'gemoji-parser'
 
@@ -14,9 +16,9 @@ def toggle_weechat(params)
   return "You are good. Nothing to do." if state == action
   case action
   when "online"
-    system("tmux send-keys -t 0:1 weechat ENTER") ? "You are now online!" : "Something wrong happens..."
+    system("tmux send-keys -t #{TMUX_SESSION}:1 weechat ENTER") ? "You are now online!" : "Something wrong happens..."
   when "offline"
-    system("tmux send-keys -t 0:1 /bye ENTER") ? "You are now offline!" : "Something wrong happens..."
+    system("tmux send-keys -t #{TMUX_SESSION}:1 /bye ENTER") ? "You are now offline!" : "Something wrong happens..."
   else
     "Don't you dare to play with me!"
   end
