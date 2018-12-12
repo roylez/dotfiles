@@ -126,3 +126,4 @@ chunkc tiling::rule --owner "^Xee.*$"           --state float
 chunkc tiling::rule --owner "^Finder$" --name "Trash"   --state float
 chunkc tiling::rule --owner "^Finder$" --name "Copy"    --state float
 chunkc tiling::rule --owner "^Finder$" --name "Desktop" --state tile
+chunkc tiling::rule --owner "^Firefox$" --name "^ImageHost" --state Float
