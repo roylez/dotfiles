@@ -549,9 +549,12 @@ if (bin-exist kubectl); then
 fi
 if ( bin-exist docker-compose ); then
   alias dc=docker-compose
-  alias d=docker
   ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
-  compdef d=docker
+fi
+
+if ( bin-exist docker ); then
+  alias d=docker
+  ( command -v _docker &>/dev/null ) && compdef dc=docker-compose
 fi
 
 # }}}
