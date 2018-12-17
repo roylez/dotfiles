@@ -66,8 +66,8 @@ shift + cmd + alt + ctrl - right: chunkc tiling::window --send-to-monitor next; 
 shift + cmd + alt + ctrl - left : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
 
 # focus monitor
-ctrl + alt - z  : chunkc tiling::monitor -f prev
-ctrl + alt - c  : chunkc tiling::monitor -f next
+ctrl + alt + cmd - f11  : chunkc tiling::monitor -f prev
+ctrl + alt + cmd - f12  : chunkc tiling::monitor -f next
 
 # send window to monitor and follow focus
 # ctrl + cmd - z  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
