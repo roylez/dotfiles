@@ -115,7 +115,7 @@ nmap <silent> <leader>t :TestFile<CR>
 " }}}
 
 if has("nvim") || version > 800
-  Plug 'w0rp/ale'
+  Plug 'w0rp/ale', { 'for': ['ruby', 'elixir', 'json'] }
   let g:ale_open_list = 1
   let g:ale_lint_on_text_changed = 'never'
   let g:ale_lint_on_enter = 0
