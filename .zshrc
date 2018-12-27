@@ -39,19 +39,21 @@ setopt brace_ccl                # expand alphabetic brace expressions
 setopt complete_in_word         # stays where it is and completion is done from both ends
 setopt correct                  # spell check for commands only
 #setopt equals extended_glob    # use extra globbing operators
-setopt no_hist_beep             # don not beep on history expansion errors
 setopt hash_list_all            # search all paths before command completion
-setopt hist_ignore_all_dups     # when runing a command several times, only store one
+setopt no_hist_beep             # don not beep on history expansion errors
 setopt hist_reduce_blanks       # reduce whitespace in history
 setopt hist_ignore_space        # do not remember commands starting with space
-setopt share_history            # share history among sessions
+setopt no_share_history         # share history among sessions, conflicts inc_append_history
 setopt hist_verify              # reload full command when runing from history
+setopt hist_ignore_all_dups     # when runing a command several times, only store one
 setopt hist_expire_dups_first   #remove dups when max size reached
+setopt inc_append_history       # append to history once executed
+setopt hist_fcntl_lock          # use filesystem lock when writing history
+setopt hist_no_store            # do not store `history` or `fc -l`
 setopt interactive_comments     # comments in history
 setopt list_types               # show ls -F style marks in file completion
 setopt long_list_jobs           # show pid in bg job list
 setopt numeric_glob_sort        # when globbing numbered files, use real counting
-setopt inc_append_history       # append to history once executed
 setopt prompt_subst             # prompt more dynamic, allow function in prompt
 setopt nonomatch
 setopt transient_rprompt        # make rprompt dissapear for previous commands
@@ -493,12 +495,12 @@ bindkey "\e\r" run-command-in-split-screen
 # }}}
 
 # 环境变量及其他参数 {{{
-# number of lines kept in history
-export HISTSIZE=10000
-# number of lines saved in the history after logout
-export SAVEHIST=10000
 # location of history
 export HISTFILE=$HOME/.zsh_history
+# number of lines kept in history
+export HISTSIZE=20000
+# number of lines saved in the history before logout
+export SAVEHIST=40000
 export EDITOR=vim
 export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
