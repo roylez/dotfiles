@@ -251,6 +251,7 @@ Plug 'amadeus/vim-mjml', { 'for': 'mjml' }
 
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
+autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
