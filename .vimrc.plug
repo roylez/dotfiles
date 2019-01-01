@@ -249,7 +249,6 @@ autocmd FileType graphql set fdm=syntax
 
 Plug 'amadeus/vim-mjml', { 'for': 'mjml' }
 
-
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
@@ -261,7 +260,7 @@ Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
 Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
 
-Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'sass', 'scss']}
+Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
 Plug 'ekalinin/Dockerfile.vim'
 
