@@ -1,11 +1,11 @@
 
 zplug "junegunn/fzf", as:command, hook-build:"./install --bin", use:"bin/{fzf-tmux,fzf}"
+zplug "junegunn/fzf", use:"shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='ag -g ""'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 zplug "changyuheng/fz", defer:1
 
-zplug "agkozak/z",      use:z.sh
+zplug "agkozak/z", use:z.sh
 export _Z_NO_RESOLVE_SYMLINKS=1
 
 # zplug "supercrabtree/k"
