@@ -70,6 +70,10 @@ endif
 set backupdir=$HOME/.backup
 set directory=$HOME/.backup     "swp
 
+" A hack so that vim does not break docker bind-mount
+"https://github.com/moby/moby/issues/15793
+set backupcopy=yes
+
 if !isdirectory($HOME . "/.vim/undo")
     call mkdir($HOME . "/.vim/undo", "p")
 endif
