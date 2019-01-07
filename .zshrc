@@ -9,6 +9,10 @@ export PATH=$HOME/bin:$PATH
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
+# disable flow controll so that ctl-s does not freeze terminal and you don't
+# have to ctrl-q to reenable it
+stty -ixon
+
 # 定义颜色 {{{
 if [[ "$TERM" = *(256color|kitty) && -f $HOME/.lscolor256 ]]; then
   #use prefefined colors
