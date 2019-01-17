@@ -314,7 +314,7 @@ else
     local host="$pB$pU$pfg_magenta%m$pR"            # underline for remote hostname
 fi
 local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       # red for root user name
-local symbol="$pB%(!:$pfg_red# :$pfg_yellow > )$pR"
+local symbol="$pB%(!:$pfg_red # :$pfg_yellow > )$pR"
 # local symbol="$pB$pfg_yellow> $pR"
 local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
 PROMPT='$host $user $__PROMPT_PWD$(get_prompt_git)$job$symbol'

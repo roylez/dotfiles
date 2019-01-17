@@ -141,7 +141,7 @@ end$0
 endsnippet
 
 snippet defquery "composable query" b
-def ${1:query_name}( query \\ __MODULE__ ) do
+def ${1:query_name}( query \\\\ __MODULE__ ) do
   query |> where([x], ${2:x.abc=true})
 end
 endsnippet
