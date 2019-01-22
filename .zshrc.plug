@@ -1,20 +1,17 @@
-
 zplug "junegunn/fzf", as:command, hook-build:"./install --bin", use:"bin/{fzf-tmux,fzf}"
-zplug "junegunn/fzf", use:"shell/key-bindings.zsh"
+zplug "junegunn/fzf", as:plugin, use:"shell/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='ag -g ""'
-
+#
 zplug "changyuheng/fz", defer:1
-
+#
 zplug "agkozak/z", use:z.sh
 export _Z_NO_RESOLVE_SYMLINKS=1
-
-# zplug "supercrabtree/k"
-
+#
 zplug "Tarrasch/zsh-autoenv"
 export AUTOENV_FILE_ENTER=.env
 export AUTOENV_FILE_LEAVE=.out
 export AUTOENV_HANDLE_LEAVE=1
-
+#
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 zplug "asdf-vm/asdf", use:asdf.sh

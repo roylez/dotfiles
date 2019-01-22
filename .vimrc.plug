@@ -104,6 +104,7 @@ Plug 'christoomey/vim-tmux-navigator'
 " parentheses and ends
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-repeat'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
