@@ -173,14 +173,17 @@ function! s:find_git_root()
 endfunction
 command! ProjectFiles execute 'Files' s:find_git_root()
 
-set grepprg=ag\ --nogroup\ --nocolor
+" set grepprg=ag\ --nogroup\ --nocolor
+set grepprg=rg\ --vimgrep
+let rg_cmd="rg --line-number --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep( rg_cmd . shellescape(<q-args>), 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0)
 
-function! SearchWordWithAg()
-  execute 'Ag' expand('<cword>')
+function! SearchWordWithRg()
+  execute 'Rg' expand('<cword>')
 endfunction
 
-function! SearchSelectionWithAg() range
+function! SearchSelectionWithRg() range
   let old_reg = getreg('"')
   let old_regtype = getregtype('"')
   let old_clipboard = &clipboard
@@ -189,11 +192,11 @@ function! SearchSelectionWithAg() range
   let selection = getreg('"')
   call setreg('"', old_reg, old_regtype)
   let &clipboard = old_clipboard
-  execute 'Ag' selection
+  execute 'Rg' selection
 endfunction
 
-nnoremap <silent> <leader>/ :Ag<CR>
-vnoremap <silent> <leader>/ :call SearchSelectionWithAg()<CR>
+nnoremap <silent> <leader>/ :Rg<CR>
+vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :ProjectFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
@@ -201,19 +204,7 @@ nnoremap <silent> <leader>s :Snippets<CR>
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
 
-let g:fzf_colors =
-      \ { 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment'] }
+let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
 
 let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
 let g:fzf_layout = { 'window': 'enew' }
