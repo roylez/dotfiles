@@ -176,7 +176,7 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
 let rg_cmd="rg --line-number --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
-command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
+" command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep( rg_cmd . shellescape(<q-args>), 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0)
 
 function! SearchWordWithRg()
@@ -211,18 +211,6 @@ let g:fzf_layout = { 'window': 'enew' }
 if !isdirectory( g:fzf_history_dir )
   call mkdir( g:fzf_history_dir , "p")
 endif
-
-
-" }}}
-
-" Plug 'mhinz/vim-startify' " {{{
-" let g:startify_lists = [
-"      \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
-"      \ { 'type': 'files',     'header': [   'MRU']            },
-"      \ { 'type': 'sessions',  'header': [   'Sessions']       },
-"      \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
-"      \ ]
-" let g:startify_bookmarks = [ '~/.vimrc.plug' ]
 " }}}
 
 Plug 'csexton/trailertrash.vim'
