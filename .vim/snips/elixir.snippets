@@ -145,3 +145,7 @@ def ${1:query_name}( query \\\\ __MODULE__ ) do
   query |> where([x], ${2:x.abc=true})
 end
 endsnippet
+
+snippet der "@derive {...}" b
+@derive {${1:Jason.Encoder}, only: ~w($0)a }
+endsnippet

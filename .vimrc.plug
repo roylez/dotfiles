@@ -175,7 +175,7 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
-let rg_cmd="rg --line-number --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
+let rg_cmd="rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
 " command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep( rg_cmd . shellescape(<q-args>), 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0)
 
