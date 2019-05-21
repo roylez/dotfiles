@@ -146,6 +146,14 @@ def ${1:query_name}( query \\\\ __MODULE__ ) do
 end
 endsnippet
 
-snippet der "@derive {...}" b
+snippet @der "@derive {...}" b
 @derive {${1:Jason.Encoder}, only: ~w($0)a }
 endsnippet
+
+snippet @doc "@doc ...." b
+@doc """
+$0
+"""
+@spec ${1:function}( $2 ) :: $3
+endsnippet
+
