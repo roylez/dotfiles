@@ -128,3 +128,4 @@ chunkc tiling::rule --owner "^Finder$" --name "Copy"    --state float
 chunkc tiling::rule --owner "^Finder$" --name "Desktop" --state tile
 chunkc tiling::rule --owner "^Firefox$" --name "^ImageHost" --state Float
 chunkc tiling::rule --owner "^JDownloader2$" --state Float
+chunkc tiling::rule --owner "^RimWorld.*$" --state Float
