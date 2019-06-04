@@ -33,3 +33,6 @@ fi
 
 # Then, source plugins and add commands to $PATH
 zplug load
+# in case there is anything wrong with zsh job control, remove $_zplug_lock
+# https://github.com/zplug/zplug/issues/322
+setopt monitor

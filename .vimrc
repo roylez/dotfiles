@@ -56,12 +56,7 @@ set wrap
 set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 
-if executable( 'par' )
-    set formatprg=par\ req
-else
-    set formatprg=fmt
-endif
-set formatoptions+=mM     " default tcq, mM to help wrap chinese
+set formatprg=fmt formatoptions+=mM     " default tcq, mM to help wrap chinese
 
 set backup
 if !isdirectory($HOME . "/.backup")
