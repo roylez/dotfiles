@@ -500,11 +500,14 @@ bindkey "\e\r" run-command-in-split-screen
 
 # 环境变量及其他参数 {{{
 # location of history
-export HISTFILE=$HOME/.zsh_history
+HISTFILE=$HOME/.zsh_history
 # number of lines kept in history
-export HISTSIZE=20000
+HISTSIZE=20000
 # number of lines saved in the history before logout
-export SAVEHIST=40000
+SAVEHIST=40000
+# ignore some commands
+HISTORY_IGNORE="(ls|cd|pwd|exit|fg|bg|jobs)"
+
 export EDITOR=vim
 export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '

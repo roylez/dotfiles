@@ -238,8 +238,6 @@ Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
-Plug 'ekalinin/Dockerfile.vim'
-
 "===================Plug loading ends==========================================
 call plug#end()
 
