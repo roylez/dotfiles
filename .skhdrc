@@ -100,17 +100,17 @@ ctrl + alt + cmd - space : chunkc tiling::desktop --rotate 90
 # alt - a : chunkc tiling::desktop --toggle offset
 
 # toggle window fullscreen
-ctrl + alt + cmd - f : chunkc tiling::window --toggle fullscreen
+ctrl + alt + cmd + shift - f : chunkc tiling::window --toggle fullscreen
 
 # toggle window parent zoom
-ctrl + alt + cmd - p : chunkc tiling::window --toggle parent
+ctrl + alt + cmd + shift - p : chunkc tiling::window --toggle parent
 
 # toggle window split type
 alt - e : chunkc tiling::window --toggle split
 
 # float / unfloat window and center on screen
-ctrl + cmd + alt - i : chunkc tiling::window --toggle float;\
-                       chunkc tiling::window --grid-layout 4:4:1:1:2:2
+ctrl + cmd + alt + shift - i : chunkc tiling::window --toggle float;\
+                               chunkc tiling::window --grid-layout 4:4:1:1:2:2
 
 # toggle sticky, float and resize to picture-in-picture size
 alt - s : chunkc tiling::window --toggle sticky;\
