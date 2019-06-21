@@ -10,17 +10,37 @@ def get_status(params)
   `uptime`.strip
 end
 
-def toggle_weechat(params)
-  state = system("pgrep weechat &>/dev/null") ? "online" : "offline"
-  action = params.dig("weechat")
-  return "You are good. Nothing to do." if state == action
+def toggle_music(action)
   case action
-  when "online"
-    system("tmux send-keys -t #{TMUX_SESSION}:1 weechat ENTER") ? "You are now online!" : "Something wrong happens..."
-  when "offline"
-    system("tmux send-keys -t #{TMUX_SESSION}:1 /bye ENTER") ? "You are now offline!" : "Something wrong happens..."
+  when "on"
+    system("mpc -q play")
+    "Music is playing"
+  when "off"
+    system("mpc -q pause")
+    "Music is off"
   else
     "Don't you dare to play with me!"
+  end
+end
+
+def toggle_service(params)
+  case params.dig("service")
+  when "weechat"
+    toggle_weechat(params.dig("service_state"))
+  when "music"
+    toggle_music(params.dig("service_state"))
+  else
+    "No such serice"
+  end
+end
+
+def toggle_weechat(action)
+  state = system("pgrep weechat &>/dev/null") ? "on" : "off"
+  return "You are good. Nothing to do." if state == action
+  case action
+  when  "on";  system("tmux send-keys -t #{TMUX_SESSION}:1 weechat ENTER") ? "You are now online!"  : "Something wrong happens..."
+  when  "off"; system("tmux send-keys -t #{TMUX_SESSION}:1 /bye ENTER")    ? "You are now offline!" : "Something wrong happens..."
+  else; "Don't you dare to play with me!"
   end
 end
 

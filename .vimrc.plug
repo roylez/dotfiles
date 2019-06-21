@@ -59,6 +59,7 @@ let g:airline_section_z='%l,%c%V %3p%%'
 let g:airline_section_error=''
 let g:airline_section_warning=''
 let g:airline_theme='dark'
+let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
@@ -223,6 +224,8 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'sheerun/vim-polyglot'
 " prevent syntax from stop working randomly
 autocmd FileType vue syntax sync fromstart
+
+Plug 'jparise/vim-graphql'
 autocmd FileType graphql set fdm=syntax
 " prevent vim from slowing down when editing vue
 " let g:vue_disable_pre_processors=1
