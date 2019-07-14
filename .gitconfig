@@ -10,8 +10,8 @@
     a   = add
     b   = branch
     c   = commit
+    d   = diff --color-words
     co  = checkout
-    d   = diff
     des = describe --tags
     l   = log
     lc  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative

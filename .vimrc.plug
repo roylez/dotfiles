@@ -117,10 +117,11 @@ nmap <silent> <leader>t :TestFile<CR>
 " }}}
 
 if has("nvim") || version > 800
-  Plug 'w0rp/ale', { 'for': ['ruby', 'elixir', 'json'] }
+  " Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
   let g:ale_open_list = 1
-  let g:ale_lint_on_text_changed = 'never'
+  let g:ale_lint_on_text_changed = 0
   let g:ale_lint_on_enter = 0
+  let g:ale_lint_on_save = 1
 endif
 
 " }}}
@@ -139,7 +140,7 @@ endif
 let g:deoplete#enable_at_startup              = 1
 let g:deoplete#omni#min_pattern_length        = 3
 let g:deoplete#omni#input_patterns            = {}
-let g:deoplete#omni#input_patterns.ruby       = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+" let g:deoplete#omni#input_patterns.ruby       = '[^. *\t]\.\w*\|\h\w*::'
 let g:deoplete#omni#input_patterns.ledger     = '^\s\+\(\S \S\|\S\|:\)\+'
 let g:deoplete                                = '~/.config/nvim/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter          = 1
@@ -259,3 +260,4 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
 else
     colorscheme tango
 endif
+
