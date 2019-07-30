@@ -59,7 +59,7 @@ setopt list_types               # show ls -F style marks in file completion
 setopt long_list_jobs           # show pid in bg job list
 setopt numeric_glob_sort        # when globbing numbered files, use real counting
 setopt prompt_subst             # prompt more dynamic, allow function in prompt
-setopt nonomatch
+setopt csh_null_glob
 setopt transient_rprompt        # make rprompt dissapear for previous commands
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word

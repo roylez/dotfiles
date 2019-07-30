@@ -93,14 +93,13 @@ nmap ga      <Plug>(EasyAlign)
 " }}}
 
 " distraction free writing
-Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
 
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
-" }}}
 
 " parentheses and ends
 Plug 'tpope/vim-surround'
@@ -110,20 +109,35 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+Plug 'kana/vim-altr'
+command! A call altr#forward()
+autocmd FileType elixir       call altr#define('lib/%.ex',    'test/%_test.exs')
+autocmd FileType yaml.ansible call altr#define('tasks/%.yml', 'defaults/%.yml', 'handlers/%.yml')
+
 Plug 'janko-m/vim-test' " {{{
 nmap <silent> <leader>t :TestFile<CR>
 " Plug 'tpope/vim-dispatch'
 " let test#stratgy = 'dispatch_background'
 " }}}
 
+" {{{ Plug ale
 if has("nvim") || version > 800
-  " Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
+  Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
   let g:ale_open_list = 1
   let g:ale_lint_on_text_changed = 0
   let g:ale_lint_on_enter = 0
   let g:ale_lint_on_save = 1
-endif
+  Plug 'GrzegorzKozub/vim-elixirls', { 'do': ':ElixirLsCompileSync' }
+  let g:ale_elixir_elixir_ls_release = expand('~/.vim/plugged') . '/vim-elixirls/elixir-ls/release'
+  " https://github.com/JakeBecker/elixir-ls/issues/54
+  let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
 
+  let g:ale_linters = {}
+  let g:ale_linters.elixir = [ 'credo', 'elixir-ls' ]
+  autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
+  autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
+endif
+" Plug 'slashmili/alchemist.vim'
 " }}}
 
 " Plug deoplete {{{
@@ -240,7 +254,7 @@ autocmd FileType ledger nnoremap G Gzz
 autocmd BufNewFile,BufRead *.markdown,*mkd setfiletype octopress
 Plug 'tangledhelix/vim-octopress', {'for' : 'octopress'}
 
-Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
+" Plug 'slashmili/alchemist.vim',    { 'for': 'elixir' }
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
