@@ -121,10 +121,18 @@ zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes select
 
-#autoload -U compinit
+# https://gist.github.com/ctechols/ca1035271ad134841284
+# On slow systems, checking the cached .zcompdump file to see if it must be 
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts 
+# it to once a day.  It should be pasted into your own completion file.
+#
+# The globbing is a little complicated here:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
 autoload -Uz compinit
-compinit
-
+[[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
 # }}}
 
 # 自定义函数 {{{
@@ -197,12 +205,9 @@ pwd_color_preexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
 #}}}
 
 #{{{functions to display git branch in prompt
-
 get_git_status() {
     unset -m '__CURRENT_GIT_BRANCH*'
 
-    # do not track git branch info in ~
-    [[ "$PWD" = "$HOME" ]]  &&  return
     local dir=$(git rev-parse --git-dir 2>/dev/null)
     [[ "${dir:h}" = "$HOME" ]] && return
 
@@ -234,29 +239,35 @@ get_git_status() {
     fi
 }
 
-git_branch_precmd() { [[ "$(fc -l -1)" == *git* ]] && get_git_status }
+git_branch_precmd() {
+  # do not track git branch info in ~
+  [[ "$PWD" = "$HOME" ]]  &&  return
+  [[ ! "$(fc -l -1)" == *(git|vim)* ]] && return
+  get_git_status
+}
 
 git_branch_chpwd() { get_git_status }
 
 #this one is to be used in prompt
 get_prompt_git() {
-    if [[ -n $__CURRENT_GIT_BRANCH ]]; then
-        local s=$__CURRENT_GIT_BRANCH
-        case "$__CURRENT_GIT_BRANCH_STATUS" in
-            ahead) s+="${pbg_green}+" ;;
-            diverged) s+="${pbg_red}=" ;;
-            behind) s+="${pbg_magenta}-" ;;
-        esac
-        if [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]]; then
-            if [[ $__CURRENT_GIT_BRANCH_HAS_UNSTAGED = '1' ]]; then
-                s+="${pbg_red}*"
-            else
-                s+="${pbg_green}*"
-            fi
-        fi
-        echo " $pfg_black$pbg_white$pS$pB $s $pR$pSS"
+  if [[ -n $__CURRENT_GIT_BRANCH ]]; then
+    local s=$__CURRENT_GIT_BRANCH
+    case "$__CURRENT_GIT_BRANCH_STATUS" in
+      ahead) s+="${pbg_green}+" ;;
+      diverged) s+="${pbg_red}=" ;;
+      behind) s+="${pbg_magenta}-" ;;
+    esac
+    if [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]]; then
+      if [[ $__CURRENT_GIT_BRANCH_HAS_UNSTAGED = '1' ]]; then
+        s+="${pbg_red}*"
+      else
+        s+="${pbg_green}*"
+      fi
     fi
+    echo " $pfg_black$pbg_white$pS$pB $s $pR$pSS"
+  fi
 }
+
 #}}}
 
 #{{{ functions to set gnu screen title
