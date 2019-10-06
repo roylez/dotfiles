@@ -5,14 +5,20 @@
 if has('nvim')
     " support for cursor shapes
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-    let g:vim_home=$HOME.'/.config/nvim'
 else
     set backspace=2
     set encoding=utf-8
     " keep record of editing information for cursor restore and more
     set viminfo='10,\"100,:20,%,n~/.viminfo
-    let g:vim_home=$HOME.'/.vim'
 endif
+" use the same vim_home dir for vim and nvim, use the following in
+" ~/.config/nvim/init.vim
+"
+"       set runtimepath^=~/.vim runtimepath+=~/.vim/after
+"       let &packpath = &runtimepath
+"       source ~/.vimrc
+"
+let g:vim_home=$HOME.'/.vim'
 "------------------------------------------------------------------------
 set background=dark
 " support for truecolor

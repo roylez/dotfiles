@@ -2,8 +2,8 @@
 "
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 "
-
-call plug#begin( g:vim_home . "/plugged")
+let g:vim_plugged_dir= g:vim_home . "/plugged"
+call plug#begin( g:vim_plugged_dir )
 "===================Plug loading starts========================================
 
 "-------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ if has("nvim") || version > 800
   let g:ale_lint_on_enter = 0
   let g:ale_lint_on_save = 1
   Plug 'GrzegorzKozub/vim-elixirls', { 'do': ':ElixirLsCompileSync' }
-  let g:ale_elixir_elixir_ls_release = expand('~/.vim/plugged') . '/vim-elixirls/elixir-ls/release'
+  let g:ale_elixir_elixir_ls_release = expand( g:vim_plugged_dir ) . '/vim-elixirls/elixir-ls/release'
   " https://github.com/JakeBecker/elixir-ls/issues/54
   let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
 
@@ -155,7 +155,7 @@ let g:deoplete#enable_at_startup              = 1
 let g:deoplete#omni#min_pattern_length        = 3
 let g:deoplete#omni#input_patterns            = {}
 let g:deoplete#omni#input_patterns.ledger     = '^\s\+\(\S \S\|\S\|:\)\+'
-let g:deoplete                                = '~/.config/nvim/.cache/deoplete'
+let g:deoplete                                = g:vim_home . '/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter          = 1
 let g:deoplete#ignore_sources                 = {}
 let g:deoplete#ignore_sources._               = ['around', 'omni', 'file']
@@ -164,7 +164,7 @@ let g:neocomplete#enable_at_startup           = 1
 let g:neocomplete#enable_smart_case           = 1
 let g:deoplete#omni#min_pattern_length        = 2
 let g:neocomplete#sources#omni#input_patterns = {}
-let g:neocomplete#data_directory              = '~/.vim/.cache/neocomplete'
+let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
 let g:neocomplete#enable_auto_delimiter       = 1
 autocmd FileType eruby let b:deoplete_disable_auto_complete=1
 " }}}

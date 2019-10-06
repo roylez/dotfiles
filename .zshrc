@@ -562,7 +562,7 @@ fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
-if (bin-exist kubectl); then
+if ( bin-exist kubectl ); then
   source <(kubectl completion zsh)
   alias k=kubectl
   compdef k=kubectl
@@ -577,6 +577,9 @@ if ( bin-exist docker ); then
   ( command -v _docker &>/dev/null ) && compdef d=docker
 fi
 
+if ( bin-exist nvim ); then
+  alias vim=nvim
+fi
 # }}}
 
 # 命令别名 {{{
