@@ -25,8 +25,6 @@
     merge-branch-file = checkout --merge
     rb  = rebase
     undo = reset HEAD --hard
-[merge]
-    tool = vimdiff
 [github]
     user = roylez
 [core]
@@ -36,3 +34,13 @@
     ;autosetuprebase = remote
 [status]
     submoduleSummary = true
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = true
+[mergetool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool]
+  prompt = false
+[diff]
+  tool = vimdiff

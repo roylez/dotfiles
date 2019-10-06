@@ -519,8 +519,6 @@ SAVEHIST=40000
 # ignore some commands
 HISTORY_IGNORE="(ls|cd|pwd|exit|fg|bg|jobs)"
 
-export EDITOR=vim
-export VISUAL=vim
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
 
@@ -579,6 +577,9 @@ fi
 
 if ( bin-exist nvim ); then
   alias vim=nvim
+  export EDITOR=nvim VISUAL=nvim
+else
+  export EDITOR=vim VISUAL=vim
 fi
 # }}}
 
