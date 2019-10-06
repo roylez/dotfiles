@@ -34,6 +34,12 @@ defmodule ${1:AppModule} do
 end
 endsnippet
 
+snippet	def "def function(...)" b
+def ${1:function}(${2:...}) do
+  $0
+end
+endsnippet
+
 snippet	config "Mix config" b
 use Mix.Config
 
@@ -121,7 +127,7 @@ def list_${1:object}(filters \\\\ ${2:[]}) do
 end
 endsnippet
 
-snippet defu "defmacro __using__(_)" b
+snippet defusing "defmacro __using__(_)" b
 defmacro __using__(${1:_}) do
   quote do
     $0
@@ -150,7 +156,7 @@ snippet @der "@derive {...}" b
 @derive {${1:Jason.Encoder}, only: ~w($0)a }
 endsnippet
 
-snippet @doc "@doc ...." b
+snippet doc "@doc and @spec for a function" b
 @doc """
 $0
 """

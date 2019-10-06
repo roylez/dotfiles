@@ -141,7 +141,7 @@ set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
 
 "---------------------completion settings-------------------------------
 "make completion menu usable even when some characters are typed.
-set completeopt=longest,menuone
+set completeopt=noselect,longest,menuone
 " set complete-=i
 " set complete-=t
 set complete+=kspell

@@ -10,7 +10,7 @@
     a   = add
     b   = branch
     c   = commit
-    d   = diff --color-words
+    d   = diff
     co  = checkout
     des = describe --tags
     l   = log
