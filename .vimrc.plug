@@ -31,10 +31,14 @@ nnoremap <silent> <Leader>z :NERDTreeFind<CR>
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeSyntaxDisableDefaultExtensions = 1
+let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'js', 'css', 'sass']
+let g:NERDTreeExtensionHighlightColor = {}
+let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
 
 " }}}
 
@@ -144,6 +148,7 @@ endif
 Plug 'wellle/tmux-complete.vim'
 if has("nvim")
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'ncm2/float-preview.nvim'
 elseif version > 800
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -159,14 +164,14 @@ let g:deoplete                                = g:vim_home . '/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter          = 1
 let g:deoplete#ignore_sources                 = {}
 let g:deoplete#ignore_sources._               = ['around', 'omni', 'file']
-au FileType elixir call deoplete#custom#source('ultisnips', 'rank', 2000)
 let g:neocomplete#enable_at_startup           = 1
 let g:neocomplete#enable_smart_case           = 1
 let g:deoplete#omni#min_pattern_length        = 2
 let g:neocomplete#sources#omni#input_patterns = {}
 let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
 let g:neocomplete#enable_auto_delimiter       = 1
-autocmd FileType eruby let b:deoplete_disable_auto_complete=1
+autocmd FileType eruby  let  b:deoplete_disable_auto_complete=1
+autocmd FileType *      call deoplete#custom#source('ultisnips', 'rank', 1000)
 " }}}
 
 Plug 'SirVer/ultisnips' " {{{
@@ -191,13 +196,10 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
-let rg_cmd="rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
-" command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--no-hscroll --delimiter : --nth 4..'}, <bang>0)
-command! -bang -nargs=* Rg call fzf#vim#grep( rg_cmd . shellescape(<q-args>), 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0)
-
-function! SearchWordWithRg()
-  execute 'Rg' expand('<cword>')
-endfunction
+command! -bang -nargs=* Rg call fzf#vim#grep(
+      \ "rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
+      \ . shellescape(<q-args>),
+      \ 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
 
 function! SearchSelectionWithRg() range
   let old_reg = getreg('"')
@@ -211,8 +213,9 @@ function! SearchSelectionWithRg() range
   execute 'Rg' selection
 endfunction
 
-nnoremap <silent> <leader>/ :Rg<CR>
 vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
+nnoremap <silent> <leader>/ :Rg<CR>
+nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :ProjectFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
@@ -242,7 +245,7 @@ Plug 'sheerun/vim-polyglot'
 " prevent syntax from stop working randomly
 autocmd FileType vue syntax sync fromstart
 " prevent vim from slowing down when editing vue
-let g:vue_disable_pre_processors=1
+let g:vue_pre_processors = ['pug', 'sass']
 
 Plug 'jparise/vim-graphql', { 'for': 'graphql' }
 autocmd FileType graphql set fdm=syntax
@@ -254,6 +257,11 @@ autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
+
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_folding = 'expr'
+nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 "===================Plug loading ends==========================================
 call plug#end()
