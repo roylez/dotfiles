@@ -281,26 +281,26 @@ if is-local; then
   esac
 fi
 
-#set screen title if not connected remotely
+#set screen/tmux title if not connected remotely
 #if [ "$STY" != "" ]; then
-screen_precmd() {
-    #a bell, urgent notification trigger
-    #echo -ne '\a'
-    #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
-    title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1..:;s:\([^-]*-[^-]*\)-.*:\1:"`" "$TERM $PWD"
-    echo -ne '\033[?17;0;127c'
+tmux_precmd() {
+  #a bell, urgent notification trigger
+  #echo -ne '\a'
+  #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
+  title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1..:;s:\([^-]*-[^-]*\)-.*:\1:"`"
+  echo -ne '\033[?17;0;127c'
 }
 
-screen_preexec() {
-    local -a cmd; cmd=(${(z)1})
-    case $cmd[1]:t in
-        'ssh'|'mosh') title "@""`echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:'`" "$TERM $cmd";;
-        'sudo')       title "#"$cmd[2]:t "$TERM $cmd[3,-1]";;
-        'for')        title "()"$cmd[7] "$TERM $cmd";;
-        'svn'|'git')  title "$cmd[1,2]" "$TERM $cmd";;
-        'ls'|'ll')    ;;
-        *)            title $cmd[1]:t "$TERM $cmd[2,-1]";;
-    esac
+tmux_preexec() {
+  local -a cmd; cmd=(${(z)1})
+  case $cmd[1]:t in
+    ssh|mosh) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
+    sudo)         title "#${cmd[2]:t}" ;;
+    for)          title "()$cmd[7]"    ;;
+    svn|git|make) title "${cmd[1,2]}"  ;;
+    ls|ll)        ;;
+    *)            title "${cmd[1]:t}"  ;;
+  esac
 }
 
 #}}}
@@ -308,9 +308,9 @@ screen_preexec() {
 #{{{define magic function arrays
 # typeset -ga preexec_functions precmd_functions chpwd_functions
 autoload -Uz add-zsh-hook
-add-zsh-hook precmd  screen_precmd
+add-zsh-hook precmd  tmux_precmd
 add-zsh-hook precmd  git_branch_precmd
-add-zsh-hook preexec screen_preexec
+add-zsh-hook preexec tmux_preexec
 add-zsh-hook preexec pwd_color_preexec
 add-zsh-hook chpwd   pwd_color_chpwd
 add-zsh-hook chpwd   git_branch_chpwd
@@ -636,8 +636,6 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
-alias tnethack='telnet nethack.alt.org'
-alias tslashem='telnet slashem.crash-override.net'
 alias forget='unset HISTFILE'
 
 #}}}
