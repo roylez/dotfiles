@@ -163,3 +163,12 @@ $0
 @spec ${1:function}( $2 ) :: $3
 endsnippet
 
+snippet defjob "job definition" b
+defmodule ${1:App.Job}.${2:JobName} do
+  use $1
+
+  def perform( $0 ) do
+  end
+end
+endsnippet
+

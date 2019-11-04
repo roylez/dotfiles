@@ -98,6 +98,8 @@ nmap ga      <Plug>(EasyAlign)
 
 " distraction free writing
 Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
+let g:goyo_height='100%'
+autocmd BufRead,BufNewFile *.md :Goyo
 
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
@@ -105,21 +107,41 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
 
-" parentheses and ends
+" the pope gang...
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
-
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-projectionist'
+
+command! A call altr#forward()
+let g:projectionist_heuristics = {
+      \ "mix.exs": {
+      \    "lib/*.ex": {
+      \       "alternate": "test/{}_test.exs",
+      \       "type": "code"
+      \    },
+      \    "test/*_test.exs": {
+      \       "alternate": "lib/{}.ex",
+      \       "type": "test"
+      \     },
+      \ },
+      \ "tasks/*.yml": {
+      \    "tasks/*.yml": {
+      \       "type": "task",
+      \       "alternate": "defaults/{}.yml"
+      \     },
+      \    "defaults/main.yml": {
+      \       "type": "default",
+      \       "alternate": "tasks/main.yml"
+      \     },
+      \ },
+      \ }
+
 Plug 'airblade/vim-gitgutter'
 
-Plug 'kana/vim-altr'
-command! A call altr#forward()
-autocmd FileType elixir       call altr#define('lib/%.ex',    'test/%_test.exs')
-autocmd FileType yaml.ansible call altr#define('tasks/%.yml', 'defaults/%.yml', 'handlers/%.yml')
-
 Plug 'janko-m/vim-test' " {{{
-nmap <silent> <leader>t :TestFile<CR>
+nmap <silent> <leader>t :TestNearest<CR>
 " Plug 'tpope/vim-dispatch'
 " let test#stratgy = 'dispatch_background'
 " }}}
@@ -127,10 +149,12 @@ nmap <silent> <leader>t :TestFile<CR>
 " {{{ Plug ale
 if has("nvim") || version > 800
   Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
-  let g:ale_open_list = 1
+  let g:ale_open_list            = 1
   let g:ale_lint_on_text_changed = 0
-  let g:ale_lint_on_enter = 0
-  let g:ale_lint_on_save = 1
+  let g:ale_lint_on_enter        = 0
+  let g:ale_lint_on_save         = 1
+  let g:ale_set_highlights       = 0
+
   Plug 'GrzegorzKozub/vim-elixirls', { 'do': ':ElixirLsCompileSync' }
   let g:ale_elixir_elixir_ls_release = expand( g:vim_plugged_dir ) . '/vim-elixirls/elixir-ls/release'
   " https://github.com/JakeBecker/elixir-ls/issues/54
@@ -259,8 +283,9 @@ autocmd FileType ledger nnoremap G Gzz
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
 Plug 'vimwiki/vimwiki'
-let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
 let g:vimwiki_folding = 'expr'
+let g:vimwiki_table_mappings = 0
 nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 "===================Plug loading ends==========================================

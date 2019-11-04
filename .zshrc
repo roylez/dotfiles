@@ -295,11 +295,12 @@ tmux_preexec() {
   local -a cmd; cmd=(${(z)1})
   case $cmd[1]:t in
     ssh|mosh) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
-    sudo)         title "#${cmd[2]:t}" ;;
-    for)          title "()$cmd[7]"    ;;
-    svn|git|make) title "${cmd[1,2]}"  ;;
-    ls|ll)        ;;
-    *)            title "${cmd[1]:t}"  ;;
+    sudo)    title "#${cmd[2]:t}"  ;;
+    for)     title "()$cmd[7]"     ;;
+    svn|git) title "${cmd[1,2]}"   ;;
+    make)    title "> ${cmd[2]} <" ;;
+    ls|ll)   ;;
+    *)       title "${cmd[1]:t}"   ;;
   esac
 }
 

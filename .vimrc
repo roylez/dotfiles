@@ -134,7 +134,7 @@ set foldmethod=marker   " fdm=syntax is very slow and makes trouble for neocompl
 " set colorcolumn=90
 
 "tags, use semicolon to seperate so that vim searches parent directories!
-set tags=./.tags;
+set tags=./.tags
 
 " 高亮当前位置
 " set cursorline cursorcolumn
@@ -208,7 +208,7 @@ autocmd FileType mail
 
 "markdown
 autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
-autocmd FileType markdown set comments=n:> nu nospell textwidth=0 formatoptions=tcroqn2
+autocmd FileType markdown set comments=n:> nospell textwidth=0 formatoptions=tcroqn2
 
 "remind
 autocmd BufNewFile,BufRead *.rem set ft=remind
