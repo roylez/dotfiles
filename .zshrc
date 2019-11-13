@@ -146,12 +146,8 @@ autoload -Uz compinit
                 printf "\e[01;$1;38;5;%sm%4s" $i $i;
             done;echo;
         done;
-    done
-}
-
-#alarm using atd
-alarm() {
-    echo "msg ${argv[2,-1]} && aplay -q ~/.sounds/MACSound/System\ Notifi.wav" | at now + $1 min
+    done; echo
+    for i in {234..255}; do printf "\e[01;$1;38;5;%sm%4s" $i  $i; done; echo
 }
 
 #calculator
@@ -162,6 +158,9 @@ bin-exist() {[[ -n ${commands[$1]} ]]}
 
 #check if is a local shell
 is-local() { [[ -z "$SSH_CONNECTION" || -f ~/.tty.local ]] }
+
+#git directory/repo name
+git_repo() { basename $(git rev-parse --show-toplevel) }
 
 # use stat_cal to generate github style commit log
 (bin-exist stat_cal) && \
@@ -296,9 +295,11 @@ tmux_preexec() {
   case $cmd[1]:t in
     ssh|mosh) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
     sudo)    title "#${cmd[2]:t}"  ;;
+    *=*)     title "${cmd[2]:t}"   ;;
     for)     title "()$cmd[7]"     ;;
+    lazygit) title "G:$(git_repo)" ;;
     svn|git) title "${cmd[1,2]}"   ;;
-    make)    title "> ${cmd[2]} <" ;;
+    make)    title "[${cmd[2]}]"   ;;
     ls|ll)   ;;
     *)       title "${cmd[1]:t}"   ;;
   esac
