@@ -1,3 +1,10 @@
+global !p
+def to_module(fn):
+    import re
+    fn = re.sub('\.exs?', '', fn)
+    return ''.join([ i.capitalize() for i in fn.split('_') ])
+endglobal
+
 snippet pry "Use IEx to pry"
 require IEx; IEx.pry
 endsnippet
@@ -29,7 +36,7 @@ IO.inspect $1
 endsnippet
 
 snippet	defm "defmodule" b
-defmodule ${1:AppModule} do
+defmodule ${1:`!p snip.rv=to_module(snip.basename)`} do
   $0
 end
 endsnippet
@@ -103,17 +110,6 @@ end
 # }}}
 endsnippet
 
-snippet defjson "define implementation for Poison.Encoder"
-defimpl Poison.Encoder, for: ${1:Module} do
-  def encode(${2:mod}, opts \\\\ []) do
-    %{
-      id: $2.id,
-      $0
-    } |> Poison.Encoder.encode(opts)
-  end
-end
-endsnippet
-
 snippet	defget "get_object(id, preloads \\ [])" b
 def get_${1:object}(id, preloads \\\\ ${2:[]})
 def get_$1(id, preloads) do
@@ -164,7 +160,7 @@ $0
 endsnippet
 
 snippet defjob "job definition" b
-defmodule ${1:App.Job}.${2:JobName} do
+defmodule ${1:App.Job}.${2:`!p snip.rv=to_module(snip.basename)`} do
   use $1
 
   def perform( $0 ) do
@@ -172,3 +168,11 @@ defmodule ${1:App.Job}.${2:JobName} do
 end
 endsnippet
 
+snippet defjobtest "job test" b
+defmodule ${1:Module}.Test.Job.${2:`!p snip.rv=to_module(snip.basename)`} do
+  use $1.DataCase
+  alias $1.Job
+
+  $0
+end
+endsnippet

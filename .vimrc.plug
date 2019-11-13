@@ -112,29 +112,17 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-projectionist'
-
-command! A call altr#forward()
 let g:projectionist_heuristics = {
       \ "mix.exs": {
-      \    "lib/*.ex": {
-      \       "alternate": "test/{}_test.exs",
-      \       "type": "code"
-      \    },
-      \    "test/*_test.exs": {
-      \       "alternate": "lib/{}.ex",
-      \       "type": "test"
-      \     },
+      \   "lib/*.ex":        { "alternate": "test/{}_test.exs", "type": "code" },
+      \   "test/*_test.exs": { "alternate": "lib/{}.ex",        "type": "test" },
+      \   "priv/repo/migrations/*.exs": { "type": "migration" },
       \ },
       \ "tasks/*.yml": {
-      \    "tasks/*.yml": {
-      \       "type": "task",
-      \       "alternate": "defaults/{}.yml"
-      \     },
-      \    "defaults/main.yml": {
-      \       "type": "default",
-      \       "alternate": "tasks/main.yml"
-      \     },
+      \   "tasks/*.yml":       { "type": "task",    "alternate": "defaults/{}.yml" },
+      \   "defaults/main.yml": { "type": "default", "alternate": "tasks/main.yml"  },
       \ },
       \ }
 
@@ -142,8 +130,7 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'janko-m/vim-test' " {{{
 nmap <silent> <leader>t :TestNearest<CR>
-" Plug 'tpope/vim-dispatch'
-" let test#stratgy = 'dispatch_background'
+let test#strategy = "dispatch"
 " }}}
 
 " {{{ Plug ale
