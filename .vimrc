@@ -53,8 +53,8 @@ set noeb vb t_vb=
 set smartindent autoindent
 " replace <tab> with 2 blank space.
 set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=8
-set textwidth=80	" wrap text for 78 letters
-" set relativenumber
+set textwidth=100	" wrap text for 78 letters
+set relativenumber number
 
 set hidden              " hide instead of abandon buffer
 map Q gq

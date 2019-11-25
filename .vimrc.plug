@@ -58,8 +58,8 @@ let g:airline_mode_map = {
     \ '' : 'S',
     \ }
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline_section_x='%{&filetype}'
-let g:airline_section_z='%l,%c%V %3p%%'
+let g:airline_section_x='%l,%c%V %3p%%'
+let g:airline_section_z='%{&filetype}'
 let g:airline_section_error=''
 let g:airline_section_warning=''
 let g:airline_theme='dark'
@@ -99,7 +99,6 @@ nmap ga      <Plug>(EasyAlign)
 " distraction free writing
 Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
 let g:goyo_height='100%'
-autocmd BufRead,BufNewFile *.md :Goyo
 
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
@@ -126,7 +125,7 @@ let g:projectionist_heuristics = {
       \ },
       \ }
 
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
 Plug 'janko-m/vim-test' " {{{
 nmap <silent> <leader>t :TestNearest<CR>
@@ -190,8 +189,7 @@ Plug 'SirVer/ultisnips' " {{{
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetDirectories=["snips", "UltiSnips"]
-let g:UltiSnipsSnippetsDir= g:vim_home . '/snips'
+let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
 let g:UltiSnipsEditSplit= 'vertical'
 " }}} Plug 'SirVer/ultisnips' "
 
@@ -273,6 +271,7 @@ Plug 'vimwiki/vimwiki'
 let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
 let g:vimwiki_folding = 'expr'
 let g:vimwiki_table_mappings = 0
+let g:vimwiki_global_ext = 0
 nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 "===================Plug loading ends==========================================

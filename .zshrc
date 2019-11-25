@@ -61,6 +61,7 @@ setopt numeric_glob_sort        # when globbing numbered files, use real countin
 setopt prompt_subst             # prompt more dynamic, allow function in prompt
 setopt csh_null_glob
 setopt transient_rprompt        # make rprompt dissapear for previous commands
+setopt monitor                  # needed for job control
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
@@ -539,17 +540,11 @@ export LESS_TERMCAP_ue=$'\E[m'
 export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
 export READNULLCMD=less
-# In archlinux the pipe script is in PATH, how ever in debian it is not
-(bin-exist src-hilite-lesspipe.sh) && export LESSOPEN="| src-hilite-lesspipe.sh %s"
-[ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
-#for gnuplot, avoid locate!!!
-#export GDFONTPATH=$(dirname `locate DejaVuSans.ttf | tail -1`)
-#[[ -n $DISPLAY ]] && export GDFONTPATH=/usr/share/fonts/TTF
-
-# redefine command not found
-(bin-exist cowsay) && (bin-exist fortune) && command_not_found_handler() { fortune -s| cowsay -W 70; return 127;}
-
+# FZF and friend
+( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
+# molokai themed
+export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
 # }}}
 
 # 读入其他配置 {{{
@@ -582,6 +577,10 @@ if ( bin-exist nvim ); then
   export EDITOR=nvim VISUAL=nvim
 else
   export EDITOR=vim VISUAL=vim
+fi
+
+if ( bin-exist bat ); then
+  alias cat=bat
 fi
 # }}}
 
