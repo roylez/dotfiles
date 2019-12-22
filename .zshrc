@@ -542,9 +542,13 @@ export LESSCHARSET=utf-8
 export READNULLCMD=less
 
 # FZF and friend
-( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
-# molokai themed
-export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
+if ( bin-exist fzf ); then
+  ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
+  # molokai themed
+  export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
+  source /usr/share/fzf/completion.zsh
+  source /usr/share/fzf/key-bindings.zsh
+fi
 # }}}
 
 # 读入其他配置 {{{

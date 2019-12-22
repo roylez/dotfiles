@@ -256,9 +256,6 @@ autocmd FileType vue syntax sync fromstart
 " prevent vim from slowing down when editing vue
 let g:vue_pre_processors = ['pug', 'sass']
 
-Plug 'jparise/vim-graphql', { 'for': 'graphql' }
-autocmd FileType graphql set fdm=syntax
-
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
