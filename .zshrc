@@ -22,12 +22,6 @@ else
   [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
 fi
 
-#color defined for prompts and etc
-autoload colors
-[[ $terminfo[colors] -ge 8 ]] && colors
-pR="%{$reset_color%}%u%b" pB="%B" pU="%U" pS="%S" pSS="%s"
-for i in red green blue yellow magenta cyan white black; {eval pfg_$i="%{$fg[$i]%}" pbg_$i="%{$bg[$i]%}"}
-#}}}
 #}}}
 
 # 设置参数 {{{
@@ -196,77 +190,11 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 # }}}
 
 #{{{ functions to set prompt pwd color
-__PROMPT_PWD="$pfg_magenta%~$pR"
+__PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
-pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="$pU$pfg_cyan%~$pR" }
+pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%U%F{cyan}%~%f%u" }
 #change back before next command
-pwd_color_preexec() { __PROMPT_PWD="$pfg_magenta%~$pR" }
-
-#}}}
-
-#{{{functions to display git branch in prompt
-get_git_status() {
-    unset -m '__CURRENT_GIT_BRANCH*'
-
-    local dir=$(git rev-parse --git-dir 2>/dev/null)
-    [[ "${dir:h}" = "$HOME" ]] && return
-
-    local st="$(git -c color.status=false status 2>/dev/null)"
-    if [[ -n "$st" ]]; then
-        local -a arr
-        arr=(${(f)st})
-
-        if [[ $arr[1] =~ 'Not currently on any branch.' ]]; then
-            __CURRENT_GIT_BRANCH='no-branch'
-        else
-            __CURRENT_GIT_BRANCH="${arr[1][(w)4]}"
-            [[ $__CURRENT_GIT_BRANCH == "master" ]] && __CURRENT_GIT_BRANCH=M
-        fi
-
-        if [[ $arr[2] =~ 'Your branch is' ]]; then
-            case $arr[2] in
-                *ahead*    ) __CURRENT_GIT_BRANCH_STATUS=ahead      ;;
-                *diverged* ) ""__CURRENT_GIT_BRANCH_STATUS=diverged   ;;
-                *date*     ) __CURRENT_GIT_BRANCH_STATUS=up-to-date ;;
-                *          ) __CURRENT_GIT_BRANCH_STATUS=behind     ;;
-            esac
-        fi
-
-        # has something new?
-        [[ ! $st =~ "nothing to commit" ]] && __CURRENT_GIT_BRANCH_IS_DIRTY='1'
-        # has unstaged changes?
-        [[ $st =~ "not staged for commit" ]] && __CURRENT_GIT_BRANCH_HAS_UNSTAGED='1'
-    fi
-}
-
-git_branch_precmd() {
-  # do not track git branch info in ~
-  [[ "$PWD" = "$HOME" ]]  &&  return
-  [[ ! "$(fc -l -1)" == *(git|vim)* ]] && return
-  get_git_status
-}
-
-git_branch_chpwd() { get_git_status }
-
-#this one is to be used in prompt
-get_prompt_git() {
-  if [[ -n $__CURRENT_GIT_BRANCH ]]; then
-    local s=$__CURRENT_GIT_BRANCH
-    case "$__CURRENT_GIT_BRANCH_STATUS" in
-      ahead) s+="${pbg_green}+" ;;
-      diverged) s+="${pbg_red}=" ;;
-      behind) s+="${pbg_magenta}-" ;;
-    esac
-    if [[ $__CURRENT_GIT_BRANCH_IS_DIRTY = '1' ]]; then
-      if [[ $__CURRENT_GIT_BRANCH_HAS_UNSTAGED = '1' ]]; then
-        s+="${pbg_red}*"
-      else
-        s+="${pbg_green}*"
-      fi
-    fi
-    echo " $pfg_black$pbg_white$pS$pB $s $pR$pSS"
-  fi
-}
+pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
 #}}}
 
@@ -312,31 +240,60 @@ tmux_preexec() {
 # typeset -ga preexec_functions precmd_functions chpwd_functions
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd  tmux_precmd
-add-zsh-hook precmd  git_branch_precmd
+add-zsh-hook precmd  vcs_info
 add-zsh-hook preexec tmux_preexec
 add-zsh-hook preexec pwd_color_preexec
 add-zsh-hook chpwd   pwd_color_chpwd
-add-zsh-hook chpwd   git_branch_chpwd
+add-zsh-hook chpwd   vcs_info
 #}}}
 
 # }}}
 
 # 提示符 {{{
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*:*' formats           " %F{white}%K{black}%B %b%m%c%u %f%k%%b"
+zstyle ':vcs_info:*:*' actionformats     " %F{white}%K{black}%B %b%m(%a)%c%u %f%k%%b"
+zstyle ':vcs_info:*:*' stagedstr         "%F{green}*"
+zstyle ':vcs_info:*:*' unstagedstr       "%F{red}*"
+zstyle ':vcs_info:*:*' check-for-changes true
+zstyle ':vcs_info:*:*' get-revision      true
+zstyle ':vcs_info:git*+set-message:*'    hooks git-misc-n-abbr-master
+function +vi-git-misc-n-abbr-master() {
+    local ahead behind
+    local -a gitstatus
+
+    # for git prior to 1.7
+    # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+    ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+    (( $ahead )) && gitstatus+=( "+${ahead}" )
+
+    # for git prior to 1.7
+    # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+    behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+    (( $behind )) && gitstatus+=( "-${behind}" )
+
+    hook_com[misc]+=${(j:/:)gitstatus}
+
+    # change branch name display to M for master and use revision when it is easier
+    hook_com[branch]=${hook_com[branch]/#%master/M}
+    [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
+}
+
 if [ "$SSH_TTY" = "" ]; then
-    local host="$pB$pfg_magenta%m$pR"
+    local host="%B%F{magenta}%m%b%f"
 else
-    local host="$pB$pU$pfg_magenta%m$pR"            # underline for remote hostname
+    local host="%B%U%F{magenta}%m%f%u%b"            # underline for remote hostname
 fi
-local user="$pB%(!:$pfg_red:$pfg_green)%n$pR"       # red for root user name
-local symbol="$pB%(!:$pfg_red # :$pfg_yellow > )$pR"
-# local symbol="$pB$pfg_yellow> $pR"
-local job="%1(j,$pfg_red:$pfg_blue%j,)$pR"
-PROMPT='$host $user $__PROMPT_PWD$(get_prompt_git)$job$symbol'
-PROMPT2="$PROMPT$pfg_cyan%_$pR $pB$pfg_black>$pR$pfg_green>$pB$pfg_green>$pR "
+local user="%B%(!:%F{red}:%F{green})%n%b"       # red for root user name
+local symbol="%B %(!:%F{red}#:%F{yellow}>) %b%f"
+local job="%1(j,%F{red}:%F{blue}%j,)%f"
+PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job$symbol'
+PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
 # RPROMPT='$__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
-SPROMPT="${pfg_yellow}zsh$pR: correct '$pfg_red$pB%R$pR' to '$pfg_green$pB%r$pR' ? ([${pfg_cyan}Y$pR]es/[${pfg_cyan}N$pR]o/[${pfg_cyan}E$pR]dit/[${pfg_cyan}A$pR]bort) "
+SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
 #行编辑高亮模式 {{{
 if (is-at-least 4.3); then
@@ -522,7 +479,7 @@ SAVEHIST=40000
 # ignore some commands
 HISTORY_IGNORE="(ls|cd|pwd|exit|fg|bg|jobs)"
 
-export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33;1m%p\e[m: '
+export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
 
 export LC_ALL=en_US.UTF-8
