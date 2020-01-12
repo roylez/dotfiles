@@ -67,7 +67,8 @@ let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
-Plug 'lifepillar/vim-gruvbox8'
+" Plug 'lifepillar/vim-gruvbox8'
+Plug 'KeitaNakamura/neodark.vim'
 
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
@@ -281,9 +282,7 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     endif
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
-    colorscheme gruvbox8
-    " colorscheme Tomorrow-Night-Eighties
-    " colorscheme SpacegrayEighties
+    colorscheme neodark
 else
     colorscheme tango
 endif
