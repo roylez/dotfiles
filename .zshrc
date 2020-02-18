@@ -12,6 +12,7 @@ export PATH=$HOME/bin:$PATH
 # disable flow controll so that ctl-s does not freeze terminal and you don't
 # have to ctrl-q to reenable it
 stty -ixon
+# }}}
 
 # 定义颜色 {{{
 if [[ "$TERM" = *(256color|kitty) && -f $HOME/.lscolor256 ]]; then
@@ -498,17 +499,18 @@ export LESS="-M -i -R --shift 5"
 export LESSCHARSET=utf-8
 export READNULLCMD=less
 
+# 读入其他配置 {{{
+
 # FZF and friend
 if ( bin-exist fzf ); then
   ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
   # molokai themed
   export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
-  source /usr/share/fzf/completion.zsh
-  source /usr/share/fzf/key-bindings.zsh
+  [[ $OSTYPE = darwin* ]] && fzf_completion_dir=/usr/local/opt/fzf/shell || fzf_completion_dir=/usr/share/fzf
+  source $fzf_completion_dir/completion.zsh
+  source $fzf_completion_dir/key-bindings.zsh
 fi
 # }}}
-
-# 读入其他配置 {{{
 
 if [[ -d $HOME/.zplug ]]; then
   # git clone https://github.com/zplug/zplug ~/.zplug
