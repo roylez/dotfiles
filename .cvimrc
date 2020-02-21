@@ -10,7 +10,7 @@ set noautofocus " The opposite of autofocus; this setting stops
 set typelinkhints
 let searchlimit = 15
 let scrollstep = 70
-let barposition = "bottom"
+let barposition = "top"
 set nodimhintcharacters
 
 let locale = "uk" " Current choices are 'jp' and 'uk'. This allows cVim to use sites like google.co.uk
