@@ -507,8 +507,9 @@ if ( bin-exist fzf ); then
   # molokai themed
   export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
   [[ $OSTYPE = darwin* ]] && fzf_completion_dir=/usr/local/opt/fzf/shell || fzf_completion_dir=/usr/share/fzf
-  source $fzf_completion_dir/completion.zsh
-  source $fzf_completion_dir/key-bindings.zsh
+  for file in $fzf_completion_dir/*.zsh; do
+    source $file
+  done
 fi
 # }}}
 
@@ -541,10 +542,6 @@ if ( bin-exist nvim ); then
 else
   export EDITOR=vim VISUAL=vim
 fi
-
-if ( bin-exist bat ); then
-  alias cat=bat
-fi
 # }}}
 
 # 命令别名 {{{
@@ -553,7 +550,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|cut -d' '"
 alias -g E="|sed"
-alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -i --color=always'
+alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -a -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less -R"
 alias -g P="|column -t"
@@ -574,8 +571,7 @@ for i in rar zip 7z lzma;   alias -s $i="7z x"
 for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias find='noglob find'        # noglob for find
 alias rsync='noglob rsync'
-alias grep='grep -I --color=auto'
-alias egrep='egrep -I --color=auto'
+alias grep='grep -a -I --color=auto'
 alias freeze='kill -STOP'
 alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'

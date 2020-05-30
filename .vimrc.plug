@@ -169,12 +169,8 @@ else
 endif
 let g:deoplete#enable_at_startup              = 1
 let g:deoplete#omni#min_pattern_length        = 3
-let g:deoplete#omni#input_patterns            = {}
-let g:deoplete#omni#input_patterns.ledger     = '^\s\+\(\S \S\|\S\|:\)\+'
 let g:deoplete                                = g:vim_home . '/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter          = 1
-let g:deoplete#ignore_sources                 = {}
-let g:deoplete#ignore_sources._               = ['around', 'omni', 'file']
 let g:neocomplete#enable_at_startup           = 1
 let g:neocomplete#enable_smart_case           = 1
 let g:deoplete#omni#min_pattern_length        = 2
@@ -183,6 +179,10 @@ let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplet
 let g:neocomplete#enable_auto_delimiter       = 1
 autocmd FileType eruby  let  b:deoplete_disable_auto_complete=1
 autocmd FileType *      call deoplete#custom#source('ultisnips', 'rank', 1000)
+autocmd FileType ledger call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
+autocmd FileType *      call deoplete#custom#option({
+      \ 'ignore_sources': { '_': ['around', 'omni', 'file'] },
+      \ })
 " }}}
 
 Plug 'SirVer/ultisnips' " {{{
