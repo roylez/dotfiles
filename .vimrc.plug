@@ -67,8 +67,8 @@ let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
-" Plug 'lifepillar/vim-gruvbox8'
-Plug 'KeitaNakamura/neodark.vim'
+Plug 'lifepillar/vim-gruvbox8'
+" Plug 'KeitaNakamura/neodark.vim'
 
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
@@ -265,12 +265,16 @@ autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
-let g:vimwiki_folding = 'expr'
-let g:vimwiki_table_mappings = 0
-let g:vimwiki_global_ext = 0
-nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_strikethrough = 1
+
+" Plug 'vimwiki/vimwiki'
+" let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+" let g:vimwiki_folding = 'expr'
+" let g:vimwiki_table_mappings = 0
+" let g:vimwiki_global_ext = 0
+" nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 "===================Plug loading ends==========================================
 call plug#end()
@@ -282,7 +286,8 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     endif
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
-    colorscheme neodark
+    " colorscheme neodark
+    colorscheme gruvbox8
 else
     colorscheme tango
 endif
