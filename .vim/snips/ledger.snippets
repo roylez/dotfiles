@@ -12,7 +12,7 @@ def creditcard_insurance(amount):
 endglobal
 
 snippet exp "Expense" b
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     Expenses:${5:Grocery}   ${6:$} ${7:value}
     ${8:Assets:}$9
 endsnippet
@@ -30,8 +30,8 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
 endsnippet
 
 snippet din "Dining" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:Restaurant}
-    Expenses:Dining      ${4:$} ${5:value}
+20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+    Expenses:Dining   $ ${5:value}
     ${6:Assets:Cash}
 endsnippet
 
@@ -52,7 +52,7 @@ ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     Assets:ING:Everyday
 endsnippet
 
-snippet cred "CreditCard" b
+snippet col "CreditCard" b
 Liabilities:CreditCard:Coles
 endsnippet
 

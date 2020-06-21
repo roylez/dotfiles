@@ -67,8 +67,8 @@ let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
-" Plug 'lifepillar/vim-gruvbox8'
-Plug 'KeitaNakamura/neodark.vim'
+Plug 'lifepillar/vim-gruvbox8'
+" Plug 'KeitaNakamura/neodark.vim'
 
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
@@ -169,12 +169,8 @@ else
 endif
 let g:deoplete#enable_at_startup              = 1
 let g:deoplete#omni#min_pattern_length        = 3
-let g:deoplete#omni#input_patterns            = {}
-let g:deoplete#omni#input_patterns.ledger     = '^\s\+\(\S \S\|\S\|:\)\+'
 let g:deoplete                                = g:vim_home . '/.cache/deoplete'
 let g:deoplete#enable_auto_delimiter          = 1
-let g:deoplete#ignore_sources                 = {}
-let g:deoplete#ignore_sources._               = ['around', 'omni', 'file']
 let g:neocomplete#enable_at_startup           = 1
 let g:neocomplete#enable_smart_case           = 1
 let g:deoplete#omni#min_pattern_length        = 2
@@ -183,6 +179,10 @@ let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplet
 let g:neocomplete#enable_auto_delimiter       = 1
 autocmd FileType eruby  let  b:deoplete_disable_auto_complete=1
 autocmd FileType *      call deoplete#custom#source('ultisnips', 'rank', 1000)
+autocmd FileType ledger call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
+autocmd FileType *      call deoplete#custom#option({
+      \ 'ignore_sources': { '_': ['around', 'omni', 'file'] },
+      \ })
 " }}}
 
 Plug 'SirVer/ultisnips' " {{{
@@ -265,12 +265,16 @@ autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
-let g:vimwiki_folding = 'expr'
-let g:vimwiki_table_mappings = 0
-let g:vimwiki_global_ext = 0
-nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+Plug 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_strikethrough = 1
+
+" Plug 'vimwiki/vimwiki'
+" let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+" let g:vimwiki_folding = 'expr'
+" let g:vimwiki_table_mappings = 0
+" let g:vimwiki_global_ext = 0
+" nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 "===================Plug loading ends==========================================
 call plug#end()
@@ -282,7 +286,8 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     endif
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
-    colorscheme neodark
+    " colorscheme neodark
+    colorscheme gruvbox8
 else
     colorscheme tango
 endif
