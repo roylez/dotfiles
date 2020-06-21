@@ -1,0 +1,96 @@
+{
+;; !  | means mandatory
+;; #  | means optional
+;; C  | left_command
+;; Q  | right_command
+;; CC | command
+;; T  | left_control
+;; W  | right_control
+;; TT | control
+;; O  | left_option
+;; E  | right_option
+;; OO | option
+;; S  | left_shift
+;; R  | right_shift
+;; SS | shift
+;; F  | fn
+;; !! | hyper [:left_command :left_control :left_optional :left_shift ]
+;; !A | hyper [:command :control :optional :shift ]
+;; ## | optional any
+
+:profiles { :Default
+           { :default true
+            ;; simultaneous_threshold_milliseconds (def: 50)
+            ;; keys need to be pressed within this threshold to be considered simultaneous
+            :sim     50
+            ;; to_delayed_action_delay_milliseconds (def: 500)
+            ;; basically it means time after which the key press is count delayed
+            :delay   500
+            ;; to_if_alone_timeout_milliseconds (def: 1000)
+            ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
+            :alone   500
+            ;; to_if_held_down_threshold_milliseconds (def: 500)
+            ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
+            :held    1000
+            }
+           }
+
+:templates {
+            :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+            :open "open \"%s\""
+            }
+
+:devices {
+          :apple [ { :vendor_id 1452 } ] 
+          :niz   [ { :vendor_id 1155 :product_id 21042 } ]  ;; Niz Plum atom68
+          }
+
+:applications {
+               :chrome ["^com\\.google\\.Chrome$"]
+               :terminal ["^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
+               }
+
+;; default is 250
+:simlayer-threshold 300
+:simlayers {
+            :space_mode  { :key :spacebar }
+            }
+
+ :main [
+        {:des "Right alt to ctrl on atom68" 
+         :rules [[:##right_alt :##right_control [:niz]]] }
+        {:des "Capslock to hyper (Ctrl+Alt)"
+         :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
+        {:des "Tap shift to change input sources"
+         :rules [
+                 [:left_shift  :left_shift  nil {:alone :!Tspacebar  } ]
+                 [:right_shift :right_shift nil {:alone :!OCspacebar } ]
+                 ] }
+        {:des "Command+-/= as F11/F12 in terminals"
+         :rules [
+                 [:!CChyphen :f11 [:terminal] ]
+                 [:!CCequal_sign :f12 [:terminal] ]
+                 ] }
+        {:des "SPACE mode"
+         :rules [
+                 [:1 :f1  :space_mode]
+                 [:2 :f2  :space_mode]
+                 [:3 :f3  :space_mode]
+                 [:4 :f4  :space_mode]
+                 [:5 :f5  :space_mode]
+                 [:6 :f6  :space_mode]
+                 [:7 :f7  :space_mode]
+                 [:8 :f8  :space_mode]
+                 [:9 :f9  :space_mode]
+                 [:0 :f10 :space_mode]
+                 [:hyphen     :f11 :space_mode]
+                 [:equal_sign :f12 :space_mode]
+                 [:j :volume_decrement :space_mode]
+                 [:k :volume_increment :space_mode]
+                 [:m :mute             :space_mode]
+                 [:h :rewind           :space_mode]
+                 [:l :fastforward      :space_mode]
+                 [:s :play_or_pause    :space_mode]
+                 ] }
+        ]
+ }
