@@ -21,10 +21,35 @@ $0
 
 endsnippet
 
+snippet ze "Zettelkasten metadata" b
+---
+title: ${1:title}
+index: ${2:`!p snip.rv=fn.strip(".md")`}
+---
+
+$0
+
+endsnippet
+
 snippet tod "today" b
 ## `date +%Y-%m-%d`
 
+- [ ] BOOT
+    - [ ] Daily Affirmations
+    - [ ] Emails
+    - [ ] time card
+    - [ ] Calendar
+    - [ ] how-to-type
+    - [ ] workspace cleanup
+    - [ ] lesswrong.com
+
 - [ ] $0
+
+- [ ] SHUTDOWN
+    - [ ] time card
+    - [ ] tomorrow planning
+    - [ ] desk
+    - [ ] water plant
 
 endsnippet
 
@@ -38,6 +63,21 @@ endsnippet
 snippet tom "tomorrow" b
 ## `date -d '1 day' +%Y-%m-%d`
 
+- [ ] BOOT
+    - [ ] Daily Affirmations
+    - [ ] Emails
+    - [ ] time card
+    - [ ] Calendar
+    - [ ] how-to-type
+    - [ ] workspace cleanup
+    - [ ] lesswrong.com
+
 - [ ] $0
+
+- [ ] SHUTDOWN
+    - [ ] time card
+    - [ ] tomorrow planning
+    - [ ] desk
+    - [ ] water plant
 
 endsnippet

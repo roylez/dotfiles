@@ -21,11 +21,11 @@ endif
 let g:vim_home=$HOME.'/.vim'
 "------------------------------------------------------------------------
 set background=dark
-" support for truecolor
-if v:version > 800
-  set termguicolors
-endif
+set notermguicolors
 set nocompatible
+
+" system plugin files in voidlinux
+set runtimepath+=/usr/share/vim/vimfiles
 
 " this is used a lot in plugin settings, and its default 1s timeout is too short
 let mapleader="\<space>"
@@ -57,10 +57,11 @@ set textwidth=100	" wrap text for 78 letters
 set relativenumber number
 
 set hidden              " hide instead of abandon buffer
-map Q gq
 set wrap
+map Q gq
 set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
+set wrapmargin=2
 
 set formatprg=fmt formatoptions+=mM     " default tcq, mM to help wrap chinese
 
@@ -172,7 +173,6 @@ nmap tc :tabclose<cr>
 nmap gf <C-W>gf
 
 " clear search highlight with F5
-nmap <F5>   :noh<cr><ESC>
 set pastetoggle=<F1>
 
 " use <leader>y/p to interact with clipboard
@@ -207,7 +207,6 @@ autocmd FileType mail
             \|:silent 1
 
 "markdown
-autocmd BufNewFile,BufRead *mkd,*.md,*.mdown set ft=markdown
 autocmd FileType markdown set comments=n:> nospell textwidth=0 formatoptions=tcroqn2
 
 "remind
