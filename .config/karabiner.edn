@@ -1,0 +1,99 @@
+{
+;; !  | means mandatory
+;; #  | means optional
+;; C  | left_command
+;; Q  | right_command
+;; CC | command
+;; T  | left_control
+;; W  | right_control
+;; TT | control
+;; O  | left_option
+;; E  | right_option
+;; OO | option
+;; S  | left_shift
+;; R  | right_shift
+;; SS | shift
+;; F  | fn
+;; !! | hyper [:left_command :left_control :left_optional :left_shift ]
+;; !A | hyper [:command :control :optional :shift ]
+;; ## | optional any
+
+:profiles { :Default
+           { :default true
+            ;; simultaneous_threshold_milliseconds (def: 50)
+            ;; keys need to be pressed within this threshold to be considered simultaneous
+            :sim     50
+            ;; to_delayed_action_delay_milliseconds (def: 500)
+            ;; basically it means time after which the key press is count delayed
+            :delay   500
+            ;; to_if_alone_timeout_milliseconds (def: 1000)
+            ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
+            :alone   500
+            ;; to_if_held_down_threshold_milliseconds (def: 500)
+            ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
+            :held    1000
+            }
+           }
+
+:templates {
+            :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+            :open "open \"%s\""
+            }
+
+:devices {
+          :apple [ { :vendor_id 1452 } ]
+          :niz   [ { :vendor_id 1155 :product_id 21042 } ]  ;; Niz Plum atom68
+          }
+
+:applications {
+               :chrome ["^com\\.google\\.Chrome$"]
+               :terminal ["^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
+               }
+
+;; default is 250
+:simlayer-threshold 300
+:simlayers {
+            ; :space_mode  { :key :spacebar }
+            }
+
+ :main [
+        {:des "Niz Plum atom68 modifications"
+         :rules [
+                 [:##right_alt :##right_control [:niz] ]
+                 [:!CC1          :f1  [:niz] ]
+                 [:!CC2          :f2  [:niz] ]
+                 [:!CC3          :f3  [:niz] ]
+                 [:!CC4          :f4  [:niz] ]
+                 [:!CC5          :f5  [:niz] ]
+                 [:!CC6          :f6  [:niz] ]
+                 [:!CC7          :f7  [:niz] ]
+                 [:!CC8          :f8  [:niz] ]
+                 [:!CC9          :f9  [:niz] ]
+                 [:!CC0          :f10 [:niz] ]
+                 [:!CChyphen     :f11 [:niz] ]
+                 [:!CCequal_sign :f12 [:niz] ]
+                 ] }
+        {:des "Capslock to hyper (Ctrl+Alt)"
+         :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
+        {:des "Tap shift to change input sources"
+         :rules [
+                 [:left_shift  :left_shift  nil {:alone :!Tspacebar  } ]
+                 [:right_shift :right_shift nil {:alone :!OCspacebar } ]
+                 ] }
+        {:des "Command+`/PageUp/PageDown as pause-play/volume-up/volume-down"
+         :rules [
+                 [:!CCgrave_accent_and_tilde :play_or_pause nil ]
+                 [:!CCpage_up                :volume_up     nil ]
+                 [:!CCpage_down              :volume_down   nil ]
+                 ] }
+        ; {:des "SPACE mode"
+        ;  :rules [
+        ;          [:j :volume_decrement :space_mode]
+        ;          [:k :volume_increment :space_mode]
+        ;          [:m :mute             :space_mode]
+        ;          [:h :rewind           :space_mode]
+        ;          [:l :fastforward      :space_mode]
+        ;          [:s :play_or_pause    :space_mode]
+        ;          ] }
+        ]
+ }
