@@ -21,10 +21,7 @@ endif
 let g:vim_home=$HOME.'/.vim'
 "------------------------------------------------------------------------
 set background=dark
-" support for truecolor
-if v:version > 800
-  set termguicolors
-endif
+set notermguicolors
 set nocompatible
 
 " this is used a lot in plugin settings, and its default 1s timeout is too short
