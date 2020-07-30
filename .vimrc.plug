@@ -11,6 +11,7 @@ call plug#begin( g:vim_plugged_dir )
 "-------------------------------------------------------------------------------
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
+" F4 and Ctrl-4
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
@@ -27,20 +28,50 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
 " find current file
-nnoremap <silent> <Leader>z :NERDTreeFind<CR>
+nnoremap <silent> <Leader>= :NERDTreeFind<CR>
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 let g:NERDTreeFileExtensionHighlightFullName = 1
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName    = 1
+let g:NERDTreePatternMatchHighlightFullName  = 1
 let g:NERDTreeSyntaxDisableDefaultExtensions = 1
 let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'js', 'css', 'sass']
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
 
 " }}}
+
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+let g:tagbar_type_elixir = {
+   \ 'ctagstype' : 'elixir',
+   \ 'kinds' : [
+       \ 'p:protocols',
+       \ 'm:modules',
+       \ 'e:exceptions',
+       \ 'y:types',
+       \ 'd:delegates',
+       \ 'f:functions',
+       \ 'c:callbacks',
+       \ 'a:macros',
+       \ 't:tests',
+       \ 'i:implementations',
+       \ 'o:operators',
+       \ 'r:records'
+   \ ],
+   \ 'sro' : '.',
+   \ 'kind2scope' : {
+       \ 'p' : 'protocol',
+       \ 'm' : 'module'
+   \ },
+   \ 'scope2kind' : {
+       \ 'protocol' : 'p',
+       \ 'module' : 'm'
+   \ },
+   \ 'sort' : 0
+\ }
+nmap <F5> :TagbarToggle<CR>
 
 Plug 'vim-airline/vim-airline' " {{{
 set noshowmode
@@ -85,10 +116,13 @@ let g:rooter_silent_chdir = 1
 Plug 'lfv89/vim-interestingwords'
 
 " comment / uncomment, context aware
-Plug 'Shougo/context_filetype.vim'
+Plug 'Shougo/context_filetype.vim', { 'for': 'vue' }
 Plug 'tyru/caw.vim' " {{{
+" F9 and Alt-9
 vmap <F9> gcc
 nmap <F9> gcc
+vmap <A-9> gcc
+nmap <A-9> gcc
 " }}}
 
 " make stuff organized
@@ -157,32 +191,32 @@ endif
 
 " Plug deoplete {{{
 Plug 'wellle/tmux-complete.vim'
-if has("nvim")
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'ncm2/float-preview.nvim'
-elseif version > 800
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+if has("nvim") || version > 800
+  if has("nvim")
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'ncm2/float-preview.nvim'
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+  let g:deoplete#enable_at_startup       = 1
+  let g:deoplete#omni#min_pattern_length = 3
+  let g:deoplete                         = g:vim_home . '/.cache/deoplete'
+  let g:deoplete#enable_auto_delimiter   = 1
+  autocmd FileType *        call deoplete#custom#source('ultisnips', 'rank', 1000)
+  autocmd FileType ledger   call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
+  autocmd FileType *        call deoplete#custom#option({ 'ignore_sources': { '_': ['around', 'omni', 'file'] } })
+  autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
 else
   Plug 'Shougo/neocomplete.vim'
+  let g:neocomplete#enable_at_startup           = 1
+  let g:neocomplete#enable_smart_case           = 1
+  let g:deoplete#omni#min_pattern_length        = 2
+  let g:neocomplete#sources#omni#input_patterns = {}
+  let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
+  let g:neocomplete#enable_auto_delimiter       = 1
 endif
-let g:deoplete#enable_at_startup              = 1
-let g:deoplete#omni#min_pattern_length        = 3
-let g:deoplete                                = g:vim_home . '/.cache/deoplete'
-let g:deoplete#enable_auto_delimiter          = 1
-let g:neocomplete#enable_at_startup           = 1
-let g:neocomplete#enable_smart_case           = 1
-let g:deoplete#omni#min_pattern_length        = 2
-let g:neocomplete#sources#omni#input_patterns = {}
-let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
-let g:neocomplete#enable_auto_delimiter       = 1
-autocmd FileType eruby  let  b:deoplete_disable_auto_complete=1
-autocmd FileType *      call deoplete#custom#source('ultisnips', 'rank', 1000)
-autocmd FileType ledger call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
-autocmd FileType *      call deoplete#custom#option({
-      \ 'ignore_sources': { '_': ['around', 'omni', 'file'] },
-      \ })
 " }}}
 
 Plug 'SirVer/ultisnips' " {{{
@@ -196,7 +230,7 @@ let g:UltiSnipsEditSplit= 'vertical'
 
 " Plug fzf {{{
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug '~/.zplug/repos/junegunn/fzf'
+" Plug '~/.zplug/repos/junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 function! s:find_git_root()
@@ -211,24 +245,112 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
       \ . shellescape(<q-args>),
       \ 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
 
-function! SearchSelectionWithRg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
-  execute 'Rg' selection
-endfunction
+" let g:zettel_dir = $HOME . '/doc/markdown/wiki'
+" 
+" function! s:zettel_edit(filename)
+"   exe "edit " . 'wiki/' . split(a:filename[0])[0] . '.md'
+" endfunction
+" 
+" function! s:zettel_compare(a, b)
+"   if a:a =~# '.*[a-z]\.md$' && a:b =~# '.*[a-z]\.md$'
+"     let ia = substitute(a:a, '.*([a-z])\.md$', '\1', '')
+"     let ib = substitute(a:b, '.*([a-z])\.md$', '\1', '')
+"     return ia == ib ? 0 : ia > ib ? 1 : -1
+"   elseif a:a =~# '.*\d\+\.md$' && a:b =~# '.*\d\+\.md$'
+"     let ia = str2nr(substitute(a:a, '.\{-}\(\d\+\)\.md$', '\1', ''))
+"     let ib = str2nr(substitute(a:b, '.\{-}\(\d\+\)\.md$', '\1', ''))
+"     return ia == ib ? 0 : ia > ib ? 1 : -1
+"   else
+"     return 0
+"   endif
+" endfunction
+" 
+" function! s:zettel_find_children(pat)
+"   return sort(systemlist('fd -e md ' . '''' . a:pat . ''''), 's:zettel_compare')
+" endfunction
+" 
+" function! s:zettel_find_siblings(...)
+"   let node = a:0 >=1 ? a:1 : expand("%")
+"   let fn  = substitute(node, '.*/\(.*\)\.md$', '\1', '')
+"   let dir = substitute(node, '^\(.*/\)[^/]\+$', '\1', '')
+"   if fn =~# '.*[a-z]$'
+"     let base = strpart(fn, 0, strlen(fn)-1)
+"     let sibling_pat = base . '[a-z]\.md'
+"   elseif fn =~# '.*\d\+$'
+"     let base = substitute(fn, '\(\w*\)\d\+$', '\1', '')
+"     let sibling_pat = base . '\d+\.md'
+"   endif
+"   return s:zettel_find_children(sibling_pat)
+" endfunction
+" 
+" function! s:zettel_next()
+"   let siblings = s:zettel_find_siblings()
+"   let ind = index(siblings, expand("%"))
+"   if ind + 1 < len(siblings)
+"     exe "edit " . siblings[ind + 1]
+"   endif
+" endfunction
+" 
+" function! s:zettel_previous()
+"   let siblings = s:zettel_find_siblings()
+"   let ind = index(siblings, expand("%"))
+"   if ind - 1 >= 0
+"     exe "edit " . siblings[ind - 1]
+"   endif
+" endfunction
+" 
+" " create a new zettel entry
+" function! s:zettel_new() range
+"   let fn = g:zettel_dir . '/zzz' . strftime("%Y%m%d%H%M%S") . '.md'
+"   execute "'<,'>w " . fn
+"   execute "e " . fn
+" endfunction
+" 
+" function! s:zettel_move(node)
+"   let children = s:zettel_find_children( a:node )
+"   let last = substitute(children[-1], '.*/' . a:node . '\(.*\)\.md', '\1', '')
+"   if str2nr(last) == 0
+"     let nind = last + 1
+"   else
+"     let nind = str2nr(last) + 1
+"   endif
+"   let nfn = substitute(children[0], '\.md', nind . '.md', '')
+"   let fn = expand("%")
+"   execute "saveas " . nfn
+"   call s:zettel_delete(fn)
+" endfunction
+" 
+" function! s:zettel_delete(...)
+"   let fn = a:0 >=1 ? a:1 : expand("%")
+"   call delete(fn) | bdelete!
+" endfunction
+" 
+" function! s:zettel_search()
+"   let files_cmd='fd -e md |awk ''{a=$0; sub( /\.md$/, "" ); print a,$0}'' |sort -k2 |cut -d" " -f1'
+"   let cmd_fmt='awk ''FNR==1 && $0=="---" {a=1}; a && /^title/ { $1=""; ti=$0 }; FNR!=1 && $0=="---" {a=0; match(FILENAME,/(\w+)\.md/,c); t[c[1]]=ti; if (c[1] ~ /^[0-9]+[a-z]$/ ) { print c[1],"\t",ti } else { match(c[1], /^([0-9]+[a-z])/, s); print c[1],"\t",t[s[1]],"-",ti }; nextfile}'' %s'
+"   let files= systemlist(files_cmd)
+"   let cmd = printf(cmd_fmt, join(files, ' '))
+"   silent! exe fzf#run({ 'source': cmd, 'sink*': function('s:zettel_edit'), 'options': '--prompt "Zettel> "' })
+" endfunction
+" 
+" command! -bang Z     call s:zettel_search()
+" command! -bang Znext call s:zettel_next()
+" command! -bang Zprev call s:zettel_previous()
+" command! -range -bang Znew  call s:zettel_new()
+" command! -bang Zdel  call s:zettel_delete()
+" command! -bang -nargs=1 Zmove call s:zettel_move(<f-args>)
+" autocmd FileType markdown nnoremap <buffer> ]] :Znext<CR>
+" autocmd FileType markdown nnoremap <buffer> [[ :Zprev<CR>
 
-vnoremap <silent> <leader>/ :call SearchSelectionWithRg()<CR>
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :ProjectFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
+" nnoremap <silent> <leader>w :Z<CR>
+" nnoremap <silent> <leader>z :Znew<CR>
+" vnoremap <silent> <leader>z :Znew<CR>
+
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -242,20 +364,21 @@ if !isdirectory( g:fzf_history_dir )
 endif
 " }}}
 
-Plug 'csexton/trailertrash.vim'
+Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
 Plug 'terryma/vim-multiple-cursors'
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
-
+"
 " support for ansible, html5, elixir, vue, terraform file types and more
 Plug 'sheerun/vim-polyglot'
 " prevent syntax from stop working randomly
 autocmd FileType vue syntax sync fromstart
 " prevent vim from slowing down when editing vue
 let g:vue_pre_processors = ['pug', 'sass']
+let g:vim_markdown_frontmatter = 1
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
@@ -265,9 +388,10 @@ autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
-Plug 'plasticboy/vim-markdown'
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_strikethrough = 1
+" vim-markdown has issues and is slow
+" Plug 'plasticboy/vim-markdown'
+" let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_strikethrough = 1
 
 " Plug 'vimwiki/vimwiki'
 " let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]

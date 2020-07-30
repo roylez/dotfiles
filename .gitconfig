@@ -1,39 +1,39 @@
 [user]
-    name = roylez
-    email = me@roylez.info
+  name = roylez
+  email = <me@roylez.info>
 [color]  # Ensure we get color
-    ui = always
+  ui = always
 [push]
-    default = current
-    followTags = true
+  default = current
+  followTags = true
 [alias]
-    a   = add
-    b   = branch
-    c   = commit
-    d   = diff
-    co  = checkout
-    des = describe --tags
-    l   = log
-    lc  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative
-    la  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative --all
-    m   = merge
-    pl  = pull
-    pu  = push
-    s   = status -sb
-    t   = tag
-    untrack = rm -r --cached
-    merge-branch-file = checkout --merge
-    rb  = rebase
-    undo = reset HEAD --hard
+  a   = add
+  b   = branch
+  c   = commit
+  d   = diff
+  co  = checkout
+  des = describe --tags
+  l   = log
+  lc  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative
+  la  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative --all
+  m   = merge
+  pl  = pull
+  pu  = push
+  s   = status -sb
+  t   = tag
+  untrack = rm -r --cached
+  merge-branch-file = checkout --merge
+  rb  = rebase
+  undo = reset HEAD --hard
 [github]
-    user = roylez
+  user = roylez
 [core]
-    pager = cat
-    excludesfile = ~/.gitignore
+  pager = cat
+  excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
 [status]
-    submoduleSummary = true
+  submoduleSummary = true
 [merge]
   tool = vimdiff
 [mergetool]
