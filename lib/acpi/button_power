@@ -1,2 +1,0 @@
-event=button[ /]power
-action=/home/roylez/lib/acpi/button_power.sh

@@ -1,2 +1,0 @@
-event=cd[ /]([a-z]+)
-action=/home/roylez/lib/acpi/music.sh "%e"

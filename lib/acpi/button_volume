@@ -1,2 +1,0 @@
-event=(hotkey[ /](ATKD|HOTK|ATK).*|button/volume.*)
-action=/home/roylez/lib/acpi/button_volume.sh %e
