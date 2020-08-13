@@ -478,7 +478,7 @@ HISTSIZE=20000
 # number of lines saved in the history before logout
 SAVEHIST=40000
 # ignore some commands
-HISTORY_IGNORE="(ls|cd|pwd|exit|fg|bg|jobs)"
+HISTORY_IGNORE="(l[ls] *|less *|z *|cd *|pwd|exit|[bf]g|jobs)"
 
 export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: '
 export INPUTRC=$HOME/.inputrc
