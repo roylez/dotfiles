@@ -212,7 +212,7 @@ else
   Plug 'Shougo/neocomplete.vim'
   let g:neocomplete#enable_at_startup           = 1
   let g:neocomplete#enable_smart_case           = 1
-  let g:deoplete#omni#min_pattern_length        = 2
+  let g:neocomplete#omni#min_pattern_length        = 2
   let g:neocomplete#sources#omni#input_patterns = {}
   let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
   let g:neocomplete#enable_auto_delimiter       = 1

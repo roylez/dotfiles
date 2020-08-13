@@ -1,7 +1,7 @@
 " Description: nvim runtime configure file
 " vim: ft=vim foldmethod=marker
 
-"---------------------vim/neovim only stuff------------------------------
+" {{{ vim/neovim only stuff
 if has('nvim')
     " support for cursor shapes
     let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
@@ -19,7 +19,9 @@ endif
 "       source ~/.vimrc
 "
 let g:vim_home=$HOME.'/.vim'
-"------------------------------------------------------------------------
+" }}}
+
+" {{{ general settings
 set background=dark
 set notermguicolors
 set nocompatible
@@ -100,7 +102,9 @@ set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %
 " set wildmenu         " show possible command when pressing <TAB>
 set wildmode=longest:list,full
 "set cmdheight=2
-set notitle             " do not set xterm dynamic title
+if !has("gui_running")
+  set notitle             " do not set xterm dynamic title
+endif
 "set number
 
 set matchtime=5
@@ -114,13 +118,11 @@ set spelllang=en_gb,cjk
 set guioptions-=T
 set guioptions-=r
 
-let s:uname = system("uname")
-if s:uname == "Darwin\n"
-    "Mac options here
-    set guifont=Monaco\ for\ Powerline:h14
+if has("mac")
+  set guifont=Monaco\ for\ Powerline:h14
 else
-    set guifont=Monaco\ 10
-    set guifontwide=WenQuanYi\ Micro\ Hei\ 12
+  set guifont=Monaco\ 10
+  set guifontwide=WenQuanYi\ Micro\ Hei\ 12
 endif
 
 " 输入:set list命令是应该显示些啥？
@@ -142,18 +144,20 @@ set tags=./.tags
 
 set noautochdir
 
-"---------------------encoding detection--------------------------------
+" encoding detection
 set fileencoding&
 set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
-
-"---------------------completion settings-------------------------------
+ 
+" completion settings
 "make completion menu usable even when some characters are typed.
 set completeopt=noselect,longest,menuone
 " set complete-=i
 " set complete-=t
 set complete+=kspell
 
-"---------------------keyboard mappings---------------------------------
+" }}}
+
+" {{{ keyboard mappings
 set winaltkeys=no
 
 "move in insert mode
@@ -182,8 +186,9 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+" }}}
 
-"--------------------------file type settings---------------------------
+" {{{ file type settings
 "Python
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
@@ -218,7 +223,8 @@ autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
 "Auomatically add file head defined in ~/.vim/templates/
 au BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
 
-"-------------------special settings------------------------------------
+" }}}
+
 " {{{ big files?
 let g:LargeFile = 0.3	"in megabyte
 augroup LargeFile
