@@ -15,7 +15,7 @@ stty -ixon
 # }}}
 
 # 定义颜色 {{{
-if [[ "$TERM" = *(256color|kitty) && -f $HOME/.lscolor256 ]]; then
+if [[ "$TERM" = *(256color|kitty|tmux) && -f $HOME/.lscolor256 ]]; then
   #use prefefined colors
   eval $(dircolors -b $HOME/.lscolor256)
   use_256color=1
