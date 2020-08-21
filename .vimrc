@@ -26,7 +26,7 @@ set background=dark
 set notermguicolors
 set nocompatible
 
-" system plugin files in voidlinux
+" system plugin files in voidlinux and archlinux
 set runtimepath+=/usr/share/vim/vimfiles
 
 " this is used a lot in plugin settings, and its default 1s timeout is too short
@@ -65,7 +65,8 @@ set whichwrap=b,s,<,>,[,],h,l
 set linebreak           " no breakline in the middle of a word
 set wrapmargin=2
 
-set formatprg=fmt formatoptions+=mM     " default tcq, mM to help wrap chinese
+set formatprg=fmt
+set formatoptions=croqn2mB1
 
 set backup
 if !isdirectory($HOME . "/.backup")

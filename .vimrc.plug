@@ -43,6 +43,7 @@ let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
 
 " }}}
 
+""" {{{ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 let g:tagbar_type_elixir = {
    \ 'ctagstype' : 'elixir',
@@ -72,6 +73,7 @@ let g:tagbar_type_elixir = {
    \ 'sort' : 0
 \ }
 nmap <F5> :TagbarToggle<CR>
+" }}}
 
 Plug 'vim-airline/vim-airline' " {{{
 set noshowmode
@@ -245,112 +247,11 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
       \ . shellescape(<q-args>),
       \ 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
 
-" let g:zettel_dir = $HOME . '/doc/markdown/wiki'
-" 
-" function! s:zettel_edit(filename)
-"   exe "edit " . 'wiki/' . split(a:filename[0])[0] . '.md'
-" endfunction
-" 
-" function! s:zettel_compare(a, b)
-"   if a:a =~# '.*[a-z]\.md$' && a:b =~# '.*[a-z]\.md$'
-"     let ia = substitute(a:a, '.*([a-z])\.md$', '\1', '')
-"     let ib = substitute(a:b, '.*([a-z])\.md$', '\1', '')
-"     return ia == ib ? 0 : ia > ib ? 1 : -1
-"   elseif a:a =~# '.*\d\+\.md$' && a:b =~# '.*\d\+\.md$'
-"     let ia = str2nr(substitute(a:a, '.\{-}\(\d\+\)\.md$', '\1', ''))
-"     let ib = str2nr(substitute(a:b, '.\{-}\(\d\+\)\.md$', '\1', ''))
-"     return ia == ib ? 0 : ia > ib ? 1 : -1
-"   else
-"     return 0
-"   endif
-" endfunction
-" 
-" function! s:zettel_find_children(pat)
-"   return sort(systemlist('fd -e md ' . '''' . a:pat . ''''), 's:zettel_compare')
-" endfunction
-" 
-" function! s:zettel_find_siblings(...)
-"   let node = a:0 >=1 ? a:1 : expand("%")
-"   let fn  = substitute(node, '.*/\(.*\)\.md$', '\1', '')
-"   let dir = substitute(node, '^\(.*/\)[^/]\+$', '\1', '')
-"   if fn =~# '.*[a-z]$'
-"     let base = strpart(fn, 0, strlen(fn)-1)
-"     let sibling_pat = base . '[a-z]\.md'
-"   elseif fn =~# '.*\d\+$'
-"     let base = substitute(fn, '\(\w*\)\d\+$', '\1', '')
-"     let sibling_pat = base . '\d+\.md'
-"   endif
-"   return s:zettel_find_children(sibling_pat)
-" endfunction
-" 
-" function! s:zettel_next()
-"   let siblings = s:zettel_find_siblings()
-"   let ind = index(siblings, expand("%"))
-"   if ind + 1 < len(siblings)
-"     exe "edit " . siblings[ind + 1]
-"   endif
-" endfunction
-" 
-" function! s:zettel_previous()
-"   let siblings = s:zettel_find_siblings()
-"   let ind = index(siblings, expand("%"))
-"   if ind - 1 >= 0
-"     exe "edit " . siblings[ind - 1]
-"   endif
-" endfunction
-" 
-" " create a new zettel entry
-" function! s:zettel_new() range
-"   let fn = g:zettel_dir . '/zzz' . strftime("%Y%m%d%H%M%S") . '.md'
-"   execute "'<,'>w " . fn
-"   execute "e " . fn
-" endfunction
-" 
-" function! s:zettel_move(node)
-"   let children = s:zettel_find_children( a:node )
-"   let last = substitute(children[-1], '.*/' . a:node . '\(.*\)\.md', '\1', '')
-"   if str2nr(last) == 0
-"     let nind = last + 1
-"   else
-"     let nind = str2nr(last) + 1
-"   endif
-"   let nfn = substitute(children[0], '\.md', nind . '.md', '')
-"   let fn = expand("%")
-"   execute "saveas " . nfn
-"   call s:zettel_delete(fn)
-" endfunction
-" 
-" function! s:zettel_delete(...)
-"   let fn = a:0 >=1 ? a:1 : expand("%")
-"   call delete(fn) | bdelete!
-" endfunction
-" 
-" function! s:zettel_search()
-"   let files_cmd='fd -e md |awk ''{a=$0; sub( /\.md$/, "" ); print a,$0}'' |sort -k2 |cut -d" " -f1'
-"   let cmd_fmt='awk ''FNR==1 && $0=="---" {a=1}; a && /^title/ { $1=""; ti=$0 }; FNR!=1 && $0=="---" {a=0; match(FILENAME,/(\w+)\.md/,c); t[c[1]]=ti; if (c[1] ~ /^[0-9]+[a-z]$/ ) { print c[1],"\t",ti } else { match(c[1], /^([0-9]+[a-z])/, s); print c[1],"\t",t[s[1]],"-",ti }; nextfile}'' %s'
-"   let files= systemlist(files_cmd)
-"   let cmd = printf(cmd_fmt, join(files, ' '))
-"   silent! exe fzf#run({ 'source': cmd, 'sink*': function('s:zettel_edit'), 'options': '--prompt "Zettel> "' })
-" endfunction
-" 
-" command! -bang Z     call s:zettel_search()
-" command! -bang Znext call s:zettel_next()
-" command! -bang Zprev call s:zettel_previous()
-" command! -range -bang Znew  call s:zettel_new()
-" command! -bang Zdel  call s:zettel_delete()
-" command! -bang -nargs=1 Zmove call s:zettel_move(<f-args>)
-" autocmd FileType markdown nnoremap <buffer> ]] :Znext<CR>
-" autocmd FileType markdown nnoremap <buffer> [[ :Zprev<CR>
-
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :ProjectFiles<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
-" nnoremap <silent> <leader>w :Z<CR>
-" nnoremap <silent> <leader>z :Znew<CR>
-" vnoremap <silent> <leader>z :Znew<CR>
-
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
