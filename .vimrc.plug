@@ -233,6 +233,9 @@ let g:UltiSnipsEditSplit= 'vertical'
 " Plug fzf {{{
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 " Plug '~/.zplug/repos/junegunn/fzf'
+if has("mac")
+  Plug '/usr/local/opt/fzf'
+endif
 Plug 'junegunn/fzf.vim'
 
 function! s:find_git_root()
