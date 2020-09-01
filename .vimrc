@@ -120,7 +120,8 @@ set guioptions-=T
 set guioptions-=r
 
 if has("mac")
-  set guifont=Monaco\ for\ Powerline:h14
+  set guifont=Fantasque\ Sans\ Mono:h16
+  set linespace=2
 else
   set guifont=Monaco\ 10
   set guifontwide=WenQuanYi\ Micro\ Hei\ 12
