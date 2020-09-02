@@ -95,13 +95,14 @@ let g:airline_section_x='%l,%c%V %3p%%'
 let g:airline_section_z='%{&filetype}'
 let g:airline_section_error=''
 let g:airline_section_warning=''
-let g:airline_theme='dark'
+" let g:airline_theme='dark'
 let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
-Plug 'lifepillar/vim-gruvbox8'
+" Plug 'lifepillar/vim-gruvbox8'
 " Plug 'KeitaNakamura/neodark.vim'
+Plug 'rakr/vim-one'
 
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
@@ -314,8 +315,9 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     endif
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
-    " colorscheme neodark
-    colorscheme gruvbox8
+    let g:one_allow_italics = 1
+    let g:airline_theme='one'
+    colorscheme one
 else
     colorscheme tango
 endif

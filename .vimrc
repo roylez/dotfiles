@@ -22,9 +22,13 @@ let g:vim_home=$HOME.'/.vim'
 " }}}
 
 " {{{ general settings
-set background=dark
+" dark background is actually not good for eyes
+set background=light
 set notermguicolors
 set nocompatible
+
+" never use background color erase
+let &t_ut=''
 
 " system plugin files in voidlinux and archlinux
 set runtimepath+=/usr/share/vim/vimfiles
