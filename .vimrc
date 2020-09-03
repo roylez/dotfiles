@@ -22,8 +22,7 @@ let g:vim_home=$HOME.'/.vim'
 " }}}
 
 " {{{ general settings
-" dark background is actually not good for eyes
-set background=light
+set background=dark
 set notermguicolors
 set nocompatible
 
