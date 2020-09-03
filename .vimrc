@@ -22,7 +22,11 @@ let g:vim_home=$HOME.'/.vim'
 " }}}
 
 " {{{ general settings
-set background=dark
+if has("gui_running")
+  set background=light
+else
+  set background=dark
+endif
 set notermguicolors
 set nocompatible
 

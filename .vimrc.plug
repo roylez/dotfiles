@@ -313,8 +313,6 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     set t_8b=[48;2;%lu;%lu;%lum
     if !has("gui_running")
         set t_Co=256
-    else
-      set background=light
     endif
     colorscheme gruvbox8
 else
