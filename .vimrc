@@ -63,7 +63,7 @@ set smartindent autoindent
 " replace <tab> with 2 blank space.
 set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=8
 set textwidth=100	" wrap text for 78 letters
-set relativenumber number
+" set relativenumber number
 
 set hidden              " hide instead of abandon buffer
 set wrap
@@ -113,7 +113,6 @@ set wildmode=longest:list,full
 if !has("gui_running")
   set notitle             " do not set xterm dynamic title
 endif
-"set number
 
 set matchtime=5
 set lazyredraw          " faster for macros
@@ -123,8 +122,7 @@ set ttyfast             " better for xterm
 set spellsuggest=best
 set spelllang=en_gb,cjk
 
-set guioptions-=T
-set guioptions-=r
+set guioptions=
 
 if has("mac")
   set guifont=Fantasque\ Sans\ Mono:h16
