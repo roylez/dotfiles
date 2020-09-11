@@ -1,7 +1,14 @@
+global !p
+def title_date(day=0):
+  from datetime import date, timedelta
+  tod = date.today()
+  d   = timedelta(days=day)
+  return tod+d
+endglobal
 snippet blog "Blog post heading for Middleman" b
 ---
 title:  ${1:blog title}
-date:   ${2:`date +%Y-%m-%d`}
+date:   ${2:`!p snip.rv=title_date()`}
 layout: post
 tags:   [$3]
 ---
@@ -22,21 +29,21 @@ $0
 endsnippet
 
 snippet tod "today" b
-## `date +%Y-%m-%d`
+## `!p snip.rv=title_date()`
 
 $0
 
 endsnippet
 
 snippet yes "yesterday" b
-## `date -d '-1 day' +%Y-%m-%d`
+## `!p snip.rv=title_date(-1)`
 
 $0
 
 endsnippet
 
 snippet tom "tomorrow" b
-## `date -d '1 day' +%Y-%m-%d`
+## `!p snip.rv=title_date(1)`
 
 $0
 

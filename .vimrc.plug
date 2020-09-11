@@ -165,6 +165,7 @@ let g:startify_bookmarks = [
 let g:startify_commands = [
       \ { 'b': ['剪切板', 'edit '. g:vim_home . '/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]} ]
 autocmd VimEnter * let t:startify_new_tab = 1
+" make startify start on every new tab
 autocmd BufEnter *
       \ if !exists('t:startify_new_tab') && empty(expand('%')) |
       \   let t:startify_new_tab = 1 |
