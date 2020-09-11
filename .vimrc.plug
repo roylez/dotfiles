@@ -171,7 +171,6 @@ autocmd BufEnter *
       \   let t:startify_new_tab = 1 |
       \   Startify |
       \ endif
-endif
 
 " the pope gang...
 Plug 'tpope/vim-surround'
