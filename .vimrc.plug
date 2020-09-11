@@ -133,6 +133,9 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 " }}}
 
+" start up window
+Plug 'mhinz/vim-startify'
+
 " distraction free writing
 Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
 let g:goyo_height='100%'

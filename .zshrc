@@ -297,13 +297,9 @@ PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
 SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
 #行编辑高亮模式 {{{
-if (is-at-least 4.3); then
-    zle_highlight=(region:bg=magenta
-                   special:bold,fg=magenta
-                   default:bold
-                   isearch:underline
-                   )
-fi
+# if (is-at-least 4.3); then
+#     zle_highlight=(region:bg=magenta special:bold,fg=magenta default:bold isearch:underline)
+# fi
 #}}}
 
 # }}}
