@@ -221,14 +221,24 @@ autocmd FileType mail
 "markdown
 autocmd FileType markdown set comments=n:> nospell textwidth=0 formatoptions=tcroqn2
 
-"remind
-autocmd BufNewFile,BufRead *.rem set ft=remind
-
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
 "Auomatically add file head defined in ~/.vim/templates/
-au BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
+autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
+
+" adhoc edits, files ending with vim-edit
+"
+" fallback to markdown file type if all ftdetect fails
+autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown
+" do not wrap actual lines
+autocmd BufRead,BufNewFile *.vim-edit setlocal spell textwidth=0
+" copy from clipboard when entering
+autocmd BufNewFile   *.vim-edit normal "+P
+" paste to clipboard when saving
+autocmd BufWritePost *.vim-edit if getfsize(expand(@%))>0 | silent :%y+ | endif
+" delete tmp file when exiting
+autocmd BufDelete,BufHidden,VimLeave *.vim-edit silent :!rm -f <afile>
 
 " }}}
 
