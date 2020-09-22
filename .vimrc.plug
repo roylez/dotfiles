@@ -101,7 +101,6 @@ let g:airline#extensions#hunks#enabled = 0
 
 " theme
 Plug 'lifepillar/vim-gruvbox8'
-" Plug 'KeitaNakamura/neodark.vim'
 
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
@@ -133,9 +132,6 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 " }}}
 
-" start up window
-Plug 'mhinz/vim-startify'
-
 " distraction free writing
 Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
 let g:goyo_height='100%'
@@ -147,7 +143,7 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 Plug 'christoomey/vim-tmux-navigator'
 
 " start up menu
-Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-startify' "{{{
 autocmd User Startified setlocal cursorline
 let g:startify_files_number = 5
 let g:startify_enable_special = 0
@@ -163,7 +159,7 @@ let g:startify_bookmarks = [
       \ { 'p': '~/.vimrc.plug' },
       \ { 'z': '~/.zshrc' } ]
 let g:startify_commands = [
-      \ { 'b': ['剪切板', 'edit '. g:vim_home . '/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]} ]
+      \ { 'b': ['CLIPBOARD', 'edit /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]} ]
 autocmd VimEnter * let t:startify_new_tab = 1
 " make startify start on every new tab
 autocmd BufEnter *
@@ -171,8 +167,9 @@ autocmd BufEnter *
       \   let t:startify_new_tab = 1 |
       \   Startify |
       \ endif
+"}}}
 
-" the pope gang...
+" the tpope gang... {{{
 Plug 'tpope/vim-surround'
 let g:surround_{char2nr('b')} = "**\r**"
 Plug 'tpope/vim-endwise'
@@ -191,6 +188,7 @@ let g:projectionist_heuristics = {
       \   "defaults/main.yml": { "type": "default", "alternate": "tasks/main.yml"  },
       \ },
       \ }
+" }}}
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
@@ -239,7 +237,7 @@ if has("nvim") || version > 800
   autocmd FileType *        call deoplete#custom#source('ultisnips', 'rank', 1000)
   autocmd FileType ledger   call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
   autocmd FileType *        call deoplete#custom#option({ 'ignore_sources': { '_': ['around', 'omni', 'file'] } })
-  autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
+  " autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
 else
   Plug 'Shougo/neocomplete.vim'
   let g:neocomplete#enable_at_startup           = 1
@@ -258,11 +256,10 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
 let g:UltiSnipsEditSplit= 'vertical'
-" }}} Plug 'SirVer/ultisnips' "
+Plug 'pgilad/vim-skeletons'
+" }}}
 
 " Plug fzf {{{
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-" Plug '~/.zplug/repos/junegunn/fzf'
 if has("mac")
   Plug '/usr/local/opt/fzf'
 endif
@@ -275,10 +272,15 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
+if &background ==# 'dark'
+   let s:fzf_color = 'dark'
+else
+   let s:fzf_color = 'light'
+endif
 command! -bang -nargs=* Rg call fzf#vim#grep(
-      \ "rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
-      \ . shellescape(<q-args>),
-      \ 1, {'options': '-e --color hl:210,hl+:196 --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
+     \ "rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
+     \ . shellescape(<q-args>),
+     \ 1, {'options': '-e --color '.s:fzf_color. ' --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
 
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
@@ -300,8 +302,6 @@ endif
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
-Plug 'terryma/vim-multiple-cursors'
-
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
@@ -322,17 +322,16 @@ autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
-" vim-markdown has issues and is slow
-" Plug 'plasticboy/vim-markdown'
-" let g:vim_markdown_folding_style_pythonic = 1
-" let g:vim_markdown_strikethrough = 1
-
-" Plug 'vimwiki/vimwiki'
-" let g:vimwiki_list = [{'path': '~/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+Plug 'vimwiki/vimwiki' "{{{
 " let g:vimwiki_folding = 'expr'
-" let g:vimwiki_table_mappings = 0
-" let g:vimwiki_global_ext = 0
-" nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+" so that it does not take over tab that is required by ultisnips
+let g:vimwiki_table_mappings = 0
+nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+let g:wiki_dir = '~/workspace/doc/markdown/'
+let g:vimwiki_list = [{'path': wiki_dir, 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+command! -nargs=0 Znew :execute ":tabnew" . wiki_dir . strftime("%y%m%d-%H%M") . ".md"
+
+" }}}
 
 "===================Plug loading ends==========================================
 call plug#end()
