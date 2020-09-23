@@ -142,6 +142,132 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
 
+Plug 'SirVer/ultisnips' " {{{
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
+let g:UltiSnipsEditSplit= 'vertical'
+Plug 'pgilad/vim-skeletons'
+" }}}
+
+" Plug fzf {{{
+if has("mac")
+  Plug '/usr/local/opt/fzf'
+endif
+Plug 'junegunn/fzf.vim'
+
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+command! ProjectFiles execute 'Files' s:find_git_root()
+
+" set grepprg=ag\ --nogroup\ --nocolor
+set grepprg=rg\ --vimgrep
+if &background ==# 'dark'
+   let s:fzf_style = 'dark'
+else
+   let s:fzf_style = 'light'
+endif
+let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
+let s:fzf_rg_opts = '-e --color '.s:fzf_style. ' --no-hscroll --delimiter : --nth 3..'
+command! -bang -nargs=* Rg call fzf#vim#grep(
+     \ g:fzf_rg . shellescape(<q-args>),
+     \ 1, {'options': s:fzf_rg_opts }, <bang>0 )
+
+nnoremap <silent> <leader>/ :Rg<CR>
+nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>f :ProjectFiles<CR>
+nnoremap <silent> <leader>s :Snippets<CR>
+
+" imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+" imap <C-x><C-l> <plug>(fzf-complete-line)
+
+let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
+
+let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
+let g:fzf_layout = { 'window': 'enew' }
+if !isdirectory( g:fzf_history_dir )
+  call mkdir( g:fzf_history_dir , "p")
+endif
+
+" }}}
+
+" Plug deoplete {{{
+Plug 'wellle/tmux-complete.vim'
+if has("nvim") || version > 800
+  if has("nvim")
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'ncm2/float-preview.nvim'
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
+  let g:deoplete#enable_at_startup       = 1
+  let g:deoplete#omni#min_pattern_length = 3
+  let g:deoplete                         = g:vim_home . '/.cache/deoplete'
+  let g:deoplete#enable_auto_delimiter   = 1
+  autocmd FileType *        call deoplete#custom#source('ultisnips', 'rank', 1000)
+  autocmd FileType ledger   call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
+  autocmd FileType *        call deoplete#custom#option({ 'ignore_sources': { '_': ['around', 'omni', 'file'] } })
+  " autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
+else
+  Plug 'Shougo/neocomplete.vim'
+  let g:neocomplete#enable_at_startup           = 1
+  let g:neocomplete#enable_smart_case           = 1
+  let g:neocomplete#omni#min_pattern_length        = 2
+  let g:neocomplete#sources#omni#input_patterns = {}
+  let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
+  let g:neocomplete#enable_auto_delimiter       = 1
+endif
+" }}}
+
+Plug 'vimwiki/vimwiki' "{{{
+" always change to the directory of the file
+" so that FZF within the dir works better
+" so that it does not take over tab that is required by ultisnips
+let g:vimwiki_table_mappings = 0
+let g:vimwiki_auto_chdir = 1
+let g:wiki_dir = '~/workspace/doc/markdown/'
+let g:vimwiki_list = [{'path': wiki_dir, 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+
+command! Znew :execute ":edit"   . g:wiki_dir . strftime("%y%m%d-%H%M%S") . ".md"
+command! Ztab :execute ":tabnew" . g:wiki_dir . strftime("%y%m%d-%H%M%S") . ".md"
+command! Z    :call fzf#vim#grep(
+         \ g:fzf_rg . '"^(#{1,2}|title:)\s+" ',
+         \ 1, {'dir': g:wiki_dir, 'options': s:fzf_rg_opts }, 0 )
+
+nnoremap <Leader>z :Z<CR>
+
+" returned string: [Title](YYYYMMDD-HHMMSS.md)
+function! s:make_note_link(l)
+   let line  = split(a:l, ':')
+   let id    = substitute(l:line[0], '^.*/', '', 'g')
+   let title = substitute(l:line[-1], '^\#*\s\+', '', 'g')
+   let link  = "[" . title ."](". id .")"
+   call setline('.', getline('.') . link )
+   call cursor(line('.'), col('.') + len(link) )
+   call feedkeys('a', 'n')
+endfunction
+
+augroup zettel
+  au!
+  autocmd FileType vimwiki inoremap <silent> [[ <esc>:call fzf#run({
+       \ 'source': 'rg --no-heading --smart-case "(#+\|title:)\s+" ',
+       \ 'sink': function('<sid>make_note_link'),
+       \ 'options': '--margin 15%,0',
+       \ 'dir': g:wiki_dir,
+       \ 'down':  10})<CR>'
+  autocmd FileType vimwiki nnoremap <Leader>f :Z<CR>
+  autocmd FileType vimwiki vnoremap z y:Ztab<CR>p
+  autocmd FileType vimwiki nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+  autocmd FileType vimwiki setlocal spell
+augroup END
+" }}}
+
 " start up menu
 Plug 'mhinz/vim-startify' "{{{
 autocmd User Startified setlocal cursorline
@@ -157,9 +283,10 @@ let g:startify_bookmarks = [
       \ { 'd': '~/workspace/doc/markdown/TODO.md' },
       \ { 'c': '~/.vimrc' },
       \ { 'p': '~/.vimrc.plug' },
-      \ { 'z': '~/.zshrc' } ]
+      \ { 's': '~/.zshrc' } ]
 let g:startify_commands = [
-      \ { 'b': ['CLIPBOARD', 'edit /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]} ]
+      \ { 'b': ['CLIPBOARD', 'edit /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]},
+      \ { 'n': ['new Zettel from clipboard', 'e +norm\ "+P '. g:wiki_dir . strftime("%y%m%d-%H%M%S") . '.md'] } ]
 autocmd VimEnter * let t:startify_new_tab = 1
 " make startify start on every new tab
 autocmd BufEnter *
@@ -219,87 +346,6 @@ endif
 " Plug 'slashmili/alchemist.vim'
 " }}}
 
-" Plug deoplete {{{
-Plug 'wellle/tmux-complete.vim'
-if has("nvim") || version > 800
-  if has("nvim")
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'ncm2/float-preview.nvim'
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  let g:deoplete#enable_at_startup       = 1
-  let g:deoplete#omni#min_pattern_length = 3
-  let g:deoplete                         = g:vim_home . '/.cache/deoplete'
-  let g:deoplete#enable_auto_delimiter   = 1
-  autocmd FileType *        call deoplete#custom#source('ultisnips', 'rank', 1000)
-  autocmd FileType ledger   call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
-  autocmd FileType *        call deoplete#custom#option({ 'ignore_sources': { '_': ['around', 'omni', 'file'] } })
-  " autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
-else
-  Plug 'Shougo/neocomplete.vim'
-  let g:neocomplete#enable_at_startup           = 1
-  let g:neocomplete#enable_smart_case           = 1
-  let g:neocomplete#omni#min_pattern_length        = 2
-  let g:neocomplete#sources#omni#input_patterns = {}
-  let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
-  let g:neocomplete#enable_auto_delimiter       = 1
-endif
-" }}}
-
-Plug 'SirVer/ultisnips' " {{{
-" add personal snippet directory to search path, note that snippets is reserved and could not be used
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
-let g:UltiSnipsEditSplit= 'vertical'
-Plug 'pgilad/vim-skeletons'
-" }}}
-
-" Plug fzf {{{
-if has("mac")
-  Plug '/usr/local/opt/fzf'
-endif
-Plug 'junegunn/fzf.vim'
-
-function! s:find_git_root()
-  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-endfunction
-command! ProjectFiles execute 'Files' s:find_git_root()
-
-" set grepprg=ag\ --nogroup\ --nocolor
-set grepprg=rg\ --vimgrep
-if &background ==# 'dark'
-   let s:fzf_color = 'dark'
-else
-   let s:fzf_color = 'light'
-endif
-command! -bang -nargs=* Rg call fzf#vim#grep(
-     \ "rg --column --no-heading --fixed-strings --color=always --smart-case --colors 'path:fg:green' --colors 'line:fg:yellow' --colors 'line:style:bold' "
-     \ . shellescape(<q-args>),
-     \ 1, {'options': '-e --color '.s:fzf_color. ' --no-hscroll --delimiter : --nth 3..'}, <bang>0 )
-
-nnoremap <silent> <leader>/ :Rg<CR>
-nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>f :ProjectFiles<CR>
-nnoremap <silent> <leader>s :Snippets<CR>
-
-" imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-" imap <C-x><C-l> <plug>(fzf-complete-line)
-
-let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
-
-let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
-let g:fzf_layout = { 'window': 'enew' }
-if !isdirectory( g:fzf_history_dir )
-  call mkdir( g:fzf_history_dir , "p")
-endif
-" }}}
-
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
 "-------------------------------------------------------------------------------
@@ -321,17 +367,6 @@ autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
 Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
-
-Plug 'vimwiki/vimwiki' "{{{
-" let g:vimwiki_folding = 'expr'
-" so that it does not take over tab that is required by ultisnips
-let g:vimwiki_table_mappings = 0
-nnoremap <Leader>tt :VimwikiToggleListItem<CR>
-let g:wiki_dir = '~/workspace/doc/markdown/'
-let g:vimwiki_list = [{'path': wiki_dir, 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
-command! -nargs=0 Znew :execute ":tabnew" . wiki_dir . strftime("%y%m%d-%H%M") . ".md"
-
-" }}}
 
 "===================Plug loading ends==========================================
 call plug#end()

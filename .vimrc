@@ -29,6 +29,9 @@ else
 endif
 set notermguicolors
 set nocompatible
+if has("gui_running") && has("gui_macvim")
+  set macmeta
+endif
 
 " never use background color erase
 let &t_ut=''
@@ -177,10 +180,16 @@ inoremap <m-k> <C-o>gk
 vmap / y/<C-R>"<CR>
 
 " tab navigation
-nmap tp :tabprevious<cr>
-nmap tn :tabnext<cr>
-nmap to :tabnew<cr>
-nmap tc :tabclose<cr>
+if has("gui_running") "only in GUI as this may conflict with tmux window navigation
+  nmap <F11> :tabprevious<CR>
+  nmap <F12> :tabnext<CR>
+  imap <F11> <ESC>:tabprevious<CR>
+  imap <F12> <ESC>:tabnext<CR>
+endif
+nmap tp :tabprevious<CR>
+nmap tn :tabnext<CR>
+nmap to :tabnew<CR>
+nmap tc :tabclose<CR>
 nmap gf <C-W>gf
 
 " clear search highlight with F5
@@ -193,6 +202,9 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
+
+" use <leader>r to reload vim configuration
+nmap <leader>r :source ~/.vimrc<CR>:echom "VIM configuration reloaded"<CR>
 " }}}
 
 " {{{ file type settings
@@ -214,7 +226,6 @@ autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 autocmd FileType mail
             \|:silent setlocal fo+=aw       " http://wcm1.web.rice.edu/mutt-tips.html
             \|:silent set spell
-            "\|:silent 0put=''
             \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
             \|:silent 1
 
@@ -234,7 +245,7 @@ autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown
 " do not wrap actual lines
 autocmd BufRead,BufNewFile *.vim-edit setlocal spell textwidth=0
 " copy from clipboard when entering
-autocmd BufNewFile   *.vim-edit normal "+P
+autocmd BufNewFile   *.vim-edit normal! "+P
 " paste to clipboard when saving
 autocmd BufWritePost *.vim-edit if getfsize(expand(@%))>0 | silent :%y+ | endif
 " delete tmp file when exiting
