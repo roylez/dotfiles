@@ -31,6 +31,7 @@ set notermguicolors
 set nocompatible
 if has("gui_running") && has("gui_macvim")
   set macmeta
+  set macligatures
 endif
 
 " never use background color erase
@@ -125,7 +126,7 @@ set ttyfast             " better for xterm
 set spellsuggest=best
 set spelllang=en_gb,cjk
 
-set guioptions=
+set guioptions=gA
 
 if has("mac")
   set guifont=Fantasque\ Sans\ Mono:h16
@@ -243,10 +244,8 @@ autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | no
 " fallback to markdown file type if all ftdetect fails
 autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown
 " do not wrap actual lines
-autocmd BufRead,BufNewFile *.vim-edit setlocal spell textwidth=0
-" copy from clipboard when entering
-autocmd BufNewFile   *.vim-edit normal! "+P
-" paste to clipboard when saving
+autocmd BufRead,BufNewFile *.vim-edit setlocal spell wrap textwidth=0 noswapfile
+" paste to clipboard when saving. 
 autocmd BufWritePost *.vim-edit if getfsize(expand(@%))>0 | silent :%y+ | endif
 " delete tmp file when exiting
 autocmd BufDelete,BufHidden,VimLeave *.vim-edit silent :!rm -f <afile>

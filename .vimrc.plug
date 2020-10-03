@@ -165,13 +165,8 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
-if &background ==# 'dark'
-   let s:fzf_style = 'dark'
-else
-   let s:fzf_style = 'light'
-endif
 let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
-let s:fzf_rg_opts = '-e --color '.s:fzf_style. ' --no-hscroll --delimiter : --nth 3..'
+let s:fzf_rg_opts = '-e --color '.&background. ' --no-hscroll --delimiter : --nth 3..'
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ g:fzf_rg . shellescape(<q-args>),
      \ 1, {'options': s:fzf_rg_opts }, <bang>0 )
@@ -230,47 +225,24 @@ Plug 'vimwiki/vimwiki' "{{{
 " so that FZF within the dir works better
 " so that it does not take over tab that is required by ultisnips
 let g:vimwiki_table_mappings = 0
-let g:vimwiki_auto_chdir = 1
-let g:wiki_dir = '~/workspace/doc/markdown/'
-let g:vimwiki_list = [{'path': wiki_dir, 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+let g:vimwiki_auto_chdir     = 1
+let g:vimwiki_hl_cb_checked  = 2
+let g:vimwiki_global_ext     = 0
+let g:vimwiki_list = [{'path': '~/workspace/doc/markdown/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+autocmd FileType vimwiki setlocal spell
+autocmd FileType vimwiki nnoremap <Leader>t :VimwikiToggleListItem<CR>
 
-command! Znew :execute ":edit"   . g:wiki_dir . strftime("%y%m%d-%H%M%S") . ".md"
-command! Ztab :execute ":tabnew" . g:wiki_dir . strftime("%y%m%d-%H%M%S") . ".md"
-command! Z    :call fzf#vim#grep(
-         \ g:fzf_rg . '"^(#{1,2}|title:)\s+" ',
-         \ 1, {'dir': g:wiki_dir, 'options': s:fzf_rg_opts }, 0 )
-
-nnoremap <Leader>z :Z<CR>
-
-" returned string: [Title](YYYYMMDD-HHMMSS.md)
-function! s:make_note_link(l)
-   let line  = split(a:l, ':')
-   let id    = substitute(l:line[0], '^.*/', '', 'g')
-   let title = substitute(l:line[-1], '^\#*\s\+', '', 'g')
-   let link  = "[" . title ."](". id .")"
-   call setline('.', getline('.') . link )
-   call cursor(line('.'), col('.') + len(link) )
-   call feedkeys('a', 'n')
-endfunction
-
-augroup zettel
-  au!
-  autocmd FileType vimwiki inoremap <silent> [[ <esc>:call fzf#run({
-       \ 'source': 'rg --no-heading --smart-case "(#+\|title:)\s+" ',
-       \ 'sink': function('<sid>make_note_link'),
-       \ 'options': '--margin 15%,0',
-       \ 'dir': g:wiki_dir,
-       \ 'down':  10})<CR>'
-  autocmd FileType vimwiki nnoremap <Leader>f :Z<CR>
-  autocmd FileType vimwiki vnoremap z y:Ztab<CR>p
-  autocmd FileType vimwiki nnoremap <Leader>tt :VimwikiToggleListItem<CR>
-  autocmd FileType vimwiki setlocal spell
-augroup END
+Plug 'roylez/zwiki'
 " }}}
 
 " start up menu
 Plug 'mhinz/vim-startify' "{{{
 autocmd User Startified setlocal cursorline
+
+function! s:new_vim_edit()
+   return '/tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit'
+endfunction
+
 let g:startify_files_number = 5
 let g:startify_enable_special = 0
 let g:startify_lists = [
@@ -285,8 +257,9 @@ let g:startify_bookmarks = [
       \ { 'p': '~/.vimrc.plug' },
       \ { 's': '~/.zshrc' } ]
 let g:startify_commands = [
-      \ { 'b': ['CLIPBOARD', 'edit /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit' ]},
-      \ { 'n': ['new Zettel from clipboard', 'e +norm\ "+P '. g:wiki_dir . strftime("%y%m%d-%H%M%S") . '.md'] } ]
+      \ { 'b': ['剪切板',     'e +norm\ "+P ' . <sid>new_vim_edit() ]},
+      \ { 'B': ['空白剪切板', 'e ' . <sid>new_vim_edit()            ]},
+      \ { 'z': ['Zettel笔记', 'Znew +norm\ "+P'                     ]} ]
 autocmd VimEnter * let t:startify_new_tab = 1
 " make startify start on every new tab
 autocmd BufEnter *
@@ -343,7 +316,6 @@ if has("nvim") || version > 800
   autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
   autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
 endif
-" Plug 'slashmili/alchemist.vim'
 " }}}
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
