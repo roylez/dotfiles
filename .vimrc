@@ -31,7 +31,6 @@ set notermguicolors
 set nocompatible
 if has("gui_running") && has("gui_macvim")
   set macmeta
-  set macligatures
 endif
 
 " never use background color erase
@@ -77,7 +76,7 @@ set linebreak           " no breakline in the middle of a word
 set wrapmargin=2
 
 set formatprg=fmt
-set formatoptions=croqn2mB1
+set formatoptions=croqnmB1
 
 set backup
 if !isdirectory($HOME . "/.backup")
@@ -231,7 +230,7 @@ autocmd FileType mail
             \|:silent 1
 
 "markdown
-autocmd FileType markdown set comments=n:> nospell textwidth=0 formatoptions=tcroqn2
+autocmd FileType markdown set comments=n:> textwidth=0 wrapmargin=2 fo=croqnmB1
 
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
@@ -244,11 +243,16 @@ autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | no
 " fallback to markdown file type if all ftdetect fails
 autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown
 " do not wrap actual lines
-autocmd BufRead,BufNewFile *.vim-edit setlocal spell wrap textwidth=0 noswapfile
+autocmd BufRead,BufNewFile *.vim-edit setlocal list spell wrap textwidth=0 wrapmargin=5 noswapfile fo=roqnmB1
 " paste to clipboard when saving. 
 autocmd BufWritePost *.vim-edit if getfsize(expand(@%))>0 | silent :%y+ | endif
 " delete tmp file when exiting
 autocmd BufDelete,BufHidden,VimLeave *.vim-edit silent :!rm -f <afile>
+
+command! -nargs=? PasteEdit :call <sid>new_vim_edit(<q-args>)
+function! s:new_vim_edit(cmd)
+  execute ":e " . a:cmd . ' /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit'
+endfunction
 
 " }}}
 
