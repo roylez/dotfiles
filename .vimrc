@@ -11,6 +11,7 @@ else
     " keep record of editing information for cursor restore and more
     set viminfo='10,\"100,:20,%,n~/.viminfo
 endif
+
 " use the same vim_home dir for vim and nvim, use the following in
 " ~/.config/nvim/init.vim
 "
@@ -29,8 +30,11 @@ else
 endif
 set notermguicolors
 set nocompatible
-if has("gui_running") && has("gui_macvim")
+if has("gui_macvim")
   set macmeta
+  " never have that python version mismatch problem again
+  set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/Current/Python
+  set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/Current
 endif
 
 " never use background color erase
@@ -154,6 +158,9 @@ set tags=./.tags
 
 set noautochdir
 
+" automatically reread file when changed elsewhere
+set autoread
+
 " encoding detection
 set fileencoding&
 set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
@@ -241,7 +248,7 @@ autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | no
 " adhoc edits, files ending with vim-edit
 "
 " fallback to markdown file type if all ftdetect fails
-autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown
+autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown.vim-edit
 " do not wrap actual lines
 autocmd BufRead,BufNewFile *.vim-edit setlocal list spell wrap textwidth=0 wrapmargin=5 noswapfile fo=roqnmB1
 " paste to clipboard when saving. 
@@ -295,6 +302,23 @@ augroup vimrc
     \|      silent! loadview
     \|  endif
 augroup END
+" }}}
+
+" {{{ per tab cwd
+function! TabCD()
+  let t:tcd_executed = get(t:, 'tcd_executed', 0)
+  if !t:tcd_executed && len(@%)
+    if isdirectory(@%)
+      :execute "tcd " . @%
+    else
+      let dirname = expand("%:p:h")
+      :execute "tcd " . dirname
+    endif
+    let t:tcd_executed = 1
+  endif
+endfunction
+
+autocmd * TabEnterPost,TabNewPost :call TabNewWithCwD()<CR>
 " }}}
 
 " {{{ Changing cursor shape per mode

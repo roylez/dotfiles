@@ -1,0 +1,52 @@
+global !p
+def title_date(day=0):
+  from datetime import date, timedelta
+  tod = date.today()
+  d   = timedelta(days=day)
+  return tod+d
+endglobal
+
+snippet skel "SKELETON" b
+---
+title: ${1:Title}
+links:
+---
+$0
+endsnippet
+
+snippet tod "today" b
+### `!p snip.rv=title_date()`
+
+$0
+
+endsnippet
+
+snippet yes "yesterday" b
+### `!p snip.rv=title_date(-1)`
+
+$0
+
+endsnippet
+
+snippet tom "tomorrow" b
+### `!p snip.rv=title_date(1)`
+
+$0
+
+endsnippet
+
+snippet tt "task" b
+- [ ] $0
+endsnippet
+
+snippet work "work flow" b
+- [ ] BOOT
+    - [ ] Emails
+    - [ ] time card
+    - [ ] Calendar
+    - [ ] Daily Affirmations
+    - [ ] how-to-type
+    - [ ] workspace clean up
+
+- [ ] $0
+endsnippet

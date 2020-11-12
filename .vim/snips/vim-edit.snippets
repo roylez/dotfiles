@@ -1,0 +1,136 @@
+snippet sfn "Salesforce New Case" b
+Hello,
+
+Thank you for filing a support case via the support tool. Please allow us some time to look into the case and we will come back to you soon.
+
+Regards,
+
+Roy
+endsnippet
+
+snippet sfs "Salesforce sosreport collection" b
+Install and run our sosreport tool which will gather additional logs and hardware information from your system.
+
+From a terminal run the following commands (supply your password if prompted):
+
+$ sudo apt-get update
+$ sudo apt-get install sosreport
+$ sudo sosreport -a
+
+The output report can be found in the /tmp directory. The file will be owned by root and you will have to take ownership before you'll be able to upload it. Please attach the report to this case.
+
+Reference: https://support.canonical.com/ua/s/article/canonical-support-data-collection-sosreport
+endsnippet
+
+snippet sfsa "Salesforce sosreport at&t" b
+Please attach the file to this case. If the file is bigger than 20Mb could you please upload it to our FTP Server following the procedure below?
+
+SFTP
+Uploading files via SFTP provides customers with a secure file transfer from the customer's machine to Canonical via the command line or using any FTP Software.
+
+    Location: files.support.canonical.com
+    Username: canonical-att
+    Password: att
+
+An example usage for SFTP would be:
+1. Open the Terminal in Ubuntu and change to the directory where the file is located.
+2. Login to the upload service:
+
+$ sftp canonical-att@files.support.canonical.com
+The authenticity of host 'files.support.canonical.com (54.164.14.101)' can't be established.
+DSA key fingerprint is 14:7a:2e:9b:91:ef:d1:86:c3:74:04:27:e4:40:85:d4.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'files.support.canonical.com,54.164.14.101' (DSA) to the list of known hosts.
+canonical-att@files.support.canonical.com's password:
+Connected to files.support.canonical.com.
+
+3. Upload your file(s):
+sftp> put test.txt
+Uploading test.txt to /test.txt test.txt  100%   16     0.0KB/s   00:00
+sftp>
+
+Replace test.txt with the name of your file. You may repeat this step for each file you wish to upload.
+4. Logout:
+sftp> bye
+$
+
+HTTPS
+You need to login and then just upload the file through the web interface.
+
+    File upload portal - https://files.support.canonical.com
+
+After uploading your file(s), please add a comment to the support case which includes the names of the file(s) that were uploaded.
+endsnippet
+
+snippet sfnb "Salesforce New Bootstack" b
+Hello,
+
+Thank you for filing a support case via the support tool. I am forwarding this ticket to our bootstack team. 
+
+Regards,
+
+Roy
+endsnippet
+
+snippet sfi "Salesforce INTERNAL" b
+## INTERNAL ##
+
+$0
+endsnippet
+
+snippet sfc "Salesforce Consulting Case" b
+Hello,
+
+$0
+
+Your case is less targeted for a technical support service (providing fixes or workarounds for specific technical errors) but more for a consultative one ("I need this..." or "How do I..." type questions).  If you would like us to provide clarification on the service your support contract entitles you to, or how it differs from a consultation service, then I can have someone give you a call.  As a general rule we strive to go above and beyond customer expectations but there is also sometimes the need to clarify exactly what your contract is meant to provide.  Let me know if you have any questions about all this.
+
+Regards,
+
+Roy
+endsnippet
+
+snippet sfe "Salesforce SEG escalation" b
+## SEG ESCALATION ##
+
+${1:Summary}
+
+${2:Expectation}
+endsnippet
+
+snippet sfsv "Salesforce severity adjustment" b
+Hello,
+
+$0
+
+Also, I'd like to shift this to a severity L3. That's not to say that this isn't important, or urgent, or even that we will reduce the work we are putting forward. It simply helps us with scheduling the appropriate resources.  (Generally L1's are production outages that will be continuously worked 24/7 by both parties).
+
+Regards,
+
+Roy
+endsnippet
+
+snippet sfo "Salesforce expired closure" b
+Hello,
+
+It has been a long time, and ${1:I assume your problem has been resolved}. Should you still need
+our assistance, please feel free to comment back to reopen the case.
+
+Regards,
+
+Roy
+endsnippet
+
+snippet sfrab "Salesforce rabbitmqctl_report request" b
+Hello,
+
+Could you please run the following command and upload the file? The file in your sosreport is truncated.
+
+The command may take a while to execute.
+
+sudo rabbitmqctl report > rabbitmqctl_report.log
+
+Cheers,
+
+Roy
+endsnippet

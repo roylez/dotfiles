@@ -169,7 +169,7 @@ let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
 let s:fzf_rg_opts = '-e --color '.&background. ' --no-hscroll --delimiter : --nth 3..'
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ g:fzf_rg . shellescape(<q-args>),
-     \ 1, {'options': s:fzf_rg_opts }, <bang>0 )
+     \ 1, {'options': s:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel || pwd')[0] }, <bang>0 )
 
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
@@ -218,6 +218,8 @@ else
   let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
   let g:neocomplete#enable_auto_delimiter       = 1
 endif
+
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 " }}}
 
 " {{{ notes taking gang... only for macvim
@@ -246,9 +248,9 @@ if has("mac")
   let g:startify_enable_special = 0
   let g:startify_lists = [
         \ { 'type': 'commands',  'header': ['      COMMAND'] },
-        \ { 'type': 'dir',       'header': ['      CURRENT DIR'] },
         \ { 'type': 'files',     'header': ['      RECENT' ] },
-        \ { 'type': 'sessions',  'header': ['      SESSION'] },
+        "\ { 'type': 'sessions',  'header': ['      SESSION'] },
+        \ { 'type': 'dir',       'header': ['      CURRENT DIR'] },
         \ { 'type': 'bookmarks', 'header': ['      BOOKMARK'] } ]
   let g:startify_bookmarks = [
         \ { 'd': '~/workspace/doc/markdown/TODO.md' },
