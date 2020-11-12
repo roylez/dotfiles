@@ -28,7 +28,8 @@
 [github]
   user = roylez
 [core]
-  pager = cat
+  # pager = cat
+  pager = less -FMRiXx4
   excludesfile = ~/.gitignore
 [branch]
     ;autosetuprebase = remote
@@ -44,3 +45,5 @@
   prompt = false
 [diff]
   tool = vimdiff
+[pull]
+	rebase = true
