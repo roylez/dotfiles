@@ -19,7 +19,8 @@ autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " automatically close vim when last window is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" https://stackoverflow.com/questions/2066590/automatically-quit-vim-if-nerdtree-is-last-and-only-buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " Automatically delete the buffer of the file you just deleted with NerdTree:
 let NERDTreeAutoDeleteBuffer = 1
@@ -161,7 +162,7 @@ Plug 'junegunn/fzf.vim'
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction
-command! ProjectFiles execute 'Files' s:find_git_root()
+command! ProjectFiles execute 'GFiles' s:find_git_root()
 
 " set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep

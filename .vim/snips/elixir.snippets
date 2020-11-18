@@ -9,17 +9,15 @@ snippet pry "Use IEx to pry"
 require IEx; IEx.pry
 endsnippet
 
-snippet defs "Genserver" b
-defmodule ${1:Server} do
-  use GenServer
+snippet useg "Genserver" b
+use GenServer
 
-  def init( params) do
-    { :ok, state }
-  end
+def init(state) do
+  { :ok, state }
+end
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: ${2:__MODULE__})
-  end
+def start_link(state) do
+  GenServer.start_link(__MODULE__, state, name: ${2:__MODULE__})
 end
 endsnippet
 
