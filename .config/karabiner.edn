@@ -74,8 +74,11 @@
                  [:!CC0             :f10 [:niz] ]
                  [:!CChyphen        :f11 [:niz] ]
                  [:!CCequal_sign    :f12 [:niz] ]
-                 [:!CCopen_bracket  :f11 [:niz] ]
-                 [:!CCclose_bracket :f12 [:niz] ]
+                 ] }
+        {:des "Command + [ or ] for F11/F12"
+         :rules [
+                 [:!CCopen_bracket  :f11 nil ]
+                 [:!CCclose_bracket :f12 nil ]
                  ] }
         {:des "Capslock to hyper (Ctrl+Alt)"
          :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }

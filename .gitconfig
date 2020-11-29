@@ -46,4 +46,4 @@
 [diff]
   tool = vimdiff
 [pull]
-	rebase = true
+  rebase = true

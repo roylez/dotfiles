@@ -170,7 +170,7 @@ let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
 let s:fzf_rg_opts = '-e --color '.&background. ' --no-hscroll --delimiter : --nth 3..'
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ g:fzf_rg . shellescape(<q-args>),
-     \ 1, {'options': s:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel || pwd')[0] }, <bang>0 )
+     \ 1, {'options': s:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }, <bang>0 )
 
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
@@ -250,11 +250,11 @@ if has("mac")
   let g:startify_lists = [
         \ { 'type': 'commands',  'header': ['      COMMAND'] },
         \ { 'type': 'files',     'header': ['      RECENT' ] },
-        "\ { 'type': 'sessions',  'header': ['      SESSION'] },
+        \ { 'type': 'sessions',  'header': ['      SESSION'] },
         \ { 'type': 'dir',       'header': ['      CURRENT DIR'] },
         \ { 'type': 'bookmarks', 'header': ['      BOOKMARK'] } ]
   let g:startify_bookmarks = [
-        \ { 'd': '~/workspace/doc/markdown/TODO.md' },
+        \ { 't': '~/workspace/doc/markdown/TODO-' . strftime("%Y") . '.md' },
         \ { 'c': '~/.vimrc' },
         \ { 'p': '~/.vimrc.plug' },
         \ { 's': '~/.zshrc' } ]
