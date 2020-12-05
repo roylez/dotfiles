@@ -57,7 +57,9 @@ TERM xterm-256color
 TERM xterm-88color
 TERM xterm-color
 TERM xterm-debian
-TERM tmux*
+TERM xterm-kitty
+TERM tmux
+TERM tmux-256color
 
 # Below are the color init strings for the basic file types. A color init
 # string consists of one or more of the following numeric codes:
@@ -69,7 +71,7 @@ TERM tmux*
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
 NORMAL 00       # global default, although everything should be something.
 FILE   00       # normal file
-DIR    01;04;38;05;75  # directory
+DIR    01;38;05;75  # directory
 LINK   01;38;05;51  # symbolic link.  (If you set this to 'target' instead of a
                     # numerical value, the color is as for the file pointed to.)
 FIFO 38;05;142;48;05;235   # pipe

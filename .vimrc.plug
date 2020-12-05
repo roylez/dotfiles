@@ -248,19 +248,18 @@ if has("mac")
   let g:startify_files_number = 5
   let g:startify_enable_special = 0
   let g:startify_lists = [
-        \ { 'type': 'commands',  'header': ['      COMMAND'] },
+        \ { 'type': 'commands',  'header': ['      COMMANDS'] },
         \ { 'type': 'files',     'header': ['      RECENT' ] },
-        \ { 'type': 'sessions',  'header': ['      SESSION'] },
         \ { 'type': 'dir',       'header': ['      CURRENT DIR'] },
-        \ { 'type': 'bookmarks', 'header': ['      BOOKMARK'] } ]
+        \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
   let g:startify_bookmarks = [
         \ { 't': '~/workspace/doc/markdown/TODO-' . strftime("%Y") . '.md' },
         \ { 'c': '~/.vimrc' },
         \ { 'p': '~/.vimrc.plug' },
         \ { 's': '~/.zshrc' } ]
   let g:startify_commands = [
-        \ { 'b': ['剪切板',     'PasteEdit +norm\ "+P' ]},
-        \ { 'B': ['空白剪切板', 'PasteEdit'            ]},
+        \ { 'b': ['空白文档',   'PasteEdit'            ]},
+        \ { 'B': ['剪切板',     'PasteEdit +norm\ "+P' ]},
         \ { 'z': ['Zettel笔记', 'Znew +norm\ "+P'      ]} ]
   autocmd VimEnter * let t:startify_new_tab = 1
   " make startify start on every new tab
