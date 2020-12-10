@@ -1,6 +1,4 @@
 global !p
-def ing_paywave_rebate(amount):
-    return round(float(amount) * 2.0 / 100, 2)
 
 # Expenses:Insurance        $ `!p snip.rv=creditcard_insurance(t[3])`
 def creditcard_insurance(amount):
@@ -17,12 +15,6 @@ snippet exp "Expense" b
     ${8:Assets:}$9
 endsnippet
 
-snippet ingt "ING Direct transfer" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * ING Direct
-    Assets:ING:Everyday	    $ $3
-    Assets:ING:Savings
-endsnippet
-
 snippet inc "Income" b
 ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
     Assets:${5:title}	    ${6:$} ${7:value}
@@ -36,20 +28,9 @@ snippet din "Dining" b
 endsnippet
 
 snippet with "Withdraw" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:ING Direct}
+${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:CBA}
     ${4:Assets:Cash}	    $ ${5:value}
-    Assets:${6:ING:Everyday}
-endsnippet
-
-snippet ing "INGRebate"
-Income:INGRebate		$ -$1
-endsnippet
-
-snippet pay "Expense paid with ING Paypass" b
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
-    ${5:Expenses}:${6:Grocery}	    ${7:$} ${8:0}
-    Income:INGRebate		$ -`!p snip.rv=ing_paywave_rebate(t[8])`
-    Assets:ING:Everyday
+    Assets:${6:CBA:Access}
 endsnippet
 
 snippet col "CreditCard" b
@@ -65,37 +46,17 @@ endsnippet
 snippet rep "Credit Card Repayment" b
 ${1:`date +%Y-%m-`}${2:`date +%d`} * CreditCard Payment
     Liabilities:CreditCard:${3:Coles}     $ ${4:0.0}
-    Assets:${5:NAB:Access}
+    Assets:${5:CBA:Access}
 endsnippet
 
 snippet deb "Debit Card" b
-Assets:ING:Everyday
+Assets:CBA:Access
 endsnippet
 
 snippet tran "Transfer" b
 ${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:transfer title}
-    Assets:${5:ING:Everyday}          $ $6
+    Assets:${5:CBA:Access}          $ $6
     Assets:$7
 
 endsnippet
 
-snippet eth "Buy Ethereum"
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * BTCMarkets
-    Assets:Coin:Ethereum             ( ETH $4 - ETH 0.001 )
-    Expenses:Service:Banking     $ 3.3
-    Assets:ING:Savings         $ -2000
-    Currency:Crypto
-
-endsnippet
-
-snippet milk "牛奶代购"
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${3: 2 Health}
-    Assets:ING:Everyday     $ -${4}
-    Assets:Alipay           CNY ${5}
-    Currency
-
-endsnippet
-
-snippet nab "NAB Debit Card" b
-Assets:NAB:Access
-endsnippet

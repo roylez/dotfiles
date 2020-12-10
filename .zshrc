@@ -597,3 +597,6 @@ alias forget='unset HISTFILE'
 #}}}
 
 typeset -U PATH
+
+# Added by serverless binary installer
+export PATH="$HOME/.serverless/bin:$PATH"
