@@ -62,21 +62,21 @@
         {:des "Niz Plum atom68 modifications"
          :rules [
                  [:##right_alt :##right_control [:niz] ]
-                 [:!CC1             :f1  [:niz] ]
-                 [:!CC2             :f2  [:niz] ]
-                 [:!CC3             :f3  [:niz] ]
-                 [:!CC4             :f4  [:niz] ]
-                 [:!CC5             :f5  [:niz] ]
-                 [:!CC6             :f6  [:niz] ]
-                 [:!CC7             :f7  [:niz] ]
-                 [:!CC8             :f8  [:niz] ]
-                 [:!CC9             :f9  [:niz] ]
-                 [:!CC0             :f10 [:niz] ]
-                 [:!CChyphen        :f11 [:niz] ]
-                 [:!CCequal_sign    :f12 [:niz] ]
                  ] }
-        {:des "Command + [ or ] for F11/F12"
+        {:des "More function keys"
          :rules [
+                 [:!CC1             :f1  nil ]
+                 [:!CC2             :f2  nil ]
+                 [:!CC3             :f3  nil ]
+                 [:!CC4             :f4  nil ]
+                 [:!CC5             :f5  nil ]
+                 [:!CC6             :f6  nil ]
+                 [:!CC7             :f7  nil ]
+                 [:!CC8             :f8  nil ]
+                 [:!CC9             :f9  nil ]
+                 [:!CC0             :f10 nil ]
+                 [:!CChyphen        :f11 nil ]
+                 [:!CCequal_sign    :f12 nil ]
                  [:!CCopen_bracket  :f11 nil ]
                  [:!CCclose_bracket :f12 nil ]
                  ] }

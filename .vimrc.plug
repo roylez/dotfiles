@@ -11,8 +11,8 @@ call plug#begin( g:vim_plugged_dir )
 "-------------------------------------------------------------------------------
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
-" F4 and Ctrl-4
-nmap <F4>   :NERDTreeToggle<CR>
+" F5 and Ctrl-5
+nmap <F5>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
 " auto start nerd tree when no file is open, conflicts with startify
@@ -42,38 +42,6 @@ let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'js', 'css', 'sass'
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
 
-" }}}
-
-""" {{{ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
-let g:tagbar_type_elixir = {
-   \ 'ctagstype' : 'elixir',
-   \ 'kinds' : [
-       \ 'p:protocols',
-       \ 'm:modules',
-       \ 'e:exceptions',
-       \ 'y:types',
-       \ 'd:delegates',
-       \ 'f:functions',
-       \ 'c:callbacks',
-       \ 'a:macros',
-       \ 't:tests',
-       \ 'i:implementations',
-       \ 'o:operators',
-       \ 'r:records'
-   \ ],
-   \ 'sro' : '.',
-   \ 'kind2scope' : {
-       \ 'p' : 'protocol',
-       \ 'm' : 'module'
-   \ },
-   \ 'scope2kind' : {
-       \ 'protocol' : 'p',
-       \ 'module' : 'm'
-   \ },
-   \ 'sort' : 0
-\ }
-nmap <F5> :TagbarToggle<CR>
 " }}}
 
 Plug 'vim-airline/vim-airline' " {{{
