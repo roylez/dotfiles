@@ -534,9 +534,9 @@ fi
 
 if ( bin-exist nvim ); then
   alias vim=nvim
-  export EDITOR='command nvim' VISUAL='command nvim'
+  export EDITOR='nvim' VISUAL='nvim'
 else
-  export EDITOR='command vim' VISUAL='command vim'
+  export EDITOR='vim' VISUAL='vim'
 fi
 # }}}
 
