@@ -11,8 +11,7 @@ call plug#begin( g:vim_plugged_dir )
 "-------------------------------------------------------------------------------
 
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
-" F5 and Ctrl-5
-nmap <F5>   :NERDTreeToggle<CR>
+nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
 " auto start nerd tree when no file is open, conflicts with startify
