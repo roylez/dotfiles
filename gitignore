@@ -21,3 +21,8 @@ erl_crash.dump
 .elixir_ls
 .formatter.exs
 .DS_Store
+.autoenv*.zsh
+creds.json
+test/*.yml
+node_modules
+vendor

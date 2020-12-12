@@ -1,0 +1,8 @@
+snippet "dns" "DNS record" b
+resource "digitalocean_record" "${1:record_name}" {
+    domain = "${var.domain}"
+    type = "${2:A}"
+    name = "${3:name}"
+    value = "${4:ip_or_data}"
+}
+endsnippet

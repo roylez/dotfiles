@@ -1,0 +1,34 @@
+snippet temp "default template" b
+<template lang="pug">
+</template>
+
+<script>
+export default {
+  data() {
+    return { $0 }
+  },
+}
+</script>
+endsnippet
+
+snippet lo "b-loading(...)" b
+b-loading( :active="$apollo.loading" )
+endsnippet
+
+snippet field "field input( name='...' rules='...')" b
+field( label='${1:Name}' :validator='$v.${2:name}' )
+  b-input(
+    v-model="$2"
+    type="${3:text}"
+    @input="$v.$2.$touch" )
+endsnippet
+
+snippet vali "import { xxx } from 'vuelidate/lib/validators'" b
+import { ${1:required, minLength} } from 'vuelidate/lib/validators'
+endsnippet
+
+snippet debug "if (env=dev) { console.log(...) }" b
+if ( process.env.NODE_ENV == 'development' ) {
+  console.log( ${1:msg} )
+}
+endsnippet
