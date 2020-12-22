@@ -132,7 +132,7 @@ set spelllang=en_gb,cjk
 set guioptions=gA
 
 if has("mac")
-  set guifont=Fantasque\ Sans\ Mono:h17
+  set guifont=Fantasque\ Sans\ Mono:h16
   set linespace=2
 else
   set guifont=Monaco\ 10
@@ -318,7 +318,7 @@ function! TabCD()
   endif
 endfunction
 
-autocmd * TabEnterPost,TabNewPost :call TabNewWithCwD()<CR>
+autocmd VimEnter,TabEnter,TabNew * call TabCD()
 " }}}
 
 " {{{ Changing cursor shape per mode
