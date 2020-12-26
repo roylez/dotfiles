@@ -1,3 +1,0 @@
-[submodule ".todo/actions"]
-	path = .todo/actions
-	url = git@github.com:roylez/todotxt-plugin.git
