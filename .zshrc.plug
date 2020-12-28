@@ -1,6 +1,4 @@
-zplug "changyuheng/fz", defer:1
-#
-zplug "agkozak/z", use:z.sh
+zplug "agkozak/zsh-z"
 export _Z_NO_RESOLVE_SYMLINKS=1
 #
 zplug "Tarrasch/zsh-autoenv"
@@ -15,8 +13,6 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "asdf-vm/asdf", use:asdf.sh
 
 zplug "zsh-users/zsh-autosuggestions", use:zsh-autosuggestions.zsh
-
-zplug "knqyf263/pet", from:gh-r, as:command, use:"*${$(uname):l}*amd64.tar.gz"
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then

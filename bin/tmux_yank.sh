@@ -13,10 +13,9 @@ if [ "$buflen" -gt "$maxlen" ]; then
 fi
 # build up OSC 52 ANSI escape sequence for clipboard operation
 esc="\e]52;c;$( printf %s "$buf" | head -c $maxlen | base64 | tr -d '\r\n' )\a"
-esc=
 
 pane_active_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
-target_tty="${SSH_TTY:-$pane_active_tty}"
+# target_tty="${SSH_TTY:-$pane_active_tty}"
 
 # if over ssh, sent to SSH_TTY otherwise pane tty
-printf '\ePtmux;\e%s\e\\' "$esc" > $target_tty
+printf "\ePtmux;\e$esc\e\\" > $pane_active_tty
