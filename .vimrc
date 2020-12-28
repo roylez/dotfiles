@@ -318,7 +318,7 @@ function! TabCD()
   endif
 endfunction
 
-autocmd VimEnter,TabEnter,TabNew * call TabCD()
+autocmd BufNewFile,BufReadPost * call TabCD()
 " }}}
 
 " {{{ Changing cursor shape per mode
