@@ -31,7 +31,7 @@ class YearStat
   def initialize(data, opts = {})
     data.map! { |d, v|
       d = Date.parse(d) unless d.is_a? Date
-      v = v.to_i  unless v.is_a? Fixnum
+      v = v.to_i  unless v.is_a? Integer
       [d, v]
     }
     @opts = { padding: 4, summary: false }.merge opts
@@ -39,7 +39,7 @@ class YearStat
     @data = data
   end
 
-  def to_s
+  def to_s(include_summary=false)
     # color code each block
     lines = transposed_weeks.map do |line|
       line.map { |d| block(d) }.join
@@ -59,13 +59,7 @@ class YearStat
       month_heading << ' ' * (col_num - month_heading.size) + MONTHS[day.mon - 1]
     end
     lines.unshift month_heading
-    # apply prefix padding
-    if @opts[:columns]
-      padding = ( @opts[:columns] - lines[1].gsub(/\e[^m]*m/,'').size ) / 2
-    else
-      padding = @opts[:padding]
-    end
-    lines.map!{|l| ' ' * padding + l }
+    lines = pad(lines)
     # remove redudant color code
     lines.map!{|l|
       while %r{(\e\[[^m]+m)([^\e]+?)\e\[m\1}.match l
@@ -73,20 +67,29 @@ class YearStat
       end
       l
     }
-    lines.join("\n")
+    include_summary ? [lines, "", pad([summary])].join("\n") : lines.join("\n")
   end
 
   def summary
-    "\tTotoal count: #{@data.map(&:last).inject(:+)}"
+    "\tTotal count: #{@data.map(&:last).inject(:+)}"
   end
 
   def self.format(data, opts = {})
     summary = opts.delete(:summary)
-    s = YearStat.new(data, opts)
-    summary ? [s.to_s, s.summary].join("\n\n") : s.to_s
+    YearStat.new(data, opts).to_s(summary)
   end
 
   private
+
+  def pad(lines)
+    # apply prefix padding
+    if @opts[:columns]
+      padding = ( @opts[:columns] - lines[0].gsub(/\e[^m]*m/,'').size ) / 2
+    else
+      padding = @opts[:padding]
+    end
+    lines.map!{|l| ' ' * padding + l }
+  end
 
   def days
     return @days  if @days
@@ -163,8 +166,9 @@ if __FILE__ == $0
   OptionParser.new do |opts|
     opts.banner = "Usage: #{$0} [options]"
     options[:columns] = `tput cols`.to_i
-    opts.on('-s','--shell COLUMNS', Integer,
-            'Centeralize in terminal') {|i| options[:columns] = i }
+    options[:summary] = false
+    opts.on('-s','--shell COLUMNS', Integer, 'Centeralize in terminal') {|i| options[:columns] = i }
+    opts.on('--summary', TrueClass, 'Print a summary of commits') {|s| options[:summary] = s }
   end.parse!
 
   if ARGF.filename != "-" or (not STDIN.tty? and not STDIN.closed?)
@@ -172,5 +176,5 @@ if __FILE__ == $0
   else
     data = git_stat
   end
-  puts YearStat.format(data, summary: true, columns: options[:columns])
+  puts YearStat.format(data, summary: options[:summary], columns: options[:columns])
 end
