@@ -158,27 +158,8 @@ is-local() { [[ -z "$SSH_CONNECTION" || -f ~/.tty.local ]] }
 #git directory/repo name
 git_repo() { basename $(git rev-parse --show-toplevel) }
 
-# use stat_cal to generate github style commit log
-(bin-exist stat_cal) && \
-    git_cal_view() {
-        pwd=$PWD
-        for i in $*; do
-            cd $i
-            git log --no-merges --pretty=format:"%ai" --since="13 months"
-            echo    # an "\n" is missing at the end of git log command
-        done \
-            |awk '{ a[$1] ++ }; END {for (i in a) {print i " " a[i]}}' \
-            |sort \
-            |stat_cal -s $COLUMNS
-        cd $pwd
-    }
-
-
 #recalculate track db gain with mp3gain
 (bin-exist mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
-
-#ccze for log viewing
-(bin-exist ccze) && lless() { tac $* |ccze -A |less }
 
 #man page to pdf
 (bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
@@ -193,9 +174,9 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 #{{{ functions to set prompt pwd color
 __PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
-pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%U%F{cyan}%~%f%u" }
+_pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%U%F{cyan}%~%f%u" }
 #change back before next command
-pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
+_pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
 #}}}
 
@@ -212,7 +193,7 @@ fi
 
 #set screen/tmux title if not connected remotely
 #if [ "$STY" != "" ]; then
-tmux_precmd() {
+_tmux_precmd() {
   #a bell, urgent notification trigger
   #echo -ne '\a'
   #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
@@ -220,7 +201,7 @@ tmux_precmd() {
   echo -ne '\033[?17;0;127c'
 }
 
-tmux_preexec() {
+_tmux_preexec() {
   local -a cmd; cmd=(${(z)1})
   case $cmd[1]:t in
     ssh|mosh) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
@@ -240,11 +221,11 @@ tmux_preexec() {
 #{{{define magic function arrays
 # typeset -ga preexec_functions precmd_functions chpwd_functions
 autoload -Uz add-zsh-hook
-add-zsh-hook precmd  tmux_precmd
+add-zsh-hook precmd  _tmux_precmd
 add-zsh-hook precmd  vcs_info
-add-zsh-hook preexec tmux_preexec
-add-zsh-hook preexec pwd_color_preexec
-add-zsh-hook chpwd   pwd_color_chpwd
+add-zsh-hook preexec _tmux_preexec
+add-zsh-hook preexec _pwd_color_preexec
+add-zsh-hook chpwd   _pwd_color_chpwd
 add-zsh-hook chpwd   vcs_info
 #}}}
 

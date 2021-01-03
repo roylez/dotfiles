@@ -290,6 +290,23 @@ endif
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
+Plug 'sillybun/vim-repl'
+nmap <leader>c   :REPLToggle<CR>
+let g:repl_program = {
+            \   'default': 'bash',
+            \   'python': 'ipython',
+            \   'ruby': 'pry',
+            \   }
+let g:repl_exit_commands = {
+      \ 'python': 'quit()',
+      \ 'default': 'exit',
+      \ }
+let g:repl_predefine_python = {
+            \   'numpy': 'import numpy as np',
+            \   'matplotlib': 'from matplotlib import pyplot as plt'
+            \   }
+let g:repl_position = 3
+
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------

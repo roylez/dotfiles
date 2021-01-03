@@ -167,8 +167,8 @@ if __FILE__ == $0
     opts.banner = "Usage: #{$0} [options]"
     options[:columns] = `tput cols`.to_i
     options[:summary] = false
-    opts.on('-s','--shell COLUMNS', Integer, 'Centeralize in terminal') {|i| options[:columns] = i }
-    opts.on('--summary', TrueClass, 'Print a summary of commits') {|s| options[:summary] = s }
+    opts.on('-c', '--columns COLUMNS', Integer, 'Centeralize in terminal') {|i| options[:columns] = i }
+    opts.on('-s', '--summary', TrueClass, 'Print a summary of commits') {|s| options[:summary] = s }
   end.parse!
 
   if ARGF.filename != "-" or (not STDIN.tty? and not STDIN.closed?)
