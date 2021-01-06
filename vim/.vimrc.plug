@@ -305,7 +305,7 @@ let g:repl_predefine_python = {
             \   'numpy': 'import numpy as np',
             \   'matplotlib': 'from matplotlib import pyplot as plt'
             \   }
-let g:repl_position = 3
+" let g:repl_position = 3
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
