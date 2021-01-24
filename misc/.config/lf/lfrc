@@ -1,0 +1,11 @@
+set shell zsh
+
+map <enter> shell
+
+set drawbox on
+
+set tabstop 4
+
+set info size
+
+
