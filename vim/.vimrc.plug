@@ -117,7 +117,6 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
 let g:UltiSnipsEditSplit= 'vertical'
-Plug 'pgilad/vim-skeletons'
 " }}}
 
 " Plug fzf {{{
@@ -142,7 +141,7 @@ command! -bang -nargs=* Rg call fzf#vim#grep(
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>f :ProjectFiles<CR>
+nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)

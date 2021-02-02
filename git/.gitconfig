@@ -25,6 +25,8 @@
   merge-branch-file = checkout --merge
   rb  = rebase
   undo = reset HEAD --hard
+  # https://metalinguist.wordpress.com/2007/12/06/the-woes-of-git-gc-aggressive-and-how-git-deltas-work/
+  gca = repack -a -d --depth=250 --window=250
 [github]
   user = roylez
 [core]
