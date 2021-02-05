@@ -129,7 +129,7 @@ set ttyfast             " better for xterm
 set spellsuggest=best
 set spelllang=en_gb,cjk
 
-set guioptions=aAeg
+set guioptions=aAegk
 
 if has("mac")
   set guifont=Fantasque\ Sans\ Mono:h16
