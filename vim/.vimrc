@@ -30,11 +30,12 @@ else
 endif
 set notermguicolors
 set nocompatible
+
 if has("gui_macvim")
   set macmeta
   " never have that python version mismatch problem again
-  set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/Current/Python
-  set pythonthreehome=/usr/local/Frameworks/Python.framework/Versions/Current
+  let &pythonthreehome=systemlist( 'python3 -c "import sys;print(sys.prefix)"' )[0]
+  let &pythonthreedll= &pythonthreehome . '/Python3'
 endif
 
 " never use background color erase
@@ -359,3 +360,4 @@ vmap <silent> <expr> p <sid>Repl()
 autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
 autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 " }}} Highlight keywords like TODO BUG HACK INFO and etc "
+

@@ -121,7 +121,7 @@ let g:UltiSnipsEditSplit= 'vertical'
 
 " Plug fzf {{{
 if has("mac")
-  Plug '/usr/local/opt/fzf'
+  Plug '/opt/homebrew/opt/fzf'
 endif
 Plug 'junegunn/fzf.vim'
 
