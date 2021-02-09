@@ -1,11 +1,68 @@
+# vim: ft=conf
+#
 set shell zsh
+set shellopts '-ey'
+set drawbox on
+set tabstop 4
+# mc style
+set nopreview
+set ratios 1:2
+set info size:time
 
+# CUSTOM COMMANDS
+#
+cmd open ${{
+  case $(file --mime-type -bL "$f") in
+    text/*|application/json) $EDITOR "$f";;
+    application/x-tar|application/x-7z*|application/*zip) lf -remote "send $id untar" ;;
+    *) $OPENER "$f";;
+  esac
+}}
+
+cmd fzf_jump ${{
+  res="$(fd -t d |fzf --info=inline --prompt='> JUMP TO:  ')"
+    if [ -d "$res" ]; then
+      cmd="cd"
+    else
+      cmd="select"
+    fi
+  lf -remote "send $id $cmd \"$res\""
+}}
+
+cmd untar !{{
+  case "$f" in
+    *.tar.*)             tar xvf "$f";;
+    *.zip|*.7z|*.lzma)   7z x "$f";;
+    *)                   echo "Not an archive file!";;
+  esac
+}}
+
+cmd tar %{{
+  printf " Archive file name: "
+  read name
+  [[ -z "${name##*.tar.*}" ]] || name=$name.tar.gz
+  lf -remote "send $id unselect \"$fx\""
+  tar acf "$name" $(basename -a $fx)
+}}
+
+cmd make_file %{{
+  echo -n " [NEW FILE] Enter a file name: "
+  read name
+  if [[ "$name" == */ ]]; then
+    mkdir -p $name
+  else
+    lf -remote "send $id \$$EDITOR $name"
+  fi
+}}
+
+cmd delete %{{
+  rm -rf "$fx"
+  }}
+# MAPPINGS
+#
 map <enter> shell
 
-set drawbox on
-
-set tabstop 4
-
-set info size
-
-
+map f :fzf_jump
+map A :tar
+map a :make_file
+map x :delete
