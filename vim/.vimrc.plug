@@ -130,10 +130,16 @@ function! s:find_git_root()
 endfunction
 command! ProjectFiles execute 'GFiles' s:find_git_root()
 
-" set grepprg=ag\ --nogroup\ --nocolor
 set grepprg=rg\ --vimgrep
 let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
 let s:fzf_rg_opts = '-e --color '.&background. ' --border sharp --no-info --no-hscroll --delimiter : --nth 3..'
+let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
+let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
+let g:fzf_layout = { 'window': 'belowright 35new' }
+if !isdirectory( g:fzf_history_dir )
+  call mkdir( g:fzf_history_dir , "p")
+endif
+
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ g:fzf_rg . shellescape(<q-args>),
      \ 1, {'options': s:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }, <bang>0 )
@@ -146,14 +152,6 @@ nnoremap <silent> <leader>s :Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
-
-let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
-
-let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
-let g:fzf_layout = { 'window': 'belowright 35new' }
-if !isdirectory( g:fzf_history_dir )
-  call mkdir( g:fzf_history_dir , "p")
-endif
 
 " }}}
 
