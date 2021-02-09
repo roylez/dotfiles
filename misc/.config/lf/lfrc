@@ -20,7 +20,7 @@ cmd open ${{
 }}
 
 cmd fzf_jump ${{
-  res="$(fd -t d |fzf --info=inline --prompt='> JUMP TO:  ')"
+  res="$(fd -t d -d 2 |fzf --info=inline --prompt='> JUMP TO:  ')" || true
     if [ -d "$res" ]; then
       cmd="cd"
     else
