@@ -136,6 +136,8 @@ set guioptions=aAegk
 
 if has("mac")
   set guifont=Fantasque\ Sans\ Mono:h16
+  " 方正颜宋
+  " set guifontwide=FZYanSongS-R-GB:h16
   set linespace=2
 else
   set guifont=Monaco\ 10

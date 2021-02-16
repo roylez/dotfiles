@@ -131,18 +131,36 @@ endfunction
 command! ProjectFiles execute 'GFiles' s:find_git_root()
 
 set grepprg=rg\ --vimgrep
-let g:fzf_rg = "rg --column --no-heading --color=always --smart-case "
-let s:fzf_rg_opts = '-e --color '.&background. ' --border sharp --no-info --no-hscroll --delimiter : --nth 3..'
-let g:fzf_colors = { 'fg': ['fg', 'Comment'], 'bg': ['bg', 'Normal'] }
-let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
-let g:fzf_layout = { 'window': 'belowright 35new' }
-if !isdirectory( g:fzf_history_dir )
-  call mkdir( g:fzf_history_dir , "p")
+let s:fzf_history_dir = $HOME . "/.backup/fzf_history"
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+            \ { 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
+if v:version >= 802
+    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.5, 'border': 'rounded' } }
+else
+    let g:fzf_layout = { 'window': 'belowright 35new' }
+endif
+if !isdirectory( s:fzf_history_dir )
+  call mkdir( s:fzf_history_dir , "p")
 endif
 
 command! -bang -nargs=* Rg call fzf#vim#grep(
-     \ g:fzf_rg . shellescape(<q-args>),
-     \ 1, {'options': s:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }, <bang>0 )
+     \ "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>),
+     \ 1, fzf#vim#with_preview({'options': '-e --reverse --no-info'}), <bang>0 )
+     "\ fzf#wrap({'options': g:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }),
 
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
@@ -154,6 +172,8 @@ nnoremap <silent> <leader>s :Snippets<CR>
 " imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " }}}
+
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 
 " Plug deoplete {{{
 Plug 'wellle/tmux-complete.vim'
@@ -197,6 +217,7 @@ if has("mac")
   let g:vimwiki_auto_chdir     = 1
   let g:vimwiki_hl_cb_checked  = 2
   let g:vimwiki_global_ext     = 0
+  let g:vimwiki_create_link    = 0
   let g:vimwiki_list = [{'path': '~/workspace/doc/markdown/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
   autocmd FileType vimwiki setlocal spell
   autocmd FileType vimwiki nnoremap <Leader>t :VimwikiToggleListItem<CR>

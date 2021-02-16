@@ -13,7 +13,8 @@ set info size:time
 #
 cmd open ${{
   case $(file --mime-type -bL "$f") in
-    text/*|application/json) $EDITOR "$f";;
+    text/x-*|application/json) $EDITOR "$f";;
+    text/*) $PAGER "$f";;
     application/x-tar|application/x-7z*|application/*zip) lf -remote "send $id untar" ;;
     *) $OPENER "$f";;
   esac
