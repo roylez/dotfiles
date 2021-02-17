@@ -7,6 +7,8 @@
 
 export PATH=$HOME/bin:$PATH
 
+[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(lsb_release -si).$(uname -m)
+
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # disable flow controll so that ctl-s does not freeze terminal and you don't
@@ -478,15 +480,48 @@ export READNULLCMD=less
 
 # 读入其他配置 {{{
 
-# FZF and friend
+# kubernet {{{
+if ( bin-exist kubectl ); then
+  source <(kubectl completion zsh)
+  alias k=kubectl
+  compdef k=kubectl
+fi
+# }}}
+
+# FZF and friend {{{
 if ( bin-exist fzf ); then
   ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
   # molokai themed
   export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
-  [[ $OSTYPE = darwin* ]] && fzf_completion_dir=/usr/local/opt/fzf/shell || fzf_completion_dir=/usr/share/fzf
+  case $DISTRO in
+    darwin*.arm64)  fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
+    darwin*.x86_64) fzf_completion_dir=/usr/local/opt/fzf/shell    ;;
+    VoidLinux*)     fzf_completion_dir=/usr/share/doc/fzf          ;;
+    *)              fzf_completion_dir=/usr/share/fzf              ;;
+  esac
   for file in $fzf_completion_dir/*.zsh; do
     source $file
   done
+fi
+# }}}
+
+# docker {{{
+if ( bin-exist docker ); then
+  alias d=docker
+  ( command -v _docker &>/dev/null ) && compdef d=docker
+fi
+if ( bin-exist docker-compose ); then
+  alias dc=docker-compose
+  ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
+fi
+# }}}
+
+# nvim {{{
+if ( bin-exist nvim ); then
+  alias vim=nvim
+  export EDITOR='nvim' VISUAL='nvim'
+else
+  export EDITOR='command vim' VISUAL='command vim'
 fi
 # }}}
 
@@ -498,27 +533,6 @@ fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
-if ( bin-exist kubectl ); then
-  source <(kubectl completion zsh)
-  alias k=kubectl
-  compdef k=kubectl
-fi
-if ( bin-exist docker-compose ); then
-  alias dc=docker-compose
-  ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
-fi
-
-if ( bin-exist docker ); then
-  alias d=docker
-  ( command -v _docker &>/dev/null ) && compdef d=docker
-fi
-
-if ( bin-exist nvim ); then
-  alias vim=nvim
-  export EDITOR='nvim' VISUAL='nvim'
-else
-  export EDITOR='command vim' VISUAL='command vim'
-fi
 # }}}
 
 # 命令别名 {{{
@@ -578,6 +592,3 @@ alias forget='unset HISTFILE'
 #}}}
 
 typeset -U PATH
-
-# Added by serverless binary installer
-export PATH="$HOME/.serverless/bin:$PATH"
