@@ -480,6 +480,14 @@ export READNULLCMD=less
 
 # 读入其他配置 {{{
 
+if [[ -d $HOME/.zplug ]]; then
+  # git clone https://github.com/zplug/zplug ~/.zplug
+  source $HOME/.zplug/init.zsh
+  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
+fi
+[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
+[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
+
 # kubernet {{{
 if ( bin-exist kubectl ); then
   source <(kubectl completion zsh)
@@ -524,14 +532,6 @@ else
   export EDITOR='command vim' VISUAL='command vim'
 fi
 # }}}
-
-if [[ -d $HOME/.zplug ]]; then
-  # git clone https://github.com/zplug/zplug ~/.zplug
-  source $HOME/.zplug/init.zsh
-  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
-fi
-[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
-[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
 # }}}
 
