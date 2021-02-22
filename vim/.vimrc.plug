@@ -131,7 +131,6 @@ endfunction
 command! ProjectFiles execute 'GFiles' s:find_git_root()
 
 set grepprg=rg\ --vimgrep
-let s:fzf_history_dir = $HOME . "/.backup/fzf_history"
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
 let g:fzf_colors =
@@ -153,13 +152,15 @@ if v:version >= 802
 else
     let g:fzf_layout = { 'window': 'belowright 35new' }
 endif
-if !isdirectory( s:fzf_history_dir )
-  call mkdir( s:fzf_history_dir , "p")
+" with g:fzf_history_dir c-p/n can recall last query
+let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
+if !isdirectory( g:fzf_history_dir )
+  call mkdir( g:fzf_history_dir , "p")
 endif
 
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>),
-     \ 1, fzf#vim#with_preview({'options': '-e --reverse --no-info'}), <bang>0 )
+     \ 1, fzf#vim#with_preview({'options': '-e --no-info'}), <bang>0 )
      "\ fzf#wrap({'options': g:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }),
 
 nnoremap <silent> <leader>/ :Rg<CR>
