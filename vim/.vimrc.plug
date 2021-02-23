@@ -160,7 +160,7 @@ endif
 
 command! -bang -nargs=* Rg call fzf#vim#grep(
      \ "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>),
-     \ 1, fzf#vim#with_preview({'options': '-e --no-info'}), <bang>0 )
+     \ 1, fzf#vim#with_preview({'options': '-e --info inline -n 4..'}), <bang>0 )
      "\ fzf#wrap({'options': g:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }),
 
 nnoremap <silent> <leader>/ :Rg<CR>
