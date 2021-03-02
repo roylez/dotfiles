@@ -174,8 +174,6 @@ nnoremap <silent> <leader>s :Snippets<CR>
 
 " }}}
 
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-
 " Plug deoplete {{{
 Plug 'wellle/tmux-complete.vim'
 if has("nvim") || version > 800
@@ -222,7 +220,12 @@ if has("mac")
   let g:vimwiki_list = [{'path': '~/workspace/doc/markdown/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
   autocmd FileType vimwiki setlocal spell
   autocmd FileType vimwiki nnoremap <Leader>t :VimwikiToggleListItem<CR>
-  autocmd BufWritePre TODO-*.md silent execute "%s/\\(### " . strftime("%Y-%m-%d") . "\\).*$/\\1    " . system("~/bin/read_km_var.sh POMODORO_COUNT")[:-2] . "/"
+  function! PomodoroCount()
+      let save_pos = getpos(".")
+      execute "%s/\\(### " . strftime("%Y-%m-%d") . "\\).*$/\\1    " . system("~/bin/read_km_var.sh POMODORO_COUNT")[:-2] . "/e"
+      call setpos(".", save_pos)
+  endfunction
+  autocmd BufWritePre TODO-*.md silent call PomodoroCount()
 
   Plug 'roylez/zwiki'
   " Plug '~/workspace/test/zwiki'
