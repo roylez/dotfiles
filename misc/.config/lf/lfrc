@@ -12,10 +12,11 @@ set info size:time
 # CUSTOM COMMANDS
 #
 cmd open ${{
-  case $(file --mime-type -bL "$f") in
-    text/x-*|application/json) $EDITOR "$f";;
+  case $(file --mime-type -bL "$f"):${f:t:e} in
+    text/x-*|application/json:*) $EDITOR "$f";;
     text/*) $PAGER "$f";;
-    application/x-tar|application/x-7z*|application/*zip) lf -remote "send $id untar" ;;
+    *:pages) $OPENER "$f";;
+    application/x-tar:*|application/x-7z*|application/*zip:*) lf -remote "send $id untar" ;;
     *) $OPENER "$f";;
   esac
 }}

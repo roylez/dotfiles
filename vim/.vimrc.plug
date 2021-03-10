@@ -9,8 +9,8 @@ call plug#begin( g:vim_plugged_dir )
 "-------------------------------------------------------------------------------
 "                                 readability                                  "
 "-------------------------------------------------------------------------------
-
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } "{{{
+" NERDTree............................................................... {{{1
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
@@ -40,8 +40,7 @@ let g:NERDTreeSyntaxDisableDefaultExtensions = 1
 let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'js', 'css', 'sass']
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
-
-" }}}
+" ....................................................................... }}}1
 
 Plug 'vim-airline/vim-airline' " {{{
 set noshowmode
@@ -76,11 +75,6 @@ Plug 'blueyed/vim-diminactive'
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
-
-Plug 'airblade/vim-rooter'
-let g:rooter_targets = '*'
-let g:rooter_silent_chdir = 1
-
 " multiple highlights <leader>k, clear with <leader>K
 Plug 'lfv89/vim-interestingwords'
 
@@ -110,16 +104,17 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 " use c-h/j/k/l for split navigation, no matter in vim or tmux
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'SirVer/ultisnips' " {{{
+" ultisnips.............................................................. {{{1
+Plug 'SirVer/ultisnips'
 " add personal snippet directory to search path, note that snippets is reserved and could not be used
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
 let g:UltiSnipsEditSplit= 'vertical'
-" }}}
+" ....................................................................... }}}1
 
-" Plug fzf {{{
+" FZF.................................................................... {{{1
 if has("mac")
   Plug '/opt/homebrew/opt/fzf'
 endif
@@ -152,6 +147,9 @@ if v:version >= 802
 else
     let g:fzf_layout = { 'window': 'belowright 35new' }
 endif
+if &background == "light"
+    let $BAT_THEME="gruvbox-light"
+endif
 " with g:fzf_history_dir c-p/n can recall last query
 let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
 if !isdirectory( g:fzf_history_dir )
@@ -171,44 +169,41 @@ nnoremap <silent> <leader>s :Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
+" ....................................................................... }}}1
 
-" }}}
-
-" Plug deoplete {{{
+" Deoplete............................................................... {{{1
 Plug 'wellle/tmux-complete.vim'
 if has("nvim") || version > 800
-  if has("nvim")
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'ncm2/float-preview.nvim'
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  let g:deoplete#enable_at_startup       = 1
-  let g:deoplete#omni#min_pattern_length = 3
-  let g:deoplete                         = g:vim_home . '/.cache/deoplete'
-  let g:deoplete#enable_auto_delimiter   = 1
-  autocmd FileType *        call deoplete#custom#source('ultisnips', 'rank', 1000)
-  autocmd FileType ledger   call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
-  autocmd FileType *        call deoplete#custom#option({ 'ignore_sources': { '_': ['around', 'omni', 'file'] } })
-  " autocmd FileType markdown call deoplete#custom#buffer_option('auto_complete', v:false)
+    if has("nvim")
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+        Plug 'ncm2/float-preview.nvim'
+    else
+        Plug 'Shougo/deoplete.nvim'
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+    Plug 'deoplete-plugins/deoplete-dictionary'
+    set dictionary+=/usr/share/dict/words
+    let g:deoplete#enable_at_startup       = 1
+    let g:deoplete#omni#min_pattern_length = 3
+    let g:deoplete                         = g:vim_home . '/.cache/deoplete'
+    let g:deoplete#enable_auto_delimiter   = 1
 else
-  Plug 'Shougo/neocomplete.vim'
-  let g:neocomplete#enable_at_startup           = 1
-  let g:neocomplete#enable_smart_case           = 1
-  let g:neocomplete#omni#min_pattern_length        = 2
-  let g:neocomplete#sources#omni#input_patterns = {}
-  let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
-  let g:neocomplete#enable_auto_delimiter       = 1
+    Plug 'Shougo/neocomplete.vim'
+    let g:neocomplete#enable_at_startup           = 1
+    let g:neocomplete#enable_smart_case           = 1
+    let g:neocomplete#omni#min_pattern_length        = 2
+    let g:neocomplete#sources#omni#input_patterns = {}
+    let g:neocomplete#data_directory              = g:vim_home . '/.cache/neocomplete'
+    let g:neocomplete#enable_auto_delimiter       = 1
 endif
 
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-" }}}
+" ....................................................................... }}}1
 
-" {{{ notes taking gang... only for macvim
+" Vimwiki................................................................ {{{1
 if has("mac")
-  Plug 'vimwiki/vimwiki' "{{{
+  Plug 'vimwiki/vimwiki'
   " always change to the directory of the file
   " so that FZF within the dir works better
   " so that it does not take over tab that is required by ultisnips
@@ -229,10 +224,9 @@ if has("mac")
 
   Plug 'roylez/zwiki'
   " Plug '~/workspace/test/zwiki'
-" }}}
 
-  " start up menu
-  Plug 'mhinz/vim-startify' "{{{
+" start up menu ......................................................... {{{2
+  Plug 'mhinz/vim-startify'
   autocmd User Startified setlocal cursorline
 
   let g:startify_files_number = 5
@@ -258,11 +252,11 @@ if has("mac")
         \   let t:startify_new_tab = 1 |
         \   Startify |
         \ endif
-  "}}}
+" ....................................................................... }}}2
 endif
-" }}}
+" ....................................................................... }}}1
 
-" the tpope gang... {{{
+" tpope gang............................................................. {{{1
 Plug 'tpope/vim-surround'
 let g:surround_{char2nr('b')} = "**\r**"
 Plug 'tpope/vim-endwise'
@@ -281,7 +275,7 @@ let g:projectionist_heuristics = {
       \   "defaults/main.yml": { "type": "default", "alternate": "tasks/main.yml"  },
       \ },
       \ }
-" }}}
+" ....................................................................... }}}1
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
@@ -290,7 +284,7 @@ nmap <silent> <leader>t :TestNearest<CR>
 let test#strategy = "dispatch"
 " }}}
 
-" {{{ Plug ale
+" {{{ ale
 if has("nvim") || version > 800
   Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
   let g:ale_open_list            = 1
@@ -311,8 +305,39 @@ if has("nvim") || version > 800
 endif
 " }}}
 
+" vim-chalk.............................................................. {{{1
+Plug 'dbmrq/vim-chalk'
+set foldmethod=marker
+" The character used as padding when aligning markers
+let g:chalk_char = "."
+" Files for which to add a space between the marker and the current text
+au BufRead,BufNewFile *.vim let b:chalk_space_before = 1
+
+" Create fold at visual selection
+vmap zf <Plug>Chalk
+" Create fold at operator movement
+nmap zf <Plug>Chalk
+" Create fold for specified number of lines
+nmap zF <Plug>ChalkRange
+
+" Create single (opening) fold marker at current level or specified count
+nmap Zf <Plug>SingleChalk
+" Create single (opening) fold marker at next levelor specified count
+nmap ZF <Plug>SingleChalkUp
+
+" Increment current fold level
+nmap =z <Plug>ChalkUp
+" Decrement current fold level
+nmap -z <Plug>ChalkDown
+" Increment levels in selection
+vmap =z <Plug>ChalkUp
+" Decrement levels in selection
+vmap -z <Plug>ChalkDown
+" ....................................................................... }}}1
+
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
+" vim-repl............................................................... {{{1
 Plug 'sillybun/vim-repl'
 nmap <leader>c   :REPLToggle<CR>
 let g:repl_program = {
@@ -329,7 +354,7 @@ let g:repl_predefine_python = {
             \   'matplotlib': 'from matplotlib import pyplot as plt'
             \   }
 " let g:repl_position = 3
-
+" ....................................................................... }}}1
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
@@ -353,7 +378,7 @@ Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 "===================Plug loading ends==========================================
 call plug#end()
 
-"if has 256 colour, use a 256 colour theme
+" 256 colour theme....................................................... {{{1
 if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_running")
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
@@ -364,4 +389,21 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
 else
     colorscheme tango
 endif
+" ....................................................................... }}}1
 
+" deoplete settings...................................................... {{{1
+call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
+call deoplete#custom#source('ultisnips', 'rank', 1000)
+call deoplete#custom#source('dictionary', 'matchers', ['matcher_head']) " Do not do fuzzy
+call deoplete#custom#source('dictionary', 'sorters', []) " If dictionary is already sorted, no need to sort it again.
+call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
+call deoplete#custom#option({
+            \'auto_complete_delay': 10,
+            \'check_stderr': v:false,
+            \'max_list': 20,
+            \'sources': {
+            \'_': ['ultisnips', 'tabnine', 'tmux'],
+            \'markdown': ['ultisnips', 'tabnine', 'dictionary'],
+            \'vimwiki': ['ultisnips', 'tabnine', 'dictionary']},
+\})
+" .................................................................... }}}1

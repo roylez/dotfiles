@@ -122,6 +122,7 @@ set wildmode=longest:list,full
 "set cmdheight=2
 if !has("gui_running")
   set notitle             " do not set xterm dynamic title
+  set shellcmdflag=-l\ -c " ensure gui vim gets the right PATH set
 endif
 
 set matchtime=5
