@@ -1,8 +1,8 @@
 global !p
-def to_module(fn):
-    import re
-    fn = re.sub('\.exs?', '', fn)
-    return ''.join([ i.capitalize() for i in fn.split('_') ])
+def to_module(path):
+  fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
+  return '.'.join( [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ] )
+
 endglobal
 
 snippet pry "Use IEx to pry"
@@ -34,7 +34,13 @@ IO.inspect $1
 endsnippet
 
 snippet	defm "defmodule" b
-defmodule ${1:`!p snip.rv=to_module(snip.basename)`} do
+defmodule ${1:`!p snip.rv=to_module(path)`} do
+  $0
+end
+endsnippet
+
+snippet defm "defmodule" "re.match('^\s+def', snip.buffer[snip.line])" be
+defmodule ${1:Module} do
   $0
 end
 endsnippet
@@ -155,22 +161,4 @@ snippet doc "@doc and @spec for a function" b
 $0
 """
 @spec ${1:function}( $2 ) :: $3
-endsnippet
-
-snippet defjob "job definition" b
-defmodule ${1:App.Job}.${2:`!p snip.rv=to_module(snip.basename)`} do
-  use $1
-
-  def perform( $0 ) do
-  end
-end
-endsnippet
-
-snippet defjobtest "job test" b
-defmodule ${1:Module}.Test.Job.${2:`!p snip.rv=to_module(snip.basename)`} do
-  use $1.DataCase
-  alias $1.Job
-
-  $0
-end
 endsnippet
