@@ -500,7 +500,10 @@ fi
 if ( bin-exist fzf ); then
   ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
   # molokai themed
-  export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
+  if [[ $- == *i* ]]; then
+    # only set default opts when in interactive shell
+    export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
+  fi
   case $DISTRO in
     darwin*.arm64)  fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
     darwin20.*)     fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;

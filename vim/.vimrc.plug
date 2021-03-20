@@ -403,7 +403,8 @@ call deoplete#custom#option({
             \'max_list': 20,
             \'sources': {
             \'_': ['ultisnips', 'tabnine', 'tmux'],
-            \'markdown': ['ultisnips', 'tabnine', 'dictionary'],
-            \'vimwiki': ['ultisnips', 'tabnine', 'dictionary']},
+            \'markdown': ['ultisnips', 'dictionary'],
+            \'vim-edit': ['ultisnips', 'dictionary'],
+            \'vimwiki': ['ultisnips', 'dictionary']},
 \})
 " .................................................................... }}}1
