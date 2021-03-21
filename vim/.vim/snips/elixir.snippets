@@ -1,15 +1,86 @@
 global !p
 def to_module(path):
   fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
-  return '.'.join( [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ] )
+  mod = '.'.join( [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ] )
+  return ''.join( [ i.capitalize() for i in mod.split('_') ] )
 
 endglobal
 
-snippet pry "Use IEx to pry"
+snippet 'requir IEx' "Use IEx to pry"
 require IEx; IEx.pry
 endsnippet
 
-snippet useg "Genserver" b
+snippet 'def init' "def init ..." b
+@spec init( ${1:args} )  :: { :ok, state :: term } | { :stop, reason :: term }
+def init( ${2:args} ) do
+  $0
+  { :ok, state }
+end
+endsnippet 
+
+snippet IO.inspect "IO.inspect" b
+IO.inspect $1
+endsnippet
+
+snippet	defmodule "defmodule" b
+defmodule ${1:`!p snip.rv=to_module(path)`} do
+  $0
+end
+endsnippet
+
+snippet defmodule "defmodule" "snip.buffer[snip.line].startswith('  ')" be
+defmodule ${1:Module} do
+  $0
+end
+endsnippet
+
+snippet	'def "def function(...)" b
+def ${1:function}(${2:...}) do
+  $0
+end
+endsnippet
+
+snippet	imp "import Config" b
+import Config
+
+config :$0
+endsnippet
+
+snippet 'use Supervisor' "Supervisor" b
+use Supervisor
+
+def start_link(arg) do
+  Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
+end
+
+def init(_) do
+
+  children = [
+    # Worker  ( { Worker, [] } )
+    # { Worker, [args] }
+    # %{ id: Worker, 
+    #    type: :worker, 
+    #    start: { Worker, :start_lin, [[]] },
+    #    restart: ..., shutdown: ... }
+    ${2:Module},
+  ]
+  Supervisor.init(children, strategy: :one_for_one)
+end
+endsnippet
+
+snippet 'use DynamicSupervisor' "DynamicSupervisor" b
+use DynamicSupervisor
+
+def start_link(_) do
+  DynamicSupervisor.start_link(__MODULE__, nil, name: __MODULE__)
+end
+
+def init(_) do
+  DynamicSupervisor.init(strategy: :one_for_one)
+end
+endsnippet
+
+snippet 'use GenServer' "Genserver" b
 use GenServer
 
 def init(state) do
@@ -21,113 +92,7 @@ def start_link(state) do
 end
 endsnippet
 
-snippet definit "def init ..." b
-@spec init( ${1:args} )  :: { :ok, state :: term } | { :stop, reason :: term }
-def init( ${2:args} ) do
-  $0
-  { :ok, state }
-end
-endsnippet 
-
-snippet ins "IO.inspect" b
-IO.inspect $1
-endsnippet
-
-snippet	defm "defmodule" b
-defmodule ${1:`!p snip.rv=to_module(path)`} do
-  $0
-end
-endsnippet
-
-snippet defm "defmodule" "re.match('^\s+def', snip.buffer[snip.line])" be
-defmodule ${1:Module} do
-  $0
-end
-endsnippet
-
-snippet	def "def function(...)" b
-def ${1:function}(${2:...}) do
-  $0
-end
-endsnippet
-
-snippet	config "Mix config" b
-use Mix.Config
-
-config :$0
-endsnippet
-
-snippet defsup "Supervisor" b
-defmodule ${1:App.Supervisor} do
-  use Supervisor
-
-  def start_link(arg) do
-    Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
-  end
-
-  def init(_) do
-
-    children = [
-      # Worker  ( { Worker, [] } )
-      # { Worker, [args] }
-      # %{ id: Worker, 
-      #    type: :worker, 
-      #    start: { Worker, :start_lin, [[]] },
-      #    restart: ..., shutdown: ... }
-      ${2:Module},
-    ]
-    Supervisor.init(children, strategy: :one_for_one)
-  end
-  
-end
-endsnippet
-
-snippet	foldp "folded code block" b
-# ${1:comment} {{{
-$0
-# }}}
-endsnippet
-
-snippet context "Context methods create/list/update/delete" b
-# ${1:Module} {{{
-def create_${1/\w+/\l$0/}(attrs \\\\ %{}) do
-  %$1{}
-  |> $1.changeset(attrs)
-  |> Repo.insert()
-end
-
-def list_${1/\w+/\l$0/} do
-  $1 |> Repo.all
-end
-
-def get_${1/\w+/\l$0/}!(id), do: Repo.get!($1, id)
-
-def update_${1/\w+/\l$0/}(%$1{}=${1/\w+/\l$0/}, attrs) do
-  ${1/\w+/\l$0/}
-  |> $1.changeset(attrs)
-  |> Repo.update()
-end
-
-def delete_${1/\w+/\l$0/}(%$1{} = ${1/\w+/\l$0/}) do
-  Repo.delete(${1/\w+/\l$0/})
-end
-# }}}
-endsnippet
-
-snippet	defget "get_object(id, preloads \\ [])" b
-def get_${1:object}(id, preloads \\\\ ${2:[]})
-def get_$1(id, preloads) do
-  { :ok, ${1/\w+/\u$0/} |> preload(^preloads) |> Repo.get(id) }
-end
-endsnippet
-
-snippet	deflist "list_object(filters \\ [])" b
-def list_${1:object}(filters \\\\ ${2:[]}) do
-  { :ok, ${1/\w+/\u$0/} |> where(^filters) |> Repo.all() }
-end
-endsnippet
-
-snippet defusing "defmacro __using__(_)" b
+snippet defmacro "defmacro __using__(_)" b
 defmacro __using__(${1:_}) do
   quote do
     $0
@@ -152,11 +117,11 @@ def ${1:query_name}( query \\\\ __MODULE__ ) do
 end
 endsnippet
 
-snippet json "@derive {...}" b
+snippet @der "@derive {...}" b
 @derive {${1:Jason.Encoder}, only: ~w($0)a }
 endsnippet
 
-snippet doc "@doc and @spec for a function" b
+snippet @doc "@doc and @spec for a function" b
 @doc """
 $0
 """
