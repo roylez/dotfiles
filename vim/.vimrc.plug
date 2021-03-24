@@ -120,28 +120,13 @@ if has("mac")
 endif
 Plug 'junegunn/fzf.vim'
 
+let $FZF_DEFAULT_OPTS='-e --info=inline --reverse'
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction
 command! ProjectFiles execute 'GFiles' s:find_git_root()
 
 set grepprg=rg\ --vimgrep
-" Customize fzf colors to match your color scheme
-" - fzf#wrap translates this to a set of `--color` options
-let g:fzf_colors =
-            \ { 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg', 'Normal'],
-            \ 'hl':      ['fg', 'Comment'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-            \ 'hl+':     ['fg', 'Statement'],
-            \ 'info':    ['fg', 'PreProc'],
-            \ 'border':  ['fg', 'Ignore'],
-            \ 'prompt':  ['fg', 'Conditional'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] }
 if v:version >= 802
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.5, 'border': 'rounded' } }
 else
@@ -155,11 +140,6 @@ let g:fzf_history_dir = $HOME . "/.backup/fzf_history"
 if !isdirectory( g:fzf_history_dir )
   call mkdir( g:fzf_history_dir , "p")
 endif
-
-command! -bang -nargs=* Rg call fzf#vim#grep(
-     \ "rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>),
-     \ 1, fzf#vim#with_preview({'options': '-e --info inline -n 4..'}), <bang>0 )
-     "\ fzf#wrap({'options': g:fzf_rg_opts, 'dir': systemlist('git rev-parse --show-toplevel 2>/dev/null || pwd')[0] }),
 
 nnoremap <silent> <leader>/ :Rg<CR>
 nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
@@ -262,6 +242,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch'
+let g:dispatch_no_maps = 1
 Plug 'tpope/vim-projectionist'
 let g:projectionist_heuristics = {
       \ "mix.exs": {
@@ -278,10 +259,55 @@ let g:projectionist_heuristics = {
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
-Plug 'janko-m/vim-test' " {{{
-nmap <silent> <leader>t :TestNearest<CR>
-let test#strategy = "dispatch"
+" Plug 'janko-m/vim-test' " {{{
+" nmap <silent> <leader>t :TestNearest<CR>
+" let test#strategy = "dispatch"
 " }}}
+
+" AsyncTasks............................................................. {{{1
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+let g:asyncrun_open = 6
+let g:asynctasks_term_pos = "dispatch"
+
+function! s:dispatch_runner(opts)
+    execute "Dispatch " . a:opts.cmd
+endfunction
+let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
+let g:asyncrun_runner.dispatch = function('s:dispatch_runner')
+let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.gitignore']
+
+function! s:fzf_sink(what)
+    let p1 = stridx(a:what, '<')
+    if p1 >= 0
+        let name = strpart(a:what, 0, p1)
+        let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
+        if name != ''
+            exec "AsyncTask ". fnameescape(name)
+        endif
+    endif
+endfunction
+
+function! s:fzf_task()
+    let rows = asynctasks#source(&columns * 48 / 100)
+    let source = []
+    for row in rows
+        let name = row[0]
+        let source += [name . '  ' . row[1] . '  : ' . row[2]]
+    endfor
+    let opts = { 'source': source, 'sink': function('s:fzf_sink'),
+                \ 'options': '+m --nth 1 --prompt "TASKS> " ' }
+    if exists('g:fzf_layout')
+        for key in keys(g:fzf_layout)
+            let opts[key] = deepcopy(g:fzf_layout[key])
+        endfor
+    endif
+    call fzf#run(opts)
+endfunction
+
+command! -nargs=0 Tasks call s:fzf_task()
+nnoremap <silent> <leader>t :Tasks<CR>
+" ....................................................................... }}}1
 
 " {{{ ale
 if has("nvim") || version > 800
