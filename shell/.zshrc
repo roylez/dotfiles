@@ -502,7 +502,18 @@ if ( bin-exist fzf ); then
   # molokai themed
   if [[ $- == *i* ]]; then
     # only set default opts when in interactive shell
-    export FZF_DEFAULT_OPTS=' --algo v1 --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196 --color info:144,prompt:161,spinner:135,pointer:135,marker:118'
+    export FZF_DEFAULT_OPTS="
+    --exact
+    --algo=v1
+    --info=inline
+    --layout=reverse
+    --height=40%
+    --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118
+    --preview-window=:hidden
+    --bind '?:toggle-preview'
+    --bind 'ctrl-i:execute(vim {+})'
+    --bind 'ctrl-m:execute(less {+})'
+    "
   fi
   case $DISTRO in
     darwin*.arm64)  fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
@@ -514,6 +525,7 @@ if ( bin-exist fzf ); then
   for file in $fzf_completion_dir/*.zsh; do
     source $file
   done
+  alias f=fzf
 fi
 # }}}
 
