@@ -25,9 +25,12 @@ let g:vim_home=$HOME.'/.vim'
 " {{{ general settings
 if has("gui_running")
   set background=light
+  set shellcmdflag=-l\ -c " ensure gui vim gets the right PATH set
 else
   set background=dark
+  set notitle             " do not set xterm dynamic title
 endif
+
 set notermguicolors
 set nocompatible
 
@@ -120,11 +123,6 @@ set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %
 " set wildmenu         " show possible command when pressing <TAB>
 set wildmode=longest:list,full
 "set cmdheight=2
-if !has("gui_running")
-  set notitle             " do not set xterm dynamic title
-  set shellcmdflag=-l\ -c " ensure gui vim gets the right PATH set
-endif
-
 set matchtime=5
 set lazyredraw          " faster for macros
 set ttyfast             " better for xterm
