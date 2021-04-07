@@ -52,7 +52,7 @@ set runtimepath+=/usr/share/vim/vimfiles
 " this is used a lot in plugin settings, and its default 1s timeout is too short
 let mapleader="\<space>"
 let maplocalleader="\<space>"
-set timeoutlen=2000 ttimeoutlen=0
+set timeoutlen=1000 ttimeoutlen=0
 
 if filereadable( $HOME . '/.vimrc.plug' )
     source $HOME/.vimrc.plug

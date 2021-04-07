@@ -75,9 +75,6 @@ Plug 'blueyed/vim-diminactive'
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
-" multiple highlights <leader>k, clear with <leader>K
-Plug 'lfv89/vim-interestingwords'
-
 " comment / uncomment, context aware
 Plug 'Shougo/context_filetype.vim', { 'for': 'vue' }
 Plug 'tyru/caw.vim' " {{{
@@ -156,7 +153,6 @@ Plug 'wellle/tmux-complete.vim'
 if has("nvim") || version > 800
     if has("nvim")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        Plug 'ncm2/float-preview.nvim'
     else
         Plug 'Shougo/deoplete.nvim'
         Plug 'roxma/nvim-yarp'
@@ -268,13 +264,16 @@ Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
 let g:asyncrun_open = 6
-let g:asynctasks_term_pos = "dispatch"
+let g:asynctasks_term_pos = "floaterm"
 
-function! s:dispatch_runner(opts)
-    execute "Dispatch " . a:opts.cmd
+" function! s:dispatch_runner(opts)
+"     execute "Dispatch " . a:opts.cmd
+" endfunction
+function! s:floaterm_runner(opts)
+    execute "FloatermNew --disposable --position=topright" . a:opts.cmd
 endfunction
 let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
-let g:asyncrun_runner.dispatch = function('s:dispatch_runner')
+let g:asyncrun_runner.floaterm = function('s:floaterm_runner')
 let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.gitignore']
 
 function! s:fzf_sink(what)
@@ -360,24 +359,34 @@ vmap =z <Plug>ChalkUp
 vmap -z <Plug>ChalkDown
 " ....................................................................... }}}1
 
+Plug 'liuchengxu/vim-which-key'
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+Plug 'voldikss/vim-floaterm'
+let g:floaterm_rootmarkers = ['.project', '.git', '.hg', '.svn', '.root', '.gitignore']
+let g:floaterm_autoclose = 2
+let g:floaterm_keymap_toggle = '<leader>c'
+nnoremap <silent> <leader>f :WhichKey '<Space>'<CR>
+command! LF FloatermToggle lf
+
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
 " vim-repl............................................................... {{{1
-Plug 'sillybun/vim-repl'
-nmap <leader>c   :REPLToggle<CR>
-let g:repl_program = {
-            \   'default': 'bash',
-            \   'python': 'ipython',
-            \   'ruby': 'pry',
-            \   }
-let g:repl_exit_commands = {
-      \ 'python': 'quit()',
-      \ 'default': 'exit',
-      \ }
-let g:repl_predefine_python = {
-            \   'numpy': 'import numpy as np',
-            \   'matplotlib': 'from matplotlib import pyplot as plt'
-            \   }
+" Plug 'sillybun/vim-repl'
+" nmap <leader>c   :REPLToggle<CR>
+" let g:repl_program = {
+"            \   'default': 'bash',
+"            \   'python': 'ipython',
+"            \   'ruby': 'pry',
+"            \   }
+" let g:repl_exit_commands = {
+"      \ 'python': 'quit()',
+"      \ 'default': 'exit',
+"      \ }
+" let g:repl_predefine_python = {
+"            \   'numpy': 'import numpy as np',
+"            \   'matplotlib': 'from matplotlib import pyplot as plt'
+"            \   }
 " let g:repl_position = 3
 " ....................................................................... }}}1
 "-------------------------------------------------------------------------------
