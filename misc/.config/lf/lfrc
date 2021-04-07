@@ -16,7 +16,10 @@ cmd open ${{
     text/x-*|application/json:*) $EDITOR "$f";;
     text/*) $PAGER "$f";;
     *:pages) $OPENER "$f";;
-    application/x-tar:*|application/x-7z*|application/*zip:*) lf -remote "send $id untar" ;;
+    application/x-tar:*) lf -remote "send $id untar" ;;
+    application/x-7z*) lf -remote "send $id untar" ;;
+    application/*zip:*) lf -remote "send $id untar" ;;
+    application/x-rar:*) lf -remote "send $id untar" ;;
     *) $OPENER "$f";;
   esac
 }}
@@ -33,9 +36,9 @@ cmd fzf_jump ${{
 
 cmd untar !{{
   case "$f" in
-    *.tar.*)             tar xvf "$f";;
-    *.zip|*.7z|*.lzma)   7z x "$f";;
-    *)                   echo "Not an archive file!";;
+    *.tar.*)                   tar xvf "$f";;
+    *.zip|*.7z|*.lzma|*.rar)   7z x "$f";;
+    *)                         echo "Not an archive file!";;
   esac
 }}
 
