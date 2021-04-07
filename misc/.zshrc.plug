@@ -10,8 +10,6 @@ export AUTOENV_HANDLE_LEAVE=1
 #
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
-zplug "asdf-vm/asdf", use:asdf.sh
-
 zplug "zsh-users/zsh-autosuggestions", use:zsh-autosuggestions.zsh
 
 # Install plugins if there are plugins that have not been installed
