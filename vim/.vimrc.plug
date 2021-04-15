@@ -190,7 +190,7 @@ if has("mac")
   let g:vimwiki_create_link    = 0
   let g:vimwiki_list = [{'path': '~/workspace/doc/markdown/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
   autocmd FileType vimwiki setlocal spell
-  autocmd FileType vimwiki nnoremap <Leader>t :VimwikiToggleListItem<CR>
+  autocmd FileType vimwiki nnoremap tt :VimwikiToggleListItem<CR>
   function! PomodoroCount()
       let save_pos = getpos(".")
       execute "%s/\\(### " . strftime("%Y-%m-%d") . "\\).*$/\\1    " . system("~/bin/read_km_var.sh POMODORO_COUNT")[:-2] . "/e"
@@ -219,7 +219,7 @@ if has("mac")
   let g:startify_commands = [
         \ { 'b': ['空白文档',   'PasteEdit'            ]},
         \ { 'B': ['剪切板',     'PasteEdit +norm\ "+P' ]},
-        \ { 'z': ['Zettel笔记', 'Znew +norm\ "+P'      ]} ]
+        \ { 'z': ['Zettel笔记', 'ZwikiNew +norm\ "+P'  ]} ]
   autocmd VimEnter * let t:startify_new_tab = 1
   " make startify start on every new tab
   autocmd BufEnter *
@@ -254,59 +254,6 @@ let g:projectionist_heuristics = {
 " ....................................................................... }}}1
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
-
-" Plug 'janko-m/vim-test' " {{{
-" nmap <silent> <leader>t :TestNearest<CR>
-" let test#strategy = "dispatch"
-" }}}
-
-" AsyncTasks............................................................. {{{1
-Plug 'skywind3000/asynctasks.vim'
-Plug 'skywind3000/asyncrun.vim'
-let g:asyncrun_open = 6
-let g:asynctasks_term_pos = "floaterm"
-
-" function! s:dispatch_runner(opts)
-"     execute "Dispatch " . a:opts.cmd
-" endfunction
-function! s:floaterm_runner(opts)
-    execute "FloatermNew --disposable --position=topright" . a:opts.cmd
-endfunction
-let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
-let g:asyncrun_runner.floaterm = function('s:floaterm_runner')
-let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.gitignore']
-
-function! s:fzf_sink(what)
-    let p1 = stridx(a:what, '<')
-    if p1 >= 0
-        let name = strpart(a:what, 0, p1)
-        let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
-        if name != ''
-            exec "AsyncTask ". fnameescape(name)
-        endif
-    endif
-endfunction
-
-function! s:fzf_task()
-    let rows = asynctasks#source(&columns * 48 / 100)
-    let source = []
-    for row in rows
-        let name = row[0]
-        let source += [name . '  ' . row[1] . '  : ' . row[2]]
-    endfor
-    let opts = { 'source': source, 'sink': function('s:fzf_sink'),
-                \ 'options': '+m --nth 1 --prompt "TASKS> " ' }
-    if exists('g:fzf_layout')
-        for key in keys(g:fzf_layout)
-            let opts[key] = deepcopy(g:fzf_layout[key])
-        endfor
-    endif
-    call fzf#run(opts)
-endfunction
-
-command! -nargs=0 Tasks call s:fzf_task()
-nnoremap <silent> <leader>t :Tasks<CR>
-" ....................................................................... }}}1
 
 " {{{ ale
 if has("nvim") || version > 800
@@ -362,33 +309,53 @@ vmap -z <Plug>ChalkDown
 Plug 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
-Plug 'voldikss/vim-floaterm'
-let g:floaterm_rootmarkers = ['.project', '.git', '.hg', '.svn', '.root', '.gitignore']
-let g:floaterm_autoclose = 2
-let g:floaterm_keymap_toggle = '<leader>c'
-nnoremap <silent> <leader>f :WhichKey '<Space>'<CR>
-command! LF FloatermToggle lf
+" AsyncTasks............................................................. {{{1
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+let g:asyncrun_open = 6
+let g:asynctasks_term_pos = "dispatch"
+
+function! s:dispatch_runner(opts)
+    execute "Dispatch " . a:opts.cmd
+endfunction
+let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
+let g:asyncrun_runner.dispatch = function('s:dispatch_runner')
+let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg', '.gitignore']
+
+function! s:fzf_sink(what)
+    let p1 = stridx(a:what, '<')
+    if p1 >= 0
+        let name = strpart(a:what, 0, p1)
+        let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
+        if name != ''
+            exec "AsyncTask ". fnameescape(name)
+        endif
+    endif
+endfunction
+
+function! s:fzf_task()
+    let rows = asynctasks#source(&columns * 48 / 100)
+    let source = []
+    for row in rows
+        let name = row[0]
+        let source += [name . '  ' . row[1] . '  : ' . row[2]]
+    endfor
+    let opts = { 'source': source, 'sink': function('s:fzf_sink'),
+                \ 'options': '+m --nth 1 --prompt "TASKS> " ' }
+    if exists('g:fzf_layout')
+        for key in keys(g:fzf_layout)
+            let opts[key] = deepcopy(g:fzf_layout[key])
+        endfor
+    endif
+    call fzf#run(opts)
+endfunction
+
+command! -nargs=0 Tasks call s:fzf_task()
+nnoremap <silent> <leader>t :Tasks<CR>
+" ....................................................................... }}}1
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
-" vim-repl............................................................... {{{1
-" Plug 'sillybun/vim-repl'
-" nmap <leader>c   :REPLToggle<CR>
-" let g:repl_program = {
-"            \   'default': 'bash',
-"            \   'python': 'ipython',
-"            \   'ruby': 'pry',
-"            \   }
-" let g:repl_exit_commands = {
-"      \ 'python': 'quit()',
-"      \ 'default': 'exit',
-"      \ }
-" let g:repl_predefine_python = {
-"            \   'numpy': 'import numpy as np',
-"            \   'matplotlib': 'from matplotlib import pyplot as plt'
-"            \   }
-" let g:repl_position = 3
-" ....................................................................... }}}1
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------

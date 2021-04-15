@@ -22,13 +22,16 @@ endif
 let g:vim_home=$HOME.'/.vim'
 " }}}
 
+set shellcmdflag=-c
+
 " {{{ general settings
 if has("gui_running")
   set background=light
-  set shellcmdflag=-l\ -c " ensure gui vim gets the right PATH set
+  "ensure gui vim gets the right PATH set
+  " set shellcmdflag=-l\ -c
 else
   set background=dark
-  set notitle             " do not set xterm dynamic title
+  set notitle
 endif
 
 set notermguicolors
@@ -203,7 +206,6 @@ nmap to :tabnew<CR>
 nmap tc :tabclose<CR>
 nmap gf <C-W>gf
 
-" clear search highlight with F5
 set pastetoggle=<F1>
 
 " use <leader>y/p to interact with clipboard
