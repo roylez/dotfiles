@@ -220,18 +220,11 @@ vmap <Leader>P "+P
 nmap <leader>r :source ~/.vimrc<CR>:echom "VIM configuration reloaded"<CR>
 " }}}
 
-" {{{ file type settings
-"Python
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-
 "ruby
 "no folding for comment block and if/do blocks
 let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
-autocmd FileType ruby set omnifunc=rubycomplete#Complete
-autocmd FileType ruby let g:rubycomplete_buffer_loading = 1
-autocmd FileType ruby let g:rubycomplete_classes_in_global = 1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
 
 "emails,
