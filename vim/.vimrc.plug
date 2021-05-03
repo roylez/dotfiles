@@ -253,6 +253,13 @@ let g:projectionist_heuristics = {
       \ }
 " ....................................................................... }}}1
 
+Plug 'easymotion/vim-easymotion'
+let g:EasyMotion_do_mapping = 0
+let g:EasyMotion_smartcase = 1
+map f <Plug>(easymotion-f)
+map F <Plug>(easymotion-F)
+map <leader>s <Plug>(easymotion-overwin-f)
+
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
 " {{{ ale

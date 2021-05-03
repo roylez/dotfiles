@@ -511,8 +511,8 @@ if ( bin-exist fzf ); then
     --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118
     --preview-window=:hidden
     --bind '?:toggle-preview'
-    --bind 'ctrl-i:execute(vim {+})'
-    --bind 'ctrl-m:execute(less {+})'
+    --bind 'ctrl-e:execute(vim {})+abort'
+    --bind 'tab:execute(less {})'
     "
   fi
   case $DISTRO in
@@ -582,8 +582,8 @@ alias grep='grep -a -I --color=auto'
 alias freeze='kill -STOP'
 alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
-# alias ll='ls -li -ctr'
-alias ll='ls -li'
+alias ll='ls -li -ctr'
+# alias ll='ls -li'
 alias df='df -Th'
 alias du='du -h'
 alias dmesg='dmesg -H'
