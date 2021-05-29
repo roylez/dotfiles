@@ -253,13 +253,6 @@ let g:projectionist_heuristics = {
       \ }
 " ....................................................................... }}}1
 
-Plug 'easymotion/vim-easymotion'
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-map f <Plug>(easymotion-f)
-map F <Plug>(easymotion-F)
-map <leader>s <Plug>(easymotion-overwin-f)
-
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
 
 " {{{ ale
@@ -282,36 +275,6 @@ if has("nvim") || version > 800
   autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
 endif
 " }}}
-
-" vim-chalk.............................................................. {{{1
-Plug 'dbmrq/vim-chalk'
-set foldmethod=marker
-" The character used as padding when aligning markers
-let g:chalk_char = "."
-" Files for which to add a space between the marker and the current text
-au BufRead,BufNewFile *.vim let b:chalk_space_before = 1
-
-" Create fold at visual selection
-vmap zf <Plug>Chalk
-" Create fold at operator movement
-nmap zf <Plug>Chalk
-" Create fold for specified number of lines
-nmap zF <Plug>ChalkRange
-
-" Create single (opening) fold marker at current level or specified count
-nmap Zf <Plug>SingleChalk
-" Create single (opening) fold marker at next levelor specified count
-nmap ZF <Plug>SingleChalkUp
-
-" Increment current fold level
-nmap =z <Plug>ChalkUp
-" Decrement current fold level
-nmap -z <Plug>ChalkDown
-" Increment levels in selection
-vmap =z <Plug>ChalkUp
-" Decrement levels in selection
-vmap -z <Plug>ChalkDown
-" ....................................................................... }}}1
 
 Plug 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>

@@ -15,6 +15,7 @@ erl_crash.dump
 *.env
 .out
 .tags
+.tasks
 .git
 .tool-versions
 .autoenv*
