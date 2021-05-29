@@ -89,10 +89,10 @@
         ;          ] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
-                 [:!TOh :left_arrow  nil]
-                 [:!TOj :down_arrow  nil]
-                 [:!TOk :up_arrow    nil]
-                 [:!TOl :right_arrow nil]
+                 [:!Ch :left_arrow  nil]
+                 [:!Cj :down_arrow  nil]
+                 [:!Ck :up_arrow    nil]
+                 [:!Cl :right_arrow nil]
                 ]}
         {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
          :rules [
