@@ -5,7 +5,7 @@
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 #if [[  "$-" != *i* ]]; then return 0; fi
 
-export PATH=$HOME/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 [[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
 
