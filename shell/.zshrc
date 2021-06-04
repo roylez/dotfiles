@@ -7,7 +7,7 @@
 
 export PATH=$HOME/bin:$PATH
 
-[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(lsb_release -si).$(uname -m)
+[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
@@ -519,7 +519,7 @@ if ( bin-exist fzf ); then
     darwin*.arm64)  fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
     darwin20.*)     fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
     darwin*.x86_64) fzf_completion_dir=/usr/local/opt/fzf/shell    ;;
-    VoidLinux*)     fzf_completion_dir=/usr/share/doc/fzf          ;;
+    void.*)         fzf_completion_dir=/usr/share/doc/fzf          ;;
     *)              fzf_completion_dir=/usr/share/fzf              ;;
   esac
   for file in $fzf_completion_dir/*.zsh; do

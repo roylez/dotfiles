@@ -1,0 +1,6 @@
+snippet lb "Traefik enable" b
+"lb.enable=true",
+endsnippet
+snippet lbwhite "Traefik ipwhitelist middleware" b
+"lb.http.middlewares.api.ipwhitelist.sourcerange=127.0.0.1/32,100.64.0.1/10",
+endsnippet
