@@ -17,6 +17,12 @@ endsnippet
 snippet tod "today" b
 ### `!p snip.rv=title_date()`
 
+`!p
+from datetime import date
+rv = [ ]
+if date.today().weekday() >= 5: rv.append("- [ ] Review calendar for next week")
+if date.today().day <= 2: rv.append("- [ ] Habit: review\n- [ ] Bill payments")
+snip.rv="\n".join(rv)`
 $0
 endsnippet
 
@@ -42,7 +48,6 @@ snippet work "work flow" b
 - [ ] Meditate
 - [ ] Emails
 - [ ] time card
-- [ ] Calendar
 - [ ] Daily Affirmations
 - [ ] how-to-type
 - [ ] workspace clean up
