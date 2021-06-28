@@ -4,3 +4,10 @@ endsnippet
 snippet lbwhite "Traefik ipwhitelist middleware" b
 "lb.http.middlewares.api.ipwhitelist.sourcerange=127.0.0.1/32,100.64.0.1/10",
 endsnippet
+
+snippet constraintX86 "only on x86" b
+constraint {
+  attribute = "${attr.cpu.arch}"
+  value = "amd64"
+}
+endsnippet

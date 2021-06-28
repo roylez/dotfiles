@@ -326,6 +326,11 @@ nnoremap <silent> <leader>t :Tasks<CR>
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 
+Plug 'mg979/vim-visual-multi'
+
+Plug 'mattn/emmet-vim'
+let g:user_emmet_leader_key=','
+
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
@@ -343,8 +348,6 @@ autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
-
-Plug 'shmargum/vim-sass-colors', {'for': ['sass', 'scss']}
 
 "===================Plug loading ends==========================================
 call plug#end()

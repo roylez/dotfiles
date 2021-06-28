@@ -83,13 +83,14 @@ endsnippet
 snippet 'use GenServer' "Genserver" b
 use GenServer
 
-def init(state) do
-  { :ok, state }
+def start_link(state) do
+  GenServer.start_link(__MODULE__, state, name: __MODULE__)
 end
 
-def start_link(state) do
-  GenServer.start_link(__MODULE__, state, name: ${2:__MODULE__})
+def init(${1:state}) do
+  { :ok, ${2:state} }
 end
+
 endsnippet
 
 snippet defmacro "defmacro __using__(_)" b
@@ -126,4 +127,11 @@ snippet @doc "@doc and @spec for a function" b
 $0
 """
 @spec ${1:function}( $2 ) :: $3
+endsnippet
+
+snippet 'def handle_info' "handle_info(msg, state)" b
+def handle_info(${1:msg}, state) do
+  $0
+  { :noreply, state }
+end
 endsnippet
