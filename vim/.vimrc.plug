@@ -349,6 +349,8 @@ autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
+Plug 'slime-lang/vim-slime-syntax'
+autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
 "===================Plug loading ends==========================================
 call plug#end()
 
