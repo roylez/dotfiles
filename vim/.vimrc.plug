@@ -351,6 +351,8 @@ autocmd FileType ledger nnoremap G Gzz
 
 Plug 'slime-lang/vim-slime-syntax'
 autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
+autocmd FileType elixir,eelixir setlocal shiftwidth=2
+
 "===================Plug loading ends==========================================
 call plug#end()
 

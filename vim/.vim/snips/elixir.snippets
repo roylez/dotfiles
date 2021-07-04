@@ -135,3 +135,24 @@ def handle_info(${1:msg}, state) do
   { :noreply, state }
 end
 endsnippet
+
+snippet 'def handle_continue' "handle_continue(msg, state)" b
+def handle_continue(${1:msg}, state) do
+  $0
+  {:noreply, state}
+end
+endsnippet
+
+snippet 'def handle_call' "handle_call(msg, from, state)" b
+def handle_call(${1:msg}, _from, state) do
+  $0
+  { :reply, res, state }
+end
+endsnippet
+
+snippet 'def handle_cast' "handle_cast(msg, state)" b
+def handle_cast(${1:msg}, state) do
+  $0
+  { :noreply, state }
+end
+endsnippet
