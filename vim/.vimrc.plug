@@ -123,6 +123,16 @@ function! s:find_git_root()
 endfunction
 command! ProjectFiles execute 'GFiles' s:find_git_root()
 
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
 set grepprg=rg\ --vimgrep
 if v:version >= 802
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.5, 'border': 'rounded' } }
@@ -138,8 +148,8 @@ if !isdirectory( g:fzf_history_dir )
   call mkdir( g:fzf_history_dir , "p")
 endif
 
-nnoremap <silent> <leader>/ :Rg<CR>
-nnoremap <silent> <leader>n :Rg <C-R><C-W><CR>
+nnoremap <silent> <leader>/ :RG<CR>
+nnoremap <silent> <leader>n :RG <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
@@ -330,6 +340,11 @@ Plug 'mg979/vim-visual-multi'
 
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
+
+Plug 'airblade/vim-rooter'
+let g:rooter_change_directory_for_non_project_files = 'current'
+let g:rooter_cd_cmd = 'tcd'
+let g:rooter_patterns = ['.git', 'Makefile', 'mix.exs']
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "

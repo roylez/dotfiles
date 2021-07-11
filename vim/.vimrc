@@ -303,23 +303,6 @@ augroup vimrc
 augroup END
 " }}}
 
-" {{{ per tab cwd
-function! TabCD()
-  let t:tcd_executed = get(t:, 'tcd_executed', 0)
-  if !t:tcd_executed && len(@%)
-    if isdirectory(@%)
-      :execute "tcd " . @%
-    else
-      let dirname = expand("%:p:h")
-      :execute "tcd " . dirname
-    endif
-    let t:tcd_executed = 1
-  endif
-endfunction
-
-autocmd BufNewFile,BufReadPost * call TabCD()
-" }}}
-
 " {{{ Changing cursor shape per mode
 " NOTE does not work over ssh
 " 1 or 0 -> blinking block
