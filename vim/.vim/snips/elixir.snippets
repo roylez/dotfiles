@@ -1,8 +1,14 @@
 global !p
-def to_module(path):
+def mod_prefix(path):
   fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
-  mod = '.'.join( [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ] )
-  return ''.join( [ i.capitalize() for i in mod.split('_') ] )
+  prefix = [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ][:-1]
+  prefix_mods = list(map(lambda x: ''.join([i.capitalize() for i in x.split('_')]), prefix))
+  return ''.join(prefix_mods)
+
+def mod_suffix(path):
+  fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
+  suffix = [ i.capitalize() for i in re.sub(r'.*/lib/','',fn).split('/') ][-1]
+  return ''.join([ i.capitalize() for i in suffix.split('_') ])
 
 endglobal
 
@@ -23,7 +29,7 @@ IO.inspect $1
 endsnippet
 
 snippet	defmodule "defmodule" b
-defmodule ${1:`!p snip.rv=to_module(path)`} do
+defmodule ${1:`!p snip.rv=mod_prefix(path)`.}${2:`!p snip.rv=mod_suffix(path)`} do
   $0
 end
 endsnippet
