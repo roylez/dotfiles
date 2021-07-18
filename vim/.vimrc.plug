@@ -11,6 +11,7 @@ call plug#begin( g:vim_plugged_dir )
 "-------------------------------------------------------------------------------
 " NERDTree............................................................... {{{1
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+let g:NERDTreeHighlightCursorline = 1
 nmap <F4>   :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 
@@ -32,12 +33,12 @@ nnoremap <silent> <Leader>= :NERDTreeFind<CR>
 
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeExactMatchHighlightFullName    = 1
 let g:NERDTreePatternMatchHighlightFullName  = 1
 let g:NERDTreeSyntaxDisableDefaultExtensions = 1
-let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'js', 'css', 'sass']
+let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'eex', 'leex', 'slim', 'slimleex', 'slime', 'js', 'css', 'sass']
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
 " ....................................................................... }}}1
@@ -353,12 +354,13 @@ Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 "-------------------------------------------------------------------------------
 "
 " support for ansible, html5, elixir, vue, terraform file types and more
-" Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['slime']
 " prevent syntax from stop working randomly
 " autocmd FileType vue syntax sync fromstart
 " prevent vim from slowing down when editing vue
 " let g:vue_pre_processors = ['pug', 'sass']
-" let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_frontmatter = 1
 
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
@@ -366,7 +368,7 @@ autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
-Plug 'elixir-editors/vim-elixir'
+" Plug 'elixir-editors/vim-elixir'
 Plug 'roylez/vim-slime-syntax'
 autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
 autocmd FileType elixir,eelixir setlocal shiftwidth=2
