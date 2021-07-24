@@ -7,8 +7,6 @@
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
-
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
 # disable flow controll so that ctl-s does not freeze terminal and you don't
@@ -68,15 +66,11 @@ watch=(notme)
 #replace the default beep with a message
 #ZBEEP="\e[?5h\e[?5l"        # visual beep
 
-#is-at-least 4.3.0 &&
-
 # 自动加载自定义函数
 fpath=($HOME/.zfunctions $fpath)
 # 需要设置了extended_glob才能glob到所有的函数，为了补全能用，又需要放在compinit前面
 _my_functions=${fpath[1]}/*(N-.x:t)
 [[ -n $_my_functions ]] && autoload -U $_my_functions
-
-autoload -U is-at-least
 # }}}
 
 # 命令补全参数{{{
@@ -279,12 +273,6 @@ PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
 # SPROMPT - the spelling prompt
 SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
 
-#行编辑高亮模式 {{{
-# if (is-at-least 4.3); then
-#     zle_highlight=(region:bg=magenta special:bold,fg=magenta default:bold isearch:underline)
-# fi
-#}}}
-
 # }}}
 
 # 键盘定义及键绑定 {{{
@@ -292,6 +280,8 @@ SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%
 # 设置键盘 {{{
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
+[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
+
 autoload -U zkbd
 bindkey -e      #use emacs style keybindings :(
 typeset -A key  #define an array
@@ -433,20 +423,6 @@ zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 # }}}
 
-# {{{ esc-enter to run program in screen split region
-function run-command-in-split-screen() {
-    screen -X eval \
-        "focus bottom" \
-        split \
-        "focus bottom" \
-        "screen $HOME/bin/screen_run $BUFFER" \
-        "focus top"
-    zle kill-buffer
-}
-zle -N run-command-in-split-screen
-bindkey "\e\r" run-command-in-split-screen
-# }}}
-
 # }}}
 
 # 环境变量及其他参数 {{{
@@ -511,21 +487,65 @@ if ( bin-exist fzf ); then
     --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118
     --preview-window=:hidden
     --bind '?:toggle-preview'
-    --bind 'ctrl-e:execute(vim {})+abort'
-    --bind 'tab:execute(less {})'
     "
   fi
-  case $DISTRO in
-    darwin*.arm64)  fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
-    darwin20.*)     fzf_completion_dir=/opt/homebrew/opt/fzf/shell ;;
-    darwin*.x86_64) fzf_completion_dir=/usr/local/opt/fzf/shell    ;;
-    void.*)         fzf_completion_dir=/usr/share/doc/fzf          ;;
-    *)              fzf_completion_dir=/usr/share/fzf              ;;
-  esac
-  for file in $fzf_completion_dir/*.zsh; do
-    source $file
-  done
   alias f=fzf
+
+  # search history with fzf
+  _fzf_history() {
+    builtin fc -l -r -n 1 | fzf --prompt 'History > '
+  }
+  # A completion fallback if something more specific isn't available.
+  function _fzf_generic_find() {
+    local cmd="$1"; shift 1
+    fd . 2>/dev/null | fzf --prompt 'Files > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
+  }
+
+  # {{{ custom command completion with fzf, idea from whiteinge/dotfiles
+  # Usage:
+  #   <[empty cli]> - complete from shell history.
+  #   <cmd> - complete from _fzf_<cmd> script or funciton output.
+  #   <cmd> - falls back to generic file path completion.
+  #
+  # New completions can be added for a <cmd> by adding a shell function or
+  # a shell script on PATH with the pattern _fzf_<cmd>. The script will be
+  # invoked with the command name and any arguments as ARGV and should print the
+  # full resulting command and any additions to stdout.
+  fzf-completion() {
+      setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+
+      local tokens=(${(z)LBUFFER})
+      local cmd=${tokens[1]}
+      local cmd_fzf_match
+
+      if [[ ${#tokens} -lt 1 ]]; then
+	  cmd_fzf_match=( '_fzf_history' )
+      else
+	  # Filter (:#) the arrays of the names ((k)) Zsh function and scripts on
+	  # PATH and remove ((M)) entries that don't match "_fzf_<cmdname>":
+	  cmd_fzf_match=${(M)${(k)functions}:#_fzf_${cmd}}
+	  if [[ ${#cmd_fzf_match} -eq 0 ]]; then
+	      cmd_fzf_match=${(M)${(k)commands}:#_fzf_${cmd}}
+	      if [[ ${#cmd_fzf_match} -eq 0 ]]; then
+		  cmd_fzf_match=( '_fzf_generic_find' )
+	      fi
+	  fi
+      fi
+
+      zle -M "Gathering suggestions..."
+      zle -R
+
+      local result=$($cmd_fzf_match "${tokens[@]}")
+      if [ -n "$result" ]; then
+	  LBUFFER="$result"
+      fi
+
+      zle reset-prompt
+  }
+
+  zle -N fzf-completion
+  bindkey '' fzf-completion
+  # }}}
 fi
 # }}}
 
@@ -569,11 +589,6 @@ alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 
-#file types
-alias -s ps=gv
-for i in avi rmvb wmv;      alias -s $i=mplayer
-for i in rar zip 7z lzma;   alias -s $i="7z x"
-
 #no correct for mkdir mv and cp
 for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias find='noglob find'        # noglob for find
@@ -582,20 +597,17 @@ alias grep='grep -a -I --color=auto'
 alias freeze='kill -STOP'
 alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
-alias ll='ls -li -ctr'
+alias ll='ls -lctr'
 # alias ll='ls -li'
 alias df='df -Th'
 alias du='du -h'
 alias dmesg='dmesg -H'
 #show directories size
 alias dud='du -s *(/)'
-#date for US and CN
-alias adate='for i in GMT US/Eastern Australia/{Brisbane,Sydney,Adelaide} Asia/{Hong_Kong,Singapore} UK/London Europe/Paris; do printf %-22s "$i:";TZ=$i date +"%m-%d %a %H:%M";done'
 #bloomberg radio
 alias info='info --vi-keys'
 alias rsync='rsync --progress --partial'
 alias history='history 1'       #zsh specific
-alias vless="/usr/share/vim/vim72/macros/less.sh"
 alias m='mutt'
 #Terminal - Harder, Faster, Stronger SSH clients
 alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'

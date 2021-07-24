@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+cmd="$1"; shift 1
+ps -ef | sed 1d | fzf --prompt 'Kill > ' -n 7.. -q "$*" \
+      | awk -v cmd="$cmd" '{ print cmd, $2 }'
