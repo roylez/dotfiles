@@ -544,7 +544,7 @@ if ( bin-exist fzf ); then
   }
 
   zle -N fzf-completion
-  bindkey '' fzf-completion
+  bindkey '' fzf-completion
   # }}}
 fi
 # }}}
@@ -565,7 +565,7 @@ if ( bin-exist nvim ); then
   alias vim=nvim
   export EDITOR='nvim' VISUAL='nvim'
 else
-  export EDITOR='command vim' VISUAL='command vim'
+  export EDITOR='vim' VISUAL='vim'
 fi
 # }}}
 

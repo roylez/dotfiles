@@ -3,7 +3,7 @@ def mod_prefix(path):
   fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
   prefix = [ i.capitalize() for i in re.sub(r'.*/(lib|test)/','',fn).split('/') ][:-1]
   prefix_mods = list(map(lambda x: ''.join([i.capitalize() for i in x.split('_')]), prefix))
-  return ''.join(prefix_mods)
+  return '.'.join(prefix_mods)
 
 def mod_suffix(path):
   fn = re.sub(r'\.exs?$', '', os.path.abspath(path))
