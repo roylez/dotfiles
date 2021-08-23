@@ -118,7 +118,7 @@ if has("mac")
 endif
 Plug 'junegunn/fzf.vim'
 
-let $FZF_DEFAULT_OPTS='-e --info=inline --reverse'
+let $FZF_DEFAULT_OPTS='-e --info=inline --reverse --preview-window=:hidden'
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
 endfunction

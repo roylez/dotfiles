@@ -73,6 +73,47 @@ _my_functions=${fpath[1]}/*(N-.x:t)
 [[ -n $_my_functions ]] && autoload -U $_my_functions
 # }}}
 
+# 设置键盘 {{{
+# create a zkbd compatible hash;
+# to add other keys to this hash, see: man 5 terminfo
+[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
+
+autoload -U zkbd
+bindkey -e      #use emacs style keybindings :(
+typeset -A key  #define an array
+
+#if zkbd definition exists, use defined keys instead
+if [[ -f ~/.zkbd/${TERM}-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then
+    source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+else
+    key[Home]=${terminfo[khome]}
+    key[End]=${terminfo[kend]}
+    key[Insert]=${terminfo[kich1]}
+    key[Delete]=${terminfo[kdch1]}
+    key[Up]=${terminfo[kcuu1]}
+    key[Down]=${terminfo[kcud1]}
+    key[Left]=${terminfo[kcub1]}
+    key[Right]=${terminfo[kcuf1]}
+    key[PageUp]=${terminfo[kpp]}
+    key[PageDown]=${terminfo[knp]}
+    for k in ${(k)key} ; do
+        # $terminfo[] entries are weird in ncurses application mode...
+        [[ ${key[$k]} == $'\eO'* ]] && key[$k]=${key[$k]/O/[}
+    done
+fi
+
+# setup key accordingly
+[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
+[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
+[[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
+[[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
+[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
+[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
+[[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
+[[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
+
+# }}}
+
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'
 zmodload -i zsh/complist        # for menu-list completion
@@ -125,6 +166,78 @@ zstyle ':completion:*:history-words' menu yes select
 # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
 autoload -Uz compinit
 [[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
+# }}}
+
+# 环境变量命令别名等 {{{
+# location of history
+HISTFILE=$HOME/.zsh_history
+# number of lines kept in history
+HISTSIZE=20000
+# number of lines saved in the history before logout
+SAVEHIST=40000
+# ignore some commands
+HISTORY_IGNORE="(l[ls] *|less *|z *|cd *|pwd|exit|[bf]g|jobs)"
+
+export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: '
+export INPUTRC=$HOME/.inputrc
+
+export LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+
+#MOST like colored man pages
+export PAGER=less LESS="-M -i -R --shift 5" LESSCHARSET=utf-8 READNULLCMD=less
+export LESS_TERMCAP_md=$'\e[1;31m'      #bold1
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_me=$'\e[m'
+export LESS_TERMCAP_so=$'\e[01;7;34m'  #search highlight
+export LESS_TERMCAP_se=$'\e[m'
+export LESS_TERMCAP_us=$'\e[1;2;32m'    #bold2
+export LESS_TERMCAP_ue=$'\e[m'
+
+# alias and listing colors
+alias -g A="|awk"
+alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
+alias -g C="|cut -d' '"
+alias -g E="|sed"
+alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -a -i --color=always'
+alias -g H="|head -n $(($LINES-2))"
+alias -g L="|less -R"
+alias -g P="|column -t"
+alias -g R="|tac"
+alias -g S="|sort"
+alias -g T="|tail -n $(($LINES-2))"
+alias -g W="|wc"
+alias -g X="|xargs"
+alias -g N="> /dev/null"
+alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
+
+#no correct for mkdir mv and cp
+for i in mkdir mv cp;       alias $i="nocorrect $i"
+alias find='noglob find'        # noglob for find
+alias rsync='noglob rsync'
+alias grep='grep -a -I --color=auto'
+alias freeze='kill -STOP'
+alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
+alias vi='vim'
+alias ll='ls -lctr'
+# alias ll='ls -li'
+alias df='df -Th'
+alias du='du -h'
+alias dmesg='dmesg -H'
+#show directories size
+alias dud='du -s *(/)'
+#bloomberg radio
+alias info='info --vi-keys'
+alias rsync='rsync --progress --partial'
+alias history='history 1'       #zsh specific
+alias m='mutt'
+#Terminal - Harder, Faster, Stronger SSH clients
+alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
+alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
+[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
+alias forget='unset HISTFILE'
+
 # }}}
 
 # 自定义函数 {{{
@@ -275,50 +388,8 @@ SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%
 
 # }}}
 
-# 键盘定义及键绑定 {{{
-#bindkey "\M-v" "\`xclip -o\`\M-\C-e\""
-# 设置键盘 {{{
-# create a zkbd compatible hash;
-# to add other keys to this hash, see: man 5 terminfo
-[[ $OSTYPE = darwin* ]] && DISTRO=$OSTYPE.$(uname -m) || DISTRO=$(awk -F\" '/^NAME/ {print $2}' /etc/os-release).$(uname -m)
-
-autoload -U zkbd
-bindkey -e      #use emacs style keybindings :(
-typeset -A key  #define an array
-
-#if zkbd definition exists, use defined keys instead
-if [[ -f ~/.zkbd/${TERM}-${DISPLAY:-$VENDOR-$OSTYPE} ]]; then
-    source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
-else
-    key[Home]=${terminfo[khome]}
-    key[End]=${terminfo[kend]}
-    key[Insert]=${terminfo[kich1]}
-    key[Delete]=${terminfo[kdch1]}
-    key[Up]=${terminfo[kcuu1]}
-    key[Down]=${terminfo[kcud1]}
-    key[Left]=${terminfo[kcub1]}
-    key[Right]=${terminfo[kcuf1]}
-    key[PageUp]=${terminfo[kpp]}
-    key[PageDown]=${terminfo[knp]}
-    for k in ${(k)key} ; do
-        # $terminfo[] entries are weird in ncurses application mode...
-        [[ ${key[$k]} == $'\eO'* ]] && key[$k]=${key[$k]/O/[}
-    done
-fi
-
-# setup key accordingly
-[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
-[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
-[[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
-[[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
-[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
-[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
-[[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
-[[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
-
-# }}}
-
-# 键绑定  {{{
+# ZLE {{{
+# 基本键绑定  {{{
 # history search can be implemented with the following widgets
 #   history-search-end
 #   up-line-or-beginning-search / down-line-or-beginning-search
@@ -336,31 +407,10 @@ bindkey '[1;5C' forward-word      # C-right
 autoload -U edit-command-line
 zle -N      edit-command-line
 bindkey '\ee' edit-command-line
-
-# dabbrev for zsh!! M-p M-n
-bindkey '\ep' _history-complete-older
-bindkey '\en' _history-complete-newer
 # }}}
 
-# }}}
-
-# ZLE 自定义widget {{{
+# 自定义widget {{{
 #
-
-# {{{ pressing TAB in an empty command makes a cd command with completion list
-# from linuxtoy.org
-dumb-cd(){
-    if [[ -n $BUFFER ]] ; then # 如果该行有内容
-        zle expand-or-complete # 执行 TAB 原来的功能
-    else # 如果没有
-        BUFFER="cd " # 填入 cd（空格）
-        zle end-of-line # 这时光标在行首，移动到行末
-        zle expand-or-complete # 执行 TAB 原来的功能
-    fi
-}
-zle -N dumb-cd
-bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
-# }}}
 
 # {{{ colorize commands
 TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
@@ -423,56 +473,7 @@ zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 # }}}
 
-# }}}
-
-# 环境变量及其他参数 {{{
-# location of history
-HISTFILE=$HOME/.zsh_history
-# number of lines kept in history
-HISTSIZE=20000
-# number of lines saved in the history before logout
-SAVEHIST=40000
-# ignore some commands
-HISTORY_IGNORE="(l[ls] *|less *|z *|cd *|pwd|exit|[bf]g|jobs)"
-
-export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: '
-export INPUTRC=$HOME/.inputrc
-
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-#MOST like colored man pages
-export PAGER=less
-export LESS_TERMCAP_md=$'\E[1;31m'      #bold1
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_me=$'\E[m'
-export LESS_TERMCAP_so=$'\E[01;7;34m'  #search highlight
-export LESS_TERMCAP_se=$'\E[m'
-export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
-export LESS_TERMCAP_ue=$'\E[m'
-export LESS="-M -i -R --shift 5"
-export LESSCHARSET=utf-8
-export READNULLCMD=less
-
-# 读入其他配置 {{{
-
-if [[ -d $HOME/.zplug ]]; then
-  # git clone https://github.com/zplug/zplug ~/.zplug
-  source $HOME/.zplug/init.zsh
-  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
-fi
-[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
-[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
-
-# kubernet {{{
-if ( bin-exist kubectl ); then
-  source <(kubectl completion zsh)
-  alias k=kubectl
-  compdef k=kubectl
-fi
-# }}}
-
-# FZF and friend {{{
+# FZF and friend, esc f to fzf for current command {{{
 if ( bin-exist fzf ); then
   ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
   # molokai themed
@@ -524,12 +525,8 @@ if ( bin-exist fzf ); then
 	  # Filter (:#) the arrays of the names ((k)) Zsh function and scripts on
 	  # PATH and remove ((M)) entries that don't match "_fzf_<cmdname>":
 	  cmd_fzf_match=${(M)${(k)functions}:#_fzf_${cmd}}
-	  if [[ ${#cmd_fzf_match} -eq 0 ]]; then
-	      cmd_fzf_match=${(M)${(k)commands}:#_fzf_${cmd}}
-	      if [[ ${#cmd_fzf_match} -eq 0 ]]; then
-		  cmd_fzf_match=( '_fzf_generic_find' )
-	      fi
-	  fi
+	  [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=${(M)${(k)commands}:#_fzf_${cmd}}
+          [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=( '_fzf_generic_find' )
       fi
 
       zle -M "Gathering suggestions..."
@@ -544,8 +541,45 @@ if ( bin-exist fzf ); then
   }
 
   zle -N fzf-completion
-  bindkey '' fzf-completion
+  bindkey '\ef' fzf-completion
   # }}}
+fi
+# }}}
+
+# {{{ pressing TAB in an empty command makes a cd command with completion list
+# from linuxtoy.org
+dumb-cd(){
+    if [[ -n $BUFFER ]] ; then # 如果该行有内容
+        zle expand-or-complete # 执行 TAB 原来的功能
+    else # 如果没有
+        BUFFER="cd " # 填入 cd（空格）
+        zle end-of-line # 这时光标在行首，移动到行末
+        zle expand-or-complete # 执行 TAB 原来的功能
+    fi
+}
+zle -N dumb-cd
+bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+# }}}
+
+# }}}
+
+# }}}
+
+# 读入其他配置 {{{
+
+if [[ -d $HOME/.zplug ]]; then
+  # git clone https://github.com/zplug/zplug ~/.zplug
+  source $HOME/.zplug/init.zsh
+  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
+fi
+[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
+[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
+
+# kubernet {{{
+if ( bin-exist kubectl ); then
+  source <(kubectl completion zsh)
+  alias k=kubectl
+  compdef k=kubectl
 fi
 # }}}
 
@@ -570,53 +604,5 @@ fi
 # }}}
 
 # }}}
-
-# 命令别名 {{{
-# alias and listing colors
-alias -g A="|awk"
-alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
-alias -g C="|cut -d' '"
-alias -g E="|sed"
-alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -a -i --color=always'
-alias -g H="|head -n $(($LINES-2))"
-alias -g L="|less -R"
-alias -g P="|column -t"
-alias -g R="|tac"
-alias -g S="|sort"
-alias -g T="|tail -n $(($LINES-2))"
-alias -g W="|wc"
-alias -g X="|xargs"
-alias -g N="> /dev/null"
-alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
-
-#no correct for mkdir mv and cp
-for i in mkdir mv cp;       alias $i="nocorrect $i"
-alias find='noglob find'        # noglob for find
-alias rsync='noglob rsync'
-alias grep='grep -a -I --color=auto'
-alias freeze='kill -STOP'
-alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
-alias vi='vim'
-alias ll='ls -lctr'
-# alias ll='ls -li'
-alias df='df -Th'
-alias du='du -h'
-alias dmesg='dmesg -H'
-#show directories size
-alias dud='du -s *(/)'
-#bloomberg radio
-alias info='info --vi-keys'
-alias rsync='rsync --progress --partial'
-alias history='history 1'       #zsh specific
-alias m='mutt'
-#Terminal - Harder, Faster, Stronger SSH clients
-alias e264='mencoder -vf harddup -ovc x264 -x264encopts crf=22:subme=6:frameref=2:8x8dct:bframes=3:weight_b:threads=auto -oac copy'
-alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
-alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
-alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
-[ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
-alias forget='unset HISTFILE'
-
-#}}}
 
 typeset -U PATH
