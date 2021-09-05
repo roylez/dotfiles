@@ -6,10 +6,10 @@
 for f in $folder/*; do
     of=$f
     if [[ -h $f ]]; then
-        f=`readlink $f`
+        f=`realpath $f`
     fi
     if [[ -f $f ]] && [[ -x $f ]] && !( file $f|grep ELF &>/dev/null ); then
-        desc=`head $f|awk '/# ?[Dd]escription:/'|sed 's=#.*: *=='`
+        desc=`awk -F: 'NR<5 && /[Dd]escription:/ {print $2}' $f`
         printf "%-30s $desc\n" `basename $of`
     fi
 done

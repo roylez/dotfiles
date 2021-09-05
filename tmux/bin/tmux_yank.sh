@@ -1,4 +1,5 @@
 #!/bin/bash
+# description: tmux yank integration
 # https://medium.com/free-code-camp/tmux-in-practice-integration-with-system-clipboard-bcd72c62ff7b
 
 set -eu

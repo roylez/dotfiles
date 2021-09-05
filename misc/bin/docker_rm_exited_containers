@@ -1,3 +1,4 @@
 #!/bin/bash
+# description: remove exited containers
 docker rm $(docker ps --all -q -f status=exited)
 
