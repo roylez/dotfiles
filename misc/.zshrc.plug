@@ -1,6 +1,3 @@
-zplug "agkozak/zsh-z"
-export _Z_NO_RESOLVE_SYMLINKS=1
-
 zplug "Tarrasch/zsh-autoenv"
 # default: .autoenv.zsh
 # export AUTOENV_FILE_ENTER=.env

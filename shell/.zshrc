@@ -283,7 +283,7 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 #{{{ functions to set prompt pwd color
 __PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
-_pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%U%F{cyan}%~%f%u" }
+_pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%B%F{yellow}%~%f%u" }
 #change back before next command
 _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
@@ -559,6 +559,12 @@ dumb-cd(){
 }
 zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+# }}}
+
+# zoxide for auto jump {{{
+if (bin-exist zoxide); then
+    eval "$(zoxide init zsh)"
+fi
 # }}}
 
 # }}}
