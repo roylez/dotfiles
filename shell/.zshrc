@@ -473,6 +473,27 @@ zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 # }}}
 
+# {{{ pressing TAB in an empty command makes a cd command with completion list
+# from linuxtoy.org
+dumb-cd(){
+    if [[ -n $BUFFER ]] ; then # 如果该行有内容
+        zle expand-or-complete # 执行 TAB 原来的功能
+    else # 如果没有
+        BUFFER="cd " # 填入 cd（空格）
+        zle end-of-line # 这时光标在行首，移动到行末
+        zle expand-or-complete # 执行 TAB 原来的功能
+    fi
+}
+zle -N dumb-cd
+bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
+# }}}
+
+# }}}
+ 
+# }}}
+
+# 其他额外软件 {{{
+
 # FZF and friend, esc f to fzf for current command {{{
 if ( bin-exist fzf ); then
   ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
@@ -546,40 +567,17 @@ if ( bin-exist fzf ); then
 fi
 # }}}
 
-# {{{ pressing TAB in an empty command makes a cd command with completion list
-# from linuxtoy.org
-dumb-cd(){
-    if [[ -n $BUFFER ]] ; then # 如果该行有内容
-        zle expand-or-complete # 执行 TAB 原来的功能
-    else # 如果没有
-        BUFFER="cd " # 填入 cd（空格）
-        zle end-of-line # 这时光标在行首，移动到行末
-        zle expand-or-complete # 执行 TAB 原来的功能
-    fi
-}
-zle -N dumb-cd
-bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
-# }}}
-
 # zoxide for auto jump {{{
 if (bin-exist zoxide); then
     eval "$(zoxide init zsh)"
 fi
 # }}}
 
-# }}}
-
-# }}}
-
-# 读入其他配置 {{{
-
-if [[ -d $HOME/.zplug ]]; then
-  # git clone https://github.com/zplug/zplug ~/.zplug
-  source $HOME/.zplug/init.zsh
-  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
+# direnv {{{
+if ( bin-exist direnv ); then
+  eval "$(direnv hook zsh)"
 fi
-[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
-[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
+# }}}
 
 # kubernet {{{
 if ( bin-exist kubectl ); then
@@ -608,6 +606,18 @@ else
   export EDITOR='vim' VISUAL='vim'
 fi
 # }}}
+
+# }}}
+
+# 读入其他配置 {{{
+
+if [[ -d $HOME/.zplug ]]; then
+  # git clone https://github.com/zplug/zplug ~/.zplug
+  source $HOME/.zplug/init.zsh
+  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
+fi
+[[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
+[[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
 # }}}
 

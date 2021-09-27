@@ -1,9 +1,9 @@
-zplug "Tarrasch/zsh-autoenv"
+#zplug "Tarrasch/zsh-autoenv"
 # default: .autoenv.zsh
 # export AUTOENV_FILE_ENTER=.env
 # default: .autoenv_leave.zsh
 # export AUTOENV_FILE_LEAVE=.out
-export AUTOENV_HANDLE_LEAVE=1
+#export AUTOENV_HANDLE_LEAVE=1
 #
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
