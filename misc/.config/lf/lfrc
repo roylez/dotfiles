@@ -34,6 +34,10 @@ cmd fzf_jump ${{
   lf -remote "send $id $cmd \"$res\""
 }}
 
+cmd autojump %{{ 
+  lf -remote "send $id cd '$(zoxide query $1)'"
+}}
+
 cmd untar !{{
   case "$f" in
     *.tar.*)                   tar xvf "$f";;
@@ -72,3 +76,4 @@ map f :fzf_jump
 map A :tar
 map a :make_file
 map x :delete
+map Z push :autojump<space>

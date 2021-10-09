@@ -562,6 +562,7 @@ if ( bin-exist fzf ); then
   }
 
   zle -N fzf-completion
+  bindkey '\ef' fzf-completion
   bindkey '' fzf-completion
   # }}}
 fi

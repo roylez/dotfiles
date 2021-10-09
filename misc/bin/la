@@ -1,7 +1,7 @@
 #!/bin/bash
 # description: 用ledger xact添加记录
 
-ledger_file=${LEDGER_FILE:-~/doc/finance/data/`date +%Y`.ledger}
+ledger_file=${LEDGER_FILE:-~/workspace/finance/data/`date +%Y`.ledger}
 xact_cmdline="$*"
 
 abort_exit() {
