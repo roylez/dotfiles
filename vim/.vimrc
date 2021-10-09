@@ -143,7 +143,7 @@ set spelllang=en_gb,cjk
 set guioptions=aAegk
 
 if has("mac")
-  set guifont=FantasqueSansMono_Nerd_Font_Mono:h16
+  set guifont=FantasqueSansMono_Nerd_Font_Mono:h18
   " 方正颜宋
   " set guifontwide=FZYanSongS-R-GB:h16
   set linespace=2
