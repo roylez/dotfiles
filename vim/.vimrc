@@ -4,7 +4,7 @@
 " {{{ vim/neovim only stuff
 if has('nvim')
     " support for cursor shapes
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+    " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 else
     set backspace=2
     set encoding=utf-8
@@ -102,10 +102,16 @@ set directory=$HOME/.backup     "swp
 "https://github.com/moby/moby/issues/15793
 set backupcopy=yes
 
-if !isdirectory($HOME . "/.vim/undo")
-    call mkdir($HOME . "/.vim/undo", "p")
+if has("nvim")
+  let vim_undo_dir = $HOME . "/.vim/nvim_undo"
+else
+  let vim_undo_dir = $HOME . "/.vim/undo"
 endif
-set undodir=~/.vim/undo undofile undolevels=1000 undoreload=1000
+if !isdirectory(vim_undo_dir)
+    call mkdir(vim_undo_dir, "p")
+endif
+let &undodir=vim_undo_dir
+set undofile undolevels=1000 undoreload=1000
 
 set commentstring=#%s       " default comment style
 set sps=best,10             " only show 10 best spell suggestions
@@ -137,7 +143,7 @@ set spelllang=en_gb,cjk
 set guioptions=aAegk
 
 if has("mac")
-  set guifont=Fantasque\ Sans\ Mono:h16
+  set guifont=FantasqueSansMono_Nerd_Font_Mono:h16
   " 方正颜宋
   " set guifontwide=FZYanSongS-R-GB:h16
   set linespace=2

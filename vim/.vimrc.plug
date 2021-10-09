@@ -362,6 +362,10 @@ let g:polyglot_disabled = ['slime']
 " let g:vue_pre_processors = ['pug', 'sass']
 let g:vim_markdown_frontmatter = 1
 
+if has('nvim')
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
+
 Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
@@ -406,3 +410,24 @@ call deoplete#custom#option({
             \'vimwiki': ['ultisnips', 'dictionary']},
 \})
 " .................................................................... }}}1
+
+if has("nvim")
+    lua <<EOLUA
+    require'nvim-treesitter.configs'.setup {
+        highlight = {
+        enable = true,
+        disable = {},
+        },
+    indent = {
+        enable = false,
+        disable = {},
+    },
+    ensure_installed = {
+        "yaml",
+        "html",
+        "scss",
+        "elixir"
+        },
+    }
+EOLUA
+endif
