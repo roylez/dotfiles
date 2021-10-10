@@ -415,6 +415,7 @@ call deoplete#custom#option({
 \})
 " .................................................................... }}}1
 
+" neovim specific lua settings {{{
 if has("nvim")
     lua <<EOLUA
     require'nvim-treesitter.configs'.setup {
@@ -426,12 +427,7 @@ if has("nvim")
         enable = false,
         disable = {},
     },
-    ensure_installed = {
-        "yaml",
-        "html",
-        "scss",
-        "elixir"
-        },
+    ensure_installed = { "yaml", "html", "scss", "elixir", "ledger", "vim", "lua", },
     }
 
     local nvim_lsp = require('lspconfig')
@@ -481,3 +477,4 @@ if has("nvim")
     }
 EOLUA
 endif
+"}}}
