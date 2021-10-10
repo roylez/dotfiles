@@ -79,13 +79,11 @@ Plug 'blueyed/vim-diminactive'
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
 " comment / uncomment, context aware
-" Plug 'Shougo/context_filetype.vim', { 'for': 'vue' }
 Plug 'tyru/caw.vim' " {{{
+Plug 'Shougo/context_filetype.vim', { 'for': 'vim' }
 " F9 and Alt-9
 vmap <F9> gcc
 nmap <F9> gcc
-vmap <A-9> gcc
-nmap <A-9> gcc
 " }}}
 
 " make stuff organized
@@ -370,7 +368,6 @@ if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
-Plug 'ledger/vim-ledger', { 'for' : 'ledger' }
 autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
