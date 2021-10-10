@@ -599,14 +599,7 @@ if ( bin-exist docker-compose ); then
 fi
 # }}}
 
-# nvim {{{
-if ( bin-exist nvim ); then
-  alias vim=nvim
-  export EDITOR='nvim' VISUAL='nvim'
-else
-  export EDITOR='vim' VISUAL='vim'
-fi
-# }}}
+export EDITOR='vim' VISUAL='vim'
 
 # }}}
 
