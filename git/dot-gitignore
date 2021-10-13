@@ -27,3 +27,4 @@ creds.json
 test/*.yml
 node_modules
 vendor
+.envrc

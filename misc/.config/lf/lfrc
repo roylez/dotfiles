@@ -8,6 +8,7 @@ set tabstop 4
 set nopreview
 set ratios 1:2
 set info size:time
+set icons on
 
 # CUSTOM COMMANDS
 #
@@ -67,12 +68,14 @@ cmd make_file %{{
 
 cmd delete %{{
   rm -rf "$fx"
+  lf -remote "send $id reload"
   }}
+
 # MAPPINGS
 #
-map <enter> shell
 
-map f :fzf_jump
+map <enter> shell
+map J :fzf_jump
 map A :tar
 map a :make_file
 map x :delete

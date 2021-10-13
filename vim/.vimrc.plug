@@ -68,8 +68,7 @@ let g:airline#extensions#hunks#enabled = 0
 " }}}
 
 " theme
-" Plug 'lifepillar/vim-gruvbox8'
-Plug 'sainnhe/gruvbox-material'
+Plug 'lifepillar/vim-gruvbox8'
 let g:gruvbox_material_enable_italic = 1
 
 " dim inactive window
@@ -382,7 +381,7 @@ if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_runni
     if !has("gui_running")
         set t_Co=256
     endif
-    colorscheme gruvbox-material
+    colorscheme gruvbox8
 else
     colorscheme tango
 endif
@@ -418,7 +417,7 @@ if has("nvim")
         enable = false,
         disable = {},
     },
-    ensure_installed = { "yaml", "html", "scss", "elixir", "ledger", "vim", "lua", },
+    ensure_installed = { "yaml", "html", "scss", "elixir", "ledger", "vim", "lua", "ruby" },
     }
 
     local nvim_lsp = require('lspconfig')

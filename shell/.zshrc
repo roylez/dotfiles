@@ -325,6 +325,18 @@ _tmux_preexec() {
   esac
 }
 
+# reset cursor to a vertical bar
+# CSI Ps SP q
+# Set cursor style (DECSCUSR), VT520.
+#   Ps = 0  -> blinking block.
+#   Ps = 1  -> blinking block (default).
+#   Ps = 2  -> steady block.
+#   Ps = 3  -> blinking underline.
+#   Ps = 4  -> steady underline.
+#   Ps = 5  -> blinking bar (xterm).
+#   Ps = 6  -> steady bar (xterm).
+_reset_cursor() { printf "\e[6 q" }
+
 #}}}
 
 #{{{define magic function arrays
@@ -332,6 +344,7 @@ _tmux_preexec() {
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd  _tmux_precmd
 add-zsh-hook precmd  vcs_info
+add-zsh-hook precmd  _reset_cursor
 add-zsh-hook preexec _tmux_preexec
 add-zsh-hook preexec _pwd_color_preexec
 add-zsh-hook chpwd   _pwd_color_chpwd

@@ -3,13 +3,13 @@
 
 " {{{ vim/neovim only stuff
 if has('nvim')
-    " support for cursor shapes
-    " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  " support for cursor shapes
+  " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 else
-    set backspace=2
-    set encoding=utf-8
-    " keep record of editing information for cursor restore and more
-    set viminfo='10,\"100,:20,%,n~/.viminfo
+  set backspace=2
+  set encoding=utf-8
+  " keep record of editing information for cursor restore and more
+  set viminfo='10,\"100,:20,%,n~/.viminfo
 endif
 
 " use the same vim_home dir for vim and nvim, use the following in
@@ -226,8 +226,8 @@ vmap <Leader>P "+P
 nmap <leader>r :source ~/.vimrc<CR>:echom "VIM configuration reloaded"<CR>
 " }}}
 
-"ruby
-"no folding for comment block and if/do blocks
+" ruby
+" no folding for comment block and if/do blocks
 let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
