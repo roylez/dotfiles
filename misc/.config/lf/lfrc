@@ -9,6 +9,8 @@ set nopreview
 set ratios 1:2
 set info size:time
 set icons on
+# automatically reload every 2 seconds
+set period 2
 
 # CUSTOM COMMANDS
 #
@@ -68,7 +70,6 @@ cmd make_file %{{
 
 cmd delete %{{
   rm -rf "$fx"
-  lf -remote "send $id reload"
   }}
 
 # MAPPINGS

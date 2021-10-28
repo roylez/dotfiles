@@ -361,7 +361,7 @@ if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
-autocmd FileType ledger set fdm=indent foldlevel=0 shiftwidth=4
+autocmd FileType ledger setlocal fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz

@@ -58,11 +58,11 @@ let maplocalleader="\<space>"
 set timeoutlen=1000 ttimeoutlen=0
 
 if filereadable( $HOME . '/.vimrc.plug' )
-    source $HOME/.vimrc.plug
+  source $HOME/.vimrc.plug
 endif
 
 " have to be after loadding pluggins
-filetype plugin indent on
+" filetype plugin indent on
 syntax on
 
 set mouse=""            " disable mouse
@@ -75,9 +75,11 @@ set ignorecase smartcase
 " disable bell all together
 set noeb vb t_vb=
 
-set smartindent autoindent
+" smartindent interferes with file type based indentation
+set autoindent
+set smartindent 
 " replace <tab> with 2 blank space.
-set expandtab smarttab shiftwidth=2 softtabstop=0 tabstop=8
+set expandtab shiftwidth=2 softtabstop=2 tabstop=8
 set textwidth=100	" wrap text for 78 letters
 " set relativenumber number
 

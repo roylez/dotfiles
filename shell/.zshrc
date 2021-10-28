@@ -528,7 +528,7 @@ if ( bin-exist fzf ); then
 
   # search history with fzf
   _fzf_history() {
-    builtin fc -l -r -n 1 | fzf --prompt 'History > '
+    builtin fc -l -r -n 1 | fzf --prompt 'History > ' -e -q "^$*"
   }
   # A completion fallback if something more specific isn't available.
   function _fzf_generic_find() {
@@ -547,36 +547,49 @@ if ( bin-exist fzf ); then
   # invoked with the command name and any arguments as ARGV and should print the
   # full resulting command and any additions to stdout.
   fzf-completion() {
-      setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+    setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
 
-      local tokens=(${(z)LBUFFER})
-      local cmd=${tokens[1]}
-      local cmd_fzf_match
+    local tokens=(${(z)LBUFFER})
+    local cmd=${tokens[1]}
+    local cmd_fzf_match
 
-      if [[ ${#tokens} -lt 1 ]]; then
-	  cmd_fzf_match=( '_fzf_history' )
-      else
-	  # Filter (:#) the arrays of the names ((k)) Zsh function and scripts on
-	  # PATH and remove ((M)) entries that don't match "_fzf_<cmdname>":
-	  cmd_fzf_match=${(M)${(k)functions}:#_fzf_${cmd}}
-	  [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=${(M)${(k)commands}:#_fzf_${cmd}}
-          [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=( '_fzf_generic_find' )
-      fi
+    if [[ ${#tokens} -lt 1 ]]; then
+      cmd_fzf_match=( '_fzf_history' )
+    else
+      # Filter (:#) the arrays of the names ((k)) Zsh function and scripts on
+      # PATH and remove ((M)) entries that don't match "_fzf_<cmdname>":
+      cmd_fzf_match=${(M)${(k)functions}:#_fzf_${cmd}}
+      [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=${(M)${(k)commands}:#_fzf_${cmd}}
+      [[ ${#cmd_fzf_match} -eq 0 ]] && cmd_fzf_match=( '_fzf_generic_find' )
+    fi
 
-      zle -M "Gathering suggestions..."
-      zle -R
+    zle -M "Gathering suggestions..."
+    zle -R
 
-      local result=$($cmd_fzf_match "${tokens[@]}")
-      if [ -n "$result" ]; then
-	  LBUFFER="$result"
-      fi
+    local result=$($cmd_fzf_match "${tokens[@]}")
+    if [ -n "$result" ]; then
+      LBUFFER="$result"
+    fi
 
-      zle reset-prompt
+    zle reset-prompt
+  }
+  
+  fzf-history-complete() {
+    setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+    local tokens=(${(z)LBUFFER})
+    local result=$(_fzf_history "${tokens[@]}")
+    if [ -n "$result" ]; then
+      LBUFFER="$result"
+    fi
+
+    zle reset-prompt
   }
 
   zle -N fzf-completion
+  zle -N fzf-history-complete
   bindkey '\ef' fzf-completion
-  bindkey '' fzf-completion
+  bindkey '' fzf-history-complete
+  bindkey '\er' fzf-history-complete
   # }}}
 fi
 # }}}
