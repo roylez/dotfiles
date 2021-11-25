@@ -11,6 +11,7 @@ set info size:time
 set icons on
 # automatically reload every 2 seconds
 set period 2
+# set icons on
 
 # CUSTOM COMMANDS
 #
