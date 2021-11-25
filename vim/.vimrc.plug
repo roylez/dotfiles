@@ -74,6 +74,9 @@ let g:gruvbox_material_enable_italic = 1
 " dim inactive window
 Plug 'blueyed/vim-diminactive'
 
+" indentation helper
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
+
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
@@ -342,8 +345,6 @@ let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_cd_cmd = 'tcd'
 let g:rooter_patterns = ['.git', 'Makefile', 'mix.exs']
 
-Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
 "-------------------------------------------------------------------------------
@@ -358,7 +359,7 @@ let g:polyglot_disabled = ['slime']
 let g:vim_markdown_frontmatter = 1
 
 if has('nvim')
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
 autocmd FileType ledger setlocal fdm=indent foldlevel=0 shiftwidth=4
@@ -369,6 +370,8 @@ autocmd FileType ledger nnoremap G Gzz
 " Plug 'elixir-editors/vim-elixir'
 Plug 'roylez/vim-slime-syntax'
 autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
+
+Plug 'elixir-editors/vim-elixir'
 autocmd FileType elixir,eelixir setlocal shiftwidth=2
 
 "===================Plug loading ends==========================================
@@ -417,7 +420,7 @@ if has("nvim")
         enable = false,
         disable = {},
     },
-    ensure_installed = { "yaml", "html", "scss", "elixir", "ledger", "vim", "lua", "ruby" },
+    ensure_installed = { "yaml", "elixir", "ledger", "vim", "lua", "ruby" },
     }
 
     local nvim_lsp = require('lspconfig')

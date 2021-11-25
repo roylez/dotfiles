@@ -6,7 +6,7 @@
 [ -z "$PS1" ] && return
 
 # don't put duplicate lines in the history. See bash(1) for more options
-#export HISTCONTROL=ignoredups
+export HISTCONTROL=ignoredups
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -37,11 +37,11 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[0
 if [[ -z $SSH_CONNECTION ]]; then
     case "$TERM" in
         xterm*|rxvt*)
-        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-        ;;
+            PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+            ;;
         screen)
-        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-        ;;
+            PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+            ;;
     esac
 fi
 
@@ -104,5 +104,3 @@ export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export VISUAL=vim
 
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

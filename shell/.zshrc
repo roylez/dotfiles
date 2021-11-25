@@ -625,8 +625,13 @@ if ( bin-exist docker-compose ); then
 fi
 # }}}
 
-export EDITOR='vim' VISUAL='vim'
-
+# vim / nvim {{{
+if ( bin-exist nvim ); then
+    export EDITOR='nvim' VISUAL='nvim'
+    alias vim='nvim'
+else
+    export EDITOR='vim' VISUAL='vim'
+fi
 # }}}
 
 # 读入其他配置 {{{
