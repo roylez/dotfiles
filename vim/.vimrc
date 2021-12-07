@@ -207,6 +207,8 @@ if has("gui_running") "only in GUI as this may conflict with tmux window navigat
   nmap <F12> :tabnext<CR>
   imap <F11> <ESC>:tabprevious<CR>
   imap <F12> <ESC>:tabnext<CR>
+  nmap ZQ    :bd<CR>
+  nmap ZZ    :w<CR>:bd<CR>
 endif
 nmap tp :tabprevious<CR>
 nmap tn :tabnext<CR>

@@ -52,6 +52,11 @@
                :terminal ["^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
                }
 
+:input-sources {
+                :en {:input_source_id "^com\\.apple\\.keylayout.*" :language "en"}
+                :zh {:language "^zh.*"}
+                }
+
 ;; default is 250
 :simlayer-threshold 300
 :simlayers {
@@ -82,11 +87,11 @@
                  ] }
         {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped"
          :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
-        ; {:des "Tap shift to change input sources"
-        ;  :rules [
-        ;          [:left_shift  :left_shift  nil {:alone :!Tspacebar  } ]
-        ;          [:right_shift :right_shift nil {:alone :!OCspacebar } ]
-        ;          ] }
+        {:des "Tap command to change input sources"
+         :rules [
+                 [:left_command  :left_command  :zh {:alone :!Tspacebar } ]
+                 [:right_command :right_command :en {:alone :!Tspacebar } ]
+                 ] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
                  [:!Ch :left_arrow  nil]
