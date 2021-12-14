@@ -19,6 +19,10 @@
 ;; ## | optional any
 ;;
 ;; https://github.com/JoshuaManuel/Karabiner-Elements-Key-List
+;;
+;; rule [:period ["period-mode" 1] nil {:afterup ["period-mode" 0] :alone :period}]
+;;       |_____| |_______________| |_| |_________________________________________|
+;;        <from>    <to>      <conditions>         <other options>
 
 :profiles { :Default
            { :default true
