@@ -46,6 +46,8 @@ if [[ -z $SSH_CONNECTION ]]; then
             export TERM=xterm
             ;;
     esac
+else
+    export TERM=xterm
 fi
 
 # Alias definitions.
