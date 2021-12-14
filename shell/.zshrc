@@ -627,10 +627,10 @@ fi
 
 # vim / nvim {{{
 if ( bin-exist nvim ); then
-    export EDITOR='nvim' VISUAL='nvim'
+    export EDITOR='nvim' VISUAL='nvim' SUDO_EDITOR='nvim'
     alias vim='nvim'
 else
-    export EDITOR='vim' VISUAL='vim'
+    export EDITOR='vim' VISUAL='vim' SUDO_EDITOR='vim'
 fi
 # }}}
 
