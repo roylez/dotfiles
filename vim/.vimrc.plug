@@ -156,6 +156,7 @@ nnoremap <silent> <leader>n :RG <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
+inoremap <silent> ,, <C-O>:Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -401,10 +402,11 @@ call deoplete#custom#option({
             \'check_stderr': v:false,
             \'max_list': 20,
             \'sources': {
-            \'_': ['ultisnips', 'tabnine', 'tmux'],
+            \'_':        ['ultisnips', 'tabnine', 'tmux'],
             \'markdown': ['ultisnips', 'dictionary'],
             \'vim-edit': ['ultisnips', 'dictionary'],
-            \'vimwiki': ['ultisnips', 'dictionary']},
+            \'vimwiki':  ['ultisnips', 'dictionary'],
+            \'ruby':     ['ultisnips', 'tmux']}
 \})
 " .................................................................... }}}1
 

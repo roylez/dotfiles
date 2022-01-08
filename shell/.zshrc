@@ -312,16 +312,20 @@ _tmux_precmd() {
 
 _tmux_preexec() {
   local -a cmd; cmd=(${(z)1})
-  case $cmd[1]:t in
-    ssh|mosh) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
-    sudo)    title "#${cmd[2]:t}"  ;;
-    *=*)     title "${cmd[2]:t}"   ;;
-    for)     title "()$cmd[7]"     ;;
-    lazygit) title "G:$(git_repo)" ;;
-    svn|git) title "${cmd[1,2]}"   ;;
-    make)    title "[${cmd[2]}]"   ;;
-    ls|ll)   ;;
-    *)       title "${cmd[1]:t}"   ;;
+  executable=$cmd[1]
+  if [[ "$(builtin whence -w $cmd[1])" = *alias ]]; then
+      executable=${$(whence $cmd[1])%% *}
+  fi
+  case $executable:t in
+    ssh|mosh|et) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
+    sudo)        title "#${cmd[2]:t}"  ;;
+    *=*)         title "${cmd[2]:t}"   ;;
+    for)         title "()$cmd[7]"     ;;
+    lazygit)     title "G:$(git_repo)" ;;
+    svn|git)     title "${cmd[1,2]}"   ;;
+    make)        title "[${cmd[2]}]"   ;;
+    ls|ll)       ;;
+    *)           title "${executable:t}"   ;;
   esac
 }
 

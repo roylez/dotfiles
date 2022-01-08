@@ -65,17 +65,13 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # enable color support of ls and also add handy aliases
-if [ "$TERM" != "dumb" ]; then
+if [ "$TERM" != "dumb" ] && (command -v dircolors &>/dev/null ); then
     [[ -f $HOME/.lscolor256 ]] && eval $(dircolors -b $HOME/.lscolor256) || eval $(dircolors -b)
     alias ls='ls --color=auto'
-    #alias dir='ls --color=auto --format=vertical'
-    #alias vdir='ls --color=auto --format=long'
 fi
 
 # some more ls aliases
 alias ll='ls -l'
-#alias la='ls -A'
-#alias l='ls -CF'
 
 bind '"": history-search-backward'
 bind '"": history-search-forward'
@@ -106,6 +102,9 @@ export PATH=$PATH:$HOME/bin
 # add Intel Compiler environment variables
 #source /opt/intel/fc/9.1.036/bin/ifortvars.sh
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex
-export EDITOR=vim
-export VISUAL=vim
+if (command -v vim &>/dev/null ); then
+    export EDITOR=vim VISUAL=vim
+else
+    export EDITOR=vi VISUAL=vi
+fi
 
