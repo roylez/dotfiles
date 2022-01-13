@@ -34,7 +34,7 @@
             :delay   500
             ;; to_if_alone_timeout_milliseconds (def: 1000)
             ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
-            :alone   150
+            :alone   200
             ;; to_if_held_down_threshold_milliseconds (def: 500)
             ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
             :held    1000
