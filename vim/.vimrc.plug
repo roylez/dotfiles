@@ -239,8 +239,6 @@ endif
 " ....................................................................... }}}1
 
 " tpope gang............................................................. {{{1
-Plug 'tpope/vim-surround'
-let g:surround_{char2nr('b')} = "**\r**"
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
@@ -288,6 +286,8 @@ endif
 
 Plug 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+Plug 'machakann/vim-sandwich'
 
 " AsyncTasks............................................................. {{{1
 Plug 'skywind3000/asynctasks.vim'
