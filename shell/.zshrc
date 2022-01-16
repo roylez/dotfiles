@@ -185,13 +185,13 @@ export LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 #MOST like colored man pages
 export PAGER=less LESS="-M -i -R --shift 5" LESSCHARSET=utf-8 READNULLCMD=less
-export LESS_TERMCAP_md=$'\e[1;31m'      #bold1
-export LESS_TERMCAP_mb=$'\e[1;31m'
-export LESS_TERMCAP_me=$'\e[m'
-export LESS_TERMCAP_so=$'\e[01;7;34m'  #search highlight
-export LESS_TERMCAP_se=$'\e[m'
-export LESS_TERMCAP_us=$'\e[1;2;32m'    #bold2
-export LESS_TERMCAP_ue=$'\e[m'
+export LESS_TERMCAP_md=$'\e[1;34m'      #bold
+export LESS_TERMCAP_mb=$'\e[1;33m'      #blinking
+export LESS_TERMCAP_me=$'\e[m'          #end all modes
+export LESS_TERMCAP_so=$'\e[01;7;34m'   #search highlight, standout mode
+export LESS_TERMCAP_se=$'\e[m'          #end standout mode
+export LESS_TERMCAP_us=$'\e[1;32m'      #underlining
+export LESS_TERMCAP_ue=$'\e[m'          #end underlining
 
 # alias and listing colors
 alias -g A="|awk"

@@ -83,11 +83,6 @@ if [ -f /etc/bash_completion ]; then
    . /etc/bash_completion
 fi
 
-# This line was appended by KDE
-# Make sure our customised gtkrc file is loaded.
-export GTK2_RC_FILES=$HOME/.gtkrc-2.0
-
-#change the prompt line
 #if [ "$TERM" = "linux" ]
 #then
 #we're on the system console or maybe telnetting in
@@ -98,6 +93,15 @@ export GTK2_RC_FILES=$HOME/.gtkrc-2.0
 #fi
 
 export PATH=$PATH:$HOME/bin
+
+export PAGER=less LESS="-M -i -R --shift 5" LESSCHARSET=utf-8 READNULLCMD=less
+export LESS_TERMCAP_md=$'\e[1;34m'      #bold
+export LESS_TERMCAP_mb=$'\e[1;33m'      #blinking
+export LESS_TERMCAP_me=$'\e[m'          #end all modes
+export LESS_TERMCAP_so=$'\e[01;7;34m'   #search highlight, standout mode
+export LESS_TERMCAP_se=$'\e[m'          #end standout mode
+export LESS_TERMCAP_us=$'\e[1;32m'      #underlining
+export LESS_TERMCAP_ue=$'\e[m'          #end underlining
 
 # add Intel Compiler environment variables
 #source /opt/intel/fc/9.1.036/bin/ifortvars.sh
