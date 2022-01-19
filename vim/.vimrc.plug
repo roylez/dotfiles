@@ -374,6 +374,7 @@ autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
 
 Plug 'elixir-editors/vim-elixir'
 autocmd FileType elixir,eelixir setlocal shiftwidth=2
+autocmd BufNewFile,BufRead *.leex setlocal ft=html.eelixir
 
 "===================Plug loading ends==========================================
 call plug#end()

@@ -24,7 +24,7 @@ def init( ${2:args} ) do
 end
 endsnippet 
 
-snippet IO.inspect "IO.inspect" b
+snippet inspect "IO.inspect" b
 IO.inspect $1
 endsnippet
 
@@ -145,7 +145,7 @@ endsnippet
 snippet 'def handle_continue' "handle_continue(msg, state)" b
 def handle_continue(${1:msg}, state) do
   $0
-  {:noreply, state}
+  { :noreply, state }
 end
 endsnippet
 

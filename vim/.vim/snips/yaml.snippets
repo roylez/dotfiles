@@ -1,0 +1,41 @@
+snippet service "Docker compose service" b
+  ${1:name}:
+    image: ${2:$1}
+    volumes:
+      - $3
+    environment:
+      - 
+    ports:
+      - 
+endsnippet
+
+snippet docker "GitHub action docker build" b
+name: build
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          buildx-version: latest
+      - name: login to docker hub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+      - name: get date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d')"
+      - name: build the image
+        run: |
+          docker buildx build --push \
+            --tag $GITHUB_REPOSITORY:latest \
+            --tag $GITHUB_REPOSITORY:${{steps.date.outputs.date}} \
+            --platform linux/amd64,linux/arm64 .
+endsnippet
