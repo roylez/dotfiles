@@ -44,9 +44,10 @@ cmd autojump %{{
 
 cmd untar !{{
   case "$f" in
-    *.tar.*)                   tar xvf "$f";;
-    *.zip|*.7z|*.lzma|*.rar)   7z x "$f";;
-    *)                         echo "Not an archive file!";;
+    *.tar.*)           tar   xvf "$f";;
+    *.zip|*.7z|*.lzma) 7z    x   "$f";;
+    *.rar)             unrar x   "$f";;
+    *)                 echo  "Not an archive file!";;
   esac
 
 }}
