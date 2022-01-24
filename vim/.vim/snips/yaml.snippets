@@ -1,4 +1,29 @@
-snippet service "Docker compose service" b
+snippet package.ansible "Ansbile install package" b
+- name: install
+  package: name=$1 state=present
+endsnippet
+
+snippet lineinfile.ansible "Ansible lineinfile" b
+- name: ${1:description}
+  lineinfile:
+    name: ${2:path}
+    line: "${3:line}"
+endsnippet
+
+snippet template.ansible "Ansible template" b
+- name: ${1:description}
+  template:
+    src=${2:file}
+    dest=${3:dest}
+  notify: ${4:reload_service}
+endsnippet
+
+snippet service.ansible "Ansible service" b
+- name: enable service
+  service: name=${1:name} state=started enabled=yes
+endsnippet
+
+snippet service.docker "Docker compose service" b
   ${1:name}:
     image: ${2:$1}
     volumes:

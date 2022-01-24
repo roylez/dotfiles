@@ -83,6 +83,7 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
 " comment / uncomment, context aware
 Plug 'tyru/caw.vim' " {{{
 Plug 'Shougo/context_filetype.vim', { 'for': 'vim' }
+autocmd FileType slime let b:caw_oneline_comment = '/'
 " F9 and Alt-9
 vmap <F9> gcc
 nmap <F9> gcc
