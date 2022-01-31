@@ -149,6 +149,10 @@ def handle_continue(${1:msg}, state) do
 end
 endsnippet
 
+snippet references "references(:tab, ...)"
+references(:${1:tab}, type: :binary_id${2:, on_delete: :delete_all})
+endsnippet
+
 snippet 'def handle_call' "handle_call(msg, from, state)" b
 def handle_call(${1:msg}, _from, state) do
   $0

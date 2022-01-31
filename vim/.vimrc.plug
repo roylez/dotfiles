@@ -377,6 +377,8 @@ autocmd BufNewFile,BufRead *.leex setlocal ft=html.eelixir
 "===================Plug loading ends==========================================
 call plug#end()
 
+runtime macros/sandwich/keymap/surround.vim
+
 " 256 colour theme....................................................... {{{1
 if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_running")
     set t_8f=[38;2;%lu;%lu;%lum
