@@ -149,6 +149,38 @@ def handle_continue(${1:msg}, state) do
 end
 endsnippet
 
+snippet 'form schema' "defmodule ..Form.Schema ... embedded_schema do..." b
+defmodule Herder.Form.${1:Module} do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @primary_key false
+
+  embedded_schema do
+    field :id, :string
+    field ${2::field}
+  end
+
+  @required_fields [:id, $2]
+  @optional_fields []
+
+  def changeset(attrs) do
+    %__MODULE__{}
+    |> cast(attrs, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields) 
+  end
+
+  def submit(%Ecto.Changeset{}=cs) do
+    apply_action(cs, :insert)
+  end
+  def submit(params) do
+    params
+    |> changeset()
+    |> apply_action(:insert)
+  end
+end
+endsnippet
+
 snippet references "references(:tab, ...)"
 references(:${1:tab}, type: :binary_id${2:, on_delete: :delete_all})
 endsnippet
