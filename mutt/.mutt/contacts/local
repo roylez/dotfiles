@@ -1,0 +1,143 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+#Author: Roy L Zuo (me@roylez.info)
+#Description:
+#   remember mutt outgoing recipients as well as from whom I have read
+#   their emails
+require 'mail'
+require 'yaml'
+require 'time'
+
+BASE_DIR = "#{ENV['HOME']}/.mutt/contacts"
+CONTACTS_FILE = File.join(BASE_DIR, "contacts.yml")
+LDAP_ENV_FILE = File.join(BASE_DIR, ".env")
+
+require 'dotenv'  rescue abort "Please install net-ldap gem!"
+Dotenv.load!(LDAP_ENV_FILE)
+
+module Contacts
+  ALIASES = %w{ ldap local }.freeze
+
+  def self.save_mail_contacts(mail_body, fields=[ :from ], with_timestamp = true )
+    a = LocalContacts.new
+    a.from_mail(mail_body, fields, with_timestamp).save
+  end
+
+  def self.query(filter)
+    cmd = File.basename($0)
+    unless ALIASES.include? cmd
+      agents = constants.select{|c| Class === const_get(c)}.map{|c| const_get(c) }
+    else
+      agents = constants.
+        select{|c| Class === const_get(c) and c.to_s =~ /#{cmd}/i }.
+        map{|c| const_get(c) }
+    end
+    agents.map{|c| c.new.query(filter) }.inject(&:+)
+  end
+
+  def self.query_print(filter)
+    res = query(filter)
+    puts
+    res.each do |email, name, detail|
+      puts "#{email}\t#{name || ' '}\t#{detail || ' '}"
+    end
+  end
+
+  do_ldap = false
+  if ENV['LDAP_BASEDN']
+    begin
+      require 'net/ldap'    # ruby-net-ldap gem needed
+      do_ldap = true
+    rescue
+      nil
+    end
+  end
+
+  class LDAPContacts
+    def initialize
+      @ldap = Net::LDAP.new :host => ENV['LDAP_SERVER'],
+                            :port => ENV['LDAP_SERVER_PORT'],
+                            :base => ENV['LDAP_BASEDN'],
+                            :encryption => :simple_tls,
+                            :auth => { :method => :simple,
+                                       :username => ENV['LDAP_BINDDN'],
+                                       :password => ENV['LDAP_PASSWORD'] }
+    end
+
+    def query(filter)
+      f =  Net::LDAP::Filter.eq( "cn", "*#{filter}*" ) | Net::LDAP::Filter.eq( "mail", "*#{filter}*" )
+      extra_fields = ENV['LDAP_EXTRA_FIELDS'] ?
+        ENV['LDAP_EXTRA_FIELDS'].downcase.split.map(&:to_sym) :
+        [ :telephonenumber ]
+      fields = %w( cn  mail ) + extra_fields
+      res = @ldap.search( filter: f, attributes: fields )
+      res.map{|entry|
+        [ entry.mail.first,     # mail
+          entry.cn.first,       # name
+          extra_fields.map{|i| entry[i].first.to_s }.compact.join(" | ") ]    # extra info
+      }
+    end
+  end   if do_ldap
+
+  class LocalContacts
+    def initialize(file = CONTACTS_FILE)
+      @file = file
+      @contacts = File.file?(@file) ? YAML.unsafe_load(File.open(@file).read) : {}
+    end
+
+    def from_mail(mail_text, fields = [:from], with_timestamp = true)
+      m = Mail.new(mail_text)
+      new_contacts = fields.collect{|f| m[f]}.compact.collect{|f|
+        [f.addresses, f.display_names].transpose
+      }.inject(&:+).uniq
+
+      new_contacts = Hash[new_contacts.collect{|a,n| [a, {:name => n}.delete_if{|k,v| v.nil? }] } ]
+
+      new_contacts.each{|_,v| v[:last] = Time.now}  if with_timestamp
+
+      new_contacts.each_key do |a|
+        @contacts[a] ? @contacts[a].merge(new_contacts[a]) : ( @contacts[a] = new_contacts[a] )
+      end
+
+      self
+    end
+
+    def save
+      open(@file, 'w'){|f| f.puts @contacts.to_yaml}
+    end
+
+    def query(filter)
+      @contacts.select{|k, v| k + v[:name].to_s =~ /#{filter}/i }.     # select matching results
+          sort{|a,b| a.last[:last].to_s <=> b.last[:last].to_s }.      # order by last contact date, desceding
+          map{|a,h| [a, h[:name], h[:last]] }
+    end
+
+  end
+end
+
+if __FILE__ == $0
+  require 'optparse'
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: #{$0} [options] [STRING]"
+    options[:fetch] = nil
+    opts.on('-f','--fetch FIELDS','Fetch addresses from email, FIELDS should be comma separated') { |fields|
+      options[:fetch] = fields.downcase.split(',').map(&:to_sym)
+    }
+    opts.on('-t','--time',
+            'Toggle if timestamps should be added to record',
+            'Records with timestamps always stand before those without.'
+           ) { options[:time] = true }
+    opts.on('-p','--print',
+            'Toggle printing of the original message',
+            'Useful when this script is used as mutt :display_filter '
+           ) { options[:print] = true }
+  end.parse!
+  if options[:fetch]  # fetch
+    mail_body = ARGF.read
+    Contacts.save_mail_contacts(mail_body, options[:fetch], options[:time])
+    puts mail_body  if options[:print]
+  else  # query
+    Contacts.query_print(ARGV.first)
+  end
+end
