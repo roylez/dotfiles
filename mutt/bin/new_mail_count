@@ -1,0 +1,7 @@
+#!/bin/sh
+
+INBOX=~/workspace/doc/mail/personal/inbox
+
+count=`ls -1 ${INBOX}/new |wc -l`
+
+echo $count
