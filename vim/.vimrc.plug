@@ -462,7 +462,7 @@ if has("nvim")
     end
 
     require'lspconfig'.elixirls.setup{
-        cmd = { vim.loop.os_homedir().."/soft/elixir-ls/language_server.sh" },
+        cmd = { vim.loop.os_homedir().."/workspace/opt/elixir-ls/language_server.sh" },
         on_attach = on_attach,
         flags = { debounce_text_changes = 150 },
         settings = {

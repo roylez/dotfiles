@@ -1,13 +1,6 @@
+# vim: ft=neomuttrc
+#
 # Order to display the headers in
-#Author: Roy L Zuo (me at roylez dot info)
-#Description:
-#   mutt main configuration file
-#
-# This configuration represents my current MUTT + offlineimap setup for
-# "inbox zero" practice. If you are looking for a fetchmail solution, look
-# for my muttrc BEFORE 2012-03-21.
-#
-
 ignore *
 unignore from subject reply-to cc list-id user-agent x-mailer lines
 hdr_order from subject reply-to cc list-id user-agent x-mailer lines
@@ -30,17 +23,19 @@ set mask="!^\\.[^.]"
 macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
 
 set postponed=~/.mutt/templates
-source ~/.mutt/account.business
-macro index <f2> '<enter-command>source ~/.mutt/account.personal<enter><change-folder>!<enter>'
-macro index <f3> '<enter-command>source ~/.mutt/account.business<enter><change-folder>!<enter>'
+# ---------------------color theme-----------------------------------
+# source "~/.mutt/muttrc.color`tput colors`"
+source "~/.mutt/muttrc.color8"
+
+source ~/.mutt/account.personal
 
 # use tab to switch between accounts, inspired by
 #  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
 macro generic \Cx| "<enter-command>source"
 macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
 macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
-macro generic \Cx0 "\Cx| ~/.mutt/account.personal\"\n\Cx&1\"<enter><change-folder>!<enter>"
-macro generic \Cx1 "\Cx| ~/.mutt/account.business\"\n\Cx&0\"<enter><change-folder>!<enter>"
+macro generic \Cx0 "\Cx| ~/.mutt/account.business\"\n\Cx&1\"<enter><change-folder>!<enter>"
+macro generic \Cx1 "\Cx| ~/.mutt/account.personal\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
 # Use as from the address mail was sent to
 # You'd have to define $alternates for this
@@ -112,12 +107,6 @@ set envelope_from=yes       #add -f <from> to sendmail command line
 set realname='Roy Zuo'
 set reverse_name=no         # I prefer to use my tailed "from"
 set reverse_realname=no     # I prefer to use my own "realname"
-alternates 'royl(ez|zuo)@gmail.com|lzuo@(hkusua|graduate).hku.hk|z.le@uq.edu.au|me@roylez.info'
-
-#mailing list
-#subscribe china@lists.uq.edu.au
-subscribe -group uq all@smms.uq.edu.au academic@smms.uq.edu.au uqstaff@lists.uq.edu.au all@scmb.uq.edu.au science.all@science.uq.edu.au moleculardynamics@lists.uq.edu.au
-subscribe -group lst xg96-4@googlegroups.com PCManX@googlegroups.com cmake@cmake.org rememberthemilk-api@googlegroups.com zsh-users@zsh.org todotxt@yahoogroups.com ruby-talk@ruby-lang.org
 
 #score "~s believe" -10
 
@@ -300,6 +289,3 @@ set pgp_auto_decode=yes
 #send-hook . "set signature='fortune -e tao taow wisdom work linux -s|cowsay -f small -W 70|'"
 # send-hook . "set signature='fortune -s|cowsay -f small -W 70|'"
 
-# ---------------------color theme-----------------------------------
-# source "~/.mutt/muttrc.color`tput colors`"
-source "~/.mutt/muttrc.color8"
