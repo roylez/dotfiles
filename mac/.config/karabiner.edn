@@ -49,6 +49,7 @@
 :devices {
           :apple [ { :vendor_id 1452 } ]
           :niz   [ { :vendor_id 1155 :product_id 21042 } ]  ;; Niz Plum atom68
+          :k780  [ { :vendor_id 1133 :product_id 50475 } ]  ;; Logitech k780
           }
 
 :applications {
@@ -70,7 +71,7 @@
  :main [
         {:des "Niz Plum atom68 modifications"
          :rules [
-                 [:##right_alt :##right_control [:niz] ]
+                 [:##right_alt :##right_control [:niz :k780] ]
                  ] }
         {:des "More function keys"
          :rules [

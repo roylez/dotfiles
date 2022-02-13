@@ -1,7 +1,7 @@
 [user]
   name = roylez
   email = <me@roylez.info>
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy+B+RggmMh/PvclWyHwRpVapAGyya9q4ZsRG67EceV
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy+B+RggmMh/PvclWyHwRpVapAGyya9q4ZsRG67EceV
 [color]  # Ensure we get color
   ui = always
 [push]
@@ -51,8 +51,10 @@
 [pull]
   rebase = true
 [init]
-	defaultBranch = master
+  defaultBranch = master
 [commit]
-	gpgsign = true
+  gpgsign = true
 [gpg]
-	format = ssh
+  format = ssh
+[gpg "ssh"]
+  allowedSignersFile = ~/.ssh/allowed_signers
