@@ -323,7 +323,7 @@ _tmux_preexec() {
     for)         title "()$cmd[7]"     ;;
     lazygit)     title "G:$(git_repo)" ;;
     svn|git)     title "${cmd[1,2]}"   ;;
-    make)        title "[${cmd[2]}]"   ;;
+    make)        title "[${cmd[2]:-${PWD##*/}}]"   ;;
     ls|ll)       ;;
     *)           title "${executable:t}"   ;;
   esac
