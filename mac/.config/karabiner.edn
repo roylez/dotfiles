@@ -69,7 +69,7 @@
             }
 
  :main [
-        {:des "Niz Plum atom68 modifications"
+        {:des "Niz Plum atom68 / Logitech K780 modifications"
          :rules [
                  [:##right_alt :##right_control [:niz :k780] ]
                  ] }
@@ -94,11 +94,18 @@
          :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
         {:des "Left Ctrl single tap to send ctl-cmd-d for easy dictionary access"
          :rules [[:left_control :left_control nil {:alone :!TCd}]] }
-        {:des "Tap shift to change input sources"
-         :rules [
-                 [:left_shift  :left_shift  :zh {:alone :!Tspacebar} ]
-                 [:right_shift :right_shift :en {:alone :!Tspacebar} ]
-                 ] }
+        {:des "Tap right shift twice to change input sources except in terminals"
+         :rules [:!terminal
+                 [:right_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
+                 [:right_shift
+                  [["change-input" 1] :right_shift]
+                  ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]] }
+        {:des "Tap left shift twice to send <ESC>f in terminals"
+         :rules [:terminal
+                 [:left_shift [:escape :f ["fzf-complete" 0]] ["fzf-complete" 1]]
+                 [:left_shift
+                  [["fzf-complete" 1] :left_shift]
+                  ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
                  [:!Ch :left_arrow  nil]
