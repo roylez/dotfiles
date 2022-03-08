@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-INBOX=~/workspace/doc/mail/personal/inbox
+INBOXS=(~/workspace/doc/mail/{gmail,icloud}/inbox)
 
-count=`ls -1 ${INBOX}/new |wc -l`
+count=0
+
+for inbox in ${INBOXS[@]}; do
+   count=$((`ls -1 ${inbox}/new |wc -l` + $count))
+done
 
 echo $count

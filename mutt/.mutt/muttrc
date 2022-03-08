@@ -27,15 +27,15 @@ set postponed=~/.mutt/templates
 # source "~/.mutt/muttrc.color`tput colors`"
 source "~/.mutt/muttrc.color8"
 
-source ~/.mutt/account.personal
+source ~/.mutt/account.icloud
 
 # use tab to switch between accounts, inspired by
 #  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
-macro generic \Cx| "<enter-command>source"
 macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
 macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
-macro generic \Cx0 "\Cx| ~/.mutt/account.business\"\n\Cx&1\"<enter><change-folder>!<enter>"
-macro generic \Cx1 "\Cx| ~/.mutt/account.personal\"\n\Cx&0\"<enter><change-folder>!<enter>"
+macro generic \Cx0 "<enter-command>source ~/.mutt/account.gmail\"\n\Cx&1\"<enter><change-folder>!<enter>"
+macro generic \Cx1 "<enter-command>source ~/.mutt/account.work\"\n\Cx&2\"<enter><change-folder>!<enter>"
+macro generic \Cx2 "<enter-command>source ~/.mutt/account.icloud\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
 # Use as from the address mail was sent to
 # You'd have to define $alternates for this
