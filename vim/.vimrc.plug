@@ -220,7 +220,7 @@ if has("mac")
         \ { 'type': 'files',     'header': ['      RECENT' ] },
         \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
   let g:startify_bookmarks = [
-        \ { 't': '~/workspace/doc/markdown/TODO-' . strftime("%Y") . '.md' },
+        \ { 't': '~/workspace/doc/markdown/TODO.md' },
         \ { 'c': '~/.vimrc' },
         \ { 'p': '~/.vimrc.plug' },
         \ { 's': '~/.zshrc' } ]
