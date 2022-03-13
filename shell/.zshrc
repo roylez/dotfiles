@@ -216,7 +216,7 @@ alias find='noglob find'        # noglob for find
 alias rsync='noglob rsync'
 alias grep='grep -a -I --color=auto'
 alias freeze='kill -STOP'
-alias ls=$'ls -h --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
+alias ls=$'ls -h --hyperlink=auto --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 alias vi='vim'
 alias ll='ls -lctr'
 # alias ll='ls -li'

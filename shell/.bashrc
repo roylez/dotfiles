@@ -67,7 +67,7 @@ fi
 # enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ] && (command -v dircolors &>/dev/null ); then
     [[ -f $HOME/.lscolor256 ]] && eval $(dircolors -b $HOME/.lscolor256) || eval $(dircolors -b)
-    alias ls='ls --color=auto'
+    alias ls=$'ls -h --hyperlink=auto --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 fi
 
 # some more ls aliases
