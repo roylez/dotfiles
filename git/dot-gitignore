@@ -27,3 +27,4 @@ node_modules
 vendor
 .yarnclean
 .envrc
+.direnv

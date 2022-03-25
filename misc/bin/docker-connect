@@ -1,0 +1,121 @@
+#!/bin/bash
+# description: provision docker-machine tls connection
+
+set -e
+
+if [ -z $2 ]; then
+  echo "USAGE: $0 <NAME> <ADDRESS>"
+  exit 1
+fi
+
+MACHINE_NAME=$1
+MACHINE_IP=${2:-$MACHINE_NAME}
+
+CERTS_DIR="$HOME/.docker/machine/certs"
+MACHINE_DIR="$HOME/.docker/machine/machines/$MACHINE_NAME"
+
+if [ -d $MACHINE_DIR ]; then 
+  echo "Machine ${MACHINE_NAME} exists!"
+else
+  if command -v docker-machine &>/dev/null; then
+    # generate config.json if docker-machine exists
+    echo -e "\n-- Generating machine profile with docker-machine --\n"
+    docker-machine create --driver=none --url=tcp://${MACHINE_IP}:2376 ${MACHINE_NAME}
+  fi
+  
+  # ensure dir exists
+  mkdir -p $CERTS_DIR
+
+  # TODO: ensure ca certs exists
+
+  # copy ca 
+  cp $CERTS_DIR/{ca,cert,key}.pem $MACHINE_DIR/
+
+  # generate server key
+  echo -e "\n-- Generating certificates with openssl --\n"
+  cd $MACHINE_DIR/
+  openssl genrsa -out server-key.pem 4096
+  openssl req -subj "/CN=${MACHINE_NAME}" -sha256 -new -key server-key.pem -out server.csr
+  openssl x509 -req -days 3650 -in server.csr -CA $CERTS_DIR/ca.pem -CAkey $CERTS_DIR/ca-key.pem -out server.pem
+  echo subjectAltName = IP:${MACHINE_IP},IP:127.0.0.1 > extfile.cnf
+  echo extendedKeyUsage = serverAuth >> extfile.cnf
+  openssl x509 -req -days 3650 -sha256 -in server.csr -CA $CERTS_DIR/ca.pem -CAkey $CERTS_DIR/ca-key.pem -CAcreateserial -out server.pem -extfile extfile.cnf
+  rm extfile.cnf server.csr
+  cd $OLDPWD
+fi
+
+scp -q $MACHINE_DIR/{ca,server,server-key}.pem $MACHINE_IP:/tmp/
+
+ssh -t $MACHINE_IP 'bash -s' <<ENDSSH
+
+if [ \$(id -u) -ne 0 ]; then
+  echo -e "\n-- SSH user is not root at ${MACHINE_NAME}, please manual provision it with the following commands --\n"
+
+  cat <<EOMSG
+  mv /tmp/{ca,server,server-key}.pem /etc/docker
+  mkdir -p /etc/systemd/system/docker.service.d
+  cat > /etc/systemd/system/docker.service.d/10-machine.conf <<-EOSYSTEMD 
+  [Service]
+  ExecStart=
+  ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock --storage-driver overlay2 --tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=generic
+  Environment=
+EOSYSTEMD
+  systemctl daemon-reload
+  systemctl restart docker.service
+EOMSG
+
+  exit
+fi
+
+if ! command -v docker; then
+  echo "Docker not installed, installing..."
+  if command -v apt; then
+    apt install -qy docker.io
+  elif command -v yum; then
+    yum install -y docker
+  elif command -v apk; then
+    apk add docker
+  elif command -v pacman; then
+    pacman -S docker
+  fi
+fi
+
+mv /tmp/{ca,server,server-key}.pem /etc/docker
+
+if command -v systemctl; then
+  mkdir -p /etc/systemd/system/docker.service.d
+  cat > /etc/systemd/system/docker.service.d/10-machine.conf <<-EOSYSTEMD 
+  [Service]
+  ExecStart=
+  ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock --storage-driver overlay2 --tlsverify --tlscacert /etc/docker/ca.pem --tlscert /etc/docker/server.pem --tlskey /etc/docker/server-key.pem --label provider=generic
+  Environment=
+EOSYSTEMD
+  systemctl daemon-reload
+  systemctl restart docker.service
+elif command -v apk; then
+  cat > /etc/conf.d/docker <<-EOALPINE
+  DOCKER_OPTS='
+  -H tcp://0.0.0.0:2376
+  -H unix:///var/run/docker.sock
+  --tlsverify
+  --tlscacert /etc/docker/ca.pem
+  --tlscert /etc/docker/server.pem
+  --tlskey /etc/docker/server-key.pem
+  --label provider=generic'
+EOALPINE
+  service docker restart
+fi
+
+ENDSSH
+
+cat <<-EOM
+
+-- Set the following environment variables to connect to docker daemon at ${MACHINE_NAME} --
+
+  export DOCKER_TLS_VERIFY="1"
+  export DOCKER_HOST="tcp://${MACHINE_IP}:2376"
+  export DOCKER_CERT_PATH="${MACHINE_DIR}"
+  export DOCKER_MACHINE_NAME="${MACHINE_NAME}"
+  # or
+  # eval \$(docker-machine env arr)
+EOM
