@@ -17,18 +17,34 @@ MACHINE_DIR="$HOME/.docker/machine/machines/$MACHINE_NAME"
 if [ -d $MACHINE_DIR ]; then 
   echo "Machine ${MACHINE_NAME} exists!"
 else
+  # ensure dir exists
+  mkdir -p $CERTS_DIR
+
+  # ensure ca certs exists
+  if [ ! -f $CERTS_DIR/ca.pem ]; then
+    echo -e "\n-- Generating docker machine CA --\n"
+    cd $CERTS_DIR
+    # ca
+    openssl genrsa -out ca-key.pem 4096
+    openssl req -new -x509 -days 3650 -subj '/C=US/ST=Limbo/L=Limbo/O=Limbo/OU=Dummy' -key ca-key.pem -out ca.pem
+    # client certs
+    echo -e "\n-- Generating docker machine client certs --\n"
+    openssl genrsa -out key.pem 4096
+    openssl req -subj '/CN=client' -new -key key.pem -out client.csr
+    echo extendedKeyUsage = clientAuth > extfile-client.cnf
+    openssl x509 -req -days 3650 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem
+    rm extfile-client.cnf client.csr
+    cd $OLDPWD
+  fi
+
   if command -v docker-machine &>/dev/null; then
     # generate config.json if docker-machine exists
     echo -e "\n-- Generating machine profile with docker-machine --\n"
     docker-machine create --driver=none --url=tcp://${MACHINE_IP}:2376 ${MACHINE_NAME}
   fi
-  
-  # ensure dir exists
-  mkdir -p $CERTS_DIR
-
-  # TODO: ensure ca certs exists
 
   # copy ca 
+  mkdir -p $MACHINE_DIR
   cp $CERTS_DIR/{ca,cert,key}.pem $MACHINE_DIR/
 
   # generate server key
@@ -117,5 +133,5 @@ cat <<-EOM
   export DOCKER_CERT_PATH="${MACHINE_DIR}"
   export DOCKER_MACHINE_NAME="${MACHINE_NAME}"
   # or
-  # eval \$(docker-machine env arr)
+  # eval \$(docker-machine env ${MACHINE_NAME})
 EOM
