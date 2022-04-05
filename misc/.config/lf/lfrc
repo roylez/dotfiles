@@ -1,5 +1,12 @@
 # vim: ft=conf
 #
+# :  read (default)  builtin/custom command
+# $  shell           shell command
+# %  shell-pipe      shell command running with the ui
+# !  shell-wait      shell command waiting for key press
+# &  shell-async     shell command running asynchronously
+#
+
 set shell zsh
 set shellopts '-ey'
 set drawbox on
@@ -28,8 +35,8 @@ cmd open ${{
   esac
 }}
 
-cmd fzf_jump ${{
-  res="$(fd -t d -d 2 |fzf --info=inline --prompt='> JUMP TO:  ')" || true
+cmd fzf_jump %{{
+  res="$(fd -t d -d 2 |fzf-tmux -w 50% --info=inline --prompt='> JUMP TO:  ')" || true
     if [ -d "$res" ]; then
       cmd="cd"
     else
