@@ -2,12 +2,12 @@
 # vim:fdm=marker
 
 # 预配置 {{{
-# 如果不是交互shell就直接结束 (unix power tool, 2.11)
-#if [[  "$-" != *i* ]]; then return 0; fi
-
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.bin:/usr/local/bin:$PATH
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
+
+# 如果不是交互shell就直接结束 (unix power tool, 2.11)
+if [[  "$-" != *i* ]]; then return 0; fi
 
 # disable flow controll so that ctl-s does not freeze terminal and you don't
 # have to ctrl-q to reenable it
