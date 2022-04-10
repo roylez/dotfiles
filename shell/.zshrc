@@ -284,6 +284,7 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 __PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
 _pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%B%F{yellow}%~%f%u" }
+_sym_color_precmd() { [ $? -ne 0 ] && __PROMPT_SYM="%b %F{red}%(!.#.>) %f" || __PROMPT_SYM="%b %F{yellow}%(!.#.>) %f" }
 #change back before next command
 _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
@@ -349,6 +350,7 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd  _tmux_precmd
 add-zsh-hook precmd  vcs_info
 add-zsh-hook precmd  _reset_cursor
+add-zsh-hook precmd  _sym_color_precmd
 add-zsh-hook preexec _tmux_preexec
 add-zsh-hook preexec _pwd_color_preexec
 add-zsh-hook chpwd   _pwd_color_chpwd
@@ -388,17 +390,15 @@ function +vi-git-misc-n-abbr-master() {
     [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
 }
 
-if [ "$SSH_TTY" = "" ]; then
-    local host="%B%F{magenta}%m%b%f"
+if [ -z "$SSH_TTY" ]; then
+    local host="%b%F{magenta}%m%f"
 else
-    local host="%B%U%F{magenta}%m%f%u%b"            # underline for remote hostname
+    local host="%b%U%F{magenta}%m%f%u"            # underline for remote hostname
 fi
 local user="%B%(!:%F{red}:%F{green})%n%b"       # red for root user name
-local symbol="%B %(!:%F{red}#:%F{yellow}>) %b%f"
 local job="%1(j,%F{red}:%F{blue}%j,)%f"
-PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job$symbol'
+PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job$__PROMPT_SYM'
 PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
-# RPROMPT='$__PROMPT_PWD'
 
 # SPROMPT - the spelling prompt
 SPROMPT="%F{yellow}zsh%f: correct '%F{red}%B%R%f%b' to '%F{green}%B%r%f%b' ? ([%F{cyan}Y%f]es/[%F{cyan}N%f]o/[%F{cyan}E%f]dit/[%F{cyan}A%f]bort) "
