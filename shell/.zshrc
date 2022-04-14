@@ -284,7 +284,6 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 __PROMPT_PWD="%F{magenta}%~%f"
 #change PWD color
 _pwd_color_chpwd() { [ $PWD = $OLDPWD ] || __PROMPT_PWD="%B%F{yellow}%~%f%u" }
-_sym_color_precmd() { [ $? -ne 0 ] && __PROMPT_SYM="%b %F{red}%(!.#.>) %f" || __PROMPT_SYM="%b %F{yellow}%(!.#.>) %f" }
 #change back before next command
 _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
@@ -350,7 +349,6 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd  _tmux_precmd
 add-zsh-hook precmd  vcs_info
 add-zsh-hook precmd  _reset_cursor
-add-zsh-hook precmd  _sym_color_precmd
 add-zsh-hook preexec _tmux_preexec
 add-zsh-hook preexec _pwd_color_preexec
 add-zsh-hook chpwd   _pwd_color_chpwd
@@ -362,8 +360,8 @@ add-zsh-hook chpwd   vcs_info
 # 提示符 {{{
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:*:*' formats           " %F{white}%K{black}%B %b%m%c%u %f%k%%b"
-zstyle ':vcs_info:*:*' actionformats     " %F{white}%K{black}%B %b%m(%a)%c%u %f%k%%b"
+zstyle ':vcs_info:*:*' formats           " %F{white}%K{black}%B%b%m%c%u%f%k%%b"
+zstyle ':vcs_info:*:*' actionformats     " %F{white}%K{black}%B%b%m(%a)%c%u%f%k%%b"
 zstyle ':vcs_info:*:*' stagedstr         "%F{green}*"
 zstyle ':vcs_info:*:*' unstagedstr       "%F{red}*"
 zstyle ':vcs_info:*:*' check-for-changes true
@@ -397,7 +395,8 @@ else
 fi
 local user="%B%(!:%F{red}:%F{green})%n%b"       # red for root user name
 local job="%1(j,%F{red}:%F{blue}%j,)%f"
-PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job$__PROMPT_SYM'
+local sym="%b%(?,%F{yellow},%F{red})%(!.#.>) %f"
+PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job $sym'
 PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
 
 # SPROMPT - the spelling prompt
