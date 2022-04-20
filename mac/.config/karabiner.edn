@@ -121,7 +121,7 @@
                 ]}
         {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
          :rules [
-                 [:!TOgrave_accent_and_tilde :play_or_pause nil ]
+                 [:!TOgrave_accent_and_tilde :play_or_pause :niz ]
                  [:!TOpage_up                :volume_up     nil ]
                  [:!TOpage_down              :volume_down   nil ]
                  ] }
