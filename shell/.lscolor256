@@ -140,6 +140,7 @@ MULTIHARDLINK 04
 
 # image formats
 .jpg 01;38;05;170
+.webp 01;38;05;170
 .eps 01;38;05;170
 .JPG 01;38;05;170
 .heic 01;38;05;170

@@ -157,6 +157,8 @@ nnoremap <silent> <leader>n :RG <C-R><C-W><CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
+nnoremap <silent> <leader>T :Tags<CR>
+nnoremap <silent> <leader>t :BTags<CR>
 inoremap <silent> ,, <C-O>:Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
@@ -332,7 +334,7 @@ function! s:fzf_task()
 endfunction
 
 command! -nargs=0 Tasks call s:fzf_task()
-nnoremap <silent> <leader>t :Tasks<CR>
+nnoremap <silent> <leader>j :Tasks<CR>
 " ....................................................................... }}}1
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }

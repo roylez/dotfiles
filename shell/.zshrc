@@ -42,11 +42,10 @@ setopt hash_list_all            # search all paths before command completion
 setopt no_hist_beep             # don not beep on history expansion errors
 setopt hist_reduce_blanks       # reduce whitespace in history
 setopt hist_ignore_space        # do not remember commands starting with space
-setopt no_share_history         # share history among sessions, conflicts inc_append_history
 setopt hist_verify              # reload full command when runing from history
 setopt hist_ignore_all_dups     # when runing a command several times, only store one
 setopt hist_expire_dups_first   #remove dups when max size reached
-setopt inc_append_history       # append to history once executed
+setopt inc_append_history_time no_inc_append_history no_share_history       # append to history once executed
 setopt hist_fcntl_lock          # use filesystem lock when writing history
 setopt hist_no_store            # do not store `history` or `fc -l`
 setopt interactive_comments     # comments in history
