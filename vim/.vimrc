@@ -26,7 +26,7 @@ set shellcmdflag=-c
 
 " {{{ general settings
 if has("gui_running")
-  set background=light
+  set background=dark
   "ensure gui vim gets the right PATH set
   " set shellcmdflag=-l\ -c
 else

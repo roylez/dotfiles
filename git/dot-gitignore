@@ -1,5 +1,6 @@
 .lftp
 .tags
+tags
 .gitignore
 *.db
 .backup
