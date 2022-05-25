@@ -345,7 +345,6 @@ Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 Plug 'mg979/vim-visual-multi'
 
 Plug 'airblade/vim-rooter'
-let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_cd_cmd = 'tcd'
 let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs']
 

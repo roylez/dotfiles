@@ -37,8 +37,10 @@ endif
 set notermguicolors
 set nocompatible
 
-if has("gui_macvim")
-  set macmeta
+if has("osx")
+  if has("gui_macvim")
+    set macmeta
+  endif
   " include path for apple silicon homebrew
   let $PATH="/opt/homebrew/bin:" . $PATH
   " never have that python version mismatch problem again

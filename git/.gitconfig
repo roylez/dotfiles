@@ -15,7 +15,7 @@
   co  = checkout
   des = describe --tags
   l   = log
-  lc  = log --graph --pretty=format:'%Cred%h%Creset [%C(cyan dim)%G?%Creset]%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative
+  lc  = log --graph --pretty=format:'%Cred%h%Creset [%C(green dim)%G?%Creset]%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue%cn%Creset' --abbrev-commit --date=relative
   m   = merge
   pl  = pull
   pu  = push
@@ -42,7 +42,7 @@
 [mergetool]
   prompt = true
 [mergetool "vimdiff"]
-  cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+  cmd = vimdiff
 [difftool]
   prompt = false
 [diff]
