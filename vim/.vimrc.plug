@@ -131,7 +131,7 @@ function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {'dir': FindRootDirectory(), 'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
@@ -347,7 +347,7 @@ Plug 'mg979/vim-visual-multi'
 Plug 'airblade/vim-rooter'
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_cd_cmd = 'tcd'
-let g:rooter_patterns = ['.git', 'Makefile', 'mix.exs']
+let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs']
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
@@ -412,6 +412,7 @@ call deoplete#custom#option({
             \'markdown': ['ultisnips', 'dictionary'],
             \'vim-edit': ['ultisnips', 'dictionary'],
             \'vimwiki':  ['ultisnips', 'dictionary'],
+            \'ledger':   ['ultisnips', 'tmux'],
             \'ruby':     ['ultisnips', 'tmux']}
 \})
 " .................................................................... }}}1

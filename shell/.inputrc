@@ -19,6 +19,6 @@ set completion-map-case on
 set completion-prefix-display-length 2
 
 "\t": menu-complete
-Control-p: history-search-backward
-Control-n: history-search-forward
+"\C-p": history-search-backward
+"\C-n": history-search-forward
 "e": edit-and-execute-command
