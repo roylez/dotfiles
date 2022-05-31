@@ -211,8 +211,8 @@ if has("mac")
 
   Plug 'roylez/zwiki'
 
-" start up menu ......................................................... {{{2
-  Plug 'mhinz/vim-startify'
+  " start up menu ......................................................... {{{2
+  Plug 'mhinz/vim-startify', { 'on': 'Startify' }
   autocmd User Startified setlocal cursorline
 
   let g:startify_files_number = 5
@@ -233,14 +233,14 @@ if has("mac")
         \ { 'b': ['空白文档',   'PasteEdit'            ]},
         \ { 'B': ['剪切板',     'PasteEdit +norm\ "+P' ]},
         \ { 'z': ['Zettel笔记', 'ZwikiNew +norm\ "+P'  ]} ]
-  autocmd VimEnter * let t:startify_new_tab = 1
+  " autocmd VimEnter * let t:startify_new_tab = 1
   " make startify start on every new tab
-  autocmd BufEnter *
-        \ if !exists('t:startify_new_tab') && empty(expand('%')) |
-        \   let t:startify_new_tab = 1 |
-        \   Startify |
-        \ endif
-" ....................................................................... }}}2
+  " autocmd BufEnter *
+  "      \ if !exists('t:startify_new_tab') && empty(expand('%')) |
+  "      \   let t:startify_new_tab = 1 |
+  "      \   Startify |
+  "      \ endif
+  " ....................................................................... }}}2
 endif
 " ....................................................................... }}}1
 
@@ -345,8 +345,9 @@ Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
 Plug 'mg979/vim-visual-multi'
 
 Plug 'airblade/vim-rooter'
+let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_cd_cmd = 'tcd'
-let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs']
+let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs', '.tags', 'readme.md']
 
 "-------------------------------------------------------------------------------
 "                                  file types                                  "
