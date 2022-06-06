@@ -261,7 +261,7 @@ calc()  { awk "BEGIN{ print $* }" ; }
 bin-exist() {[[ -n ${commands[$1]} ]]}
 
 #check if is a local shell
-is-local() { [[ -z "$SSH_CONNECTION" || -f ~/.tty.local ]] }
+is-local() { [[ -z "$SSH_CONNECTION" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
 
 #git directory/repo name
 git_repo() { basename $(git rev-parse --show-toplevel) }
@@ -313,14 +313,13 @@ _tmux_preexec() {
   local -a cmd; cmd=(${(z)1})
   executable=$cmd[1]
   if [[ "$(builtin whence -w $cmd[1])" = *alias ]]; then
-      executable=${$(whence $cmd[1])%% *}
+      executable=${(z)$(whence $cmd[1])[-1]}
   fi
   case $executable:t in
     ssh|mosh|et) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
     sudo)        title "#${cmd[2]:t}"  ;;
     *=*)         title "${cmd[2]:t}"   ;;
     for)         title "()$cmd[7]"     ;;
-    lazygit)     title "G:$(git_repo)" ;;
     svn|git)     title "${cmd[1,2]}"   ;;
     make)        title "[${cmd[2]:-${PWD##*/}}]"   ;;
     ls|ll)       ;;
