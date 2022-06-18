@@ -410,7 +410,7 @@ call deoplete#custom#option({
             \'sources': {
             \'_':        ['ultisnips', 'tabnine', 'tmux'],
             \'markdown': ['ultisnips', 'dictionary'],
-            \'vim-edit': ['ultisnips', 'dictionary'],
+            \'scratch':  ['ultisnips', 'dictionary'],
             \'vimwiki':  ['ultisnips', 'dictionary'],
             \'ledger':   ['ultisnips', 'tmux'],
             \'ruby':     ['ultisnips', 'tmux']}

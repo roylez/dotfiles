@@ -259,20 +259,20 @@ autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
 "Auomatically add file head defined in ~/.vim/templates/
 autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | normal G
 
-" adhoc edits, files ending with vim-edit
+" adhoc edits, files ending with "scratch"
 "
 " fallback to markdown file type if all ftdetect fails
-autocmd BufRead,BufNewFile *.vim-edit setfiletype markdown.vim-edit
+autocmd BufRead,BufNewFile *.scratch setfiletype markdown.scratch
 " do not wrap actual lines
-autocmd BufRead,BufNewFile *.vim-edit setlocal list spell wrap textwidth=0 wrapmargin=5 noswapfile fo=roqnmB1
+autocmd BufRead,BufNewFile *.scratch setlocal list spell wrap textwidth=0 wrapmargin=5 noswapfile fo=roqnmB1
 " paste to clipboard when saving. 
-autocmd BufWritePost *.vim-edit if getfsize(expand(@%))>0 | silent :%y+ | endif
+autocmd BufWritePost *.scratch if getfsize(expand(@%))>0 | silent :%y+ | endif
 " delete tmp file when exiting
-autocmd BufDelete,BufHidden,VimLeave *.vim-edit silent :!rm -f <afile>
+autocmd BufDelete,BufHidden,VimLeave *.scratch silent :!rm -f <afile>
 
 command! -nargs=? PasteEdit :call <sid>new_vim_edit(<q-args>)
 function! s:new_vim_edit(cmd)
-  execute ":e " . a:cmd . ' /tmp/' . strftime('%Y%m%d.%H%M%S') . '.vim-edit'
+  execute ":e " . a:cmd . ' /tmp/' . strftime('%Y%m%d.%H%M%S') . '.scratch'
 endfunction
 
 " }}}

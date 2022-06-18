@@ -77,9 +77,9 @@ cmd make_file %{{
   fi
 }}
 
-cmd delete %{{
-  rm -rf "$fx"
-  }}
+cmd delete ${{ rm -rf "$fx" }}
+
+cmd vidir ${{ vidir }}
 
 # MAPPINGS
 #
@@ -90,3 +90,4 @@ map A :tar
 map a :make_file
 map x :delete
 map Z push :autojump<space>
+map R :vidir
