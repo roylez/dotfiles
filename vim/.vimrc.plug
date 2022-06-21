@@ -270,20 +270,20 @@ Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim'
 if has("nvim")
   Plug 'neovim/nvim-lspconfig'
 elseif version > 800
-  Plug 'w0rp/ale', { 'for': ['elixir', 'json'] }
+  Plug 'w0rp/ale', { 'for': ['elixir', 'json', 'markdown'] }
   let g:ale_open_list            = 1
   let g:ale_lint_on_text_changed = 0
   let g:ale_lint_on_enter        = 0
   let g:ale_lint_on_save         = 1
-  let g:ale_set_highlights       = 0
+  " let g:ale_set_highlights       = 0
 
-  Plug 'GrzegorzKozub/vim-elixirls', { 'do': ':ElixirLsCompileSync' }
-  let g:ale_elixir_elixir_ls_release = expand( g:vim_plugged_dir ) . '/vim-elixirls/elixir-ls/release'
+  let g:ale_elixir_elixir_ls_release = expand( '~/workspace/opt/elixir-ls' )
   " https://github.com/JakeBecker/elixir-ls/issues/54
   let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
 
   let g:ale_linters = {}
-  let g:ale_linters.elixir = [ 'credo', 'elixir-ls' ]
+  let g:ale_linters.elixir = [ 'elixir-ls' ]
+  let g:ale_linters.markdown = [ 'vale' ]
   autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
   autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
   autocmd FileType elixir,eelixir nnoremap K :ALEHover<CR>
