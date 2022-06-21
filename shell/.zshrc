@@ -312,9 +312,6 @@ _tmux_precmd() {
 _tmux_preexec() {
   local -a cmd; cmd=(${(z)1})
   executable=$cmd[1]
-  if [[ "$(builtin whence -w $cmd[1])" = *alias ]]; then
-      executable=${(z)$(whence $cmd[1])[-1]}
-  fi
   case $executable:t in
     ssh|mosh|et) title "@$(echo $cmd[-1]|sed -E 's:.*@::;s:([a-zA-Z][^.]+)\..*$:\1:')" ;;
     sudo)        title "#${cmd[2]:t}"  ;;
@@ -322,7 +319,6 @@ _tmux_preexec() {
     for)         title "()$cmd[7]"     ;;
     svn|git)     title "${cmd[1,2]}"   ;;
     make)        title "[${cmd[2]:-${PWD##*/}}]"   ;;
-    ls|ll)       ;;
     *)           title "${executable:t}"   ;;
   esac
 }
