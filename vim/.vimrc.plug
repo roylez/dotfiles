@@ -209,7 +209,7 @@ if has("mac")
   autocmd FileType vimwiki setlocal spell
   autocmd FileType vimwiki nnoremap tt :VimwikiToggleListItem<CR>
 
-  Plug 'roylez/zwiki'
+  Plug 'git@github.com:roylez/zwiki'
 
   " start up menu ......................................................... {{{2
   Plug 'mhinz/vim-startify', { 'on': 'Startify' }
