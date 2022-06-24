@@ -77,7 +77,7 @@ cmd make_file %{{
   fi
 }}
 
-cmd delete ${{ rm -rf "$fx" }}
+cmd delete %{{ rm -rf "$fx" }}
 
 cmd vidir ${{ vidir }}
 

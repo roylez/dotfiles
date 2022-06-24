@@ -268,25 +268,25 @@ Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim'
 
 " {{{ ale
 if has("nvim")
-  Plug 'neovim/nvim-lspconfig'
+    Plug 'neovim/nvim-lspconfig'
 elseif version > 800
-  Plug 'w0rp/ale', { 'for': ['elixir', 'json', 'markdown'] }
-  let g:ale_open_list            = 1
-  let g:ale_lint_on_text_changed = 0
-  let g:ale_lint_on_enter        = 0
-  let g:ale_lint_on_save         = 1
-  " let g:ale_set_highlights       = 0
+    Plug 'w0rp/ale', { 'for': ['elixir', 'json', 'markdown', 'markdown.scratch'] }
+    let g:ale_open_list            = 1
+    let g:ale_lint_on_text_changed = 1
+    let g:ale_lint_on_enter        = 0
+    let g:ale_lint_on_save         = 1
+    " let g:ale_set_highlights       = 0
 
-  let g:ale_elixir_elixir_ls_release = expand( '~/workspace/opt/elixir-ls' )
-  " https://github.com/JakeBecker/elixir-ls/issues/54
-  let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
+    let g:ale_elixir_elixir_ls_release = expand( '~/workspace/opt/elixir-ls' )
+    " https://github.com/JakeBecker/elixir-ls/issues/54
+    let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
 
-  let g:ale_linters = {}
-  let g:ale_linters.elixir = [ 'elixir-ls' ]
-  let g:ale_linters.markdown = [ 'vale' ]
-  autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
-  autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
-  autocmd FileType elixir,eelixir nnoremap K :ALEHover<CR>
+    let g:ale_linters = {}
+    let g:ale_linters.elixir   = [ 'elixir-ls' ]
+    let g:ale_linters.markdown = [ 'languagetool' ]
+    autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
+    autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
+    autocmd FileType elixir,eelixir nnoremap K :ALEHover<CR>
 endif
 " }}}
 
@@ -386,15 +386,11 @@ runtime macros/sandwich/keymap/surround.vim
 
 " 256 colour theme....................................................... {{{1
 if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_running")
-    set t_8f=[38;2;%lu;%lu;%lum
-    set t_8b=[48;2;%lu;%lu;%lum
-    if !has("gui_running")
-        set t_Co=256
-    endif
     colorscheme gruvbox8
 else
     colorscheme tango
 endif
+
 " ....................................................................... }}}1
 
 " deoplete settings...................................................... {{{1

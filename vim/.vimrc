@@ -34,7 +34,6 @@ else
   set notitle
 endif
 
-set notermguicolors
 set nocompatible
 
 if has("osx")
@@ -339,6 +338,21 @@ augroup END
 "     autocmd VimLeave * silent !echo -ne "\033[2 q"
 " endif
 " }}}
+
+" make curly underline available in some terminal {{{
+" https://sw.kovidgoyal.net/kitty/underlines/
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+" }}}
+
+" true color for some terminals {{{
+if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$'
+  let &t_8f= "\e[38;2;%lu;%lu;%lum"
+  let &t_8b= "\e[48;2;%lu;%lu;%lum"
+  if !has("gui_running")
+    set t_Co=256 termguicolors
+  endif
+endif
 
 " visual p does not replace paste buffer {{{ "
 function! RestoreRegister()
