@@ -75,25 +75,28 @@
                  ] }
         {:des "More function keys"
          :rules [
-                 [:!CC1             :f1  nil ]
-                 [:!CC2             :f2  nil ]
-                 [:!CC3             :f3  nil ]
-                 [:!CC4             :f4  nil ]
-                 [:!CC5             :f5  nil ]
-                 [:!CC6             :f6  nil ]
-                 [:!CC7             :f7  nil ]
-                 [:!CC8             :f8  nil ]
-                 [:!CC9             :f9  nil ]
-                 [:!CC0             :f10 nil ]
-                 [:!CChyphen        :f11 nil ]
-                 [:!CCequal_sign    :f12 nil ]
-                 [:!CCopen_bracket  :f11 nil ]
-                 [:!CCclose_bracket :f12 nil ]
+                 [:!CC1             :f1  ]
+                 [:!CC2             :f2  ]
+                 [:!CC3             :f3  ]
+                 [:!CC4             :f4  ]
+                 [:!CC5             :f5  ]
+                 [:!CC6             :f6  ]
+                 [:!CC7             :f7  ]
+                 [:!CC8             :f8  ]
+                 [:!CC9             :f9  ]
+                 [:!CC0             :f10 ]
+                 [:!CChyphen        :f11 ]
+                 [:!CCequal_sign    :f12 ]
+                 [:!CCopen_bracket  :f11 ]
+                 [:!CCclose_bracket :f12 ]
                  ] }
         {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped"
          :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
         {:des "Left Ctrl single tap to send ctl-cmd-d for easy dictionary access"
          :rules [[:left_control :left_control nil {:alone :!TCd}]] }
+        ; too laggy to be useful
+        ; {:des "Spacebar to left_shift when held"
+        ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
         {:des "Tap shift twice to change input sources except in terminals"
          :rules [:!terminal
                  [:right_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
@@ -114,16 +117,16 @@
         ;           ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
-                 [:!Ch :left_arrow  nil]
-                 [:!Cj :down_arrow  nil]
-                 [:!Ck :up_arrow    nil]
-                 [:!Cl :right_arrow nil]
+                 [:!Ch :left_arrow  ]
+                 [:!Cj :down_arrow  ]
+                 [:!Ck :up_arrow    ]
+                 [:!Cl :right_arrow ]
                 ]}
         {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
          :rules [
                  [:!TOgrave_accent_and_tilde :play_or_pause :niz ]
-                 [:!TOpage_up                :volume_up     nil ]
-                 [:!TOpage_down              :volume_down   nil ]
+                 [:!TOpage_up                :volume_up     ]
+                 [:!TOpage_down              :volume_down   ]
                  ] }
         ; {:des "SPACE mode"
         ;  :rules [
