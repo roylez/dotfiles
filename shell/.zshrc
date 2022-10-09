@@ -197,7 +197,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|cut -d' '"
 alias -g E="|sed"
-alias -g G='|GREP_COLOR=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') egrep -a -i --color=always'
+alias -g G='|GREP_COLORS=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') grep -E -a -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less -R"
 alias -g P="|column -t"
@@ -525,7 +525,7 @@ if ( bin-exist fzf ); then
 
   # search history with fzf
   _fzf_history() {
-    builtin fc -l -r -n 1 | fzf --prompt 'History > ' -e -q "^$*"
+    builtin fc -l -r -n 1 | fzf --prompt 'History > ' -e -q "$*"
   }
   # A completion fallback if something more specific isn't available.
   function _fzf_generic_find() {
@@ -605,7 +605,7 @@ fi
 
 # kubernet {{{
 if ( bin-exist kubectl ); then
-  source <(kubectl completion zsh)
+  # run: kubectl completion zsh > ~/.zfunctions/_kubectl
   alias k=kubectl
   compdef k=kubectl
 fi

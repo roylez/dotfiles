@@ -21,6 +21,10 @@ if defined?(PryByebug)
   end
 end
 
+Pry::Commands.block_command 'load_script', 'Load and eval script' do |script|
+  Pry.toplevel_binding.eval File.read(script)
+end
+
 module Kernel
   def suppress_warnings
     original_verbosity = $VERBOSE

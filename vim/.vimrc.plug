@@ -76,6 +76,7 @@ Plug 'blueyed/vim-diminactive'
 
 " indentation helper
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
+nmap <silent> <Leader><tab> :IndentLinesToggle<CR>
 
 "-------------------------------------------------------------------------------
 "                                 operability                                  "
@@ -341,6 +342,7 @@ nnoremap <silent> <leader>j :Tasks<CR>
 " ....................................................................... }}}1
 
 Plug 'csexton/trailertrash.vim', { 'on': 'TrailerTrim' }
+nmap <Leader><backspace> :TrailerTrim<CR>
 
 Plug 'mg979/vim-visual-multi'
 
@@ -362,7 +364,9 @@ let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs', '.tags', '
 " let g:vue_pre_processors = ['pug', 'sass']
 " let g:vim_markdown_frontmatter = 1
 
-Plug 'pearofducks/ansible-vim'
+Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
+Plug 'ledger/vim-ledger',       { 'for': 'ledger'  }
+Plug 'vim-crystal/vim-crystal', { 'for': 'crystal' }
 
 if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
