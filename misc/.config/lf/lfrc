@@ -37,15 +37,24 @@ cmd open ${{
 
 cmd fzf_jump ${{
   res="$(fd -t d -d 2 |fzf --info=inline --prompt='> JUMP TO:  ')" || true
-    if [ -d "$res" ]; then
-      cmd="cd"
-    else
-      cmd="select"
-    fi
+  if [ -d "$res" ]; then
+    cmd="cd"
+  else
+    cmd="select"
+  fi
   lf -remote "send $id $cmd \"$res\""
 }}
 
-cmd autojump %{{ 
+cmd fzf_open ${{
+  res="$(fd -t f -d 2 |fzf --info=inline --prompt='> OPEN:  ')" || true
+  if [ -f "$res" ]; then
+    lf -remote "send $id $open &$OPENER \"$res\""
+  else
+    lf -remote "send $id $select \"$res\""
+  fi
+}}
+
+cmd autojump %{{
   lf -remote "send $id cd '$(zoxide query $1)'"
 }}
 
@@ -82,13 +91,54 @@ cmd delete %{{ rm -rf "$fx" }}
 
 cmd vidir ${{ vidir }}
 
+cmd scp_to &{{
+  scp -r "$fx" $1
+  lf -remote "send $id echo ==> $fx copied to $1"
+  }}
+
 # MAPPINGS
 #
+# Defaults
+#
+# map zh set hidden!
+# map zr set reverse!
+# map zn set info
+# map zs set info size
+# map zt set info time
+# map za set info size:time
+# map sn :set sortby natural; set info
+# map ss :set sortby size; set info size
+# map st :set sortby time; set info time
+# map sa :set sortby atime; set info atime
+# map sc :set sortby ctime; set info ctime
+# map se :set sortby ext; set info
+# map gh cd ~
+# map <space> :toggle; down
+
+# overrides
+#
+map zh
+map zr
+map zn
+map zs
+map zt
+map za
+map sh set hidden!
+map ss set sortby size
+map st :set sortby time; set info size:time
+map sa :set sortby atime; set info size:atime
+map sc :set sortby ctime; set info size:ctime
+map se set sortby ext
 
 map <enter> shell
-map J :fzf_jump
-map A :tar
-map a :make_file
-map x :delete
-map Z push :autojump<space>
-map R :vidir
+map A tar
+map a make_file
+map x delete
+map R vidir
+
+map z<space> push :autojump<space>
+map zz fzf_jump
+map zo fzf_open
+
+map Tl :scp_to limbo:tmp
+map Ts :scp_to cs:tmp
