@@ -525,12 +525,12 @@ if ( bin-exist fzf ); then
 
   # search history with fzf
   _fzf_history() {
-    builtin fc -l -r -n 1 | fzf --prompt 'History > ' -e -q "$*"
+    builtin fc -l -r -n 1 | fzf-tmux -p --prompt 'HISTORY > ' -e -q "$*"
   }
   # A completion fallback if something more specific isn't available.
   function _fzf_generic_find() {
     local cmd="$1"; shift 1
-    fd . 2>/dev/null | fzf --prompt 'Files > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
+    fd . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
   }
 
   # {{{ custom command completion with fzf, idea from whiteinge/dotfiles

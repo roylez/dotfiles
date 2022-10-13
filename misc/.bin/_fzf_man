@@ -3,6 +3,6 @@
 local cmd="$1"; shift 1
 
 man -k . \
-  | fzf --prompt 'Manpage > ' -q "$*" \
+  | fzf-tmux -p --prompt 'MAN > ' -q "$*" \
   | awk -v cmd=$cmd 'BEGIN {FS="[,( ]"} {sub(/)\s+- .*$/, "", $0); print cmd, $NF, $1}'
 

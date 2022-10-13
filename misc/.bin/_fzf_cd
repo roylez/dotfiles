@@ -2,5 +2,5 @@
 # Use a fuzzy-finder to complete child directories
 #
 cmd="$1"; shift 1
-fd -t d "${2:-.}" | fzf --prompt "CD > " -q "$*" \
+fd -t d "${2:-.}" | fzf-tmux -p --prompt "CD > " -q "$*" \
     | xargs printf '%s %s\n' "$cmd"
