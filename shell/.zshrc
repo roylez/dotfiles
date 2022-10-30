@@ -258,7 +258,7 @@ alias forget='unset HISTFILE'
 calc()  { awk "BEGIN{ print $* }" ; }
 
 #check if a binary exists in path
-bin-exist() {[[ -n ${commands[$1]} ]]}
+_has() {[[ -n ${commands[$1]} ]]}
 
 #check if is a local shell
 is-local() { [[ -z "$SSH_CONNECTION" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
@@ -267,15 +267,15 @@ is-local() { [[ -z "$SSH_CONNECTION" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
 git_repo() { basename $(git rev-parse --show-toplevel) }
 
 #recalculate track db gain with mp3gain
-(bin-exist mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
+(_has mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
 
 #man page to pdf
-(bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
+(_has ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
 
 #help command for builtins
 help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 
-(bin-exist ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
+(_has ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
 
 # }}}
 
@@ -505,8 +505,8 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # 其他额外软件 {{{
 
 # FZF and friend, esc f to fzf for current command {{{
-if ( bin-exist fzf ); then
-  ( bin-exist fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
+if ( _has fzf ); then
+  ( _has fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
   # molokai themed
   if [[ $- == *i* ]]; then
     # only set default opts when in interactive shell
@@ -592,19 +592,19 @@ fi
 # }}}
 
 # zoxide for auto jump {{{
-if (bin-exist zoxide); then
+if _has zoxide; then
     eval "$(zoxide init zsh)"
 fi
 # }}}
 
 # direnv {{{
-if ( bin-exist direnv ); then
+if ( _has direnv ); then
   eval "$(direnv hook zsh)"
 fi
 # }}}
 
 # kubernet {{{
-if ( bin-exist kubectl ); then
+if ( _has kubectl ); then
   # run: kubectl completion zsh > ~/.zfunctions/_kubectl
   alias k=kubectl
   compdef k=kubectl
@@ -612,18 +612,18 @@ fi
 # }}}
 
 # docker {{{
-if ( bin-exist docker ); then
+if ( _has docker ); then
   alias d=docker
   ( command -v _docker &>/dev/null ) && compdef d=docker
 fi
-if ( bin-exist docker-compose ); then
+if ( _has docker-compose ); then
   alias dc=docker-compose
   ( command -v _docker-compose &>/dev/null ) && compdef dc=docker-compose
 fi
 # }}}
 
 # vim / nvim {{{
-if ( bin-exist nvim ); then
+if ( _has nvim ); then
     export EDITOR='nvim' VISUAL='nvim' SUDO_EDITOR='nvim'
     alias vim='nvim'
 else

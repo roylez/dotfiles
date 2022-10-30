@@ -99,6 +99,7 @@ nmap ga      <Plug>(EasyAlign)
 " distraction free writing
 Plug 'junegunn/goyo.vim',  { 'on': 'Goyo', 'for': 'markdown' }
 let g:goyo_height='100%'
+nmap <Leader>g :Goyo<CR>
 
 " drawings
 Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
@@ -231,9 +232,10 @@ if has("mac")
         \ { 'p': '~/.vimrc.plug' },
         \ { 's': '~/.zshrc' } ]
   let g:startify_commands = [
-        \ { 'b': ['空白文档',   'PasteEdit'            ]},
-        \ { 'B': ['剪切板',     'PasteEdit +norm\ "+P' ]},
-        \ { 'z': ['Zettel笔记', 'ZwikiNew +norm\ G"+p'  ]} ]
+        \ { 'b': ['BLANK',      'PasteEdit'            ]},
+        \ { 'B': ['CLIPBOARD',  'PasteEdit +norm\ "+P' ]},
+        \ { 'z': ['Zettel', 'ZwikiNew +norm\ G"+p'  ]} ]
+
   let g:startify_custom_header = "startify#center(split(system('mdcat --no-color ~/workspace/doc/markdown/TODO.md'), '\n'))"
   " autocmd VimEnter * let t:startify_new_tab = 1
   " make startify start on every new tab
