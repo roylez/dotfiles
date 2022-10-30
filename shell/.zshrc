@@ -2,7 +2,7 @@
 # vim:fdm=marker
 
 # 预配置 {{{
-export PATH=$HOME/.bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
