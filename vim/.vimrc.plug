@@ -269,6 +269,10 @@ let g:projectionist_heuristics = {
 " ....................................................................... }}}1
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
+let g:gitgutter_sign_added = '▌'
+let g:gitgutter_sign_modified = '▌'
+let g:gitgutter_sign_removed = '▌'
+let g:gitgutter_sign_modified_removed = '∙'
 
 " {{{ ale
 if has("nvim")
@@ -368,25 +372,25 @@ let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs', '.tags', '
 " let g:vim_markdown_frontmatter = 1
 
 Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
-Plug 'ledger/vim-ledger',       { 'for': 'ledger'  }
 Plug 'vim-crystal/vim-crystal', { 'for': 'crystal' }
 
 if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
+Plug 'ledger/vim-ledger',       { 'for': 'ledger'  }
 autocmd FileType ledger setlocal fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
 autocmd FileType ledger nnoremap k kzz
 autocmd FileType ledger nnoremap G Gzz
 
-" Plug 'elixir-editors/vim-elixir'
 Plug 'roylez/vim-slime-syntax'
 autocmd BufNewFile,BufRead *.slim,*slime,*.slimleex set ft=slime
 
 Plug 'elixir-editors/vim-elixir'
 autocmd FileType elixir,eelixir setlocal shiftwidth=2
-autocmd BufNewFile,BufRead *.leex setlocal ft=html.eelixir
+autocmd BufNewFile,BufRead *.leex,*.heex setlocal ft=html.eelixir
+Plug 'mattn/emmet-vim'
 
 "===================Plug loading ends==========================================
 call plug#end()
