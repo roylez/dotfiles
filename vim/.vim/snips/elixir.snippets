@@ -84,6 +84,13 @@ end
 def init(_) do
   DynamicSupervisor.init(strategy: :one_for_one)
 end
+  
+def start_child(foo, bar, baz) do
+  # If MyWorker is not using the new child specs, we need to pass a map:
+  # spec = %{id: MyWorker, start: {MyWorker, :start_link, [foo, bar, baz]}}
+  spec = {MyWorker, foo: foo, bar: bar, baz: baz}
+  DynamicSupervisor.start_child(__MODULE__, spec)
+end
 endsnippet
 
 snippet 'use GenServer' "Genserver" b

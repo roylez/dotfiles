@@ -508,7 +508,8 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
 # FZF and friend, esc f to fzf for current command {{{
 if ( _has fzf ); then
-  ( _has fd ) && export FZF_DEFAULT_COMMAND='fd --type f'
+  ( _has fd ) && FD_EXECUTABLE=fd || FD_EXECUTABLE=fdfind
+  export FZF_DEFAULT_COMMAND="$FD_EXECUTABLE --type f"
   # molokai themed
   if [[ $- == *i* ]]; then
     # only set default opts when in interactive shell
@@ -532,7 +533,7 @@ if ( _has fzf ); then
   # A completion fallback if something more specific isn't available.
   function _fzf_generic_find() {
     local cmd="$1"; shift 1
-    fd . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
+    $FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
   }
 
   # {{{ custom command completion with fzf, idea from whiteinge/dotfiles

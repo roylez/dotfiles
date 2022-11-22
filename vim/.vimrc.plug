@@ -41,6 +41,7 @@ let g:NERDTreeSyntaxDisableDefaultExtensions = 1
 let g:NERDTreeSyntaxEnabledExtensions = ['yml', 'ex', 'exs', 'eex', 'leex', 'slim', 'slimleex', 'slime', 'js', 'css', 'sass']
 let g:NERDTreeExtensionHighlightColor = {}
 let g:NERDTreeExtensionHighlightColor['ex'] = 'AE403F'
+" let g:NERDTreeQuitOnOpen = 1
 " ....................................................................... }}}1
 
 Plug 'vim-airline/vim-airline' " {{{
@@ -269,9 +270,9 @@ let g:projectionist_heuristics = {
 " ....................................................................... }}}1
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
-let g:gitgutter_sign_added = '▌'
-let g:gitgutter_sign_modified = '▌'
-let g:gitgutter_sign_removed = '▌'
+let g:gitgutter_sign_added = '∙'
+let g:gitgutter_sign_modified = '∙'
+let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
 " {{{ ale
