@@ -508,6 +508,7 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 
 # FZF and friend, esc f to fzf for current command {{{
 if ( _has fzf ); then
+  # dirty hack for ubuntu/debian
   ( _has fd ) && FD_EXECUTABLE=fd || FD_EXECUTABLE=fdfind
   export FZF_DEFAULT_COMMAND="$FD_EXECUTABLE --type f"
   # molokai themed
@@ -585,11 +586,26 @@ if ( _has fzf ); then
     zle reset-prompt
   }
 
+  fzf-view-file() {
+    setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+    zle reset-prompt
+
+    local cmd="${PAGER:-less}"
+    result=$($FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s "%s"\n' "$cmd")
+    echo $result
+    if [ -n "$result" ]; then
+      LBUFFER="$result"
+    fi
+    zle accept-line
+  }
+
   zle -N fzf-completion
   zle -N fzf-history-complete
+  zle -N fzf-view-file
   bindkey '\ef' fzf-completion
   bindkey '' fzf-history-complete
   bindkey '\er' fzf-history-complete
+  bindkey '\el' fzf-view-file
   # }}}
 fi
 # }}}
