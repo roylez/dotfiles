@@ -117,10 +117,10 @@
         ;           ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
-                 [:!Ch :left_arrow  ]
-                 [:!Cj :down_arrow  ]
-                 [:!Ck :up_arrow    ]
-                 [:!Cl :right_arrow ]
+                 [:!TOh :left_arrow  ]
+                 [:!TOj :down_arrow  ]
+                 [:!TOk :up_arrow    ]
+                 [:!TOl :right_arrow ]
                 ]}
         {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
          :rules [
