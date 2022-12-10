@@ -607,6 +607,35 @@ if ( _has fzf ); then
   bindkey '\er' fzf-history-complete
   bindkey '\el' fzf-view-file
   # }}}
+
+  # {{{ wiki search and view
+  if [ -d $HOME/workspace/doc/wiki ]; then
+    fzf-view-wiki() {
+      setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+      zle reset-prompt
+
+      if _has glow; then
+        local cmd=glow
+      else
+        local cmd=less
+      fi
+      local wiki_dir=$HOME/workspace/doc/wiki
+      result=$( \
+        awk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
+        fzf-tmux -p --prompt 'WIKI > ' -q "$*" | \
+        cut -d: -f1 | \
+        xargs printf "$cmd $wiki_dir/%s" 
+      )
+      if [ -n "$result" ]; then
+        LBUFFER="$result"
+      fi
+      zle accept-line
+    }
+
+    zle -N fzf-view-wiki
+    bindkey '\e ' fzf-view-wiki
+  fi
+  # }}}
 fi
 # }}}
 
