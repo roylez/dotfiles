@@ -591,12 +591,11 @@ if ( _has fzf ); then
     zle reset-prompt
 
     local cmd="${PAGER:-less}"
-    result=$($FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s "%s"\n' "$cmd")
-    echo $result
+    result=$($FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s')
     if [ -n "$result" ]; then
-      LBUFFER="$result"
+      LBUFFER="$cmd \"$result\""
+      zle accept-line
     fi
-    zle accept-line
   }
 
   zle -N fzf-completion
