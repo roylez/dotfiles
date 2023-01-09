@@ -590,9 +590,12 @@ if ( _has fzf ); then
     setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
     zle reset-prompt
 
-    local cmd="${PAGER:-less}"
     result=$($FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s')
     if [ -n "$result" ]; then
+      cmd="${PAGER:-less}"
+      if ( _has lnav ) && [[ "$result" = *log* ]]; then
+        cmd="lnav -R"
+      fi
       LBUFFER="$cmd \"$result\""
       zle accept-line
     fi

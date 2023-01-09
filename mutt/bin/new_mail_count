@@ -1,11 +1,17 @@
 #!/bin/bash
+#
 
-INBOXS=(~/workspace/doc/mail/{gmail,icloud}/inbox)
+BASE_DIR=~/workspace/doc/mail
 
-count=0
+work_emails=`ls -1 $BASE_DIR/work/inbox/new |wc -l`
+personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -type f |wc -l`
 
-for inbox in ${INBOXS[@]}; do
-   count=$((`ls -1 ${inbox}/new |wc -l` + $count))
-done
-
-echo $count
+if [[ $(( work_emails + personal_emails )) -eq 0 ]]; then
+  echo 0
+elif [[ $personal_emails -eq 0 ]]; then
+  echo W$work_emails
+elif [[ $work_emails -eq 0 ]]; then
+  echo E$personal_emails
+else
+  echo E$personal_emails W$work_emails
+fi
