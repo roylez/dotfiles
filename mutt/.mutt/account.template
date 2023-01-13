@@ -7,7 +7,7 @@ set postponed = "+inbox"
 set trash     = "+trash"
 set spoolfile = "~/workspace/doc/mail/personal/inbox"
 set from      = 'Roy Zuo <me@roylez.info>'
-set sendmail  = "~/.mutt/do_sendmail msmtp"
+set sendmail  = "~/.mutt/bin/do_sendmail msmtp"
 
 set signature = ~/.mutt/sign
 set status_format="===[ 个人 | @roylez.info | %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="

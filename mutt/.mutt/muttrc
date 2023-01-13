@@ -55,12 +55,12 @@ set recall=no
 
 #preferred file type order when viewing multipart/alternative emails
 unalternative_order *
-#alternative_order text/enriched text/plain text/html
-alternative_order text/*
+alternative_order text/enriched text/plain text/html text/*
 
 # auto view settings
-auto_view text/html application/msword text/enriched text/rtf
+auto_view text/html application/msword text/enriched text/rtf text/calendar application/ics
 set mailcap_path=~/.mutt/mailcap_`uname -s|tr '[:upper:]' '[:lower:]'`
+set display_filter='grep -v "\\[-- Autoview using"'
 # this may fix some long url problems in html emails
 set pipe_decode=yes
 

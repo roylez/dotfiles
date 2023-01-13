@@ -8,8 +8,8 @@
 application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 #text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
 
-# image/*   ; ~/.mutt/view_attachment.sh %s
-#image/*; ~/.mutt/view_attachment.sh %s
+# image/*   ; ~/.mutt/bin/view_attachment.sh %s
+#image/*; ~/.mutt/bin/view_attachment.sh %s
 #text/text; open -a BBEdit '%s'; needsterminal; description=Text Text; nametemplate=%s.txt
 application/pdf; open -a /Applications/Preview.app '%s'; copiousoutput; test=test -n $DISPLAY
 image/*; open -a /Applications/Preview.app '%s'; copiousoutput; test=test -n $DISPLAY

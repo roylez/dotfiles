@@ -7,6 +7,8 @@ application/excel; xls2csv %s | less; copiousoutput
 application/x-msexcel; xls2csv %s | less; copiousoutput
 #application/msword;antiword %s | less ; nametemplate=%s.doc; copiousoutput
 text/rtf;catdoc %s | less ; nametemplate=%s.rtf; copiousoutput
+text/calendar;~/.mutt/bin/view_calendar.rb %s; copiousoutput
+application/ics;~/.mutt/bin/view_calendar.rb %s; copiousoutput
 
 # images
 #image/jpeg; display 'jpeg'; test=test -n "$DISPLAY"
@@ -15,8 +17,8 @@ image/*; display %s; test=test -n "$DISPLAY"
 
 # portable document format
 application/pdf; evince %s; test=test -n "DISPLAY"
-application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=select-print.sh %s
+application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=bin/select-print.sh %s
 
 video/*; mplayer %s
-text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -cols %{COLUMNS:-80} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
 #text/html; elinks -force-html -dump-width `tput cols` -dump %s; copiousoutput
