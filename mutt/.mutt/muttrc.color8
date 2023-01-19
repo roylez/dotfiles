@@ -1,4 +1,4 @@
-# vim: ft=muttrc
+# vim: ft=neomuttrc
 
 color normal    white default
 color attachment brightblack default
@@ -33,12 +33,12 @@ color header  black blue  .*
 color header  black magenta ^(From|To|Cc|Subject|X-Bogosity):
 color signature cyan default
 
-color index yellow default ~p              # To me
-color index blue default ~P                # From me
-color index brightwhite default ~N         # New
-color index brightgreen default "~N ~p"    # New to me
-color index brightcyan default ~T          # Tagged
-color index brightblack default ~D         # Deleted
-color index black yellow ~F                # flaged
+color index yellow default '~p !(~f reply)'            # To me
+color index blue default ~P                            # From me
+color index brightwhite default ~N                     # New
+color index brightgreen default '~N ~p !(~f reply)'    # New to me
+color index brightcyan default ~T                      # Tagged
+color index brightblack default ~D                     # Deleted
+color index black yellow ~F                            # flaged
 
 color index black white "~s 'Roy Zuo'"

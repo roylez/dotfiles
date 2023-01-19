@@ -20,5 +20,5 @@ application/pdf; evince %s; test=test -n "DISPLAY"
 application/pdf; pdftotext -enc UTF-8 %s /dev/stdout; copiousoutput;print=bin/select-print.sh %s
 
 video/*; mplayer %s
-text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -cols %{COLUMNS:-80} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput
+text/html; w3m -o display_link_number=1 -dump -ppc 9 -I %{charset} -cols ${COLUMNS:-80} -T text/html %s|sed -e "s:^[[:space:]]$::"|cat -s; copiousoutput; x-neomutt-nowrap
 #text/html; elinks -force-html -dump-width `tput cols` -dump %s; copiousoutput
