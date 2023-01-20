@@ -19,6 +19,8 @@ set print_command="enscript -v -Email -G --word-wrap -f Palatino-Roman@11"
 set mbox_type=Maildir
 set mask="!^\\.[^.]"
 
+set arrow_cursor
+
 # make c contextual according to archlinux wiki
 macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
 
@@ -152,9 +154,9 @@ set pager_index_lines=4
 set pager_stop
 #set pager=vim
 # caching
-set header_cache=~/.mutt-headercache
+set header_cache=~/.mutt/.headercache
 set maildir_header_cache_verify=no
-set message_cachedir=~/.mutt/cache
+set message_cachedir=~/.mutt/.cache
 
 #headers:
 # my_hdr X-PGP-Key-ID:3038867F
@@ -182,9 +184,8 @@ macro pager H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham a
 macro pager \cu "|urlview \n"
 
 #identity selection
-#alias identity_1        Roy Zuo     <roylzuo@gmail.com>
-#alias identity_2        Roy Zuo     <z.le@uq.edu.au>
-#alias identity_3        Le Zuo      <lzuo@graduate.hku.hk>
+#alias identity_1        Roy Zuo     <xxx@gmail.com>
+#alias identity_2        Roy Zuo     <xxx@xxxx>
 #macro compose v "<edit-from>^Uidentity_<tab>" "Select from"
 # ---------------------key bindings----------------------------------
 bind    index,pager g   noop
