@@ -208,11 +208,11 @@ if has("mac")
   let g:vimwiki_hl_cb_checked  = 2
   let g:vimwiki_global_ext     = 0
   let g:vimwiki_create_link    = 0
-  let g:vimwiki_list = [{'path': '~/workspace/doc/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
+  let g:vimwiki_list = [{'path': '~/wiki/', 'syntax': 'markdown', 'ext': '.md', 'auto_diary_index': 1}]
   autocmd FileType vimwiki setlocal spell
   autocmd FileType vimwiki nnoremap tt :VimwikiToggleListItem<CR>
 
-  Plug 'git@github.com:roylez/zwiki'
+  Plug 'roylez/zwiki'
 
   " start up menu ......................................................... {{{2
   Plug 'mhinz/vim-startify', { 'on': 'Startify' }
@@ -228,7 +228,7 @@ if has("mac")
         \ { 'type': 'files',     'header': ['      RECENT' ] },
         \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
   let g:startify_bookmarks = [
-        \ { 't': '~/workspace/doc/wiki/TODO.md' },
+        \ { 't': '~/wiki/TODO.md' },
         \ { 'c': '~/.vimrc' },
         \ { 'p': '~/.vimrc.plug' },
         \ { 's': '~/.zshrc' } ]
@@ -237,7 +237,7 @@ if has("mac")
         \ { 'B': ['CLIPBOARD',  'PasteEdit +norm\ "+P' ]},
         \ { 'z': ['Zettel', 'ZwikiNew +norm\ G"+p'  ]} ]
 
-  let g:startify_custom_header = "startify#center(split(system('bat --decorations=always --style=grid ~/workspace/doc/wiki/TODO.md'), '\n'))"
+  let g:startify_custom_header = "startify#center(split(system('bat --decorations=always --style=grid ~/wiki/TODO.md'), '\n'))"
   " autocmd VimEnter * let t:startify_new_tab = 1
   " make startify start on every new tab
   " autocmd BufEnter *

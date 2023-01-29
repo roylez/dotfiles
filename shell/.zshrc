@@ -611,7 +611,8 @@ if ( _has fzf ); then
   # }}}
 
   # {{{ wiki search and view
-  if [ -d $HOME/workspace/doc/wiki ]; then
+  wiki_dir=$HOME/wiki
+  if [[ -d $wiki_dir ]]; then
     fzf-view-wiki() {
       setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
       zle reset-prompt
@@ -621,7 +622,6 @@ if ( _has fzf ); then
       else
         local cmd=less
       fi
-      local wiki_dir=$HOME/workspace/doc/wiki
       result=$( \
         awk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
         fzf-tmux -p --prompt 'WIKI > ' -q "$*" | \
