@@ -203,8 +203,10 @@ bind    pager   gg      top
 bind    pager   G       bottom
 
 #toggle thread view
-macro    pager   V       '<esc>V'
-macro    index   V       '<esc>V'
+macro    index,pager   V   "<esc>V"  "toggle thread view"
+
+# undo limit
+macro index a "<limit>all\n" "show all messages (undo limit)"
 
 #macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
 # ---------------------GnuPG stuff-----------------------------------
