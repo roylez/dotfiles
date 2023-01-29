@@ -41,7 +41,7 @@ if has("osx")
     set macmeta
   endif
   " include path for apple silicon homebrew
-  let $PATH="/opt/homebrew/bin:" . $PATH
+  let $PATH= $HOME . "/brew/bin:/opt/homebrew/bin:" . $PATH
   " never have that python version mismatch problem again
   let &pythonthreehome=systemlist( '/usr/bin/python3 -c "import sys;print(sys.prefix)"' )[0]
   let &pythonthreedll= &pythonthreehome . '/Python3'
