@@ -616,8 +616,8 @@ if ( _has fzf ); then
       setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
       zle reset-prompt
 
-      if _has glow; then
-        local cmd=glow
+      if _has bat; then
+        local cmd="bat --style grid"
       else
         local cmd=less
       fi
