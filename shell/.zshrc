@@ -623,7 +623,7 @@ if ( _has fzf ); then
         local cmd=less
       fi
       result=$( \
-        awk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
+        gawk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
         fzf-tmux -p --prompt 'WIKI > ' -q "$*" | \
         cut -d: -f1 | \
         xargs printf "$cmd $wiki_dir/%s" 
