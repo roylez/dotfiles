@@ -267,6 +267,11 @@ let g:projectionist_heuristics = {
       \   "defaults/main.yml": { "type": "default", "alternate": "tasks/main.yml"  },
       \ },
       \ }
+
+Plug 'tpope/vim-surround'
+autocmd FileType markdown,vimwiki let b:surround_{char2nr('i')} = "*\r*"
+autocmd FileType markdown,vimwiki let b:surround_{char2nr('b')} = "**\r**"
+autocmd FileType markdown,vimwiki let b:surround_{char2nr('c')} = "``` \1language: \1\r```"
 " ....................................................................... }}}1
 
 Plug 'airblade/vim-gitgutter', { 'for': ['yaml', 'elixir', 'ansible.yaml', 'vim' ] }
@@ -301,8 +306,6 @@ endif
 
 Plug 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-
-Plug 'machakann/vim-sandwich'
 
 " AsyncTasks............................................................. {{{1
 Plug 'skywind3000/asynctasks.vim'
@@ -395,8 +398,6 @@ Plug 'mattn/emmet-vim'
 
 "===================Plug loading ends==========================================
 call plug#end()
-
-runtime macros/sandwich/keymap/surround.vim
 
 " 256 colour theme....................................................... {{{1
 if $TERM =~ '^\(xterm\|screen\|tmux\)' || $TERM =~ '256color$' || has("gui_running")
