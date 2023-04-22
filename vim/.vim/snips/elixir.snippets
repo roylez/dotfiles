@@ -205,3 +205,17 @@ def handle_cast(${1:msg}, state) do
   { :noreply, state }
 end
 endsnippet
+
+snippet component "defmodule Component" b
+defmodule ${1:`!p snip.rv=mod_prefix(path)`.}${2:`!p snip.rv=mod_suffix(path)`} do
+  @moduledoc """
+  $2 components
+  """
+  use Phoenix.Component
+
+  # alias Phoenix.LiveView.JS
+  # import HerderWeb.Gettext
+
+  embed_templates "*"
+end
+endsnippet

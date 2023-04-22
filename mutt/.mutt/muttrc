@@ -21,9 +21,6 @@ set mask="!^\\.[^.]"
 
 set arrow_cursor
 
-# make c contextual according to archlinux wiki
-macro index 'c' '<change-folder>?<change-dir><home>^K=<enter>'
-
 set postponed=~/.mutt/templates
 # ---------------------color theme-----------------------------------
 # source "~/.mutt/muttrc.color`tput colors`"
@@ -32,12 +29,12 @@ source "~/.mutt/muttrc.color8"
 source ~/.mutt/account/icloud
 
 # use tab to switch between accounts, inspired by
-#  http://msmtp.sourceforge.net/doc/msmtp.html#Using-msmtp-with-Mutt
-macro generic \Cx& "<enter-command>macro index \\t \"\\Cx"
-macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
-macro generic \Cx0 "<enter-command>source ~/.mutt/account/gmail\"\n\Cx&1\"<enter><change-folder>!<enter>"
-macro generic \Cx1 "<enter-command>source ~/.mutt/account/work\"\n\Cx&2\"<enter><change-folder>!<enter>"
-macro generic \Cx2 "<enter-command>source ~/.mutt/account/icloud\"\n\Cx&0\"<enter><change-folder>!<enter>"
+#  https://marlam.de/msmtp/msmtp.html#Using-msmtp-with-Mutt
+# macro generic \Cx& ":macro index \\t \\Cx"
+# macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
+# macro generic \Cx0 ":source ~/.mutt/account/gmail\"\n\Cx&1\"<enter><change-folder>!<enter>"
+# macro generic \Cx1 ":source ~/.mutt/account/work\"\n\Cx&2\"<enter><change-folder>!<enter>"
+# macro generic \Cx2 ":source ~/.mutt/account/icloud\"\n\Cx&0\"<enter><change-folder>!<enter>"
 
 # Use as from the address mail was sent to
 # You'd have to define $alternates for this
@@ -145,7 +142,7 @@ set rfc2047_parameters=yes
 # 否则它们一下就消失了。
 set wait_key=no
 # 当你要把信件存到另一个信箱，而这个信箱已经存在时，是否提示附加？
-set noconfirmappend
+set confirm_append=no
 # 是否把邮件头也放在编辑器里可以修改？
 set edit_headers=no
 # 当你在用 pager 看信件时，在 index 留出多少行显示邮件列表？
@@ -207,6 +204,18 @@ macro    index,pager   V   "<esc>V"  "toggle thread view"
 
 # undo limit
 macro index a "<limit>all\n" "show all messages (undo limit)"
+
+# archive
+macro index,pager y "<save-message>=all<enter>" "Archive"
+
+# make c contextual according to archlinux wiki
+macro index c '<change-folder>?<change-dir><enter>oa'
+
+# quick switch folder
+bind index .  noop
+macro index .a '<change-folder>?<change-dir><enter>oa2<enter><enter>'
+macro index .i '<change-folder>?<change-dir><enter>oa3<enter><enter>'
+macro index .. '<change-folder>?<change-dir><enter>oa3<enter><enter>'
 
 #macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
 # ---------------------GnuPG stuff-----------------------------------

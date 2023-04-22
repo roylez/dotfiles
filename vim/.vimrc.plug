@@ -260,6 +260,7 @@ let g:projectionist_heuristics = {
       \ "mix.exs": {
       \   "lib/*.ex":        { "alternate": "test/{}_test.exs", "type": "code" },
       \   "test/*_test.exs": { "alternate": "lib/{}.ex",        "type": "test" },
+      \   "lib/*.html.heex": { "alternate": "lib/{}.ex",        "type": "template" },
       \   "priv/repo/migrations/*.exs": { "type": "migration" },
       \ },
       \ "tasks/*.yml": {

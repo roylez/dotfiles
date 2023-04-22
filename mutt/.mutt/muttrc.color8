@@ -31,9 +31,10 @@ color header  black blue  '.*'
 color header  black magenta '^(From|To|Cc|Subject|X-Bogosity):'
 color signature cyan default
 
-color index green default '~p !(~f reply) !~D' # To me
-color index blue default '~P'                  # From me
-color index bold default default '~N'          # New
-color index bold cyan  default '~T'            # Tagged
-color index bold black default '~D'            # Deleted
-color index reverse bold default default '~F'  # flaged
+color index white default '!~p'               # Not to me
+color index green default '~p!(~freply)!~D'   # To me
+color index bold default default '~N'         # New
+color index bold cyan  default '~T'           # Tagged
+color index blue default '~P'                 # From me
+color index black default '~D'                # Deleted
+color index reverse bold default default '~F' # flaged

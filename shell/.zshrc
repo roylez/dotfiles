@@ -380,7 +380,7 @@ function +vi-git-misc-n-abbr-master() {
     hook_com[misc]+=${(j:/:)gitstatus}
 
     # change branch name display to M for master and use revision when it is easier
-    hook_com[branch]=${hook_com[branch]/#%master/M}
+    hook_com[branch]=${hook_com[branch]/#%(master|main)/M}
     [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
 }
 

@@ -1,7 +1,7 @@
 [user]
   name = roylez
   email = <me@roylez.info>
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDy+B+RggmMh/PvclWyHwRpVapAGyya9q4ZsRG67EceV
+  signingkey = ~/.ssh/id_ed25519
 [color]  # Ensure we get color
   ui = always
 [push]
