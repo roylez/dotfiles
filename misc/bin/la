@@ -1,37 +1,104 @@
 #!/bin/bash
-# description: 用ledger xact添加记录
 
-ledger_file=${LEDGER_FILE:-~/workspace/finance/data/`date +%Y`.ledger}
-xact_cmdline="$*"
+ledger_root=${LEDGER_ROOT:-~/workspace/finance/data}
+ledger_file=${LEDGER_FILE:-$ledger_root/`date +%Y`.ledger}
 
-abort_exit() {
-    echo "$*"; exit 1
-}
+DEFAULT_ACCOUNT1=Expenses:Grocery
+DEFAULT_ACCOUNT2=Assets:Spend
 
 create_transaction() {
-    echo -e "\n$*" >> "$ledger_file"
-    [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
+  echo -e "\n$*" >> "$ledger_file"
+  [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
 }
 
-create_draft() {
-    cmd="ledger xact -- $*"
-    draft=$($cmd)
-    [ -z "$draft" ] && abort_exit "无法自动生成交易记录"
-    echo -e "$draft"
+read_title() {
+  read -r -p "請輸入標題，回車搜索補全： " title
+  if [ -z $title ] ; then
+    title=$(
+      awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $ledger_root/*.ledger \
+        | sort -nr \
+        | cut -d" " -f2- \
+        | fzf-tmux -p --prompt '標題> '
+    )
+  fi
 }
 
-# the first argument is not a date, prepend current date
-if [[ ! $1 =~ ^[0-9][0-9.\-]+[0-9] ]]; then
-    xact_cmdline="$(date +%m.%d) $xact_cmdline"
-fi
+read_amount() {
+  read -r -p "請輸入金額： " amount
+}
 
-draft=$(create_draft $xact_cmdline)
+read_account() {
+  echo "請輸入賬戶 $1： "
+  account=$(ledger accounts |fzf-tmux -p --prompt '賬戶> ')
+}
 
-echo -e "\n$draft\n"
+read_date() {
+  date=${date:-`date +%Y-%m-%d`}
+  read -r -p "請輸入日期[${date}|DATE]： " new_date
+  date=${new_date:-$date}
+}
 
-read -r -p "确定添加此记录？ [Y/n] " response
-if [[ $response =~ ^([nN][oO]|[nN])$ ]]; then
-    abort_exit "放弃编辑"
-else
-    create_transaction "$draft"
-fi
+while true; do
+  read -n 1 -p "添加新紀錄？ [Y|e|n] " response
+  case $response in
+
+    [nqNQ] )
+      echo
+      exit ;;
+
+    [eE] )
+      vim $ledger_file ;;
+
+    [yY] | "" )
+      echo
+      read_date
+      echo $date
+      echo
+      read_title
+      echo $title
+      echo
+      read_amount
+      echo
+      echo "請輸入消費賬戶： "
+      account1=$(ledger accounts --count expenses |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
+      echo $account1
+      echo
+      echo "請輸入支出賬戶： "
+      account2=$(ledger accounts --count assets liabilities |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
+      echo $account2
+      echo
+
+      draft=$(ledger xact -- "$date" "$title" "$account1" "$amount" "$account2")
+      if [ -n "$draft" ]; then
+        echo 建立模板如下：
+        echo
+        echo -e "\e[1m$draft\e[m"
+        echo
+
+        read -n 1 -p "確認添加？[Y|n] " create
+        case $create in
+          [yY] ) 
+            echo -e "\n$draft" >> "$ledger_file"
+            echo -e "\n添加成功"
+            ;;
+          "" ) 
+            echo -e "\n$draft" >> "$ledger_file"
+            echo "添加成功"
+            ;;
+          * )
+            echo -e "\n放棄添加"
+            ;;
+        esac
+      else
+        echo "輸入有誤"
+      fi
+      echo
+      ;;
+
+    * )
+      echo -e "\n錯誤回答，請重試"
+      ;;
+  esac
+
+  echo
+done
