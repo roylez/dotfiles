@@ -12,7 +12,8 @@ create_transaction() {
 }
 
 read_title() {
-  read -r -p "請輸入標題，回車搜索補全： " title
+  echo -ne "請輸入標題，回車搜索：   \e[s"
+  read -r title
   if [ -z $title ] ; then
     title=$(
       awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $ledger_root/*.ledger \
@@ -21,20 +22,18 @@ read_title() {
         | fzf-tmux -p --prompt '標題> '
     )
   fi
+  echo -ne "\e[u\e[1A"
 }
 
 read_amount() {
-  read -r -p "請輸入金額： " amount
-}
-
-read_account() {
-  echo "請輸入賬戶 $1： "
-  account=$(ledger accounts |fzf-tmux -p --prompt '賬戶> ')
+  read -r -p "請輸入金額：             " amount
 }
 
 read_date() {
   date=${date:-`date +%Y-%m-%d`}
-  read -r -p "請輸入日期[${date}|DATE]： " new_date
+  echo -ne "請輸入日期[${date}]： \e[s"
+  read -r new_date
+  echo -ne "\e[u\e[1A"
   date=${new_date:-$date}
 }
 
@@ -53,22 +52,24 @@ while true; do
       echo
       read_date
       echo $date
-      echo
+
+      read_amount
+
       read_title
       echo $title
-      echo
-      read_amount
-      echo
-      echo "請輸入消費賬戶： "
+
+      echo -n "請選擇消費賬戶：         "
       account1=$(ledger accounts --count expenses |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
       echo $account1
-      echo
-      echo "請輸入支出賬戶： "
+
+      echo -n "請選擇支出賬戶：         "
       account2=$(ledger accounts --count assets liabilities |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
       echo $account2
-      echo
 
+      echo
       draft=$(ledger xact -- "$date" "$title" "$account1" "$amount" "$account2")
+      date=$(echo $draft |cut -d" " -f1)
+
       if [ -n "$draft" ]; then
         echo 建立模板如下：
         echo
@@ -92,7 +93,6 @@ while true; do
       else
         echo "輸入有誤"
       fi
-      echo
       ;;
 
     * )

@@ -2,33 +2,36 @@ global !p
 
 # Expenses:Insurance        $ `!p snip.rv=creditcard_insurance(t[3])`
 def creditcard_insurance(amount):
-    # try:
-    return round(float(amount) * 0.0055, 2)
-    # except:
-        # return "ERR"
+  return round(float(amount) * 0.0055, 2)
+
+# last day of last month
+def end_of_last_month():
+  from datetime import date, timedelta
+  tod = date.today()
+  return (date(tod.year, tod.month, 1) - timedelta( days = 1) ).isoformat()
 
 endglobal
 
 snippet exp "Expense" b
-20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} ${4:Expense title}
     Expenses:${5:Grocery}   ${6:$} ${7:value}
     ${8:Assets:}$9
 endsnippet
 
 snippet inc "Income" b
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} ${4:Expense title}
     Assets:${5:title}	    ${6:$} ${7:value}
     Income:$8
 endsnippet
 
 snippet din "Dining" b
-20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:Expense title}
+20${1:`date +%y`}-${2:`date +%m`}-${3:`date +%d`} ${4:Expense title}
     Expenses:Dining   $ ${5:value}
     ${6:Assets:Cash}
 endsnippet
 
 snippet with "Withdraw" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * ${3:CBA}
+${1:`date +%Y-%m-`}${2:`date +%d`} ${3:Withdraw}
     ${4:Assets:Cash}	    $ ${5:value}
     Assets:${6:CBA:Access}
 endsnippet
@@ -38,23 +41,29 @@ Liabilities:CreditCard:Coles
 endsnippet
 
 snippet int "每月利息" b
-${1:`date +%Y-%m`}-${2:01} * Interest
-    Assets:ING:Savings      $ $3
+${1:`!p snip.rv=end_of_last_month()`} Interest
+    Assets:Mojo			$ $2
+    Assets:Smile		$ $3
+    Assets:Firefighter		$ $4
     Income:Interest
 endsnippet
 
 snippet rep "Credit Card Repayment" b
-${1:`date +%Y-%m-`}${2:`date +%d`} * CreditCard Payment
+${1:`date +%Y-%m-`}${2:`date +%d`} CreditCard Payment
     Liabilities:CreditCard:${3:Coles}     $ ${4:0.0}
     Assets:${5:CBA:Access}
 endsnippet
 
 snippet deb "Debit Card" b
-Assets:CBA:Access
+Assets:Spend
+endsnippet
+
+snippet spe "Debit Card" b
+Assets:Spend
 endsnippet
 
 snippet tran "Transfer" b
-${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} * ${4:transfer title}
+${1:`date +%Y`}-${2:`date +%m`}-${3:`date +%d`} ${4:transfer title}
     Assets:${5:CBA:Access}          $ $6
     Assets:$7
 
