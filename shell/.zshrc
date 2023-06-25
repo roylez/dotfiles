@@ -657,7 +657,7 @@ fi
 if ( _has kubectl ); then
   # run: kubectl completion zsh > ~/.zfunctions/_kubectl
   alias k=kubectl
-  compdef k=kubectl
+  compdef _kubectl k=kubectl
 fi
 # }}}
 

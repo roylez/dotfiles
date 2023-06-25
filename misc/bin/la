@@ -6,6 +6,8 @@ ledger_file=${LEDGER_FILE:-$ledger_root/`date +%Y`.ledger}
 DEFAULT_ACCOUNT1=Expenses:Grocery
 DEFAULT_ACCOUNT2=Assets:Spend
 
+DEFAULT_DATE=$(tail $ledger_file| awk '/^20/ {d=$1} END {print d}')
+
 create_transaction() {
   echo -e "\n$*" >> "$ledger_file"
   [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
@@ -30,7 +32,7 @@ read_amount() {
 }
 
 read_date() {
-  date=${date:-`date +%Y-%m-%d`}
+  date=${date:-$DEFAULT_DATE}
   echo -ne "請輸入日期[${date}]： \e[s"
   read -r new_date
   echo -ne "\e[u\e[1A"

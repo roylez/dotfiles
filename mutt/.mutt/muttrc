@@ -156,6 +156,8 @@ set header_cache_compress_method = zstd
 set maildir_header_cache_verify=no
 set message_cachedir=~/.mutt/.cache
 
+set delete=yes
+
 #headers:
 # my_hdr X-PGP-Key-ID:3038867F
 #backup everything sent to gmail's sent box
@@ -171,6 +173,11 @@ set query_command = "echo ; run-parts -a '%s' ~/.mutt/contacts/|grep '@'"
 
 #filter to collect email addresses, WARNING: it is slow
 #set display_filter = "~/.mutt/contact_query -f from -p"
+
+# Delete to trash folder, unless in trash
+# unset confirmappend
+folder-hook . set trash="=trash"
+folder-hook trash$ unset trash
 
 #bogofilter
 # macro index S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"

@@ -3,31 +3,36 @@
 #Last Change: Mon 14 Sep 2009 11:19:34 PM EST
 #Description: get exchange rate from yahoo
 
-require 'rest-client'
+require 'uri'
+require 'net/http'
 require 'json'
-require 'ostruct'
 
 def rate(from, to, amount=1)
-  res  = RestClient.get 'http://apilayer.net/api/live', params:
-    { :access_key => '6f1462e3e8a1cb7cfb2d81742ced72ac',
-      :currencies => ['usd', from, to].compact.join(',') }
-  q = JSON.parse(res)['quotes']
-  r = q["USD#{to}".upcase] / q["USD#{from}".upcase]
-  amount * r
+  url = URI("https://api.apilayer.com/exchangerates_data/convert?to=#{to}&from=#{from}&amount=#{amount}")
+
+  https = Net::HTTP.new(url.host, url.port);
+  https.use_ssl = true
+
+  request = Net::HTTP::Get.new(url)
+  request['apikey'] = %x(rbw get apilayer.exchangerate.token).chomp
+
+  response = https.request(request)
+  JSON.parse(response.read_body)["result"]
+
 end
 
 if __FILE__ == $0
-    if ARGV.length == 3
-        f = ARGV[0].upcase
-        t = ARGV[1].upcase
-        m = ARGV[2].to_f
-    elsif ARGV.length == 2
-        f = ARGV[0].upcase
-        t = ARGV[1].upcase
-        m = 1
-    else
-        puts "Usage:    #{$0} <from> <to> <amount>"
-        exit
-    end
-    puts rate( f, t , m )
+  if ARGV.length == 3
+    f = ARGV[0].upcase
+    t = ARGV[1].upcase
+    m = ARGV[2].to_f
+  elsif ARGV.length == 2
+    f = ARGV[0].upcase
+    t = ARGV[1].upcase
+    m = 1
+  else
+    puts "Usage:    #{$0} <from> <to> <amount>"
+    exit
+  end
+  puts rate( f, t , m )
 end
