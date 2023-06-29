@@ -194,6 +194,9 @@ export LESS_TERMCAP_se=$'\e[m'          #end standout mode
 export LESS_TERMCAP_us=$'\e[1;32m'      #underlining
 export LESS_TERMCAP_ue=$'\e[m'          #end underlining
 
+#for alias to be used when sudo, man bash
+alias sudo='sudo '
+
 # alias and listing colors
 alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring

@@ -70,6 +70,8 @@ if [ "$TERM" != "dumb" ] && (command -v dircolors &>/dev/null ); then
     alias ls=$'ls -h --hyperlink=auto --quoting-style=escape --color=auto -X --group-directories-first --time-style="+\e[33m[\e[32m%Y-%m-%d \e[35m%k:%M\e[33m]\e[m"'
 fi
 
+alias sudo='sudo '
+
 # some more ls aliases
 alias ll='ls -l'
 
