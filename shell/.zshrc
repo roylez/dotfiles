@@ -199,7 +199,7 @@ alias -g A="|awk"
 alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
 alias -g C="|cut -d' '"
 alias -g E="|sed"
-alias -g G='|GREP_COLORS=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') grep -E -a -i --color=always'
+alias -g G='|GREP_COLORS=mt=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') grep -E -a -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less -R"
 alias -g P="|column -t"
