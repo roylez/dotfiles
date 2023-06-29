@@ -36,7 +36,7 @@ endif
 
 set nocompatible
 
-if has("osx")
+if has("osx") && !has("nvim")
   if has("gui_macvim")
     set macmeta
   endif
