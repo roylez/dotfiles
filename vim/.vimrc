@@ -36,15 +36,17 @@ endif
 
 set nocompatible
 
-if has("osx") && !has("nvim")
+if has("osx")
   if has("gui_macvim")
     set macmeta
   endif
   " include path for apple silicon homebrew
   let $PATH= $HOME . "/brew/bin:/opt/homebrew/bin:" . $PATH
   " never have that python version mismatch problem again
-  let &pythonthreehome=systemlist( '/usr/bin/python3 -c "import sys;print(sys.prefix)"' )[0]
-  let &pythonthreedll= &pythonthreehome . '/Python3'
+  if !has("nvim")
+    let &pythonthreehome=systemlist( '/usr/bin/python3 -c "import sys;print(sys.prefix)"' )[0]
+    let &pythonthreedll= &pythonthreehome . '/Python3'
+  endif
 endif
 
 " never use background color erase

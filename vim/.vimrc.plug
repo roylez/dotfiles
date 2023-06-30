@@ -109,18 +109,15 @@ Plug 'vim-scripts/DrawIt', { 'on': 'DrawIt' }
 Plug 'christoomey/vim-tmux-navigator'
 
 " Snips.............................................................. {{{1
+Plug 'SirVer/ultisnips'
+" add personal snippet directory to search path, note that snippets is reserved and could not be used
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
+let g:UltiSnipsEditSplit= 'vertical'
 if has("nvim")
-  Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/vim-vsnip'
-  let g:vsnip_snippet_dir = g:vim_home . '/vsnips'
-else
-  Plug 'SirVer/ultisnips'
-  " add personal snippet directory to search path, note that snippets is reserved and could not be used
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
-  let g:UltiSnipsEditSplit= 'vertical'
+  Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 endif
 " ....................................................................... }}}1
 
@@ -503,24 +500,13 @@ EOLSP
   lua << EOCMP
     local cmp = require'cmp'
 
-    local has_words_before = function()
-      unpack = unpack or table.unpack
-      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-    end
-
-    local feedkey = function(key, mode)
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-    end
+    local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
     cmp.setup({
       snippet = {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+          vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
         end,
       },
       window = {
@@ -534,31 +520,22 @@ EOLSP
         ['<C-e>'] = cmp.mapping.abort(),
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          elseif vim.fn["vsnip#available"](1) == 1 then
-            feedkey("<Plug>(vsnip-expand-or-jump)", "")
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-          end
-        end, { "i", "s" }),
-
-        ["<S-Tab>"] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-            feedkey("<Plug>(vsnip-jump-prev)", "")
-          end
-        end, { "i", "s" }),
+        ["<Tab>"] = cmp.mapping(
+          function(fallback)
+            cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+          end, { "i", "s" }
+        ),
+        ["<S-Tab>"] = cmp.mapping(
+          function(fallback)
+            cmp_ultisnips_mappings.jump_backwards(fallback)
+          end, { "i", "s" }
+        ),
 
       }),
       sources = cmp.config.sources(
         {
           { name = 'nvim_lsp' },
-          { name = 'vsnip' },
+          { name = 'ultisnips' },
         },
         {
           { name = 'buffer' },
