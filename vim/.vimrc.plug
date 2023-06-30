@@ -179,6 +179,7 @@ if has("nvim")
   " Plug 'hrsh7th/cmp-path'
   " Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/nvim-cmp'
+  Plug 'uga-rosa/cmp-dictionary'
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -541,6 +542,19 @@ EOLSP
           { name = 'buffer' },
         }
       )
+    })
+
+    cmp.setup.filetype({ 'markdown', 'mail' }, {
+      sources = {
+        { name = 'buffer' },
+        { name = "dictionary", keyword_length = 2 },
+      }
+    })
+
+    local dict = require("cmp_dictionary")
+
+    dict.switcher({
+      spelllang = { en = os.getenv('HOME') .. '/.vim/en.dict', },
     })
 EOCMP
 endif

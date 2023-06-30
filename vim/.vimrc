@@ -123,7 +123,7 @@ set undofile undolevels=1000 undoreload=1000
 
 set commentstring=#%s       " default comment style
 set sps=best,10             " only show 10 best spell suggestions
-set dictionary+=/usr/share/dict/words
+" set dictionary+=/usr/share/dict/words
 
 " make fuzzy find in :find command possible
 set path+=**
