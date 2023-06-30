@@ -180,6 +180,7 @@ if has("nvim")
   " Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/nvim-cmp'
   Plug 'uga-rosa/cmp-dictionary'
+  Plug 'onsails/lspkind.nvim'
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -500,7 +501,7 @@ EOLSP
   
   lua << EOCMP
     local cmp = require'cmp'
-
+    local lspkind = require('lspkind')
     local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
     cmp.setup({
@@ -510,10 +511,26 @@ EOLSP
           vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
         end,
       },
+
       window = {
         -- completion = cmp.config.window.bordered(),
         -- documentation = cmp.config.window.bordered(),
       },
+
+      formatting = {
+        format = lspkind.cmp_format({
+          mode = "symbol_text",
+          menu = ({
+          buffer = "[B]",
+          nvim_lsp = "[LSP]",
+          luasnip = "[LuaSnip]",
+          nvim_lua = "[LUA]",
+          ultisnips = '[US]',
+          dictionary = '[DICT]',
+          })
+        }),
+      },
+
       mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
