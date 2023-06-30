@@ -561,7 +561,7 @@ EOLSP
       )
     })
 
-    cmp.setup.filetype({ 'markdown', 'mail' }, {
+    cmp.setup.filetype({ 'markdown', 'mail', 'markdown.scratch' }, {
       sources = {
         { name = 'buffer' },
         { name = "dictionary", keyword_length = 2 },
