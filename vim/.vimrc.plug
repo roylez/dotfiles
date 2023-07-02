@@ -123,7 +123,7 @@ endif
 
 " FZF.................................................................... {{{1
 if has("mac")
-  Plug '/opt/homebrew/opt/fzf'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 endif
 Plug 'junegunn/fzf.vim'
 

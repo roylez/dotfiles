@@ -60,6 +60,7 @@
 :input-sources {
                 :en {:input_source_id "^com\\.apple\\.keylayout.*" :language "en"}
                 :zh {:language "^zh.*"}
+                :sogou {:input_mode_id "^com\\.sogou\\.inputmethod.*" :language "^zh.*"}
                 }
 
 ;; default is 250
@@ -91,8 +92,6 @@
                  [:!CC8             :f8  ]
                  [:!CC9             :f9  ]
                  [:!CC0             :f10 ]
-                 [:!CChyphen        :f11 ]
-                 [:!CCequal_sign    :f12 ]
                  [:!CCopen_bracket  :f11 ]
                  [:!CCclose_bracket :f12 ]
                  ] }
@@ -103,16 +102,20 @@
         ; too laggy to be useful
         ; {:des "Spacebar to left_shift when held"
         ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
-        {:des "Tap shift twice to change input sources except in terminals"
+        {:des "Tap left shift twice to change input sources except in terminals"
          :rules [:!terminal
-                 [:right_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
-                 [:right_shift
-                  [["change-input" 1] :right_shift]
-                  ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
                  [:left_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
                  [:left_shift
                   [["change-input" 1] :left_shift]
                   ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
+                 ]
+         }
+        {:des "Tap right shift twice when language is zh to change between simplified and traditional Chinese"
+         :rules [:sogou
+                 [:right_shift [:!WRf ["change-zh-type" 0]] ["change-zh-type" 1]]
+                 [:right_shift
+                  [["change-zh-type" 1] :right_shift]
+                  ["change-zh-type" 0] {:delayed {:invoked ["change-zh-type" 0] :canceled ["change-zh-type" 0]} :params {:delay 300}}]
                  ]
          }
         ; {:des "Tap left shift twice to send <ESC>f in terminals"

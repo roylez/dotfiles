@@ -9,7 +9,7 @@
 
 set shell zsh
 set shellopts '-ey'
-set drawbox on
+set drawbox true
 set tabstop 4
 # mc style
 set nopreview
@@ -81,7 +81,7 @@ cmd make_file %{{
   echo -n " [NEW FILE] Enter a file name: "
   read name
   if [[ "$name" == */ ]]; then
-    mkdir -p $name
+    mkdir -p "$name"
   else
     lf -remote "send $id \$$EDITOR $name"
   fi
