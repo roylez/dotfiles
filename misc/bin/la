@@ -8,6 +8,8 @@ DEFAULT_ACCOUNT2=Assets:Spend
 
 DEFAULT_DATE=$(tail $ledger_file| awk '/^20/ {d=$1} END {print d}')
 
+editor=${EDITOR:-vim}
+
 create_transaction() {
   echo -e "\n$*" >> "$ledger_file"
   [[ $? -eq 0 ]] && echo -e "\n成功添加到 $ledger_file"
@@ -48,7 +50,7 @@ while true; do
       exit ;;
 
     [eE] )
-      vim $ledger_file ;;
+      $editor $ledger_file ;;
 
     [yY] | "" )
       echo
