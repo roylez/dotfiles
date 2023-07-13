@@ -165,7 +165,6 @@ nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>s :Snippets<CR>
 nnoremap <silent> <leader>T :Tags<CR>
 nnoremap <silent> <leader>t :BTags<CR>
-inoremap <silent> ,, <C-O>:Snippets<CR>
 
 " imap <C-x><C-f> <plug>(fzf-complete-file-ag)
 " imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -181,6 +180,7 @@ if has("nvim")
   Plug 'hrsh7th/nvim-cmp'
   Plug 'uga-rosa/cmp-dictionary'
   Plug 'onsails/lspkind.nvim'
+  Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -504,6 +504,16 @@ EOLSP
     local lspkind = require('lspkind')
     local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
+    local source_mapping = {
+      buffer      = "[B]",
+      nvim_lsp    = "[LSP]",
+      nvim_lua    = "[LUA]",
+      path        = "[P]",
+      ultisnips   = '[S]',
+      dictionary  = '[D]',
+      cmp_tabnine = "[TN]",
+    }
+
     cmp.setup({
       snippet = {
         -- REQUIRED - you must specify a snippet engine
@@ -518,17 +528,25 @@ EOLSP
       },
 
       formatting = {
-        format = lspkind.cmp_format({
-          mode = "symbol_text",
-          menu = ({
-          buffer = "[B]",
-          nvim_lsp = "[LSP]",
-          luasnip = "[LuaSnip]",
-          nvim_lua = "[LUA]",
-          ultisnips = '[US]',
-          dictionary = '[DICT]',
-          })
-        }),
+        format = function(entry, vim_item)
+          vim_item.kind = lspkind.symbolic(vim_item.kind, {mode = "symbol"})
+          vim_item.menu = source_mapping[entry.source.name]
+          if entry.source.name == "cmp_tabnine" then
+            local detail = (entry.completion_item.labelDetails or {}).detail
+              vim_item.kind = ""
+              if detail and detail:find('.*%%.*') then
+                vim_item.kind = vim_item.kind .. ' ' .. detail
+              end
+
+              if (entry.completion_item.data or {}).multiline then
+                vim_item.kind = vim_item.kind .. ' ' .. '[ML]'
+              end
+            end
+
+            local maxwidth = 80
+            vim_item.abbr = string.sub(vim_item.abbr, 1, maxwidth)
+            return vim_item
+      end,
       },
 
       mapping = cmp.mapping.preset.insert({
@@ -536,14 +554,21 @@ EOLSP
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-
-        ["<Tab>"] = cmp.mapping(
+        ['<CR>' ] = function(fallback)
+          if cmp.visible() then cmp.mapping.confirm({ select = true }) else fallback() end
+        end,
+        ["<C-n>"] = function(fallback)
+          if cmp.visible() then cmp.select_next_item() else fallback() end
+        end, 
+        ["<C-p>"] = function(fallback)
+          if cmp.visible() then cmp.select_prev_item() else fallback() end
+        end, 
+        ['<Tab>'] = cmp.mapping(
           function(fallback)
             cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
-          end, { "i", "s" }
-        ),
-        ["<S-Tab>"] = cmp.mapping(
+            end, { "i", "s" }
+        ), 
+        ["<Shift-Tab>"] = cmp.mapping(
           function(fallback)
             cmp_ultisnips_mappings.jump_backwards(fallback)
           end, { "i", "s" }
@@ -552,8 +577,9 @@ EOLSP
       }),
       sources = cmp.config.sources(
         {
-          { name = 'nvim_lsp' },
           { name = 'ultisnips' },
+          -- { name = 'nvim_lsp' },
+          { name = 'cmp_tabnine' },
         },
         {
           { name = 'buffer' },
