@@ -45,13 +45,13 @@ cmd fzf_jump ${{
   lf -remote "send $id $cmd \"$res\""
 }}
 
-cmd fzf_open ${{
-  res="$(fd -t f -d 2 |fzf --info=inline --prompt='> OPEN:  ')" || true
-  if [ -f "$res" ]; then
-    lf -remote "send $id $open &$OPENER \"$res\""
-  else
-    lf -remote "send $id $select \"$res\""
-  fi
+cmd fzf_select ${{
+  res="$(fd -t f |fzf --info=inline --prompt='> FILE:  ')" || true
+  # The problem is that lf loads directories asynchronously, if it hasn't been visited before. This
+  # means that if you try to open the file immediately after using select, lf will have changed to
+  # the containing directory, but $f is empty because the contents of that directory have not been
+  # loaded yet.
+  lf -remote "send $id :select '$res'"
 }}
 
 cmd autojump %{{
@@ -61,6 +61,7 @@ cmd autojump %{{
 cmd untar !{{
   case "$f" in
     *.tar.*)           tar   xvf "$f";;
+    *.tar)             tar   xvf "$f";;
     *.zip|*.7z|*.lzma) 7z    x   "$f";;
     *.ZIP|*.7Z|*.LZMA) 7z    x   "$f";;
     *.rar)             unrar x   "$f";;
@@ -137,8 +138,8 @@ map x delete
 map R vidir
 
 map z<space> push :autojump<space>
-map zz fzf_jump
-map zo fzf_open
+map Z fzf_jump
+map O fzf_select
 
 map Tl :scp_to limbo:tmp
 map Ts :scp_to cs:tmp
