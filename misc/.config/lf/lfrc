@@ -36,22 +36,29 @@ cmd open ${{
 }}
 
 cmd fzf_jump ${{
-  res="$(fd -t d -d 2 |fzf --info=inline --prompt='> JUMP TO:  ')" || true
+  dir=${lf_user_root:-$PWD}
+  res="$(fd -t d --base-directory $dir |fzf --info=inline --prompt='> JUMP TO:  ')" || true
   if [ -d "$res" ]; then
     cmd="cd"
   else
     cmd="select"
   fi
-  lf -remote "send $id $cmd \"$res\""
+  lf -remote "send $id $cmd '$dir/$res'"
 }}
 
 cmd fzf_select ${{
-  res="$(fd -t f |fzf --info=inline --prompt='> FILE:  ')" || true
+  dir=${lf_user_root:-$PWD}
+  res="$(fd -t f --base-directory $dir |fzf --info=inline --prompt='> FILE:  ')" || true
   # The problem is that lf loads directories asynchronously, if it hasn't been visited before. This
   # means that if you try to open the file immediately after using select, lf will have changed to
   # the containing directory, but $f is empty because the contents of that directory have not been
   # loaded yet.
-  lf -remote "send $id :select '$res'"
+  lf -remote "send $id :select '$dir/$res'"
+}}
+
+cmd fzf_change_root &{{
+  lf -remote "send $id :set user_root $PWD"
+  lf -remote "send $id :echomsg => FZF root (lf_user_root) changed to '$PWD'"
 }}
 
 cmd autojump %{{
@@ -137,9 +144,10 @@ map a make_file
 map x delete
 map R vidir
 
-map z<space> push :autojump<space>
+# map z<space> push :autojump<space>
 map Z fzf_jump
-map O fzf_select
+map o fzf_select
+map . fzf_change_root
 
 map Tl :scp_to limbo:tmp
 map Ts :scp_to cs:tmp
