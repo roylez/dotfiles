@@ -37,7 +37,7 @@ cmd open ${{
 
 cmd fzf_jump ${{
   dir=${lf_user_root:-$PWD}
-  res=$(fd -t d --base-directory "$dir" |fzf --info=inline --prompt='> JUMP TO:  ') || true
+  res=$(fd -t d -d 3 --base-directory "$dir" |fzf --info=inline --prompt='> JUMP TO:  ') || true
   if [ -d "$res" ]; then
     cmd="cd"
   else
