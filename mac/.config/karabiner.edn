@@ -95,8 +95,17 @@
                  [:!CCopen_bracket  :f11 ]
                  [:!CCclose_bracket :f12 ]
                  ] }
-        {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped"
-         :rules [[:##caps_lock :!Tleft_option nil {:alone :escape}]] }
+:input-sources {
+                :en {:input_source_id "^com\\.apple\\.keylayout.*" :language "en"}
+                :zh {:language "^zh.*"}
+                :sogou {:input_mode_id "^com\\.sogou\\.inputmethod.*" :language "^zh.*"}
+                }
+        {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped, and switch to English as well if input method is Chinese"
+         :rules [
+                 [:##caps_lock :!Tleft_option :en {:alone :escape}]
+                 [:##caps_lock :!Tleft_option :zh {:alone [:!Tspacebar :escape]}]
+                 ]
+         }
         {:des "Left Ctrl single tap to send ctl-cmd-d for easy dictionary access"
          :rules [[:left_control :left_control nil {:alone :!TCd}]] }
         ; too laggy to be useful
