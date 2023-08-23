@@ -29,3 +29,4 @@ vendor
 .yarnclean
 .envrc
 .direnv
+*.log
