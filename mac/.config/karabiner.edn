@@ -70,14 +70,15 @@
             }
 
  :main [
-        {:des "Niz Plum atom68 / Logitech modifications"
+        {:des "Niz Plum atom68 / Logitech keyboard modifications"
          :rules [
                  [:##right_alt :##right_control [:niz :logi] ]
                  ] }
 
         {:des "Screenshot with logitech mouses"
          :rules [
-                 [{:pkey :button4} [:km "screenshot"] [:logi] ]
+                 [{:pkey :button4} [:km "screenshot"] :logi ]
+                 [{:pkey :button5} {:pkey :button4} :logi ]
                  ] }
 
         {:des "More function keys"
@@ -95,19 +96,15 @@
                  [:!CCopen_bracket  :f11 ]
                  [:!CCclose_bracket :f12 ]
                  ] }
-:input-sources {
-                :en {:input_source_id "^com\\.apple\\.keylayout.*" :language "en"}
-                :zh {:language "^zh.*"}
-                :sogou {:input_mode_id "^com\\.sogou\\.inputmethod.*" :language "^zh.*"}
-                }
+
         {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped, and switch to English as well if input method is Chinese"
          :rules [
                  [:##caps_lock :!Tleft_option :en {:alone :escape}]
                  [:##caps_lock :!Tleft_option :zh {:alone [:!Tspacebar :escape]}]
                  ]
          }
-        {:des "Left Ctrl single tap to send ctl-cmd-d for easy dictionary access"
-         :rules [[:left_control :left_control nil {:alone :!TCd}]] }
+        {:des "Left alt single tap to send ctl-cmd-d for easy dictionary access"
+         :rules [[:left_alt :left_alt nil {:alone :!TCd}]] }
         ; too laggy to be useful
         ; {:des "Spacebar to left_shift when held"
         ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
