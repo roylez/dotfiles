@@ -70,17 +70,21 @@ module Contacts
     end
 
     def query(filter)
-      f =  Net::LDAP::Filter.eq( "cn", "*#{filter}*" ) | Net::LDAP::Filter.eq( "mail", "*#{filter}*" )
+      f = Net::LDAP::Filter.eq( "cn", "*#{filter}*" ) | Net::LDAP::Filter.eq( "mail", "*#{filter}*" )
       extra_fields = ENV['LDAP_EXTRA_FIELDS'] ?
         ENV['LDAP_EXTRA_FIELDS'].downcase.split.map(&:to_sym) :
         [ :telephonenumber ]
       fields = %w( cn  mail ) + extra_fields
       res = @ldap.search( filter: f, attributes: fields )
-      res.map{|entry|
-        [ entry.mail.first,     # mail
-          entry.cn.first,       # name
-          extra_fields.map{|i| entry[i].first.to_s }.compact.join(" | ") ]    # extra info
-      }
+      if res
+        res.map{|entry|
+          [ entry.mail.first,     # mail
+            entry.cn.first,       # name
+            extra_fields.map{|i| entry[i].first.to_s }.compact.join(" | ") ]    # extra info
+        }
+      else
+        []
+      end
     end
   end   if do_ldap
 

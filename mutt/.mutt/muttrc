@@ -144,7 +144,8 @@ set wait_key=no
 # 当你要把信件存到另一个信箱，而这个信箱已经存在时，是否提示附加？
 set confirm_append=no
 # 是否把邮件头也放在编辑器里可以修改？
-set edit_headers=no
+set edit_headers=yes
+set auto_edit=yes
 # 当你在用 pager 看信件时，在 index 留出多少行显示邮件列表？
 set pager_index_lines=4
 # 如果翻到最后，再按往下翻也不会翻到下一封信件

@@ -1,6 +1,10 @@
 #!/bin/zsh
 # vim:fdm=marker
 
+# 如果需要調試加載時間問題，啟動後運行 zprof  {{{
+zmodload zsh/zprof
+# }}}
+
 # 预配置 {{{
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -193,6 +197,7 @@ export LESS_TERMCAP_so=$'\e[01;7;34m'   #search highlight, standout mode
 export LESS_TERMCAP_se=$'\e[m'          #end standout mode
 export LESS_TERMCAP_us=$'\e[1;32m'      #underlining
 export LESS_TERMCAP_ue=$'\e[m'          #end underlining
+export GROFF_NO_SGR=1
 
 #for alias to be used when sudo, man bash
 alias sudo='sudo '
@@ -422,45 +427,49 @@ bindkey '[1;5C' forward-word      # C-right
 autoload -U edit-command-line
 zle -N      edit-command-line
 bindkey '\ee' edit-command-line
+
+autoload -Uz copy-earlier-word
+zle -N copy-earlier-word
+bindkey '\em' copy-earlier-word
 # }}}
 
 # 自定义widget {{{
 #
 
 # {{{ colorize commands
-TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
-
-recolor-cmd() {
-    region_highlight=()
-    colorize=true
-    start_pos=0
-    for arg in ${(z)BUFFER}; do
-        ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
-        ((end_pos=$start_pos+${#arg}))
-        if $colorize; then
-            colorize=false
-            res=$(LC_ALL=C builtin type $arg 2>/dev/null)
-            case $res in
-                *'reserved word'*)   style="fg=magenta,bold";;
-                *'alias for'*)       style="fg=cyan,bold";;
-                *'shell builtin'*)   style="fg=yellow,bold";;
-                *'shell function'*)  style='fg=green,bold';;
-                *"$arg is"*)
-                    [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
-                *)                   style='none,bold';;
-            esac
-            region_highlight+=("$start_pos $end_pos $style")
-        fi
-        [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
-        start_pos=$end_pos
-    done
-}
-
-check-cmd-self-insert() { zle .self-insert && recolor-cmd }
-check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
-
-zle -N self-insert check-cmd-self-insert
-zle -N backward-delete-char check-cmd-backward-delete-char
+# TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
+#
+# recolor-cmd() {
+#     region_highlight=()
+#     colorize=true
+#     start_pos=0
+#     for arg in ${(z)BUFFER}; do
+#         ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+#         ((end_pos=$start_pos+${#arg}))
+#         if $colorize; then
+#             colorize=false
+#             res=$(LC_ALL=C builtin type $arg 2>/dev/null)
+#             case $res in
+#                 *'reserved word'*)   style="fg=magenta,bold";;
+#                 *'alias for'*)       style="fg=cyan,bold";;
+#                 *'shell builtin'*)   style="fg=yellow,bold";;
+#                 *'shell function'*)  style='fg=green,bold';;
+#                 *"$arg is"*)
+#                     [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
+#                 *)                   style='none,bold';;
+#             esac
+#             region_highlight+=("$start_pos $end_pos $style")
+#         fi
+#         [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
+#         start_pos=$end_pos
+#     done
+# }
+#
+# check-cmd-self-insert() { zle .self-insert && recolor-cmd }
+# check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
+#
+# zle -N self-insert check-cmd-self-insert
+# zle -N backward-delete-char check-cmd-backward-delete-char
 # }}}
 
 # {{{ double ESC to prepend "sudo"
@@ -685,11 +694,11 @@ fi
 
 # 读入其他配置 {{{
 
-if [[ -d $HOME/.zplug ]]; then
-  # git clone https://github.com/zplug/zplug ~/.zplug
-  source $HOME/.zplug/init.zsh
-  [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
-fi
+# if [[ -d $HOME/.zplug ]]; then
+#   # git clone https://github.com/zplug/zplug ~/.zplug
+#   source $HOME/.zplug/init.zsh
+#   [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
+# fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
