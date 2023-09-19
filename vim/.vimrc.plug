@@ -83,9 +83,8 @@ nmap <silent> <Leader><tab> :IndentLinesToggle<CR>
 "                                 operability                                  "
 "-------------------------------------------------------------------------------
 " comment / uncomment, context aware
-Plug 'tyru/caw.vim' " {{{
+Plug 'tpope/vim-commentary' " {{{
 Plug 'Shougo/context_filetype.vim', { 'for': 'vim' }
-autocmd FileType slime let b:caw_oneline_comment = '/'
 " F9 and Alt-9
 vmap <F9> gcc
 nmap <F9> gcc
