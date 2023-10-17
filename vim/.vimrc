@@ -249,7 +249,6 @@ autocmd FileType mail
             \|:silent setlocal fo+=aw       " http://wcm1.web.rice.edu/mutt-tips.html
             \|:silent set spell
             \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
-            \|:silent 1
 
 "markdown
 autocmd FileType markdown set comments=n:> textwidth=0 wrapmargin=2 fo=croqnmB1
