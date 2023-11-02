@@ -44,6 +44,7 @@
 :templates {
             :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
             :open "open \"%s\""
+            :app "open -a \"%s\""
             }
 
 :devices {
@@ -104,7 +105,9 @@
                  ]
          }
         {:des "Left alt single tap to send ctl-cmd-d for easy dictionary access"
-         :rules [[:left_alt :left_alt nil {:alone :!TCd}]] }
+         :rules [
+                 [:left_alt :left_alt nil {:alone :!TCd}]]
+         }
         ; too laggy to be useful
         ; {:des "Spacebar to left_shift when held"
         ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
@@ -122,6 +125,12 @@
                  [:right_shift
                   [["change-zh-type" 1] :right_shift]
                   ["change-zh-type" 0] {:delayed {:invoked ["change-zh-type" 0] :canceled ["change-zh-type" 0]} :params {:delay 300}}]
+                 ]
+         }
+        {:des "Tap command to open chrome or kitty"
+         :rules [
+                 [:left_command :left_command nil {:alone [:app "Kitty"]}]
+                 [:right_command :right_command nil {:alone [:app "Google Chrome"]}]
                  ]
          }
         ; {:des "Tap left shift twice to send <ESC>f in terminals"
