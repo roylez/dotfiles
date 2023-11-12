@@ -261,6 +261,10 @@ let g:projectionist_heuristics = {
       \   "lib/*.html.heex": { "alternate": "lib/{}.ex",        "type": "template" },
       \   "priv/repo/migrations/*.exs": { "type": "migration" },
       \ },
+      \ "shard.yml": {
+      \   "src/*.cr":       { "alternate": "spec/{}_spec.cr", "type": "code" },
+      \   "spec/*_spec.cr": { "alternate": "src/{}.cr", "type": "test" },
+      \ },
       \ "tasks/*.yml": {
       \   "tasks/*.yml":       { "type": "task",    "alternate": "defaults/{}.yml" },
       \   "defaults/main.yml": { "type": "default", "alternate": "tasks/main.yml"  },

@@ -3,7 +3,6 @@
 #Description:
 #   remember mutt outgoing recipients as well as from whom I have read
 #   their emails
-require 'mail'
 require 'yaml'
 require 'time'
 
@@ -14,6 +13,7 @@ LDAP_ENV_FILE = File.join(BASE_DIR, ".env")
 begin
   require 'dotenv'
   require 'net-ldap'
+  require 'mail'
 rescue LoadError => e
   abort "Please install #{e} gem!"
 end

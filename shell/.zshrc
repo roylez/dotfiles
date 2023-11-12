@@ -159,18 +159,6 @@ zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes select
 
-# https://gist.github.com/ctechols/ca1035271ad134841284
-# On slow systems, checking the cached .zcompdump file to see if it must be 
-# regenerated adds a noticable delay to zsh startup.  This little hack restricts 
-# it to once a day.  It should be pasted into your own completion file.
-#
-# The globbing is a little complicated here:
-# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
-# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
-# - '.' matches "regular files"
-# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
-autoload -Uz compinit
-[[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
 # }}}
 
 # 环境变量命令别名等 {{{
@@ -220,7 +208,6 @@ alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 
 #no correct for mkdir mv and cp
-for i in mkdir mv cp;       alias $i="nocorrect $i"
 alias find='noglob find'        # noglob for find
 alias rsync='noglob rsync'
 alias grep='grep -a -I --color=auto'
@@ -668,7 +655,13 @@ fi
 if ( _has kubectl ); then
   # run: kubectl completion zsh > ~/.zfunctions/_kubectl
   alias k=kubectl
-  compdef _kubectl k=kubectl
+fi
+# }}}
+
+# {{{ ASDF
+if [[ -f "$HOME/.asdf/asdf.sh" ]]; then
+  source "$HOME/.asdf/asdf.sh" 
+  fpath=(${ASDF_DIR}/completions $fpath)
 fi
 # }}}
 
@@ -692,6 +685,23 @@ else
 fi
 # }}}
 
+# {{{ 启用补全，清理变量
+typeset -U PATH
+
+# https://gist.github.com/ctechols/ca1035271ad134841284
+# On slow systems, checking the cached .zcompdump file to see if it must be 
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts 
+# it to once a day.  It should be pasted into your own completion file.
+#
+# The globbing is a little complicated here:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
+autoload -Uz compinit
+[[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
+# }}}
+
 # 读入其他配置 {{{
 
 # if [[ -d $HOME/.zplug ]]; then
@@ -703,5 +713,5 @@ fi
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
 # }}}
+# }}}
 
-typeset -U PATH
