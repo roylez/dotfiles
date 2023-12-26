@@ -67,19 +67,20 @@ set pipe_decode=yes
 # 回信时是否包含原文。
 set include=yes
 # 回信的引文之前插入那个符号？
-set indent_str="> "
+set indent_string="> "
 #To character
-# 1. not directly adressed to me    # 2. addressed exclusively to me
-# 3. addressed to me and others     # 4. CC to me
-# 5. sent from me                   # 6. addressed to a mailinglist I am reading
-#set to_chars=" >=+<!"
+# 1. <space> not directly adressed to me    # 2. + addressed exclusively to me
+# 3. T addressed to me and others           # 4. C CC to me
+# 5. F sent from me                         # 6. L addressed to a list I am reading
+# 7. R in the "Reply-To:" header field but none of the above applies.
+set to_chars="+TCR"
 
 # don't forget to include the attachments in forward emails
 set mime_forward
 set mime_forward_rest
 
 # traditional Fwd: subject
-set forw_format="Fwd: %s"
+set forward_format="Fwd: %s"
 
 # Show tildes at the end of mail
 set tilde=yes
@@ -90,9 +91,9 @@ set wrap=-5
 # 当你按"r"回信时，不提示你输入回信地址和主题，直接进入编辑模式
 set fast_reply
 #no reply to myself
-unset metoo
+unset me_too
 unset reply_self
-set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
+set reply_regex="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 # default regexp cacthes everything and is too much for me
 #set quote_regexp="^([ \t]*[>])+"
 # *sigh* this catches raster too. why can't people just use a standard,
@@ -102,10 +103,10 @@ set reply_regexp="^(re([\[0-9\]+])*|aw|回复)(:[ \t]|：)"
 
 #set different from information when replying according to accounts
 set use_from
-set envelope_from=yes       #add -f <from> to sendmail command line
-set realname='Roy Zuo'
-set reverse_name=no         # I prefer to use my tailed "from"
-set reverse_realname=no     # I prefer to use my own "realname"
+set use_envelope_from=yes       #add -f <from> to sendmail command line
+set real_name='Roy Zuo'
+set reverse_name=no          # I prefer to use my tailed "from"
+set reverse_real_name=no     # I prefer to use my own "realname"
 
 #score "~s believe" -10
 
