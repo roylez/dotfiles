@@ -90,6 +90,10 @@ vmap <F9> gcc
 nmap <F9> gcc
 " }}}
 
+" Peekaboo.................................................................... {{{1
+Plug 'junegunn/vim-peekaboo'
+" ....................................................................... }}}1
+
 " make stuff organized
 Plug 'junegunn/vim-easy-align' "{{{
 vmap <Enter> <Plug>(EasyAlign)
