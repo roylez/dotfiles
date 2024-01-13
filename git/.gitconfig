@@ -1,8 +1,9 @@
 [user]
-  name = roylez
+	name = Roy Zuo
   email = <me@roylez.info>
   signingkey = ~/.ssh/id_ed25519
 [color]  # Ensure we get color
+  # Ensure we get color
   ui = always
 [push]
   default = current

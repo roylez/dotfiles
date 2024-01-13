@@ -54,7 +54,7 @@
           }
 
 :applications {
-               :chrome ["^com\\.google\\.Chrome$"]
+               :chrome ["^com\\.google\\.Chrome$", "^com\\.vivaldi\\.Vivaldi"]
                :terminal ["^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
                }
 
@@ -98,10 +98,10 @@
                  [:!CCclose_bracket :f12 ]
                  ] }
 
-        {:des "Capslock to hyper (Ctrl+Alt) when held, to ESC when tapped, and switch to English as well if input method is Chinese"
+        {:des "Capslock to hyper when held, to ESC when tapped, and switch to English as well if input method is Chinese"
          :rules [
-                 [:##caps_lock :!Tleft_option :en {:alone :escape}]
-                 [:##caps_lock :!Tleft_option :zh {:alone [:!Tspacebar :escape]}]
+                 [:##caps_lock :!CTOleft_shift :en {:alone :escape}]
+                 [:##caps_lock :!CTOleft_shift :zh {:alone [:!Tspacebar :escape]}]
                  ]
          }
         {:des "Left alt single tap to send ctl-cmd-d for easy dictionary access"
@@ -111,26 +111,18 @@
         ; too laggy to be useful
         ; {:des "Spacebar to left_shift when held"
         ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
-        {:des "Tap left shift twice to change input sources except in terminals"
+        {:des "Tap right shift twice to change input sources except in terminals"
          :rules [:!terminal
-                 [:left_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
-                 [:left_shift
-                  [["change-input" 1] :left_shift]
-                  ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
-                 ]
-         }
-        {:des "Tap right shift twice when language is zh to change between simplified and traditional Chinese"
-         :rules [:sogou
-                 [:right_shift [:!WRf ["change-zh-type" 0]] ["change-zh-type" 1]]
+                 [:right_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
                  [:right_shift
-                  [["change-zh-type" 1] :right_shift]
-                  ["change-zh-type" 0] {:delayed {:invoked ["change-zh-type" 0] :canceled ["change-zh-type" 0]} :params {:delay 300}}]
+                  [["change-input" 1] :right_shift]
+                  ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
                  ]
          }
         {:des "Tap command to open chrome or kitty"
          :rules [
-                 [:left_command :left_command nil {:alone [:app "Kitty"]}]
-                 [:right_command :right_command nil {:alone [:app "Google Chrome"]}]
+                 [:left_command :left_command nil {:alone [:app "Vivaldi"]}]
+                 [:right_command :right_command nil {:alone [:app "Kitty"]}]
                  ]
          }
         ; {:des "Tap left shift twice to send <ESC>f in terminals"
@@ -141,16 +133,16 @@
         ;           ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
         {:des "Hyper+hjkl as up/down/left/right"
          :rules [
-                 [:!TOh :left_arrow  ]
-                 [:!TOj :down_arrow  ]
-                 [:!TOk :up_arrow    ]
-                 [:!TOl :right_arrow ]
+                 [:!!h :left_arrow  ]
+                 [:!!j :down_arrow  ]
+                 [:!!k :up_arrow    ]
+                 [:!!l :right_arrow ]
                 ]}
         {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
          :rules [
-                 [:!TOgrave_accent_and_tilde :play_or_pause :niz ]
-                 [:!TOpage_up                :volume_up     ]
-                 [:!TOpage_down              :volume_down   ]
+                 [:!!grave_accent_and_tilde :play_or_pause :niz ]
+                 [:!!page_up                :volume_up     ]
+                 [:!!page_down              :volume_down   ]
                  ] }
         ; {:des "SPACE mode"
         ;  :rules [
