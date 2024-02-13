@@ -600,8 +600,8 @@ EOLSP
 
     local dict = require("cmp_dictionary")
 
-    dict.switcher({
-      spelllang = { en = os.getenv('HOME') .. '/.vim/en.dict', },
+    dict.setup({
+      paths = { os.getenv('HOME') .. '/.vim/en.dict' }
     })
 EOCMP
 endif
