@@ -55,7 +55,7 @@
 
 :applications {
                :chrome ["^com\\.google\\.Chrome$", "^com\\.vivaldi\\.Vivaldi"]
-               :terminal ["^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
+               :terminal ["^com\\.github\\.wez\\.wezterm$", "^net\\.kovidgoyal\\.kitty$", "^com\\.apple\\.Terminal$"]
                }
 
 :input-sources {
@@ -121,8 +121,8 @@
          }
         {:des "Tap command to open chrome or kitty"
          :rules [
-                 [:left_command :left_command nil {:alone [:app "Vivaldi"]}]
-                 [:right_command :right_command nil {:alone [:app "Kitty"]}]
+                 [:left_command :left_command nil {:alone [:app "WezTerm"]}]
+                 [:right_command :right_command nil {:alone [:app "Vivaldi"]}]
                  ]
          }
         ; {:des "Tap left shift twice to send <ESC>f in terminals"
