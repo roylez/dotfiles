@@ -121,7 +121,7 @@
          }
         {:des "Tap command to open chrome or kitty"
          :rules [
-                 [:left_command :left_command nil {:alone [:app "WezTerm"]}]
+                 [:left_command :left_command nil {:alone [:app "Kitty"]}]
                  [:right_command :right_command nil {:alone [:app "Vivaldi"]}]
                  ]
          }

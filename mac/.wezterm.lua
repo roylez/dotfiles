@@ -32,23 +32,28 @@ config.line_height = 1.05
 
 config.use_fancy_tab_bar = false
 
+config.default_cursor_style = "BlinkingBar"
+config.cursor_blink_rate = 700
+
 config.quick_select_patterns = { url_regex, path_regex, hash_regex }
 
 config.enable_kitty_keyboard = true
 
 config.front_end = 'WebGpu'
 
-config.hyperlink_rules = {
-  { regex = url_regex, format = "$0" },
-  { regex = [=[[-.\w]+@[-.\w]+]=], format = "mailto:$0" }
-}
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+-- make username/project paths clickable. this implies paths like the following are for github.
+table.insert(config.hyperlink_rules, {
+  regex = [[["]?([\w\d]{1}[-\w\d]+)(/){1}([-\w\d\.]+)["]?]],
+  format = 'https://www.github.com/$1/$3',
+})
 
 config.initial_cols = 200
 config.initial_rows = 80
 config.macos_window_background_blur = 20
 
 config.webgpu_power_preference = "HighPerformance"
-config.window_background_opacity = 0.90
+config.window_background_opacity = 0.70
 config.window_close_confirmation = "NeverPrompt"
 
 config.set_environment_variables = {
@@ -72,8 +77,10 @@ config.keys = {
 
   { mods = 'CTRL|SHIFT|SUPER', key = 'r', action = act.ShowLauncherArgs { flags = 'TABS|LAUNCH_MENU_ITEMS' }, },
 
-  { mods = 'CMD', key = 'RightArrow', action = act.ActivateTabRelative(1)  },
   { mods = 'CMD', key = 'LeftArrow',  action = act.ActivateTabRelative(-1) },
+  { mods = 'CMD', key = 'RightArrow', action = act.ActivateTabRelative(1)  },
+  { mods = 'CMD', key = 'h',          action = act.ActivateTabRelative(-1)  },
+  { mods = 'CMD', key = 'l',          action = act.ActivateTabRelative(1) },
 
   { mods = 'CMD', key = 'e', 
     action = act.SpawnCommandInNewTab {
@@ -91,6 +98,19 @@ config.keys = {
   },
 
   { mods = 'CMD', key = 'p', action = act.QuickSelect },
+  
+  {
+    mods = 'CMD', key = 'o',
+    action = act.QuickSelectArgs {
+      label = 'open url',
+      patterns = { url_regex },
+      action = wezterm.action_callback(function(window, pane)
+        local url = window:get_selection_text_for_pane(pane)
+        wezterm.log_info('opening: ' .. url)
+        wezterm.open_with(url)
+      end),
+    }
+  },
 }
 
 --- }}}
