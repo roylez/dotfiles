@@ -63,7 +63,7 @@ set timeoutlen=1000 ttimeoutlen=0
 " selection to $ should not include eol character
 set selection=exclusive
 
-if filereadable( $HOME . '/.vimrc.plug' )
+if filereadable( $HOME . '/.vimrc.plug' ) && ! has("nvim")
   source $HOME/.vimrc.plug
 endif
 

@@ -457,7 +457,7 @@ if has("nvim")
       enable = false,
       disable = {},
     },
-    ensure_installed = { "yaml", "elixir", "ledger", "vim", "lua", "ruby" },
+    ensure_installed = { "yaml", "elixir", "ledger", "vim", "lua" },
   }
 
   -- Use an on_attach function to only map the following keys
