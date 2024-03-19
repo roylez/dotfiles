@@ -8,6 +8,7 @@
 [push]
   default = current
   followTags = true
+  autoSetupRemote = true
 [alias]
   a   = add
   b   = branch
@@ -39,7 +40,8 @@
 [status]
   submoduleSummary = true
 [merge]
-  tool = vimdiff
+  tool = nvim -d
+  conflictstyle = zdiff3
 [mergetool]
   prompt = true
 [mergetool "vimdiff"]
@@ -47,7 +49,8 @@
 [difftool]
   prompt = false
 [diff]
-  tool = vimdiff
+  tool = nvim -d
+  algorithm = histogram
 [pull]
   rebase = true
 [init]
