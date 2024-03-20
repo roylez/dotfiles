@@ -16,9 +16,8 @@ return {
     \ { 'type': 'files',     'header': ['      RECENT' ] },
     \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
     let g:startify_bookmarks = [
-    \ { 't': '~/wiki/TODO.md' },
-    \ { 'c': '~/.vimrc' },
-    \ { 'p': '~/.vimrc.plug' },
+    \ { 't': '~/workspace/doc/main.taskpaper' },
+    \ { 'c': '~/.config/nvim/init.lua' },
     \ { 's': '~/.zshrc' } ]
     let g:startify_commands = [
     \ { 'b': ['BLANK',      'PasteEdit'            ]},
