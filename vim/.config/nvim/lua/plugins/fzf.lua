@@ -15,15 +15,14 @@ return {
           keyset[n]=k
         end
       end
+      table.sort(keyset)
 
       local actions = require("fzf-lua.actions")
 
-      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Fuzzy Search' })
-      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Fuzzy Buffers' })
-      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Fuzzy Files' })
-      vim.keymap.set({'n'}, '<leader>t', fzf.tags,      { silent = true, desc = 'Fuzzy Tags' })
+      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Rg' })
+      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Buffers' })
+      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Files' })
       vim.keymap.set({'n'}, '<leader>F', function()
-        local fzf = require("fzf-lua")
         fzf.fzf_exec(keyset, {
           prompt = 'FZF...> ',
           actions = {
@@ -32,7 +31,7 @@ return {
             end
           }
         })
-      end, { silent = true, desc = 'Fuzzy ...' })
+      end, { silent = true, desc = 'Fuzzy...' })
 
     end
 }

@@ -12,10 +12,10 @@
       }
     }
   },
-  "pro_writer": {
+  "writer": {
     "type": "chat",
     "opts": {
-      "template": "I want you act as a proofreader. I will provide you texts and I would like you to review them for any spelling, grammar, or punctuation errors :\n\n{{input}}",
+      "template": "I want you act as a proofreader. I will provide you texts and I would like you to review them for any spelling, grammar, or punctuation errors. Just send me the revised text without anything else:\n\n{{input}}",
       "strategy": "replace",
       "params": {
         "model": "gpt-3.5-turbo"
