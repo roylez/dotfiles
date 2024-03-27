@@ -6,7 +6,6 @@ local M = {
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
-    'uga-rosa/cmp-dictionary',
     'dcampos/cmp-snippy',
     'dcampos/nvim-snippy',
     'onsails/lspkind.nvim',
@@ -30,7 +29,7 @@ M.config = function()
     buffer      = "[B]",
     nvim_lsp    = "[LSP]",
     nvim_lua    = "[LUA]",
-    path        = "[P]",
+    path        = "[F]",
     snippy      = '[SNIP]',
     dictionary  = '[D]',
     cmp_tabnine = "[TN]",
@@ -140,26 +139,11 @@ M.config = function()
       }),
     },
     sources = cmp.config.sources({
-      { name = "snippy" },
+      { name = "snippy", max_item_count = 5 },
       { name = "nvim_lsp" },
-    }, {
-        { name = "buffer" },
-        { name = "path" },
-      }),
-  })
-
-  cmp.setup.filetype({ 'markdown', 'mail', 'markdown.scratch' }, {
-    sources = {
-      { name = 'snippy' },
-      { name = 'buffer' },
-      { name = "dictionary", keyword_length = 2 },
-    }
-  })
-
-  local dict = require("cmp_dictionary")
-
-  dict.setup({
-    paths = { os.getenv('HOME') .. '/.vim/en.dict' }
+      { name = "buffer" },
+      { name = "path" },
+    }, { }),
   })
 
   -- cmp.setup.cmdline("/", {
