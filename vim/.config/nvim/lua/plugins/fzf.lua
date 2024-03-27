@@ -6,6 +6,12 @@ return {
 
       fzf.setup({ "max-perf" })
 
+      local actions = require("fzf-lua.actions")
+
+      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Rg' })
+      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Buffers' })
+      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Files' })
+
       local keyset={}
       local n=0
 
@@ -17,11 +23,6 @@ return {
       end
       table.sort(keyset)
 
-      local actions = require("fzf-lua.actions")
-
-      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Rg' })
-      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Buffers' })
-      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Files' })
       vim.keymap.set({'n'}, '<leader>F', function()
         fzf.fzf_exec(keyset, {
           prompt = 'FZF...> ',
