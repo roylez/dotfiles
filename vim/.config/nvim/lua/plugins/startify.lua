@@ -17,6 +17,7 @@ return {
     \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
     let g:startify_bookmarks = [
     \ { 't': '~/workspace/doc/main.taskpaper' },
+    \ { 'd': '~/wiki/TODO.md' },
     \ { 'c': '~/.config/nvim/init.lua' },
     \ { 's': '~/.zshrc' } ]
     let g:startify_commands = [
