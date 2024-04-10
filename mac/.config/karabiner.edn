@@ -50,7 +50,7 @@
 :devices {
           :apple [ { :vendor_id 1452 } ]
           :niz   [ { :vendor_id 1155 :product_id 21042 } ]  ;; Niz Plum atom68
-          :logi  [ { :vendor_id 1133 :product_id 50475 } ]  ;; Logitech unifying devices
+          :logi  [ { :vendor_id 1133 :product_id 50475 } { :vendor_id 1133 :product_id 50504 }]  ;; Logitech unifying devices
           }
 
 :applications {
