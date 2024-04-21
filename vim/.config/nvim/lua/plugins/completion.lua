@@ -47,7 +47,7 @@ M.config = function()
     },
     formatting = {
       format = lspkind.cmp_format({
-        mode = 'symbol',
+        mode = ( vim.fn.has('gui_running') == 1 and 'symbol' or 'text' ),
         menu = ( source_mapping ),
         maxwidth = 50,
         ellipsis_char = '...',
