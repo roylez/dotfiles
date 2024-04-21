@@ -22,7 +22,8 @@ return
       local chatgpt = require("chatgpt")
 
       chatgpt.setup({
-        api_key_cmd = 'cat ' .. os.getenv("HOME") .. '/.gpt',
+        -- api_host_cmd = 'sed -n 2p ' .. os.getenv("HOME") .. '/.gpt',
+        api_key_cmd = 'sed -n 1p ' .. os.getenv("HOME") .. '/.gpt',
         actions_paths = { custom_actions },
       })
 

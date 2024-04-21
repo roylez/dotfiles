@@ -22,6 +22,16 @@
       }
     }
   },
+  "Tech Support": {
+    "type": "chat",
+    "opts": {
+      "template": "I want you act as a proofreader. I will provide you texts and I would like you to review them for any spelling, grammar, or punctuation errors, and make it look from a professional technical support person. Just send me the revised text without anything else:\n\n{{input}}",
+      "strategy": "replace",
+      "params": {
+        "model": "gpt-3.5-turbo"
+      }
+    }
+  },
   "translate": {
     "type": "chat",
     "opts": {
