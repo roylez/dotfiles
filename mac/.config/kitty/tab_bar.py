@@ -71,12 +71,23 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
 
 
 def create_cells():
-    cells = [ get_todo(), get_time() ]
+    cells = [
+        get_todo(),
+        get_date(),
+        get_time()
+    ]
     return [c for c in cells if c is not None]
 
 def get_time():
     now = datetime.datetime.now().strftime("%H:%M")
     return { "icon": " ", "color": "#669bbc", "text": now }
+
+def get_date():
+    today = datetime.date.today()
+    if today.weekday() < 5:
+        return { "icon": "󰃵 ", "color": "#2a9d8f", "text": today.strftime("%b %e") }
+    else:
+        return { "icon": "󰧓 ", "color": "#f2e8cf", "text": today.strftime("%b %e") }
 
 def get_dummy():
     return { "icon": " ", "color": "#a3b18a", "text": "dummy" }

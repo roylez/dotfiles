@@ -20,7 +20,7 @@ end)
 config.color_scheme = 'Tomorrow Night Bright'
 
 config.font = wezterm.font_with_fallback {
-  'FantasqueSansMono Nerd Font Mono',
+  'FantasqueSansMono',
   { family="LXGW WenKai Mono", weight="Bold"}
 }
 

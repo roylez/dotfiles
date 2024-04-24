@@ -1,7 +1,7 @@
 return {
   {
     'roylez/zwiki',
-    lazy = true,
+    ft = 'vimwiki',
     dependencies = { 'vimwiki/vimwiki', "ibhagwan/fzf-lua" }
   },
 

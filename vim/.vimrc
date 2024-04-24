@@ -223,17 +223,6 @@ nmap tc :tabclose<CR>
 nmap gf <C-W>gf
 
 set pastetoggle=<F1>
-
-" use <leader>y/p to interact with clipboard
-vmap <Leader>y "+y
-vmap <Leader>d "+d
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
-
-" use <leader>r to reload vim configuration
-nmap <leader>r :source ~/.vimrc<CR>:echom "VIM configuration reloaded"<CR>
 " }}}
 
 " ruby

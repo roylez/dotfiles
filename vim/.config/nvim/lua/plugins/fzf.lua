@@ -8,9 +8,9 @@ return {
 
       local actions = require("fzf-lua.actions")
 
-      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Rg' })
-      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Buffers' })
-      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Files' })
+      vim.keymap.set({'n'}, '<leader>/', fzf.live_grep, { silent = true, desc = 'Search with Rg' })
+      vim.keymap.set({'n'}, '<leader>b', fzf.buffers,   { silent = true, desc = 'Search Buffers' })
+      vim.keymap.set({'n'}, '<leader>f', fzf.files,     { silent = true, desc = 'Search Files' })
 
       local keyset={}
       local n=0
@@ -32,7 +32,7 @@ return {
             end
           }
         })
-      end, { silent = true, desc = 'Fuzzy...' })
+      end, { silent = true, desc = 'Search ...' })
 
     end
 }

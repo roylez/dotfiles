@@ -26,5 +26,4 @@ return {
     end
   },
 
-  { "davidoc/taskpaper.vim", ft = 'taskpaper' },
 }

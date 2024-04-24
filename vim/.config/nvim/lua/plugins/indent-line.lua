@@ -13,7 +13,7 @@ return {
         enabled = not config.get_config(0).enabled,
       })
     end,
-    { noremap = true, silent = true }
+    { noremap = true, silent = true, desc = 'Show Indent' }
     )
   end
 }
