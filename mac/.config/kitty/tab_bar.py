@@ -89,27 +89,12 @@ def get_date():
     else:
         return { "icon": "󰧓 ", "color": "#f2e8cf", "text": today.strftime("%b %e") }
 
-def get_dummy():
-    return { "icon": " ", "color": "#a3b18a", "text": "dummy" }
-
 def get_todo():
     out = subprocess.getoutput("/opt/homebrew/bin/rg -m 1 --pcre2 -N '^(?!@done).*@today' ~/workspace/doc/main.taskpaper |sed 's:^.*- ::;s:@today::'")
     if len(out) > 0:
         return { "icon": " ", "color": "#e76f51", "text": out }
     else:
         return None
-
-def get_headphone_battery_status():
-    try:
-        battery_pct = int(subprocess.getoutput("headsetcontrol -b -c"))
-    except Exception:
-        status = ""
-    else:
-        if battery_pct < 0:
-            status = ""
-        else:
-            status = f"{battery_pct}% {''[battery_pct // 10]}"
-    return f" {status}"
 
 def _redraw_tab_bar(timer_id):
     for tm in get_boss().all_tab_managers:
