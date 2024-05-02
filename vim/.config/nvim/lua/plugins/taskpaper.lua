@@ -32,7 +32,7 @@ return
                 vim.api.nvim_call_function('taskpaper#delete_tag', { 'done' })
               else
                 vim.api.nvim_call_function('taskpaper#delete_tag', { 'today' })
-                vim.api.nvim_call_function('taskpaper#add_tag', { 'done', '' })
+                vim.api.nvim_call_function('taskpaper#add_tag', { 'done', os.date("%Y-%m-%d", os.time()) })
               end
             end, '标注 @done' },
         }
