@@ -16,8 +16,8 @@ return {
     \ { 'type': 'files',     'header': ['      RECENT' ] },
     \ { 'type': 'bookmarks', 'header': ['      BOOKMARKS'] } ]
     let g:startify_bookmarks = [
-    \ { 't': '~/workspace/doc/main.taskpaper' },
-    \ { 'd': '~/wiki/TODO.md' },
+    \ { 't': '~/seafile/doc/TODO.taskpaper' },
+    \ { 'd': '~/seafile/doc/wiki/TODO.md' },
     \ { 'c': '~/.config/nvim/init.lua' },
     \ { 's': '~/.zshrc' } ]
     let g:startify_commands = [
@@ -25,7 +25,7 @@ return {
     \ { 'B': ['CLIPBOARD',  'PasteEdit +norm\ "+P' ]},
     \ { 'z': ['Zettel',     'ZwikiNew +norm\ G"+p'  ]} ]
 
-    let g:startify_custom_header = "startify#center(split(system('bat --decorations=always --style=grid ~/wiki/TODO.md'), '\n'))"
+    let g:startify_custom_header = "startify#center(split(system('bat --decorations=always --style=grid ~/seafile/doc/wiki/TODO.md'), '\n'))"
     ]]
   end
 }
