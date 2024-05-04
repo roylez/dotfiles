@@ -1,7 +1,12 @@
 import datetime
 import json
 import subprocess
+import os
 from collections import defaultdict
+from configparser import ConfigParser
+
+CONFIG = ConfigParser()
+CONFIG.read(os.path.expanduser("~/.config/kitty/tab_bar.ini"))
 
 from kitty.boss import get_boss
 from kitty.fast_data_types import Screen, add_timer, get_options
@@ -64,15 +69,17 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
         if icon:
             fg = to_color(c.get("color")) if c.get("color") else tab_fg
             screen.cursor.fg = as_rgb(int(fg))
-            screen.draw(f" {icon}")
+            screen.draw(f" {icon} ")
         screen.cursor.fg = tab_fg
         text = c["text"]
-        screen.draw(f" {text} ")
+        screen.draw(f"{text} ")
 
 
 def create_cells():
     cells = [
         get_todo(),
+        # get_work_email() if datetime.date.today().weekday()<5 else None,
+        # get_personal_email(),
         get_date(),
         get_time()
     ]
@@ -85,14 +92,28 @@ def get_time():
 def get_date():
     today = datetime.date.today()
     if today.weekday() < 5:
-        return { "icon": "󰃵 ", "color": "#2a9d8f", "text": today.strftime("%b %e") }
+        return { "icon": "󰃵 ", "color": "#2a9d8f", "text": today.strftime("%b %d") }
     else:
-        return { "icon": "󰧓 ", "color": "#f2e8cf", "text": today.strftime("%b %e") }
+        return { "icon": "󰧓 ", "color": "#f2e8cf", "text": today.strftime("%b %d") }
 
 def get_todo():
-    out = subprocess.getoutput("/opt/homebrew/bin/rg -m 1 --pcre2 -N '^(?!@done).*@today' ~/workspace/doc/main.taskpaper |sed 's:^.*- ::;s:@today::'")
+    out = subprocess.getoutput(CONFIG['todo']['command'])
     if len(out) > 0:
-        return { "icon": " ", "color": "#e76f51", "text": out }
+        return { "icon": " ", "color": "#d62828", "text": out }
+    else:
+        return None
+
+def get_work_email():
+    out = subprocess.getoutput(CONFIG['work_email']['command'])
+    if out != '0':
+        return { "icon": "󰻨 ", "color": "#e76f51", "text": out }
+    else:
+        return None
+
+def get_personal_email():
+    out = subprocess.getoutput(CONFIG['personal_email']['command'])
+    if out != '0':
+        return { "icon": "󰇰 ", "color": "#a98467", "text": out }
     else:
         return None
 
