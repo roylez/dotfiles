@@ -3,15 +3,30 @@
 
 BASE_DIR=~/workspace/doc/mail
 
-work_emails=`ls -1 $BASE_DIR/work/inbox/new |wc -l`
-personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -type f |wc -l`
+case $1 in
+  work)
+    work_emails=`ls -1 $BASE_DIR/work/inbox/new |wc -l`
+    echo $work_emails
+    ;;
 
-if [[ $(( work_emails + personal_emails )) -eq 0 ]]; then
-  echo 0
-elif [[ $personal_emails -eq 0 ]]; then
-  echo W$work_emails
-elif [[ $work_emails -eq 0 ]]; then
-  echo E$personal_emails
-else
-  echo E$personal_emails W$work_emails
-fi
+  personal)
+    personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -type f |wc -l`
+    echo $personal_emails
+    ;;
+
+  *)
+    work_emails=`ls -1 $BASE_DIR/work/inbox/new |wc -l`
+    personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -type f |wc -l`
+
+    if [[ $(( work_emails + personal_emails )) -eq 0 ]]; then
+      echo 0
+    elif [[ $personal_emails -eq 0 ]]; then
+      echo W$work_emails
+    elif [[ $work_emails -eq 0 ]]; then
+      echo E$personal_emails
+    else
+      echo E$personal_emails W$work_emails
+    fi
+    ;;
+
+esac
