@@ -19,7 +19,6 @@ return
         t = {
           name = 'TaskPaper',
           t = { ":call taskpaper#toggle_tag('today', '')<CR>", '标注 @today' },
-          D = { ":call taskpaper#archive_done()<CR>",          '归档' },
           s = { ":call taskpaper#search()<CR>",                '搜索...' },
           T = {
             function()
@@ -35,6 +34,10 @@ return
                 vim.api.nvim_call_function('taskpaper#add_tag', { 'done', os.date("%Y-%m-%d", os.time()) })
               end
             end, '标注 @done' },
+          D = {
+            function()
+              require('utils').preserve("call taskpaper#archive_done()")
+            end, '归档' },
         }
       },{ prefix = '<leader>' })
 
