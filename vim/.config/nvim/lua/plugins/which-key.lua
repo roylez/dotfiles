@@ -13,5 +13,8 @@ return {
         align = 'center'
       }
     }
+
+    vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y',  { silent = true, desc = 'Copy' })
+    vim.keymap.set({ 'n', 'v' }, '<leader>p', '"+p',  { silent = true, desc = 'Paste' })
   end
 }

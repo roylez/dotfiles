@@ -10,6 +10,10 @@ return
       vim.g["task_paper_search_hide_done"] = 1
       vim.g["no_taskpaper_maps"] = 1
 
+      vim.cmd [[
+        au BufEnter *.taskpaper setlocal autoindent noexpandtab tabstop=4 shiftwidth=4
+      ]]
+
       local wk = require("which-key")
 
       vim.keymap.set('n', 'o',    'o<C-r>=taskpaper#newline()<CR>',    { silent = true, buffer = true })
