@@ -40,7 +40,7 @@ return
             end, '标注 @done' },
           D = {
             function()
-              require('utils').preserve("call taskpaper#archive_done()")
+              require('util').preserve("call taskpaper#archive_done()")
             end, '归档' },
         }
       },{ prefix = '<leader>' })

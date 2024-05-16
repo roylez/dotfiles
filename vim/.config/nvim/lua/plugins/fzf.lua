@@ -6,6 +6,8 @@ return {
 
       fzf.setup({ "max-perf" })
 
+      fzf.register_ui_select()
+
       local actions = require("fzf-lua.actions")
 
       vim.keymap.set('n', '<leader>/', fzf.live_grep, { silent = true, desc = 'Search with Rg' })
