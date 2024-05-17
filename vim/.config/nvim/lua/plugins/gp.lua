@@ -88,6 +88,14 @@ local options = {
     	gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
     end,
     -- }}}
+
+    -- {{{ Proofread the text and rewrite it like some tech document
+    DocRewrite = function(gp, params)
+      local template = "I want you act as a proofreader. I will provide you texts and I would like you to review them for any spelling, grammar, or punctuation errors, and make it look from a piece professional technical document. Please respond with only revised text in markdown and nothing else:\n\n{{selection}}"
+      local agent = gp.get_chat_agent()
+    	gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
+    end,
+    -- }}}
   },
 }
 
@@ -105,6 +113,7 @@ return
 
       local actions = {
         [ "SupportRewrite" ] = "'<,'>GpSupportRewrite",
+        [ "DocRewrite" ]     = "'<,'>GpDocRewrite",
         [ "Explain" ]        = "'<,'>GpExplain",
         [ "Implement" ]      = "'<,'>GpImplement",
         [ "UnitTests" ]      = "'<,'>GpUnitTests",
