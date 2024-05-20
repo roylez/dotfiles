@@ -1,3 +1,21 @@
+function replace_old_dues()
+  local current_line
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local today = os.date("*t", os.time())
+  today = os.time({year=today.year, month=today.month, day=today.day})
+  for i, line in ipairs(lines) do
+    lines[i] = line:gsub("@due%((%d%d%d%d)%-(%d%d)%-(%d%d)%)", function(year, month, day)
+      local date = os.time({year=tonumber(year), month=tonumber(month), day=tonumber(day)})
+      if date < today then
+        return "@today"
+      else
+        return "@due(" .. year .. "-" .. month .. "-" .. day .. ")"
+      end
+    end)
+  end
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+end
+
 return
   {
     "davidoc/taskpaper.vim",
@@ -12,7 +30,7 @@ return
 
       vim.cmd [[
         au BufEnter *.taskpaper setlocal autoindent noexpandtab tabstop=4 shiftwidth=4
-      ]]
+        ]]
 
       local wk = require("which-key")
 
@@ -26,7 +44,7 @@ return
           s = { ":call taskpaper#search()<CR>",                '搜索...' },
           T = {
             function()
-              vim.cmd( ":%s/@due(" .. os.date("%Y-%m-%d", os.time()) .. ".\\{-})/@today/ge" )
+              replace_old_dues()
               vim.cmd( ":call taskpaper#search_tag('today')" )
             end, '显示当日' },
           d = {

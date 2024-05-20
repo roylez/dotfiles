@@ -11,6 +11,9 @@ return {
         height = { min = 3, max = 25 },
         spacing = 3,
         align = 'center'
+      },
+      window = {
+        border = 'single'
       }
     }
 
