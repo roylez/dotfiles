@@ -119,12 +119,12 @@
                   ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
                  ]
          }
-        {:des "Tap left command twice to open kitty"
+        {:des "Tap left command twice to open terminal"
          :rules [
-                 [:left_command [[:app "Kitty"] ["to-kitty" 0]] ["to-kitty" 1]]
+                 [:left_command [[:app "Kitty"] ["to-terminal" 0]] ["to-terminal" 1]]
                  [:left_command
-                  [["to-kitty" 1] :left_command]
-                  ["to-kitty" 0] {:delayed {:invoked ["to-kitty" 0] :canceled ["to-kitty" 0]} :params {:delay 300}}]
+                  [["to-terminal" 1] :left_command]
+                  ["to-terminal" 0] {:delayed {:invoked ["to-terminal" 0] :canceled ["to-terminal" 0]} :params {:delay 300}}]
                  ]
          }
         {:des "Tap right command twice to open Vivaldi"

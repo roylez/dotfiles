@@ -1,10 +1,13 @@
 -- Pull in the wezterm API
+--
 local wezterm = require 'wezterm'
+
+local home = os.getenv('HOME')
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- patterns 
+-- patterns
 local url_regex = [[https?://[^<>"\s{-}\^⟨⟩`│⏎]+]]
 local hash_regex = [=[[a-f\d]{4,}|[A-Z_]{4,}]=]
 local path_regex = [[~?(?:[-.\w]*/)+[-.\w]*]]
@@ -20,11 +23,11 @@ end)
 config.color_scheme = 'Tomorrow Night Bright'
 
 config.font = wezterm.font_with_fallback {
-  'FantasqueSansMono',
-  { family="LXGW WenKai Mono", weight="Bold"}
+  'Fantasque Sans Mono',
+  {family="LXGW WenKai Mono TC", weight="Regular", stretch="Normal", style="Normal"}
 }
 
-config.font_size = 18
+config.font_size = 17
 -- no ligatures
 config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 
@@ -32,14 +35,19 @@ config.line_height = 1.05
 
 config.use_fancy_tab_bar = false
 
+config.switch_to_last_active_tab_when_closing_tab = true
+
 config.default_cursor_style = "BlinkingBar"
+
 config.cursor_blink_rate = 700
+
+config.status_update_interval = 1000
 
 config.quick_select_patterns = { url_regex, path_regex, hash_regex }
 
 config.enable_kitty_keyboard = true
 
-config.front_end = 'WebGpu'
+config.front_end = 'OpenGL'
 
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 -- make username/project paths clickable. this implies paths like the following are for github.
@@ -50,7 +58,7 @@ table.insert(config.hyperlink_rules, {
 
 config.initial_cols = 200
 config.initial_rows = 80
-config.macos_window_background_blur = 20
+config.macos_window_background_blur = 10
 
 config.webgpu_power_preference = "HighPerformance"
 config.window_background_opacity = 0.70
@@ -62,6 +70,21 @@ config.set_environment_variables = {
     .. os.getenv('PATH')
 }
 
+config.window_padding = {
+  left = '0.5cell',
+  right = '0.5cell',
+  top = '0.5cell',
+  bottom = '0.5cell',
+}
+
+--- {{{ launch menu
+config.launch_menu = {
+  { label = 'MUTT',           args = { 'ssh',  '-t', 'limbo', 'zsh', '-ic', '"neomutt -F .mutt/muttrc"' } },
+  { label = 'TASKPAPER',      args = { 'nvim', home .. "/Documents/TODO.taskpaper" } },
+  { label = 'lf',             args = { "lf",   home .. "/Downloads"                } },
+  { label = 'WezTerm Config', args = { 'nvim', home .. '/.wezterm.lua'             } },
+}
+--- }}}
 --- }}}
 
 --- keys {{{
@@ -75,22 +98,22 @@ config.keys = {
 
   { mods = 'CMD', key = 'd', action = act.ShowDebugOverlay },
 
-  { mods = 'CTRL|SHIFT|SUPER', key = 'r', action = act.ShowLauncherArgs { flags = 'TABS|LAUNCH_MENU_ITEMS' }, },
+  { mods = 'CTRL|SHIFT|SUPER', key = 'r', action = act.ShowLauncherArgs { flags = 'TABS|LAUNCH_MENU_ITEMS', title = 'RUN...' }, },
 
   { mods = 'CMD', key = 'LeftArrow',  action = act.ActivateTabRelative(-1) },
   { mods = 'CMD', key = 'RightArrow', action = act.ActivateTabRelative(1)  },
   { mods = 'CMD', key = 'h',          action = act.ActivateTabRelative(-1)  },
   { mods = 'CMD', key = 'l',          action = act.ActivateTabRelative(1) },
 
-  { mods = 'CMD', key = 'e', 
+  { mods = 'CMD', key = 'e',
     action = act.SpawnCommandInNewTab {
       label = 'MUTT',
       args = { 'ssh',  '-t', 'limbo', 'zsh', '-ic', '"neomutt -F .mutt/muttrc -F .mutt/account/work"' },
     }
   },
 
-  { 
-    mods = 'CTRL|SHIFT|SUPER', key = 'Enter', 
+  {
+    mods = 'CTRL|SHIFT|SUPER', key = 'Enter',
     action = act.SpawnCommandInNewTab {
       label = 'SCRATCH',
       args = { "nvim", "+Startify" }
@@ -98,7 +121,7 @@ config.keys = {
   },
 
   { mods = 'CMD', key = 'p', action = act.QuickSelect },
-  
+
   {
     mods = 'CMD', key = 'o',
     action = act.QuickSelectArgs {
@@ -113,14 +136,6 @@ config.keys = {
   },
 }
 
---- }}}
-
---- {{{ launch menu
-config.launch_menu = {
-  { label = 'MUTT',           args = { 'ssh',  '-t', 'limbo', 'zsh', '-ic', '"neomutt -F .mutt/muttrc"' } },
-  { label = 'lf',             args = { "lf", os.getenv("HOME") .. "/Downloads" } },
-  { label = 'WezTerm Config', args = { 'nvim', os.getenv("HOME") .. '/.wezterm.lua' } },
-}
 --- }}}
 
 -- and finally, return the configuration to wezterm

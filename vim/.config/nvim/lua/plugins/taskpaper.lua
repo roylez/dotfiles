@@ -6,7 +6,7 @@ function replace_old_dues()
   for i, line in ipairs(lines) do
     lines[i] = line:gsub("@due%((%d%d%d%d)%-(%d%d)%-(%d%d)%)", function(year, month, day)
       local date = os.time({year=tonumber(year), month=tonumber(month), day=tonumber(day)})
-      if date < today then
+      if date <= today then
         return "@today"
       else
         return "@due(" .. year .. "-" .. month .. "-" .. day .. ")"

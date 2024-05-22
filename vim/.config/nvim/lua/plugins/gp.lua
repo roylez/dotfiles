@@ -108,8 +108,12 @@ local options = {
 
     -- {{{ Translate
     Translate = function(gp, params)
-      local agent = gp.get_command_agent()
-      local template = "You are a Translator, please translate this into English."
+      local agent = gp.get_chat_agent()
+      local template = [[
+      You are a Translator, please translate this into English. Please respond with only revised text and nothing else:
+
+      {{selection}}
+      ]]
       gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
     end,
     -- }}}
