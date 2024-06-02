@@ -36,6 +36,7 @@ return
 
       vim.keymap.set('n', 'o',    'o<C-r>=taskpaper#newline()<CR>',    { silent = true, buffer = true })
       vim.keymap.set('i', '<CR>', '<CR><C-r>=taskpaper#newline()<CR>', { silent = true, buffer = true })
+      vim.keymap.set('n', 'q',    ':x<CR>',                            { silent = true, buffer = true })
 
       wk.register({
         t = {

@@ -294,6 +294,12 @@ if is-local; then
     tmux*)        function title() { print -nP "\e]2;$1\a" } ;;
     screen*)      function title() { print -nP "\ek$1\e\\" } ;;
   esac
+else
+  case $TERM in
+    xterm*|rxvt*) function title() { print -nP "\e]0;@${HOST}: $1\a" } ;;
+    tmux*)        function title() { print -nP "\e]2;@${HOST}: $1\a" } ;;
+    screen*)      function title() { print -nP "\ek@${HOST}: $1\e\\" } ;;
+  esac
 fi
 
 #set screen/tmux title if not connected remotely

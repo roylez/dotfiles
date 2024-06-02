@@ -80,8 +80,8 @@ def create_cells():
         get_todo(),
         # get_work_email() if datetime.date.today().weekday()<5 else None,
         # get_personal_email(),
+        get_time(),
         get_date(),
-        get_time()
     ]
     return [c for c in cells if c is not None]
 
