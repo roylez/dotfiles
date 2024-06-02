@@ -189,7 +189,7 @@ local options = {
         I want you to act as an Computing Technical Writer. I will give you a computing technical
         question and you need to write an artical about this topic in RedHat knowledge base style.
         This article should contains two parts: Problem description and the solution, I want you to
-        explain the question in the "Problem desription" part, and provide the solution of the
+        explain the question in the "Problem description" part, and provide the solution of the
         question in "Solution" part. I want you to write the topic with simply A0-level words and
         sentences, plus command examples, and explain every command in the article, avoid using the
         word like 'we' and 'you'. I want you to only reply the artical in raw markdown text without
