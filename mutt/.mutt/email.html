@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+$for(author-meta)$
+  <meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+  <meta name="date" content="$date-meta$" />
+$endif$
+$if(keywords)$
+  <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$" />
+$endif$
+  <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+  <style type="text/css">
+  body, table, td, a {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img {
+    border: 0;
+    height: auto;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 7px;
+    max-width: 100%;
+    -ms-interpolation-mode: bicubic;
+  }
+  figure { margin: 0; padding: 0; }
+  article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section { display: block; }
+  a[x-apple-data-detectors] {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+  }
+  div[style*="margin: 16px 0;"] { margin: 0 !important; }
+  table, td, div, a { box-sizing: border-box; }
+  body, .body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    line-height: 1.2;
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  table { border-collapse: separate !important; width: 100%; }
+  table td { font-family: Georgia, "Times New Roman", Times, serif; font-size: 14px; vertical-align: top; }
+  strong, b { font-weight: bold; }
+  h1, h2, h3, h4, h5, h6 {
+    color: #222222 !important;
+    font-family: "Roboto", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0;
+    margin-bottom: 7px;
+    margin-top: 10.5px;
+  }
+  h1, h2 { margin-bottom: 10.5px; margin-top: 14px; }
+  h1 { font-size: 22.4px; text-transform: capitalize; }
+  h2 { font-size: 19.6px; }
+  h3 { font-size: 16.8px; }
+  h4 { font-size: 15.4px; }
+  h5 { font-size: 14px; }
+  h6 { font-size: 12.6px; }
+  p, ul, ol {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    padding-top: 7px;
+    color: #111111;
+  }
+  ul, ol { margin: 0; margin-bottom: 7.5px; padding-left: 25px; }
+  ul li, ol li { list-style-position: outside; margin-left: 5px; margin-bottom: 1px; }
+  li > ul, li > ol { margin-top: 7.5px; }
+  a { color: #348eda; text-decoration: none; font-weight: bold; }
+  pre > a, code > a { color: none; font-weight: normal; }
+  code, pre {
+    word-break: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 11.9px;
+  }
+  pre {
+    display: block;
+    width: 96%;
+    margin: 1em 0;
+    margin-bottom: 9px;
+    background: #f8f8f8;
+    padding: 1%;
+    white-space: pre-wrap;
+    border-radius: 4px;
+  }
+  p > code { color: #111111; background: none; }
+  blockquote {
+    padding: 0 7px 0 7px;
+    border-left: 2px solid #cccccc;
+    border-top: 4.2px solid transparent;
+    font-style: italic;
+    margin: 0 0 7px 3px;
+  }
+  blockquote p { padding: 0; }
+  mark { background: #ff0; }
+  dl dt { font-weight: bold; }
+  dl dd { margin-left: 28px; }
+  hr { margin: 28px 0; border: none; border-top: 1px solid #cccccc; }
+  @media only screen and (max-width: 840px) {
+    table[class=body] { font-size: 12px !important; }
+    table[class=body] p, table[class=body] ul, table[class=body] ol { font-size: 12px !important; }
+    table[class=body] h1 { font-size: 18.2px !important; }
+    table[class=body] h2 { font-size: 16.8px !important; }
+    table[class=body] h3 { font-size: 15.4px !important; }
+    table[class=body] h4 { font-size: 14.7px !important; }
+    table[class=body] h5 { font-size: 12.6px !important; }
+    table[class=body] h6 { font-size: 11.9px !important; }
+    table[class=body] h1, table[class=body] h2 { margin-bottom: 14px !important; margin-top: 14px !important; }
+  }
+  </style>
+$if(quotes)$
+  <style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
+$endif$
+$if(highlighting-css)$
+  <style type="text/css">
+$highlighting-css$
+  </style>
+$endif$
+$for(css)$
+  <link rel="stylesheet" href="$css$" type="text/css" />
+$endfor$
+$if(math)$
+  $math$
+$endif$
+$for(header-includes)$
+  $header-includes$
+$endfor$
+</head>
+<body>
+$for(include-before)$
+$include-before$
+$endfor$
+$if(title)$
+<div id="$idprefix$header">
+<h1 class="title">$title$</h1>
+$if(subtitle)$
+<h1 class="subtitle">$subtitle$</h1>
+$endif$
+$for(author)$
+<h2 class="author">$author$</h2>
+$endfor$
+$if(date)$
+<h3 class="date">$date$</h3>
+$endif$
+</div>
+$endif$
+$if(toc)$
+<div id="$idprefix$TOC">
+$toc$
+</div>
+$endif$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+</body>
+</html>

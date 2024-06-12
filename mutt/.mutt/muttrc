@@ -13,6 +13,7 @@ set editor='nvim -c "setlocal wrapmargin=0 wrap list linebreak nohlsearch spell"
 set text_flowed=yes
 
 set sendmail_wait = 10
+set sendmail  = "~/.mutt/bin/do_sendmail"
 set print_command="enscript -v -Email -G --word-wrap -f Palatino-Roman@11"
 
 # Use Maildir instead of mbox

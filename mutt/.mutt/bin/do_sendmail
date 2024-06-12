@@ -1,12 +1,17 @@
 #!/bin/bash
-export PATH=~/.mutt:$PATH
+
+export PATH=~/.mutt/bin:$PATH
 
 ## Save msg in file to re-use it for multiple tests.
-t=`mktemp -t mutt_message.XXXXXX` || exit 3
-cat > "$t"
+# t=`mktemp -t mutt_message.XXXXXX` || exit 3
+# cat > "$t"
 
 # save email addresses in contacts.yml
-~/.mutt/contacts/local -f to,cc,bcc -t "$t"
+~/.mutt/contacts/local -f to,cc,bcc -t -p | \
+  # convert markdown to html
+  MIMEmbellish |\
+  # setenv ACCOUNT in muttrc!
+  msmtp -a $ACCOUNT "$@"
 
 #
 # ## Attachment keywords that the message body will be searched for:
@@ -48,9 +53,7 @@ cat > "$t"
 #     exit_status=1
 # fi
 
-"$@" < "$t"
-
-rm -f "$t"
+# "$@" < "$t"
+# rm -f "$t"
 
 # exit $exit_status
-

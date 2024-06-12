@@ -288,19 +288,17 @@ _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 #{{{ functions to set gnu screen title
 # active command as title in terminals
 function title() {}
-if is-local; then
-  case $TERM in
-    xterm*|rxvt*) function title() { print -nP "\e]0;$1\a" } ;;
-    tmux*)        function title() { print -nP "\e]2;$1\a" } ;;
-    screen*)      function title() { print -nP "\ek$1\e\\" } ;;
-  esac
-else
-  case $TERM in
-    xterm*|rxvt*) function title() { print -nP "\e]0;@${HOST}: $1\a" } ;;
-    tmux*)        function title() { print -nP "\e]2;@${HOST}: $1\a" } ;;
-    screen*)      function title() { print -nP "\ek@${HOST}: $1\e\\" } ;;
-  esac
-fi
+case $TERM in
+  tmux*)        function title() { print -nP "\e]2;$1\a" } ;;
+  screen*)      function title() { print -nP "\ek$1\e\\" } ;;
+  xterm*|rxvt*)
+    if is-local; then
+      function title() { print -nP "\e]0;$1\a" }
+    else
+      function title() { print -nP "\e]0;@${HOST}: $1\a" }
+    fi
+    ;;
+esac
 
 #set screen/tmux title if not connected remotely
 #if [ "$STY" != "" ]; then
