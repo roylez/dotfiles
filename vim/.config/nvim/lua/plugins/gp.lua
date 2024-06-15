@@ -1,9 +1,6 @@
-function file_exists(name)
-  local f = io.open(name, "r")
-  return f ~= nil and io.close(f)
-end
+local settings_file = os.getenv("HOME") .. '/.gp.deepinfra.json'
 
-local cred_file = os.getenv("HOME") .. '/.gpt'
+local settings = vim.json.decode(require('util').read_file(settings_file))
 
 local chat_system_prompt = [[
       You are a general AI assistant.
@@ -27,42 +24,29 @@ local code_system_prompt = [[
       ```
 ]]
 
+local create_agents = function(agents)
+  local results = {}
+  for i, a in ipairs(agents) do
+    results[i] = {
+      name = a.name,
+      chat = a.chat,
+      command = not a.chat,
+      model = a.chat and { model = a.model, temperature = 1.1, top_p = 1 } or { model = a.model, temperature = 0.8, top_p = 1 },
+      system_prompt = a.chat and chat_system_prompt or code_system_prompt,
+    }
+  end
+  return results
+end
 
 local options = {
-  openai_api_key = { "cat", cred_file },
 
-  --- {{{ Agents
-  agents = {
-    {
-      name = "ChatGPT4o",
-      chat = true,
-      command = false,
-      model = { model = "gpt-4o", temperature = 1.1, top_p = 1 },
-      system_prompt = chat_system_prompt,
-    },
-    {
-      name = "ChatGPT3-5",
-      chat = true,
-      command = false,
-      model = { model = "gpt-3.5-turbo-1106", temperature = 1.1, top_p = 1 },
-      system_prompt = chat_system_prompt,
-    },
-    {
-      name = "CodeGPT4",
-      chat = false,
-      command = true,
-      model = { model = "gpt-4-1106-preview", temperature = 0.8, top_p = 1 },
-      system_prompt = code_system_prompt,
-    },
-    {
-      name = "CodeGPT4o",
-      chat = false,
-      command = true,
-      model = { model = "gpt-4o", temperature = 0.8, top_p = 1 },
-      system_prompt = code_system_prompt,
-    },
-  },
-  --- }}}
+  openai_api_key       = settings.api_key,
+
+  openai_api_endpoint  = settings.api_endpoint,
+
+  chat_topic_gen_model = settings.chat_topic_gen_model,
+
+  agents = create_agents(settings.agents),
 
   hooks = {
     -- {{{ InspectPlugin
@@ -209,7 +193,7 @@ return
     'Robitx/gp.nvim',
 
     enabled = function()
-      return file_exists( cred_file )
+      return require('util').is_file( settings_file )
     end,
 
     config = function()

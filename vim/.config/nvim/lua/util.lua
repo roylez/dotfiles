@@ -20,6 +20,15 @@ M.is_file = function(name)
    return f ~= nil and io.close(f)
 end
 
+-- read in a file
+M.read_file = function(path)
+  local file = io.open(path, "rb")
+  if not file then return nil end
+  local content = file:read "*a"
+  file:close()
+  return content
+end
+
 -- create a menu using vim.ui.select
 M.create_menu = function( prompt, items )
 

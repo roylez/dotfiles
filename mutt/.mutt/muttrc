@@ -16,6 +16,9 @@ set sendmail_wait = 10
 set sendmail  = "~/.mutt/bin/do_sendmail"
 set print_command="enscript -v -Email -G --word-wrap -f Palatino-Roman@11"
 
+# no dashes before signatures
+unset sig_dashes
+
 # Use Maildir instead of mbox
 set mbox_type=Maildir
 set mask="!^\\.[^.]"
