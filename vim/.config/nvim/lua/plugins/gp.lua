@@ -142,9 +142,13 @@ local options = {
 
       I want you act as a proofreader. I will provide you texts and I would like you to review them
       for any spelling, grammar, or punctuation errors, and make it look from a professional
-      technical support person. Please respond with only revised text and nothing else:
+      technical support person. Be cool and do not use casual abbrevations "it's" or "don't". Do not
+      include anything like "Here is the revised text", and respond with revised text only.
+
+      Here is the text to proofread:
 
       {{selection}}
+
       ]]
       local agent = gp.get_chat_agent()
       gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
@@ -154,10 +158,14 @@ local options = {
     -- {{{ Proofread the text and rewrite it like some tech document
     DocRewrite = function(gp, params)
       local template = [[
+
         I want you act as a proofreader. I will provide you texts and I would like you to review
         them for any spelling, grammar, or punctuation errors, and make it look from a piece
-        professional technical document. Please respond with only revised text in markdown and
-        nothing else:
+        professional technical document. Be cool and do not use casual abbrevations "it's" or
+        "don't". Do not include anything like "Here is the revised text", and respond with revised
+        text only.
+
+        Here is the text to proofread:
 
         {{selection}}
       ]]
