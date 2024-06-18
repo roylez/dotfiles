@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PATH=~/brew/bin:/opt/homebrew/bin:$PATH
+
+TITLE=$(kitten @ ls -t state:active |jq '.[0].tabs[0].title')
+
+if [[ "$TITLE" = *tmux* ]]; then
+  kitten @ send-key ctrl+a [
+else
+  kitten @ action show_scrollback
+fi
