@@ -1,0 +1,47 @@
+#!/usr/bin/env sh
+
+PATH=~/brew/bin:/opt/homebrew/bin:$PATH
+
+windows=$(kitty @ ls | \
+  jq -r '
+    .[]
+    | .id as $os_win_id
+    | .tabs[] += { tab_len: (.tabs|length) }
+    | .tabs[]
+    | select(.is_focused == false)
+    | .id as $tab_id
+    | .tab_len as $tab_len
+    | .windows[] += { tab_id: $tab_id, os_win_id: $os_win_id, win_len: (.windows|length), tab_len: $tab_len }
+    | .windows[]
+    | [.os_win_id, .tab_id, .id, .tab_len, .win_len, .title  ]
+    | @tsv
+    ' |\
+  awk -F"\t" '
+      {
+        single_tab=$4==1;
+        single_win=$5==1;
+        last_tab=$4==i+1;
+        last_win=$5==j+1;
+        first_tab=i==0;
+        first_win=j==0;
+      }
+
+      { printf $3"\t" }
+
+      single_tab && first_win { printf "---" }
+      !single_tab && first_win { printf "+--" }
+      !single_win && !first_win { printf "   " }
+
+      single_win { printf "---" }
+      !single_win { printf "+--" }
+
+      {print "\t"$1":"$2"\t"$6}
+
+      { last_tab ? i=0 : i++ ; last_win ? j=0 : j++}
+      ' |column -ts  $'\t'
+    )
+
+
+window_id=$(fzf --prompt="CHOOSE WINDOW> " --nth=1,4 --reverse <<< "${windows}" | awk '{ print $1 }')
+
+kitty @ focus-window -m "id:${window_id}"
