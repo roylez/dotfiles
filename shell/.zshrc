@@ -613,33 +613,6 @@ if ( _has fzf ); then
   bindkey '\el' fzf-view-file
   # }}}
 
-  # {{{ wiki search and view
-  wiki_dir=$HOME/wiki
-  if [[ -d $wiki_dir ]]; then
-    fzf-view-wiki() {
-      setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
-      zle reset-prompt
-
-      if _has bat; then
-        local cmd="bat --style grid"
-      else
-        local cmd=less
-      fi
-      result=$( \
-        gawk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
-        fzf-tmux -p --prompt 'WIKI > ' -q "$*" | \
-        cut -d: -f1 
-      )
-      if [ -n "$result" ]; then
-        LBUFFER="$cmd $wiki_dir/$result"
-        zle accept-line
-      fi
-    }
-
-    zle -N fzf-view-wiki
-    bindkey '\e ' fzf-view-wiki
-  fi
-  # }}}
 fi
 # }}}
 

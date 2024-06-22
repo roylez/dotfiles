@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-PATH=~/brew/bin:/opt/homebrew/bin:$PATH
-
 windows=$(kitty @ ls | \
   jq -r '
     .[]
