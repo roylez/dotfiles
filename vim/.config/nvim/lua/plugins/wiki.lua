@@ -1,6 +1,7 @@
 return {
   {
     'roylez/zwiki',
+    -- dir='~/workspace/stuff/zwiki',
     lazy = false,
     dependencies = { 'vimwiki/vimwiki', "ibhagwan/fzf-lua" }
   },

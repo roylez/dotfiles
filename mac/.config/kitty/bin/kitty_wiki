@@ -2,10 +2,10 @@
 
 wiki_dir=$HOME/wiki
 
-cmd="nvim -R"
+cmd="nvim "
 
 result=$( \
-  gawk 'FNR < 3 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
+  gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]":",$0; nextfile}' $wiki_dir/*.md | \
   fzf-tmux -p --prompt 'WIKI > ' -q "$*" | \
   cut -d: -f1
 )
