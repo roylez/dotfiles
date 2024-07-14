@@ -29,6 +29,7 @@ local create_agents = function(agents)
   for i, a in ipairs(agents) do
     results[i] = {
       name = a.name,
+      provider = "openai",
       chat = a.chat,
       command = not a.chat,
       model = a.chat and { model = a.model, temperature = 1.1, top_p = 1 } or { model = a.model, temperature = 0.8, top_p = 1 },
@@ -40,11 +41,14 @@ end
 
 local options = {
 
-  openai_api_key       = settings.api_key,
-
-  openai_api_endpoint  = settings.api_endpoint,
-
   chat_topic_gen_model = settings.chat_topic_gen_model,
+
+  providers = {
+    openai = {
+      endpoint = settings.api_endpoint,
+      secret = settings.api_key
+     },
+  },
 
   agents = create_agents(settings.agents),
 
@@ -53,8 +57,8 @@ local options = {
     InspectPlugin = function(plugin, params)
       local bufnr = vim.api.nvim_create_buf(false, true)
       local copy = vim.deepcopy(plugin)
-      local key = copy.config.openai_api_key
-      copy.config.openai_api_key = key:sub(1, 3) .. string.rep("*", #key - 6) .. key:sub(-3)
+      local key = copy.config.providers.openai.secret
+      copy.config.providers.openai.secret = key:sub(1, 3) .. string.rep("*", #key - 6) .. key:sub(-3)
       local plugin_info = string.format("Plugin structure:\n%s", vim.inspect(copy))
       local params_info = string.format("Command params:\n%s", vim.inspect(params))
       local lines = vim.split(plugin_info .. "\n" .. params_info, "\n")
@@ -85,7 +89,9 @@ local options = {
         nil, -- command will run directly without any prompting for user input
         agent.model,
         template,
-        agent.system_prompt
+        agent.system_prompt,
+        false,
+        agent.provider
       )
     end,
     -- }}}
@@ -98,7 +104,7 @@ local options = {
 
       {{selection}}
       ]]
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
 
@@ -114,7 +120,7 @@ local options = {
       Please respond by writing table driven unit tests for the code above.
       ]]
       local agent = gp.get_command_agent()
-      gp.Prompt(params, gp.Target.enew, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.enew, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
 
@@ -132,7 +138,7 @@ local options = {
       ]]
 
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.popup, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.popup, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
 
@@ -151,7 +157,7 @@ local options = {
 
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
 
@@ -170,7 +176,7 @@ local options = {
         {{selection}}
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
 
@@ -190,7 +196,7 @@ local options = {
         {{selection}}
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt)
+      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
     end,
     -- }}}
   },

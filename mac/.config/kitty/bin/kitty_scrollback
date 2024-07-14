@@ -7,5 +7,5 @@ TITLE=$(kitten @ ls -t state:active |jq '.[0].tabs[0].title')
 if [[ "$TITLE" = *tmux* ]]; then
   kitten @ send-key ctrl+a [
 else
-  kitten @ action show_scrollback
+  kitten @ kitten ~/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
 fi
