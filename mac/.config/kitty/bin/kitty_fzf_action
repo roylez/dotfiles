@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+actions=$(cat <<-EOS
+Edit Config   ,kitty @ action edit_config_file
+EMAIL         ,kitty @ action launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
+Env Vars      ,kitty @ action show_kitty_env_vars
+Files         ,kitty @ action launch --type=overlay zsh -ic "lf ~/Downloads"
+Fullscreen    ,kitty @ action toggle_fullscreen
+Kitty Shell   ,kitty @ action kitty_shell window
+New Tab       ,kitty @ action new_tab
+New Window    ,kitty @ action new_window
+Reload        ,kitty @ action load_config_file
+SCRATCH       ,kitty @ action launch --type=tab --tab-title SCRATCH nvim +Startify
+TODO          ,kitty @ action launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
+Emoji         ,kitty @ action input_unicode_character
+EOS)
+
+cmd=$(echo "$actions" | tr , "\t"  |\
+  fzf --prompt="RUN ACTION> " --keep-right --layout=reverse -d$'\t' |\
+  sed "s=.*\t==g"
+)
+
+$cmd
