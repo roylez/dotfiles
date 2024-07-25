@@ -38,17 +38,22 @@ return
       vim.keymap.set('i', '<CR>', '<CR><C-r>=taskpaper#newline()<CR>', { silent = true, buffer = true })
       vim.keymap.set('n', 'q',    ':x<CR>',                            { silent = true, buffer = true })
 
-      wk.register({
-        t = {
-          name = 'TaskPaper',
-          t = { ":call taskpaper#toggle_tag('today', '')<CR>", '标注 @today' },
-          s = { ":call taskpaper#search()<CR>",                '搜索...' },
-          T = {
+      wk.add(
+        {
+          { "<leader>t", group = "TaskPaper" },
+          { "<leader>tD",
+            function()
+              vim.api.nvim_call_function("taskpaper#archive_done", {})
+              -- require('util').preserve("call taskpaper#archive_done()")
+            end,
+            desc = "归档" },
+          { "<leader>tT",
             function()
               replace_old_dues()
               vim.cmd( ":call taskpaper#search_tag('today')" )
-            end, '显示当日' },
-          d = {
+            end,
+            desc = '显示当日' },
+          { "<leader>td",
             function()
               if vim.api.nvim_call_function('taskpaper#has_tag', { 'done' }) == 1 then
                 vim.api.nvim_call_function('taskpaper#delete_tag', { 'done' })
@@ -56,14 +61,11 @@ return
                 vim.api.nvim_call_function('taskpaper#delete_tag', { 'today' })
                 vim.api.nvim_call_function('taskpaper#add_tag', { 'done', os.date("%Y-%m-%d", os.time()) })
               end
-            end, '标注 @done' },
-          D = {
-            function()
-              vim.api.nvim_call_function("taskpaper#archive_done", {})
-              -- require('util').preserve("call taskpaper#archive_done()")
-            end, '归档' },
+            end, desc = '标注 @done' },
+          { "<leader>ts", ":call taskpaper#search()<CR>", desc = "搜索..." },
+          { "<leader>tt", ":call taskpaper#toggle_tag('today', '')<CR>", desc = "标注 @today" },
         }
-      },{ prefix = '<leader>' })
+      )
 
     end,
   }
