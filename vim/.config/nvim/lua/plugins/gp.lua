@@ -83,16 +83,7 @@ local options = {
       local agent = gp.get_command_agent()
       gp.info("Implementing selection with agent: " .. agent.name)
 
-      gp.Prompt(
-        params,
-        gp.Target.rewrite,
-        nil, -- command will run directly without any prompting for user input
-        agent.model,
-        template,
-        agent.system_prompt,
-        false,
-        agent.provider
-      )
+      gp.Prompt( params, gp.Target.rewrite, agent, template)
     end,
     -- }}}
 
@@ -104,7 +95,7 @@ local options = {
 
       {{selection}}
       ]]
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.rewrite, agent, template)
     end,
     -- }}}
 
@@ -120,7 +111,7 @@ local options = {
       Please respond by writing table driven unit tests for the code above.
       ]]
       local agent = gp.get_command_agent()
-      gp.Prompt(params, gp.Target.enew, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.enew, agent, template)
     end,
     -- }}}
 
@@ -138,7 +129,7 @@ local options = {
       ]]
 
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.popup, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.popup, agent, template)
     end,
     -- }}}
 
@@ -157,7 +148,7 @@ local options = {
 
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.rewrite, agent, template)
     end,
     -- }}}
 
@@ -176,7 +167,7 @@ local options = {
         {{selection}}
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.rewrite, agent, template)
     end,
     -- }}}
 
@@ -196,7 +187,7 @@ local options = {
         {{selection}}
       ]]
       local agent = gp.get_chat_agent()
-      gp.Prompt(params, gp.Target.rewrite, nil, agent.model, template, agent.system_prompt, false, agent.provider)
+      gp.Prompt(params, gp.Target.rewrite, agent, template)
     end,
     -- }}}
   },
@@ -216,40 +207,24 @@ return
 
       local wk = require("which-key")
 
-      wk.register({
-        g = {
-          name = "AI辅助",
-          c = { ":<C-u>'<,'>GpChatNew popup<cr>",   "Chat New"         },
-          t = { ":<C-u>'<,'>GpChatPaste popup<cr>", "Chat Paste"       },
-
-          r = { ":<C-u>'<,'>GpRewrite<cr>",         "Rewrite"          },
-          a = { ":<C-u>'<,'>GpAppend<cr>",          "Append (after)"   },
-          b = { ":<C-u>'<,'>GpPrepend<cr>",         "Prepend (before)" },
-
-          i = { ":<C-u>'<,'>GpImplement<cr>",       "Implement"        },
-          w = { ":<C-u>'<,'>GpSupportRewrite<cr>",  "Support Rewrtie"  },
-          W = { ":<C-u>'<,'>GpDocRewrite<cr>",      "Doc Rewrite"      },
-          T = { ":<C-u>'<,'>GpTranslate<cr>",       "Translate"        },
-          K = { ":<C-u>'<,'>GpKBWrite<cr>",         "KB Write"         },
-
-          n = { "<cmd>GpNextAgent<cr>",             "Next Agent"       },
-
-        },
-      }, { mode = "v", prefix = "<leader>", buffer = nil, silent = true, noremap = true, nowait = true, })
-
-      wk.register({
-        g = {
-          name = "AI辅助",
-          c = { "<cmd>GpChatNew popup<cr>", "New Chat" },
-          t = { "<cmd>GpChatToggle popup<cr>", "Toggle Chat" },
-
-          r = { "<cmd>GpRewrite<cr>", "Inline Rewrite" },
-          a = { "<cmd>GpAppend<cr>", "Append (after)" },
-          b = { "<cmd>GpPrepend<cr>", "Prepend (before)" },
-
-          n = { "<cmd>GpNextAgent<cr>", "Next Agent" },
-        },
-      }, { mode = "n", prefix = "<leader>", buffer = nil, silent = true, noremap = true, nowait = true, })
+      wk.add(
+        {
+          nowait = true, remap = false, mode = "v",
+          { "<leader>g",  group = "AI辅助" },
+          { "<leader>gK", ":<C-u>'<,'>GpKBWrite<cr>",         desc = "KB Write" },
+          { "<leader>gT", ":<C-u>'<,'>GpTranslate<cr>",       desc = "Translate" },
+          { "<leader>gW", ":<C-u>'<,'>GpDocRewrite<cr>",      desc = "Doc Rewrite" },
+          { "<leader>gi", ":<C-u>'<,'>GpImplement<cr>",       desc = "Implement" },
+          { "<leader>gt", ":<C-u>'<,'>GpChatPaste popup<cr>", desc = "Chat Paste"  },
+          { "<leader>gw", ":<C-u>'<,'>GpSupportRewrite<cr>",  desc = "Support Rewrtie" },
+          { "<leader>ga", ":<C-u>'<,'>GpAppend<cr>",        desc = "Append (after)",   mode = { "n", "v" } },
+          { "<leader>gb", ":<C-u>'<,'>GpPrepend<cr>",       desc = "Prepend (before)", mode = { "n", "v" } },
+          { "<leader>gc", ":<C-u>'<,'>GpChatNew popup<cr>", desc = "New Chat",         mode = { "n", "v" } },
+          { "<leader>gn", "<cmd>GpNextAgent<cr>",           desc = "Next Agent",       mode = { "n", "v" } },
+          { "<leader>gr", ":<C-u>'<,'>GpRewrite<cr>",       desc = "Rewrite",          mode = { "n", "v" } },
+          { "<leader>gt", "<cmd>GpChatToggle popup<cr>",    desc = "Toggle Chat",      mode = "n" }
+        }
+      )
 
     end
   }

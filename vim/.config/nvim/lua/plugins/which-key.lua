@@ -12,7 +12,7 @@ return {
         spacing = 3,
         align = 'center'
       },
-      window = {
+      win = {
         border = 'single'
       }
     }
