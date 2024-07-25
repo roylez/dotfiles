@@ -198,6 +198,7 @@ alias -g E="|sed"
 alias -g G='|GREP_COLORS=mt=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') grep -E -a -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less -R"
+alias -g Q="|jq -C |less -R"
 alias -g P="|column -t"
 alias -g R="|tac"
 alias -g S="|sort"
