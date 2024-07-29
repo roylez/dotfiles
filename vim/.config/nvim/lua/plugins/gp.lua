@@ -1,4 +1,4 @@
-local settings_file = os.getenv("HOME") .. '/.gp.deepinfra.json'
+local settings_file = os.getenv("HOME") .. '/.gp.json'
 
 local settings = vim.json.decode(require('util').read_file(settings_file))
 
@@ -24,41 +24,48 @@ local code_system_prompt = [[
       ```
 ]]
 
-local create_agents = function(agents)
+local create_providers = function(settings)
   local results = {}
-  for i, a in ipairs(agents) do
+  for i, a in pairs(settings) do
     results[i] = {
-      name = a.name,
-      provider = "openai",
-      chat = a.chat,
-      command = not a.chat,
-      model = a.chat and { model = a.model, temperature = 1.1, top_p = 1 } or { model = a.model, temperature = 0.8, top_p = 1 },
-      system_prompt = a.chat and chat_system_prompt or code_system_prompt,
+      endpoint = a.endpoint,
+      secret = a.secret
     }
+  end
+  return results
+end
+
+local create_agents = function(settings)
+  local results = {}
+  for k, v in pairs(settings) do
+    for _, a in ipairs(v.agents) do
+      results[#results+1] = {
+        name = a.name,
+        provider = k,
+        chat = a.chat,
+        command = not a.chat,
+        model = a.chat and { model = a.model, temperature = 1.1, top_p = 1 } or { model = a.model, temperature = 0.8, top_p = 1 },
+        system_prompt = a.chat and chat_system_prompt or code_system_prompt,
+      }
+    end
   end
   return results
 end
 
 local options = {
 
-  chat_topic_gen_model = settings.chat_topic_gen_model,
+  providers = create_providers(settings),
 
-  providers = {
-    openai = {
-      endpoint = settings.api_endpoint,
-      secret = settings.api_key
-     },
-  },
-
-  agents = create_agents(settings.agents),
+  agents = create_agents(settings),
 
   hooks = {
     -- {{{ InspectPlugin
+    -- GpInspectPlugin provides a detailed inspection of the plugin state
     InspectPlugin = function(plugin, params)
       local bufnr = vim.api.nvim_create_buf(false, true)
       local copy = vim.deepcopy(plugin)
-      local key = copy.config.providers.openai.secret
-      copy.config.providers.openai.secret = key:sub(1, 3) .. string.rep("*", #key - 6) .. key:sub(-3)
+      local key = copy.config.openai_api_key or ""
+      copy.config.openai_api_key = key:sub(1, 3) .. string.rep("*", #key - 6) .. key:sub(-3)
       local plugin_info = string.format("Plugin structure:\n%s", vim.inspect(copy))
       local params_info = string.format("Command params:\n%s", vim.inspect(params))
       local lines = vim.split(plugin_info .. "\n" .. params_info, "\n")
