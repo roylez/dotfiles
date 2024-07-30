@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ $# -eq 2 ]; then
+  title=$1
+  content=$2
+elif [ $# -eq 1 ]; then
+  title=Kitty
+  content=$1
+else
+  exit 1
+fi
+
+printf "\x1b]99;i=1:d=0;${title}\x1b\\"
+printf "\x1b]99;i=1:d=1:p=body;${content}\x1b\\"
