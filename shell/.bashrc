@@ -116,3 +116,7 @@ if (command -v direnv &>/dev/null); then
   eval "$(direnv hook bash)"
 fi
 
+if (command -v zoxide &>/dev/null); then
+  eval "$(zoxide init bash)"
+fi
+
