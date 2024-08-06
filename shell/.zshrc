@@ -198,7 +198,7 @@ alias -g E="|sed"
 alias -g G='|GREP_COLORS=mt=$(echo 3$[$(date +%s%N)/1000%6+1]'\'';1;7'\'') grep -E -a -i --color=always'
 alias -g H="|head -n $(($LINES-2))"
 alias -g L="|less -R"
-alias -g Q="|jq -C |less -R"
+alias -g Q="|jq -C"
 alias -g P="|column -t"
 alias -g R="|tac"
 alias -g S="|sort"
@@ -524,7 +524,8 @@ if ( _has fzf ); then
     --info=inline
     --layout=reverse
     --height=40%
-    --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118
+    --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118,border:46
+    --border=sharp
     --preview-window=:hidden
     --bind '?:toggle-preview'
     "
@@ -591,18 +592,18 @@ if ( _has fzf ); then
   }
 
   fzf-view-file() {
-    setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
+    setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
     zle reset-prompt
 
-    result=$($FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s')
-    if [ -n "$result" ]; then
-      cmd="${PAGER:-less}"
-      if ( _has lnav ) && [[ "$result" = *log* ]]; then
-        cmd="lnav -R"
-      fi
-      LBUFFER="$cmd \"$result\""
-      zle accept-line
-    fi
+    cmd="${PAGER:-less}"
+    $FD_EXECUTABLE . 2>/dev/null |\
+      fzf-tmux -p 70%,70% -q "$*" \
+      --prompt 'FILES > ' \
+      --bind "enter:become($cmd {1})" \
+      --bind "ctrl-/:toggle-preview" \
+      --preview-window 'right,50%,border-left,nohidden' \
+      --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
+      --header "[ENTER] view | [C-/] toggle preview "
   }
 
   zle -N fzf-completion
