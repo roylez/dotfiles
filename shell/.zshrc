@@ -596,14 +596,22 @@ if ( _has fzf ); then
     zle reset-prompt
 
     cmd="${PAGER:-less}"
-    $FD_EXECUTABLE . 2>/dev/null |\
+    result=$($FD_EXECUTABLE . 2>/dev/null |\
       fzf-tmux -p 70%,70% -q "$*" \
       --prompt 'FILES > ' \
-      --bind "enter:become($cmd {1})" \
       --bind "ctrl-/:toggle-preview" \
       --preview-window 'right,50%,border-left,nohidden' \
       --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
-      --header "[ENTER] view | [C-/] toggle preview "
+      --header "[ENTER] view | [C-/] toggle preview ")
+
+    if [ -n "$result" ]; then
+      cmd="${PAGER:-less}"
+      if ( _has lnav ) && [[ "$result" = *log* ]]; then
+        cmd="lnav -R"
+      fi
+      LBUFFER="$cmd \"$result\""
+      zle accept-line
+    fi
   }
 
   zle -N fzf-completion
