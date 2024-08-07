@@ -7,7 +7,7 @@ fzf-tmux \
   --prompt 'WIKI > ' \
   -q "$*" \
   --no-mouse \
-  --preview "bat --color=always --theme=Coldark-Dark $wiki_dir/{1}" \
+  --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}" \
   --bind "space:execute(cat $wiki_dir/{1}|pbcopy && ~/.config/kitty/bin/kitty_notify Zwiki '已复制「{1}」')" \
   --bind "enter:become(nvim $wiki_dir/{1})" \
   --header "[SPACE] copy | [ENTER] edit"
