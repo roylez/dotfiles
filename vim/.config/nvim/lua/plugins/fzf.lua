@@ -4,7 +4,7 @@ return {
     config = function()
       local fzf = require("fzf-lua")
 
-      fzf.setup({ "max-perf" })
+      fzf.setup({ "fzf-native" })
 
       fzf.register_ui_select()
 
@@ -14,6 +14,7 @@ return {
       vim.keymap.set('n', '<leader>b', fzf.buffers,   { silent = true, desc = 'Search Buffers' })
       vim.keymap.set('n', '<leader>f', fzf.files,     { silent = true, desc = 'Search Files' })
       vim.keymap.set('n', '<leader>r', fzf.oldfiles,  { silent = true, desc = 'Search MRU' })
+      vim.keymap.set('n', '<leader>u', fzf.resume,    { silent = true, desc = 'Resume' })
 
       local keyset={}
       local n=0
