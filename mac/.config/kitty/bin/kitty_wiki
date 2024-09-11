@@ -2,12 +2,12 @@
 
 wiki_dir=$HOME/wiki
 
-gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md | \
+gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md | \
 fzf-tmux \
   --prompt 'WIKI > ' \
   -q "$*" \
   --no-mouse \
-  --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}" \
-  --bind "space:execute(cat $wiki_dir/{1}|pbcopy && ~/.config/kitty/bin/kitty_notify Zwiki '已复制「{1}」')" \
+  --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}.md" \
+  --bind "space:execute(cat $wiki_dir/{1}|pbcopy && kitten notify Zwiki '已复制「{1}.md」')" \
   --bind "enter:become(nvim $wiki_dir/{1})" \
   --header "[SPACE] copy | [ENTER] edit"
