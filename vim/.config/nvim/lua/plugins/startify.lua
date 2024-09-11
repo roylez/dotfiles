@@ -22,8 +22,8 @@ return {
     \ { 's': '~/.zshrc' } ]
     let g:startify_commands = [
     \ { 'b': ['BLANK',      'PasteEdit'            ]},
-    \ { 'B': ['CLIPBOARD',  'PasteEdit +norm\ "+P' ]},
-    \ { 'z': ['Zettel',     'ZwikiNew +norm\ G"+p'  ]} ]
+    \ { 'B': ['CLIPBOARD',  'PasteEdit +silent\ norm\ "+P' ]},
+    \ { 'z': ['Zettel',     'ZwikiNew +silent\ norm\ G"+p'  ]} ]
 
     let g:startify_custom_header = "startify#center(split(system('bat --decorations=always --style=grid ~/wiki/TODO.md'), '\n'))"
     ]]
