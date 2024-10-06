@@ -1,19 +1,23 @@
 #!/usr/bin/env sh
 
 actions=$(cat <<-EOS
-EMAIL         ,kitty @ action launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
-Edit Config   ,kitty @ action edit_config_file
-Emoji         ,kitty @ action input_unicode_character
-Env Vars      ,kitty @ action show_kitty_env_vars
-Files         ,kitty @ action launch --type=overlay zsh -ic "lf ~/Downloads"
-Fullscreen    ,kitty @ action toggle_fullscreen
-Kitty Shell   ,kitty @ action kitty_shell window
-New Tab       ,kitty @ action new_tab
-New Window    ,kitty @ action new_window
-Reload        ,kitty @ action load_config_file
-SCRATCH       ,kitty @ action launch --type=tab --tab-title SCRATCH nvim +Startify
-TODO          ,kitty @ action launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
-WIKI          ,kitty @ action launch --type=overlay --title=Wiki kitty_wiki
+SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +PasteEdit +start
+SCRATCH in split   ,launch --type=window --title SCRATCH nvim +PasteEdit +start
+SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +PasteEdit +silent\ norm\ \"+P
+EMAIL              ,launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
+Edit Config        ,edit_config_file
+Emoji              ,input_unicode_character
+Env Vars           ,show_kitty_env_vars
+Files              ,launch --type=overlay zsh -ic "lf ~/Downloads"
+Fullscreen         ,toggle_fullscreen
+Kitty Shell        ,kitty_shell window
+MRU                ,launch --type=tab nvim -c "lua vim.fn.feedkeys(' r')"
+Tab new            ,new_tab
+Window new         ,new_window
+Reload             ,load_config_file
+TODO               ,launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
+WIKI search        ,launch --type=overlay --title=Wiki kitty_wiki
+WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\ norm\ \"+P
 EOS)
 
 cmd=$(echo "$actions" | tr , "\t"  |\
@@ -21,4 +25,4 @@ cmd=$(echo "$actions" | tr , "\t"  |\
   sed "s=.*\t==g"
 )
 
-$cmd
+kitty @ action $cmd
