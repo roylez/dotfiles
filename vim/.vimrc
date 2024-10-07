@@ -5,11 +5,12 @@
 if has('nvim')
   " support for cursor shapes
   " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  set shada='50,"100,:20,%
 else
   set backspace=2
   set encoding=utf-8
   " keep record of editing information for cursor restore and more
-  set viminfo='10,\"100,:20,%,n~/.viminfo
+  set viminfo='30,\"100,:20,%,n~/.viminfo
 endif
 
 " use the same vim_home dir for vim and nvim, use the following in

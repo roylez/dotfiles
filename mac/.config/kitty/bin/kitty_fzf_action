@@ -16,8 +16,8 @@ Tab new            ,new_tab
 Window new         ,new_window
 Reload             ,load_config_file
 TODO               ,launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
-WIKI search        ,launch --type=overlay --title=Wiki kitty_wiki
-WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\ norm\ \"+P
+Zettle new         ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\ norm\ \"+P
+Zettle search      ,launch --type=overlay --title=Wiki kitty_wiki
 EOS)
 
 cmd=$(echo "$actions" | tr , "\t"  |\
