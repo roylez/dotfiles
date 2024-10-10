@@ -1,17 +1,22 @@
 return {
-
   'kana/vim-textobj-user',
 
+  -- dii / cii
   {
     'kana/vim-textobj-indent',
-    dependencies = { 'kana/vim-textobj-user' }
+    dependencies = { 'kana/vim-textobj-user' },
+  },
+
+  -- dic / cic
+  {
+    'glts/vim-textobj-comment',
+    dependencies = { 'kana/vim-textobj-user' },
   },
 
   {
-    'andyl/vim-textobj-elixir',
+    'amiralies/vim-textobj-elixir',
     ft = 'elixir',
-    dependencies = { 'kana/vim-textobj-user' }
+    dependencies = { 'kana/vim-textobj-user' },
   },
-
 }
 
