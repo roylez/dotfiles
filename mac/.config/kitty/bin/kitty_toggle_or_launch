@@ -4,9 +4,8 @@
 TITLE=$1
 shift
 
-if (kitten @ ls --self -t title:${TITLE} &>/dev/null); then
+if (kitten @ ls -t title:${TITLE} &>/dev/null); then
   kitten @ action toggle_tab title:${TITLE}
 else
   kitten @ launch --type=tab --tab-title=${TITLE} "$@"
 fi
-
