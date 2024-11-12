@@ -187,6 +187,9 @@ export LESS_TERMCAP_us=$'\e[1;32m'      #underlining
 export LESS_TERMCAP_ue=$'\e[m'          #end underlining
 export GROFF_NO_SGR=1
 
+# RG conf
+export RIPGREP_CONFIG_PATH=~/.ripgreprc
+
 #for alias to be used when sudo, man bash
 alias sudo='sudo '
 

@@ -32,9 +32,11 @@
 [github]
   user = roylez
 [core]
-  # pager = cat
-  pager = less -FMRiXx4
+  ; pager = less -FMRiXx4
+  pager = delta
   excludesfile = ~/.gitignore
+[interactive]
+  diffFilter = delta --color-only
 [branch]
     ;autosetuprebase = remote
 [status]
@@ -61,3 +63,10 @@
   format = ssh
 [gpg "ssh"]
   allowedSignersFile = ~/.ssh/allowed_signers
+[delta]
+  navigation = true
+  hyperlinks = true
+  hyperlinks-file-link-format = "file://{host}{path}#{line}"
+  features = calochortus-lyallii
+[include]
+  path = ~/.gitconfig.themes
