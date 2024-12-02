@@ -1,4 +1,3 @@
-{
 ;; !  | means mandatory
 ;; #  | means optional
 ;; C  | left_command
@@ -24,6 +23,7 @@
 ;;       |_____| |_______________| |_| |_________________________________________|
 ;;        <from>    <to>      <conditions>         <other options>
 
+{
 :profiles { :Default
            { :default true
             ;; simultaneous_threshold_milliseconds (def: 50)
@@ -76,10 +76,12 @@
                  [:##right_alt :##right_control [:niz :logi] ]
                  ] }
 
-        {:des "Screenshot with logitech mouses"
+        {:des "Logitech mouses"
          :rules [
-                 [{:pkey :button4} [:km "screenshot"] :logi ]
-                 [{:pkey :button5} {:pkey :button4} :logi ]
+                 ; screenshot
+                 [{:pkey :button5} [:km "screenshot"] :logi ]
+                 ; history back in browser
+                 [{:pkey :button4} :!TSpage_up [ :logi :chrome ] ]
                  ] }
 
         {:des "More function keys"
