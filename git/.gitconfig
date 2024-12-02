@@ -43,7 +43,7 @@
   submoduleSummary = true
 [merge]
   tool = nvim -d
-  conflictstyle = zdiff3
+  ; conflictstyle = zdiff3
 [mergetool]
   prompt = true
 [mergetool "vimdiff"]

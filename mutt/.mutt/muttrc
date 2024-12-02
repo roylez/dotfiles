@@ -9,7 +9,7 @@ set index_format="%<[y?%<[m?%<[d?%[%H:%M ]&%[%d %a]>&%[%b %d]>&%[%y-%m ]> %?X?%2
 set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? 删除:%d?%?F? 星:%F?%?t? 标记:%t?%?p?? ]----%>-(%P %l)==="
 set status_on_top
 
-set editor='nvim -c "setlocal wrapmargin=0 wrap list linebreak nohlsearch spell" -c "norm ggO"'
+set editor='nvim -c "setlocal wrapmargin=0 wrap list linebreak nohlsearch spell" -c "norm gg}O"'
 set text_flowed=yes
 
 set sendmail_wait = 10
