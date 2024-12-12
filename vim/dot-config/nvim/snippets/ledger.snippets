@@ -1,0 +1,25 @@
+snippet salary Salary Payment
+  ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
+    Assets:CBA
+    Income:Salary                    $ -$3
+    Distribution:Kimy                $ $4
+    Distribution:Roy                 $ $4
+    Assets:Smile                     $ $5
+    Assets:Spend                     $ $6
+    Assets:Firefighter               $ $7
+    Liabilities:Reimbursable         $ 0
+    Expenses:Service:Banking         $ 0
+
+snippet interest Interest
+  ${1:`!lua os.date('%Y-%m-01')`} Interest
+    Assets:Mojo            $ $2
+    Assets:Smile           $ $3
+    Assets:Firefighter     $ $4
+    Assets:Spend           $ $5
+    Investment:Cash        $ 0
+    Income:Interest
+
+snippet exp Expenses
+  ${1:`!lua os.date('%Y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
+    Expenses:${5:Grocery}                         $ $6
+    Assets:Spend
