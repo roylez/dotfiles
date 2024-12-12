@@ -33,6 +33,11 @@ M.config = function()
     snippy      = '[SNIP]',
     dictionary  = '[D]',
     cmp_tabnine = "[TN]",
+    codeium     = '[AI]',
+  }
+
+  local symbol_mapping = {
+    Codeium = '',
   }
 
   cmp.setup({
@@ -47,36 +52,15 @@ M.config = function()
     },
     formatting = {
       format = lspkind.cmp_format({
-        mode = ( vim.fn.has('gui_running') == 1 and 'symbol' or 'text' ),
+        mode = 'symbol',
         menu = ( source_mapping ),
+        symbol_map = symbol_mapping,
         maxwidth = 50,
         ellipsis_char = '...',
         show_labelDetails = true
       })
     },
     mapping = {
-      -- ["<Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_next_item()
-      --   elseif snippy.can_expand_or_advance() then
-      --     snippy.expand_or_advance()
-      --   elseif has_words_before() then
-      --     cmp.complete()
-      --   else
-      --     fallback()
-      --   end
-      -- end, { "i", "s" }),
-      --
-      -- ["<S-Tab>"] = cmp.mapping(function(fallback)
-      --   if cmp.visible() then
-      --     cmp.select_prev_item()
-      --   elseif snippy.can_jump(-1) then
-      --     snippy.previous()
-      --   else
-      --     fallback()
-      --   end
-      -- end, { "i", "s" }),
-
       ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
       ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
       ['<C-n>'] = cmp.mapping({
@@ -128,6 +112,7 @@ M.config = function()
     },
     sources = cmp.config.sources({
       { name = "snippy", max_item_count = 5 },
+      { name = 'codeium' },
       { name = "nvim_lsp" },
       { name = "buffer" },
       { name = "path" },
