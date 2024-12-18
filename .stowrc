@@ -1,1 +1,1 @@
---dotfiles -v
+--dotfiles -v -t ~

@@ -70,5 +70,5 @@
   features = calochortus-lyallii
 [include]
   path = ~/.gitconfig.themes
-[includeIf "gitdir:work.*"]
+[includeIf "gitdir:**/w.*"]
   path = ~/.gitconfig.work
