@@ -119,9 +119,6 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=[ g:vim_home . '/snips' ]
 let g:UltiSnipsEditSplit= 'vertical'
-if has("nvim")
-  Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-endif
 " ....................................................................... }}}1
 
 " FZF.................................................................... {{{1
@@ -147,7 +144,7 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 set grepprg=rg\ --vimgrep
-if v:version >= 802 || has("nvim")
+if v:version >= 802
     let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.5, 'border': 'rounded' } }
 else
     let g:fzf_layout = { 'window': 'belowright 35new' }
@@ -175,27 +172,16 @@ nnoremap <silent> <leader>t :BTags<CR>
 
 " Deoplete............................................................... {{{1
 Plug 'wellle/tmux-complete.vim'
-if has("nvim")
-  Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'hrsh7th/cmp-buffer'
-  " Plug 'hrsh7th/cmp-path'
-  " Plug 'hrsh7th/cmp-cmdline'
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'uga-rosa/cmp-dictionary'
-  Plug 'onsails/lspkind.nvim'
-  " Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-  Plug 'deoplete-plugins/deoplete-dictionary'
-  set dictionary+=/usr/share/dict/words
-  let g:deoplete#enable_at_startup       = 1
-  let g:deoplete#omni#min_pattern_length = 3
-  let g:deoplete                         = g:vim_home . '/.cache/deoplete'
-  let g:deoplete#enable_auto_delimiter   = 1
-endif
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+Plug 'deoplete-plugins/deoplete-dictionary'
+set dictionary+=/usr/share/dict/words
+let g:deoplete#enable_at_startup       = 1
+let g:deoplete#omni#min_pattern_length = 3
+let g:deoplete                         = g:vim_home . '/.cache/deoplete'
+let g:deoplete#enable_auto_delimiter   = 1
 
 " ....................................................................... }}}1
 
@@ -287,30 +273,6 @@ let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
 
-" {{{ ale
-if has("nvim")
-    Plug 'neovim/nvim-lspconfig'
-elseif version > 800
-    Plug 'w0rp/ale', { 'for': ['elixir', 'json', 'markdown', 'markdown.scratch'] }
-    let g:ale_open_list            = 1
-    let g:ale_lint_on_text_changed = 1
-    let g:ale_lint_on_enter        = 0
-    let g:ale_lint_on_save         = 1
-    " let g:ale_set_highlights       = 0
-
-    let g:ale_elixir_elixir_ls_release = expand( '~/workspace/opt/elixir-ls' )
-    " https://github.com/JakeBecker/elixir-ls/issues/54
-    let g:ale_elixir_elixir_ls_config = { 'elixirLS': { 'dialyzerEnabled': v:false } }
-
-    let g:ale_linters = {}
-    let g:ale_linters.elixir   = [ 'elixir-ls' ]
-    let g:ale_linters.markdown = [ 'languagetool' ]
-    autocmd FileType elixir,eelixir nnoremap <C-]> :ALEGoToDefinition<CR>
-    autocmd FileType elixir,eelixir nnoremap <C-\> :ALEFindReferences<CR>
-    autocmd FileType elixir,eelixir nnoremap K :ALEHover<CR>
-endif
-" }}}
-
 Plug 'liuchengxu/vim-which-key'
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
@@ -385,10 +347,6 @@ let g:rooter_patterns = ['.git', '.gitignore', 'Makefile', 'mix.exs', '.tags', '
 Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
 Plug 'vim-crystal/vim-crystal', { 'for': 'crystal' }
 
-if has('nvim')
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-endif
-
 Plug 'ledger/vim-ledger',       { 'for': 'ledger'  }
 autocmd FileType ledger setlocal fdm=indent foldlevel=0 shiftwidth=4
 autocmd FileType ledger nnoremap j jzz
@@ -403,13 +361,6 @@ autocmd FileType elixir,eelixir setlocal shiftwidth=2
 autocmd BufNewFile,BufRead *.leex,*.heex setlocal ft=html.eelixir
 Plug 'mattn/emmet-vim'
 
-"-------------------------------------------------------------------- nvim stuff 
-
-if has("nvim")
-  " Sittin' in a tree
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-endif
-
 "===================Plug loading ends==========================================
 call plug#end()
 
@@ -421,26 +372,3 @@ else
 endif
 
 " ....................................................................... }}}1
-
-" Completion Settings...................................................... {{{1
-if !has("nvim")
-  call deoplete#custom#var('omni', 'input_patterns', { 'ledger': '^\s\+\(\S \S\|\S\|:\)\+' })
-  call deoplete#custom#source('ultisnips', 'rank', 1000)
-  call deoplete#custom#source('ultisnips', 'min_pattern_length', 2)
-  call deoplete#custom#source('dictionary', 'matchers', ['matcher_head']) " Do not do fuzzy
-  call deoplete#custom#source('dictionary', 'sorters', []) " If dictionary is already sorted, no need to sort it again.
-  call deoplete#custom#source('dictionary', 'min_pattern_length', 2)
-  call deoplete#custom#option({
-              \'auto_complete_delay': 5,
-              \'check_stderr': v:false,
-              \'max_list': 20,
-              \'sources': {
-              \'_':        ['ultisnips', 'tabnine', 'tmux'],
-              \'markdown': ['ultisnips', 'dictionary'],
-              \'scratch':  ['ultisnips', 'dictionary'],
-              \'vimwiki':  ['ultisnips', 'dictionary'],
-              \'ledger':   ['ultisnips', 'tmux'],
-              \'ruby':     ['ultisnips', 'tmux']}
-  \})
-endif
-" .................................................................... }}}1
