@@ -77,7 +77,7 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
 
 def create_cells():
     cells = [
-        get_todo(),
+        # get_todo(),
         # get_work_email() if datetime.date.today().weekday()<5 else None,
         # get_personal_email(),
         get_time(),

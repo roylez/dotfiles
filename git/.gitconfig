@@ -68,6 +68,8 @@
   hyperlinks = true
   hyperlinks-file-link-format = "file://{host}{path}#{line}"
   features = calochortus-lyallii
+[hub]
+  protocol = ssh
 [include]
   path = ~/.gitconfig.themes
 [includeIf "hasconfig:remote.*.url:*canonical/*"]
