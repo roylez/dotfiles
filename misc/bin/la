@@ -1,7 +1,6 @@
 #!/bin/bash
 
-ledger_root=${LEDGER_ROOT:-~/workspace/finance/data}
-ledger_file=${LEDGER_FILE:-$ledger_root/`date +%Y`.ledger}
+ledger_file=${LEDGER_FILE:-${LEDGER_ROOT}/data/`date +%Y`.ledger}
 
 DEFAULT_ACCOUNT1=Expenses:Grocery
 DEFAULT_ACCOUNT2=Assets:Spend

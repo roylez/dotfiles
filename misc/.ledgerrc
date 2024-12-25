@@ -1,5 +1,3 @@
---file ~/workspace/finance/accounting
---price-db  ~/workspace/finance/prices.db
 --date-format %Y-%m-%d
 --wide
 --no-pager
