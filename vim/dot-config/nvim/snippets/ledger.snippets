@@ -20,6 +20,11 @@ snippet interest Interest
     Income:Interest
 
 snippet exp Expenses
-  ${1:`!lua os.date('%Y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
+  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
     Expenses:${5:Grocery}                         $ $6
     Assets:Spend
+
+snippet tra Travel
+  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
+    Travel:${5:Destination}                         $ $6
+    Assets:Smile

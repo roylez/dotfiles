@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ledger_file=${LEDGER_FILE:-${LEDGER_ROOT}/data/`date +%Y`.ledger}
+ledger_file=${LEDGER_ROOT}/data/`date +%Y`.ledger
 
 DEFAULT_ACCOUNT1=Expenses:Grocery
 DEFAULT_ACCOUNT2=Assets:Spend
@@ -19,7 +19,7 @@ read_title() {
   read -r title
   if [ -z $title ] ; then
     title=$(
-      awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $ledger_root/*.ledger \
+      awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $LEDGER_ROOT/data/*.ledger \
         | sort -nr \
         | cut -d" " -f2- \
         | fzf-tmux -p --prompt '標題> '
