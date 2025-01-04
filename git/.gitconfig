@@ -42,12 +42,12 @@
 [status]
   submoduleSummary = true
 [merge]
-  tool = nvim -d
+  tool = nvimdiff
   ; conflictstyle = zdiff3
 [mergetool]
   prompt = true
-[mergetool "vimdiff"]
-  cmd = vimdiff
+[mergetool "nvimdiff"]
+  cmd = nvim -d
 [difftool]
   prompt = false
 [diff]
