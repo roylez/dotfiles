@@ -17,6 +17,7 @@ return {
     vim.cmd [[
 
     noremap <silent> <F4> :Fern . -drawer -reveal=% -toggle -width=35<CR><C-w>=
+    noremap <silent> z=   :Fern . -drawer -reveal=%<CR>
 
     function! FernInit() abort
       nmap <buffer><expr>
