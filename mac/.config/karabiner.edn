@@ -1,7 +1,7 @@
 ;; !  | means mandatory
 ;; #  | means optional
 ;; C  | left_command
-;; Q  | right_command
+;; Q  | left_command
 ;; CC | command
 ;; T  | left_control
 ;; W  | right_control
@@ -121,19 +121,19 @@
                   ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
                  ]
          }
-        {:des "Tap left command twice to open terminal"
+        {:des "Tap right command twice to open terminal"
          :rules [
-                 [:left_command [[:app "Kitty"] ["to-terminal" 0]] ["to-terminal" 1]]
-                 [:left_command
-                  [["to-terminal" 1] :left_command]
+                 [:right_command [[:app "Kitty"] ["to-terminal" 0]] ["to-terminal" 1]]
+                 [:right_command
+                  [["to-terminal" 1] :right_command]
                   ["to-terminal" 0] {:delayed {:invoked ["to-terminal" 0] :canceled ["to-terminal" 0]} :params {:delay 300}}]
                  ]
          }
-        {:des "Tap right command twice to open Vivaldi"
+        {:des "Tap left command twice to open Vivaldi"
          :rules [
-                 [:right_command [[:app "Vivaldi"] ["to-browser" 0]] ["to-browser" 1]]
-                 [:right_command
-                  [["to-browser" 1] :right_command]
+                 [:left_command [[:app "Vivaldi"] ["to-browser" 0]] ["to-browser" 1]]
+                 [:left_command
+                  [["to-browser" 1] :left_command]
                   ["to-browser" 0] {:delayed {:invoked ["to-browser" 0] :canceled ["to-browser" 0]} :params {:delay 300}}]
                  ]
          }
