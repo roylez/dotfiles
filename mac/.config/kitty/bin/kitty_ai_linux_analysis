@@ -4,8 +4,8 @@ FILE=$1
 shift
 
 if [ -N $FILE ]; then
-  aichat -f $FILE -r linux-support <&0 | less -R
+  aichat -f $FILE -r sos <&0 | less -R
 else
-  aichat -f $FILE -r linux-support | less -R
+  aichat -f $FILE -r sos | less -R
 fi
 
