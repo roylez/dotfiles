@@ -123,6 +123,13 @@ M.config = function()
     }
   })
 
+  cmp.setup.filetype('mail', {
+    sources = {
+      { name = "snippy", max_item_count = 5 },
+      { name = "buffer" }
+    }
+  })
+
   -- cmp.setup.cmdline("/", {
   --   mapping = cmp.mapping.preset.cmdline(),
   --   sources = { { name = 'buffer' } }
