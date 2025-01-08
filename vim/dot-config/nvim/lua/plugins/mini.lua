@@ -4,8 +4,6 @@ return {
 
     require('mini.diff').setup()
 
-    require('mini.animate').setup()
-
     -- commenting
     require('mini.comment').setup({
       mappings = {
