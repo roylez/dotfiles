@@ -4,7 +4,7 @@ actions=$(cat <<-EOS
 SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
 SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +ScratchClip
-AIChat             ,launch --type=overlay --title AIChat aichat
+Chat               ,launch --type=tab --title AIChat aichat
 EMAIL              ,launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
 Edit Config        ,edit_config_file
 Emoji              ,input_unicode_character
@@ -17,7 +17,7 @@ Tab new            ,new_tab
 Window new         ,new_window
 Reload             ,load_config_file
 TODO               ,launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
-Zettle new         ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\ norm\ \"+P
+Zettle new         ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
 Zettle search      ,launch --type=overlay --title=Wiki kitty_wiki
 EOS)
 
