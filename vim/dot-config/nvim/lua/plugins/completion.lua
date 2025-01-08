@@ -37,7 +37,7 @@ M.config = function()
   }
 
   local symbol_mapping = {
-    Codeium = '',
+    Codeium = '',
   }
 
   cmp.setup({
