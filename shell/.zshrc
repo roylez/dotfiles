@@ -236,6 +236,7 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 [ -d /usr/share/man/zh_CN ] && alias cman="MANPATH=/usr/share/man/zh_CN man"
+
 alias forget='unset HISTFILE'
 
 # }}}
@@ -672,6 +673,12 @@ if ( _has nvim ); then
     alias vim='nvim'
 else
     export EDITOR='vim' VISUAL='vim' SUDO_EDITOR='vim'
+fi
+# }}}
+
+# vim / nvim {{{
+if ( _has kitten ) && [ -z "$SSH_TTY" ]; then
+    alias ssh='kitten ssh'
 fi
 # }}}
 
