@@ -72,8 +72,8 @@ endif
 " filetype plugin indent on
 syntax on
 
-set mouse=""            " disable mouse
-set history=50		" keep 50 lines of command line history
+set mouse=      " disable mouse
+set history=50	" keep 50 lines of command line history
 
 " do incremental searching
 set incsearch hlsearch wrapscan

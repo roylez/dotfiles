@@ -5,6 +5,8 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
+aunmenu *
+
 " gx by default opens a link under the cursor, this opens the current file
 nmap gX :lua vim.ui.open(vim.fn.expand("%"))<CR>
 

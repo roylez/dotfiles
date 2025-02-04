@@ -1,6 +1,4 @@
 return {
-  { "folke/which-key.nvim", config = function() require("which-key").setup() end },
-
   {
     'levouh/tint.nvim', 
     config = function()
