@@ -61,8 +61,8 @@ let mapleader="\<space>"
 let maplocalleader="\<space>"
 set timeoutlen=1000 ttimeoutlen=0
 
-" selection to $ should not include eol character
-set selection=exclusive
+" selection to $ include eol character
+set selection=inclusive
 
 if filereadable( $HOME . '/.vimrc.plug' ) && ! has("nvim")
   source $HOME/.vimrc.plug
