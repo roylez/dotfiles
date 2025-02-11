@@ -31,13 +31,13 @@
             :sim     50
             ;; to_delayed_action_delay_milliseconds (def: 500)
             ;; basically it means time after which the key press is count delayed
-            :delay   500
+            :delay   300
             ;; to_if_alone_timeout_milliseconds (def: 1000)
             ;; hold for 995s and single tap registered; hold for 1005s and seen as modifier
             :alone   200
             ;; to_if_held_down_threshold_milliseconds (def: 500)
             ;; key is fired twice when 500 ms is elapsed (otherwise seen as a hold command)
-            :held    1000
+            :held    500
             }
            }
 
@@ -70,100 +70,100 @@
             ; :space_mode  { :key :spacebar }
             }
 
- :main [
-        {:des "Niz Plum atom68 / Logitech keyboard modifications"
-         :rules [
-                 [:##right_alt :##right_control [:niz :logi] ]
-                 ] }
+:main [
+       {:des "Niz Plum atom68 / Logitech keyboard modifications"
+        :rules [
+                [:##right_alt :##right_control [:niz :logi] ]
+                ] }
 
-        {:des "Logitech mouses"
-         :rules [
-                 ; screenshot
-                 [{:pkey :button5} [:km "screenshot"] :logi ]
-                 ; history back in browser
-                 [{:pkey :button4} :!TSpage_up [ :logi :chrome ] ]
-                 ] }
+       {:des "Logitech mouses"
+        :rules [
+                ; screenshot
+                [{:pkey :button5} [:km "screenshot"] :logi ]
+                ; history back in browser
+                [{:pkey :button4} :!TSpage_up [ :logi :chrome ] ]
+                ] }
 
-        {:des "More function keys"
-         :rules [
-                 [:!CC1             :f1  ]
-                 [:!CC2             :f2  ]
-                 [:!CC3             :f3  ]
-                 [:!CC4             :f4  ]
-                 [:!CC5             :f5  ]
-                 [:!CC6             :f6  ]
-                 [:!CC7             :f7  ]
-                 [:!CC8             :f8  ]
-                 [:!CC9             :f9  ]
-                 [:!CC0             :f10 ]
-                 [:!CCopen_bracket  :f11 ]
-                 [:!CCclose_bracket :f12 ]
-                 ] }
+       {:des "More function keys"
+        :rules [
+                [:!CC1             :f1  ]
+                [:!CC2             :f2  ]
+                [:!CC3             :f3  ]
+                [:!CC4             :f4  ]
+                [:!CC5             :f5  ]
+                [:!CC6             :f6  ]
+                [:!CC7             :f7  ]
+                [:!CC8             :f8  ]
+                [:!CC9             :f9  ]
+                [:!CC0             :f10 ]
+                [:!CCopen_bracket  :f11 ]
+                [:!CCclose_bracket :f12 ]
+                ] }
 
-        {:des "Capslock to hyper when held, to ESC when tapped, and switch to English as well if input method is Chinese"
-         :rules [
-                 [:##caps_lock :!CTOleft_shift :en {:alone :escape}]
-                 [:##caps_lock :!CTOleft_shift :zh {:alone [:!Tspacebar :escape]}]
-                 ]
-         }
-        {:des "Left alt single tap to send ctl-cmd-d for easy dictionary access"
-         :rules [
-                 [:left_alt :left_alt nil {:alone :!TCd}]]
-         }
-        ; too laggy to be useful
-        ; {:des "Spacebar to left_shift when held"
-        ;  :rules [[:spacebar :left_shift nil {:alone, :spacebar} ]] }
-        {:des "Tap right shift twice to change input sources except in terminals"
-         :rules [:!terminal
-                 [:right_shift [:!Tspacebar ["change-input" 0]] ["change-input" 1]]
-                 [:right_shift
-                  [["change-input" 1] :right_shift]
-                  ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} :params {:delay 300}}]
-                 ]
-         }
-        {:des "Tap right command twice to open terminal"
-         :rules [
-                 [:right_command [[:app "Kitty"] ["to-terminal" 0]] ["to-terminal" 1]]
-                 [:right_command
-                  [["to-terminal" 1] :right_command]
-                  ["to-terminal" 0] {:delayed {:invoked ["to-terminal" 0] :canceled ["to-terminal" 0]} :params {:delay 300}}]
-                 ]
-         }
-        {:des "Tap left command twice to open Vivaldi"
-         :rules [
-                 [:left_command [[:app "Vivaldi"] ["to-browser" 0]] ["to-browser" 1]]
-                 [:left_command
-                  [["to-browser" 1] :left_command]
-                  ["to-browser" 0] {:delayed {:invoked ["to-browser" 0] :canceled ["to-browser" 0]} :params {:delay 300}}]
-                 ]
-         }
-        ; {:des "Tap left shift twice to send <ESC>f in terminals"
-        ;  :rules [:terminal
-        ;          [:left_shift [:escape :f ["fzf-complete" 0]] ["fzf-complete" 1]]
-        ;          [:left_shift
-        ;           [["fzf-complete" 1] :left_shift]
-        ;           ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
-        {:des "Hyper+hjkl as up/down/left/right"
-         :rules [
-                 [:!!h :left_arrow  ]
-                 [:!!j :down_arrow  ]
-                 [:!!k :up_arrow    ]
-                 [:!!l :right_arrow ]
+       {:des "Capslock to hyper when held, to ESC when tapped, and switch to English as well if input method is Chinese"
+        :rules [
+                [:##caps_lock :!CTOleft_shift :en {:alone :escape}]
+                [:##caps_lock :!CTOleft_shift :zh {:alone [{:input :en} :escape]}]
+                ]
+        }
+       {:des "Left alt single tap to send ctl-cmd-d for easy dictionary access"
+        :rules [
+                [:left_alt :left_alt nil {:alone :!TCd}]]
+        }
+
+       {:des "tap left shift to delete word left"
+        :rules [
+                [:left_shift  :left_shift nil {:alone :!Odelete_or_backspace }]
+                ]
+        }
+
+       {:des "Tap right shift twice to change input sources except in terminals"
+        :rules [:!terminal
+                [:right_shift [["change-input" 0] :!Tspacebar]  ["change-input" 1]]
+                [:right_shift [["change-input" 1] :right_shift] ["change-input" 0] {:delayed {:invoked ["change-input" 0] :canceled ["change-input" 0]} }]
+                ]
+        }
+
+       {:des "Tap right command twice to open terminal"
+        :rules [
+                [:right_command [["to-terminal" 0] [:app "Kitty"]] ["to-terminal" 1]]
+                [:right_command [["to-terminal" 1] :right_command] ["to-terminal" 0] {:delayed {:invoked ["to-terminal" 0] :canceled ["to-terminal" 0]} }]
+                ]
+        }
+       {:des "Tap left command twice to open Vivaldi"
+        :rules [
+                [:left_command [["to-browser" 0] [:app "Vivaldi"]] ["to-browser" 1]]
+                [:left_command [["to-browser" 1] :left_command]    ["to-browser" 0] {:delayed {:invoked ["to-browser" 0] :canceled ["to-browser" 0]} }]
+                ]
+        }
+       ; {:des "Tap left shift twice to send <ESC>f in terminals"
+       ;  :rules [:terminal
+       ;          [:left_shift [:escape :f ["fzf-complete" 0]] ["fzf-complete" 1]]
+       ;          [:left_shift
+       ;           [["fzf-complete" 1] :left_shift]
+       ;           ["fzf-complete" 0] {:delayed {:invoked ["fzf-complete" 0] :canceled ["fzf-complete" 0]} :params {:delay 300}}]] }
+       {:des "Hyper+hjkl as up/down/left/right"
+        :rules [
+                [:!!h :left_arrow  ]
+                [:!!j :down_arrow  ]
+                [:!!k :up_arrow    ]
+                [:!!l :right_arrow ]
                 ]}
-        {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
-         :rules [
-                 [:!!grave_accent_and_tilde :play_or_pause :niz ]
-                 [:!!page_up                :volume_up     ]
-                 [:!!page_down              :volume_down   ]
-                 ] }
-        ; {:des "SPACE mode"
-        ;  :rules [
-        ;          [:j :volume_decrement :space_mode]
-        ;          [:k :volume_increment :space_mode]
-        ;          [:m :mute             :space_mode]
-        ;          [:h :rewind           :space_mode]
-        ;          [:l :fastforward      :space_mode]
-        ;          [:s :play_or_pause    :space_mode]
-        ;          ] }
-        ]
- }
+       {:des "Hyper+`/PageUp/PageDown as pause-play/volume-up/volume-down"
+        :rules [
+                [:!!grave_accent_and_tilde :play_or_pause :niz ]
+                [:!!page_up                :volume_up     ]
+                [:!!page_down              :volume_down   ]
+                ] }
+       ; {:des "SPACE mode"
+       ;  :rules [
+       ;          [:j :volume_decrement :space_mode]
+       ;          [:k :volume_increment :space_mode]
+       ;          [:m :mute             :space_mode]
+       ;          [:h :rewind           :space_mode]
+       ;          [:l :fastforward      :space_mode]
+       ;          [:s :play_or_pause    :space_mode]
+       ;          ] }
+
+       ]
+}
