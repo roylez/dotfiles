@@ -18,5 +18,8 @@ return {
     require('mini.misc').setup()
     MiniMisc.setup_auto_root({".git", "mix.exs", "Makefile"})
 
+    -- text object a/i
+    require('mini.ai').setup()
+
   end
 }
