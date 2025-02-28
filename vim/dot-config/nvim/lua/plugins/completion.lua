@@ -112,7 +112,7 @@ M.config = function()
     },
     sources = cmp.config.sources({
       { name = "snippy", max_item_count = 5 },
-      -- { name = 'codeium' },
+      { name = 'codeium' },
       { name = "nvim_lsp" },
       { name = "buffer" },
       { name = "path" },
@@ -120,7 +120,13 @@ M.config = function()
 
     experimental = {
       ghost_text = true
+    },
+
+    performance = {
+      -- needed to accommodate slow AI completions
+      fetching_timeout = 2000,
     }
+
   })
 
   cmp.setup.filetype('mail', {
@@ -129,20 +135,6 @@ M.config = function()
       { name = "buffer" }
     }
   })
-
-  -- cmp.setup.cmdline("/", {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = { { name = 'buffer' } }
-  -- })
-
-  -- cmp.setup.cmdline(":", {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = cmp.config.sources({
-  --     { name = "path" },
-  --   }, {
-  --       { name = "cmdline" },
-  --     }),
-  -- })
 end
 
 return M
