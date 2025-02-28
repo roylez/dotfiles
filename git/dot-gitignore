@@ -32,3 +32,4 @@ vendor
 .envrc
 .direnv
 *.log
+.unison.*tmp
