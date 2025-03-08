@@ -20,6 +20,20 @@ M.is_file = function(name)
    return f ~= nil and io.close(f)
 end
 
+-- test if a directory exists
+M.is_dir = function(name)
+  local f = io.open(name, "r")
+  if f then
+    io.close(f)
+    local handle = io.popen("test -d " .. name)
+    local result = handle:read()
+    handle:close()
+    return result == nil
+  else
+    return false
+  end
+end
+
 -- read in a file
 M.read_file = function(path)
   local file = io.open(path, "rb")

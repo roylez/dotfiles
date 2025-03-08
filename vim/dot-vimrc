@@ -5,7 +5,7 @@
 if has('nvim')
   " support for cursor shapes
   " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  set shada='50,"100,:20,%
+  set shada='100,<100,:200,%,s100,n~/.nvim.shada
 else
   set backspace=2
   set encoding=utf-8
