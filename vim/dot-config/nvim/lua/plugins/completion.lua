@@ -112,7 +112,7 @@ M.config = function()
     },
     sources = cmp.config.sources({
       { name = "snippy", max_item_count = 5 },
-      { name = 'codeium' },
+      -- { name = 'codeium' },
       { name = "nvim_lsp" },
       { name = "buffer" },
       { name = "path" },
