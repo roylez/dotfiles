@@ -513,7 +513,6 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # }}}
 
 # 其他额外软件 {{{
-
 # FZF and friend, esc f to fzf for current command {{{
 if ( _has fzf ); then
   # dirty hack for ubuntu/debian
@@ -676,10 +675,12 @@ else
 fi
 # }}}
 
-# vim / nvim {{{
+# kitty ssh {{{
 if ( _has kitten ) && [ -z "$SSH_TTY" ]; then
     alias ssh='kitten ssh'
 fi
+# }}}
+
 # }}}
 
 # {{{ 启用补全，清理变量
@@ -701,14 +702,8 @@ autoload -Uz compinit
 
 # 读入其他配置 {{{
 
-# if [[ -d $HOME/.zplug ]]; then
-#   # git clone https://github.com/zplug/zplug ~/.zplug
-#   source $HOME/.zplug/init.zsh
-#   [[ -f $HOME/.zshrc.plug ]] && source $HOME/.zshrc.plug
-# fi
 [[ -f $HOME/.zshrc.$(hostname -s) ]] && source $HOME/.zshrc.$(hostname -s)
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
-# }}}
 # }}}
 

@@ -2,9 +2,9 @@ snippet salary Salary Payment
   ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
     Assets:CBA
     Income:Salary                    $ -$3
-    Distribution:Kimy                $ $4
-    Distribution:Roy                 $ $4
-    Assets:Smile                     $ $5
+    Assets:Smile                     $ $4
+    Distribution:Kimy                ( $ ${5:$4/4} )
+    Distribution:Roy                 ( $ $5 )
     Assets:Spend                     $ $6
     Assets:Firefighter               $ $7
     Liabilities:Reimbursable         $ 0
@@ -28,3 +28,8 @@ snippet tra Travel
   20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
     Travel:${5:Destination}                         $ $6
     Assets:Smile
+
+snippet med Medicare
+  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} Medicare
+      Expenses:Health                         $ -$4
+      Assets:Spend
