@@ -149,7 +149,9 @@ set ttyfast             " better for xterm
 set spellsuggest=best
 set spelllang=en_gb,cjk
 
-set guioptions=aAegk
+if !has("nvim")
+  set guioptions=aAegk
+endif
 
 if has("mac")
   set guifont=FantasqueSansMono_Nerd_Font_Mono:h18
@@ -223,7 +225,6 @@ nmap to :tabnew<CR>
 nmap tc :tabclose<CR>
 nmap gf <C-W>gf
 
-set pastetoggle=<F1>
 " }}}
 
 " ruby

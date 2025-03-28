@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ -d ~/workspace/2.areas/mail ]]; then
+  neomutt
+else
+  ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
+fi
+

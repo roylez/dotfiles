@@ -78,8 +78,9 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
 def create_cells():
     cells = [
         # get_todo(),
-        # get_work_email() if datetime.date.today().weekday()<5 else None,
-        # get_personal_email(),
+        get_email('work', '#a98467'),
+        get_email('gmail'),
+        get_email('icloud'),
         get_time(),
         get_date(),
     ]
@@ -103,17 +104,11 @@ def get_todo():
     else:
         return None
 
-def get_work_email():
-    out = subprocess.getoutput(CONFIG['work_email']['command'])
+def get_email(type, color = "#e76f51"):
+    config = CONFIG[f'mail.{type}']
+    out = subprocess.getoutput(config['command'])
     if out != '0':
-        return { "icon": "󰻨 ", "color": "#e76f51", "text": out }
-    else:
-        return None
-
-def get_personal_email():
-    out = subprocess.getoutput(CONFIG['personal_email']['command'])
-    if out != '0':
-        return { "icon": "󰇰 ", "color": "#a98467", "text": out }
+        return { "icon": config['icon'] + " ", "color": color, "text": out }
     else:
         return None
 
