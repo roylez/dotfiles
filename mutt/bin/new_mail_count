@@ -4,11 +4,11 @@
 BASE_DIR=~/workspace/2.areas/mail
 
 if [[ -n $1 ]]; then
-  n=`ls -1 $BASE_DIR/${1}/inbox/new |wc -l`
+  n=`find $BASE_DIR/${1}/inbox/new -name '*,' |wc -l`
   echo $n
 else
-  work_emails=`ls -1 $BASE_DIR/work/inbox/new |wc -l`
-  personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -type f |wc -l`
+  work_emails=`find $BASE_DIR/work/inbox/new -name '*,' |wc -l`
+  personal_emails=`find $BASE_DIR/{gmail,icloud}/inbox/new -name '*,' |wc -l`
 
   if [[ $(( work_emails + personal_emails )) -eq 0 ]]; then
     echo 0

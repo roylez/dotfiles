@@ -21,6 +21,7 @@ unset sig_dashes
 
 # Use Maildir instead of mbox
 set mbox_type=Maildir
+set maildir_trash=yes
 set mask="!^\\.[^.]"
 
 set arrow_cursor
