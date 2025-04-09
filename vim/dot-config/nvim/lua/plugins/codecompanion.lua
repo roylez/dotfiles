@@ -58,7 +58,7 @@ local opts = {
     chat = {
       window = { position = "right" },
     },
-    diff = { provider = 'mini_diff' }
+    -- diff = { provider = 'mini_diff' }
   },
   prompt_library = prompt_library
 }
@@ -71,8 +71,8 @@ return {
   dependencies = {
     {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
     {"nvim-lua/plenary.nvim", branch = "master"},
-    {"hrsh7th/nvim-cmp"},
-    {"folke/which-key.nvim"},
+    "hrsh7th/nvim-cmp",
+    "folke/which-key.nvim",
   },
 
   enabled = function()

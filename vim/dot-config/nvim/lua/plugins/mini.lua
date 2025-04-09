@@ -1,25 +1,28 @@
 return {
-  'echasnovski/mini.nvim',
-  config = function()
-
-    require('mini.diff').setup()
-
-    -- commenting
-    require('mini.comment').setup({
+  -- commenting
+  {
+    'echasnovski/mini.comment',
+    opts = {
       mappings = {
         comment = 'gc',
         comment_line = '<F9>',
         comment_visual = '<F9>',
         text_object = 'gc'
       }
-    })
+    }
+  },
 
-    -- auto change root directory
-    require('mini.misc').setup()
-    MiniMisc.setup_auto_root({".git", "mix.exs", "Makefile"})
+  -- rooter
+  {
+    'echasnovski/mini.misc',
+    config = function()
+      require('mini.misc').setup()
+      MiniMisc.setup_auto_root({".git", "mix.exs", "Makefile"})
+    end
+  },
 
-    -- text object a/i
-    require('mini.ai').setup()
-
-  end
+  -- arround text objects
+  {
+    'echasnovski/mini.ai'
+  },
 }

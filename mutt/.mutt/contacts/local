@@ -42,7 +42,6 @@ module Contacts
 
   def self.query_print(filter)
     res = query(filter)
-    puts
     res.each do |email, name, detail|
       puts "#{email}\t#{name || ' '}\t#{detail || ' '}"
     end

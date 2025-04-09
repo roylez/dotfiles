@@ -111,6 +111,9 @@ set directory=$HOME/.backup     "swp
 "https://github.com/moby/moby/issues/15793
 set backupcopy=yes
 
+" skip backup for vidir and zsh zle temp files
+set backupskip+=*/dir*,*/zsh*.zsh
+
 if has("nvim")
   let vim_undo_dir = $HOME . "/.vim/nvim_undo"
 else

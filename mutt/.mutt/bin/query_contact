@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+SCRIPT_DIR=~/.mutt/contacts
+
+echo
+
+$SCRIPT_DIR/local $1
+
+[[ -f $SCRIPT_DIR/.env ]] && $SCRIPT_DIR/ldap $1

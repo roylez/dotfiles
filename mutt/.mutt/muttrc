@@ -173,7 +173,7 @@ set delete=yes
 #address book related
 set query_format = "%4c %t %-30.30n %-51.51a %?e?(%e)?"
 # set query_format = `~/.mutt/query_format`
-set query_command = "echo ; run-parts -a '%s' ~/.mutt/contacts/|grep '@'"
+set query_command = "~/.mutt/bin/query_contact"
 # abook stuff
 #macro generic,index,pager A "<shell-escape>abook<return>"
 #macro index,pager a "|abook --add-email<return>"

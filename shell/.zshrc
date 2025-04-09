@@ -509,7 +509,7 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # }}}
 
 # }}}
- 
+
 # }}}
 
 # 其他额外软件 {{{
@@ -582,7 +582,7 @@ if ( _has fzf ); then
 
     zle reset-prompt
   }
-  
+
   fzf-history-complete() {
     setopt localoptions localtraps noshwordsplit noksh_arrays noposixbuiltins
     local tokens=(${(z)LBUFFER})
@@ -649,9 +649,9 @@ fi
 # }}}
 
 # {{{ ASDF
-if [[ -f "$HOME/.asdf/asdf.sh" ]]; then
-  source "$HOME/.asdf/asdf.sh" 
-  fpath=(${ASDF_DIR}/completions $fpath)
+if [[ -d "$HOME/.asdf/shims" ]]; then
+  export PATH="$HOME/.asdf/shims:$PATH"
+  fpath=($HOME/.asdf/completions $fpath)
 fi
 # }}}
 
@@ -687,8 +687,8 @@ fi
 typeset -U PATH
 
 # https://gist.github.com/ctechols/ca1035271ad134841284
-# On slow systems, checking the cached .zcompdump file to see if it must be 
-# regenerated adds a noticable delay to zsh startup.  This little hack restricts 
+# On slow systems, checking the cached .zcompdump file to see if it must be
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts
 # it to once a day.  It should be pasted into your own completion file.
 #
 # The globbing is a little complicated here:

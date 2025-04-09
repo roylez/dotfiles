@@ -8,7 +8,7 @@ return {
 
   'mg979/vim-visual-multi',
 
-  { 'csexton/trailertrash.vim', event = "BufWritePre" },
+  { 'csexton/trailertrash.vim', cmd = "TrailerTrim", event = "BufWritePre" },
 
   {
     'tpope/vim-surround',
