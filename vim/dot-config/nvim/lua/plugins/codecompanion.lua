@@ -11,7 +11,14 @@ local prompt_library = {
           local text = require("codecompanion.helpers.actions").get_code(context.start_line, context.end_line)
 
           return [[
-          I want you act as a proofreader. I will provide you texts and I would like you to review them for any spelling, grammar, or punctuation errors. Just send me the revised text without anything else. The text is here
+          I want you act as a proofreader. I will provide you texts and I would like you to review them
+
+          - Correct any spelling, grammar, or punctuation errors.
+          - Make the text to read more naturally but still looks professional.
+          - Do not use any contractions like I'm or you're.
+          - Just send me the revised text without anything else.
+
+          The text is here
 
           ```
           ]] .. text .. [[
