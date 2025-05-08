@@ -76,3 +76,5 @@
   path = ~/.gitconfig.work
 [includeIf "hasconfig:remote.*.url:*openstack/*"]
   path = ~/.gitconfig.work
+[includeIf "hasconfig:remote.*.url:**/*@git.launchpad.net/**"]
+  path = ~/.gitconfig.work

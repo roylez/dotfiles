@@ -23,8 +23,6 @@ endif
 let g:vim_home=$HOME.'/.vim'
 " }}}
 
-set shellcmdflag=-c
-
 " {{{ general settings
 if has("gui_running")
   set background=dark
@@ -230,22 +228,13 @@ nmap gf <C-W>gf
 
 " }}}
 
+" file type hacks that probably should not go into after/ftplugin/ {{{
 " ruby
 " no folding for comment block and if/do blocks
 let ruby_no_comment_fold=1
 let ruby_fold=1
 let ruby_operators=1
 autocmd BufRead,BufNewfile Vagrantfile set ft=ruby
-
-"emails,
-"delete old quotations, set spell and put cursor in the first line
-autocmd FileType mail
-            \|:silent setlocal fo+=aw       " http://wcm1.web.rice.edu/mutt-tips.html
-            \|:silent set spell
-            \|:silent g/^.*>\sOn.*wrote:\s*$\|^>\s*>.*$/de
-
-"markdown
-autocmd FileType markdown set comments=n:> textwidth=0 wrapmargin=2 fo=croqnmB1
 
 "crontab hack for mac
 autocmd BufEnter /private/tmp/crontab.* setl backupcopy=yes
