@@ -211,6 +211,15 @@ inoremap <m-k> <C-o>gk
 " search for visual-mode selected text
 vmap / y/<C-R>"<CR>
 
+" backspace to jump to previous buffer
+nnoremap <BS> <C-^>
+
+" use <Tab> to jump to next hit without leaving search mode
+cnoremap <expr> <Tab> getcmdtype() =~ '[\/?]' ? "<C-g>" : "<C-z>"
+
+" enter to type command 
+nnoremap <CR> :
+
 " tab navigation
 if has("gui_running") "only in GUI as this may conflict with tmux window navigation
   nmap <F11> :tabprevious<CR>
