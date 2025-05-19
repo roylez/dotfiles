@@ -393,10 +393,15 @@ if [ -z "$SSH_TTY" ]; then
 else
     local host="%b%U%F{magenta}%m%f%u"            # underline for remote hostname
 fi
+if [ -n "$CONTAINER_ID" ]; then
+  local container=" %f[%F{yellow}$CONTAINER_ID%f]"
+else
+  local container=""
+fi
 local user="%B%(!:%F{red}:%F{green})%n%b"       # red for root user name
 local job="%1(j,%F{red}:%F{blue}%j,)%f"
 local sym="%b%(?,%F{yellow},%F{red})%(!.#.>) %f"
-PROMPT='$host $user $__PROMPT_PWD${vcs_info_msg_0_}$job $sym'
+PROMPT='$host$container $user $__PROMPT_PWD${vcs_info_msg_0_}$job $sym'
 PROMPT2="$PROMPT%F{cyan}%_ %B%F{black}>%b%F{green}>%B%F{green}>%f%b "
 
 # SPROMPT - the spelling prompt
