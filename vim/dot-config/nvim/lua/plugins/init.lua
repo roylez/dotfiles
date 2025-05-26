@@ -1,14 +1,12 @@
 return {
   {
-    'levouh/tint.nvim', 
+    'levouh/tint.nvim',
     config = function()
       require("tint").setup()
     end
   },
 
   'mg979/vim-visual-multi',
-
-  { 'csexton/trailertrash.vim', cmd = "TrailerTrim", event = "BufWritePre" },
 
   {
     'tpope/vim-surround',

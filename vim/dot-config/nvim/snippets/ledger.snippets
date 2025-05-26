@@ -10,6 +10,11 @@ snippet salary Salary Payment
     Liabilities:Reimbursable         $ 0
     Expenses:Service:Banking         $ 0
 
+snippet reimbursable Expensify items
+  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} $4
+      Liabilities:Reimbursable      $ $5
+      Assets:Spend
+
 snippet interest Interest
   ${1:`!lua os.date('%Y-%m-01')`} Interest
     Assets:Mojo            $ $2

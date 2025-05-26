@@ -263,7 +263,7 @@ calc()  { awk "BEGIN{ print $* }" ; }
 _has() {[[ -n ${commands[$1]} ]]}
 
 #check if is a local shell
-is-local() { [[ -z "$SSH_CONNECTION" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
+_is_local() { [[ -z "$SSH_TTY" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
 
 #git directory/repo name
 git_repo() { basename $(git rev-parse --show-toplevel) }
@@ -292,17 +292,16 @@ _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 
 #{{{ functions to set gnu screen title
 # active command as title in terminals
+if _is_local || [ -n "$TMUX" ]; then
+  local title_host=""
+else
+  local title_host="@${HOST}: "
+fi
 function title() {}
 case $TERM in
-  tmux*)        function title() { print -nP "\e]2;$1\a" } ;;
-  screen*)      function title() { print -nP "\ek$1\e\\" } ;;
-  xterm*|rxvt*)
-    if is-local; then
-      function title() { print -nP "\e]0;$1\a" }
-    else
-      function title() { print -nP "\e]0;@${HOST}: $1\a" }
-    fi
-    ;;
+  tmux*)        function title() { print -nP "\e]2;${title_host}$1\a" } ;;
+  screen*)      function title() { print -nP "\ek${title_host}$1\e\\" } ;;
+  xterm*|rxvt*) function title() { print -nP "\e]0;${title_host}$1\a" } ;;
 esac
 
 #set screen/tmux title if not connected remotely
@@ -388,7 +387,7 @@ function +vi-git-misc-n-abbr-master() {
     [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
 }
 
-if [ -z "$SSH_TTY" ]; then
+if _is_local; then
     local host="%b%F{magenta}%m%f"
 else
     local host="%b%U%F{magenta}%m%f%u"            # underline for remote hostname
@@ -681,7 +680,7 @@ fi
 # }}}
 
 # kitty ssh {{{
-if ( _has kitten ) && [ -z "$SSH_TTY" ]; then
+if ( _has kitten ) && _is_local; then
     alias ssh='kitten ssh'
 fi
 # }}}
