@@ -50,4 +50,12 @@ windows=$(kitty @ ls -m 'not state:self ' | jq -r '
 
 window_id=$(fzf --prompt="CHOOSE WINDOW OR TAB> " --nth=1,4 --reverse <<< "${windows}" | awk '{ print $1 }')
 
-kitty @ focus-window -m "id:${window_id}"
+kitty_selector="id:${window_id}"
+
+kitty @ focus-window -m $kitty_selector
+
+title=$(kitty @ ls -m $kitty_selector |jq -r '.[0].tabs[0].title')
+
+if [[ "$title" = *tmux* ]]; then
+  kitty @ send-key -m $kitty_selector ctrl+a space
+fi
