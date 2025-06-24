@@ -82,7 +82,7 @@ set noeb vb t_vb=
 
 " smartindent interferes with file type based indentation
 set autoindent
-set smartindent 
+set smartindent
 " replace <tab> with 2 blank space.
 set expandtab shiftwidth=2 softtabstop=2 tabstop=8
 set textwidth=100	" wrap text for 78 letters
@@ -189,7 +189,7 @@ set autoread
 " encoding detection
 set fileencoding&
 set fileencodings=ucs-bom,utf-8,enc-cn,cp936,gbk,latin1
- 
+
 " completion settings
 "make completion menu usable even when some characters are typed.
 set completeopt=noselect,longest,menuone
@@ -217,7 +217,7 @@ nnoremap <BS> <C-^>
 " use <Tab> to jump to next hit without leaving search mode
 cnoremap <expr> <Tab> getcmdtype() =~ '[\/?]' ? "<C-g>" : "<C-z>"
 
-" enter to type command 
+" enter to type command
 nnoremap <CR> :
 
 " tab navigation
@@ -256,26 +256,26 @@ autocmd BufNewFile * silent! exec ":0r " . g:vim_home . "/templates/" . &ft | no
 " {{{ big files?
 let g:LargeFile = 0.3	"in megabyte
 augroup LargeFile
-    au!
-    au BufReadPre *
+  au!
+  au BufReadPre *
         \let f=expand("<afile>")
         \|if getfsize(f) >= g:LargeFile*1023*1024 || getfsize(f) <= -2
-            \|let b:eikeep = &ei
-            \|let b:ulkeep = &ul
-            \|let b:bhkeep = &bh
-            \|let b:fdmkeep= &fdm
-            \|let b:swfkeep= &swf
-            \|set ei=FileType
-            \|setlocal noswf bh=unload fdm=manual
-            \|let f=escape(substitute(f,'\','/','g'),' ')
-            \|exe "au LargeFile BufEnter ".f." set ul=-1"
-            \|exe "au LargeFile BufLeave ".f." let &ul=".b:ulkeep."|set ei=".b:eikeep
-            \|exe "au LargeFile BufUnload ".f." au! LargeFile * ". f
-            \|echomsg "***note*** handling a large file"
+        \|let b:eikeep = &ei
+        \|let b:ulkeep = &ul
+        \|let b:bhkeep = &bh
+        \|let b:fdmkeep= &fdm
+        \|let b:swfkeep= &swf
+        \|set ei=FileType
+        \|setlocal noswf bh=unload fdm=manual
+        \|let f=escape(substitute(f,'\','/','g'),' ')
+        \|exe "au LargeFile BufEnter ".f." set ul=-1"
+        \|exe "au LargeFile BufLeave ".f." let &ul=".b:ulkeep."|set ei=".b:eikeep
+        \|exe "au LargeFile BufUnload ".f." au! LargeFile * ". f
+        \|echomsg "***note*** handling a large file"
         \|endif
-    au BufReadPost *
+  au BufReadPost *
         \if &ch < 2 && getfsize(expand("<afile>")) >= g:LargeFile*1024*1024
-            \|echomsg "***note*** handling a large file"
+        \|echomsg "***note*** handling a large file"
         \|endif
 augroup END
 " }}}

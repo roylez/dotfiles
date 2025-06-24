@@ -1,13 +1,25 @@
+# snippet salary Salary Payment
+#   ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
+#     Assets:CBA
+#     Income:Salary                    $ -$3
+#     Assets:Smile                     $ $4
+#     Distribution:Kimy                ( $ ${5:$4/4} )
+#     Distribution:Roy                 ( $ $5 )
+#     Assets:Spend                     $ $6
+#     Assets:Firefighter               $ $7
+#     Liabilities:Reimbursable         $ 0
+#     Expenses:Service:Banking         $ 0
+
 snippet salary Salary Payment
   ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
     Assets:CBA
     Income:Salary                    $ -$3
-    Assets:Smile                     $ $4
-    Distribution:Kimy                ( $ ${5:$4/4} )
-    Distribution:Roy                 ( $ $5 )
-    Assets:Spend                     $ $6
-    Assets:Firefighter               $ $7
     Liabilities:Reimbursable         $ 0
+    Assets:Smile                     $ $4
+    Distribution:Kimy                ( $ ${4/\d\+/\=submatch(0)*0.25/} )
+    Distribution:Roy                 ( $ ${4/\d\+/\=submatch(0)*0.25/} )
+    Assets:Spend                     $ $5
+    Assets:Firefighter               ( $ ${4/\d\+/\=submatch(0)*8.5/} - $ $5 )
     Expenses:Service:Banking         $ 0
 
 snippet reimbursable Expensify items
@@ -38,3 +50,12 @@ snippet med Medicare
   20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} Medicare
       Expenses:Health                         $ -$4
       Assets:Spend
+
+snippet sup super rebalancing
+  20${1:`!lua os.date('%y')`}-06-30 Australian Retirement Trust
+      Investment:Superannuation:Roy           = $ $2
+      Equity:Super:Roy
+
+  20${1}-06-30 Australia Super
+      Investment:Superannuation:Kimy           = $ $3
+      Equity:Super:Kimy

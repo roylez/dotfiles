@@ -711,3 +711,5 @@ autoload -Uz compinit
 
 # }}}
 
+
+export PATH="$PATH:$HOME/.local/bin"

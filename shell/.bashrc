@@ -120,3 +120,5 @@ if (command -v zoxide &>/dev/null); then
   eval "$(zoxide init bash)"
 fi
 
+
+export PATH="$PATH:$HOME/.local/bin"
