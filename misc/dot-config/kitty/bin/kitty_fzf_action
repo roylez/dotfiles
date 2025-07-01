@@ -5,6 +5,7 @@ SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
 SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +ScratchClip
 Chat               ,launch --type=tab --title AIChat aichat
+CHIRP DOC          ,launch --type=overlay --title=CHIRP kitty_chirp
 EMAIL              ,launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
 Edit Config        ,edit_config_file
 Emoji              ,input_unicode_character

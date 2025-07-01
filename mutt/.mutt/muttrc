@@ -10,6 +10,7 @@ set status_format="===[ %f ]---[ 邮件:%?M?%M/?%m%?n? 新:%n?%?o? 旧:%o?%?d? �
 set status_on_top
 
 set editor='nvim +/^$ ++1'
+# require fo=+aw in vim to send out flowed text correctly
 set text_flowed=yes
 
 set sendmail_wait = 10

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+dir=$HOME/workspace/3.resources/se-docs/docs
+
+fd -e md --exclude template.md --exclude index.md . $dir |\
+  sed "s:/\([^/]*.md\):\\t\1:;s:^${dir}/::" |\
+  fzf-tmux \
+    --prompt 'DOC> ' \
+    -q "$*" \
+    --no-mouse \
+    --preview "bat -pp --color=always --theme=Coldark-Dark $dir/{1}/{2}" \
+    --bind "ctrl-c:execute(cat $dir/{1}/{2}|pbcopy && kitten notify Zwiki '已复制「{2}」')" \
+    --bind "enter:become(nvim $dir/{1}/{2})" \
+    --bind "ctrl-o:become(open $dir/{1}/{2})" \
+    --header "[Ctrl-C] copy | [ENTER] edit | [Ctrl-O] browser"

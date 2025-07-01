@@ -33,3 +33,5 @@ vendor
 .direnv
 *.log
 .unison.*tmp
+CONVENTIONS.md
+.aider*
