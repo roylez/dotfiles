@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+
+active=$(kitty @ ls -t state:active)
+title=$(echo "$active"|jq ".[0].tabs[0].title")
+id=$(echo "$active"|jq ".[0].tabs[0].id")
+
+if [[ "$title" = *tmux* ]]; then
+  kitty @ send-key -t id:$id ctrl+a '|' ctrl+a :
+  kitty @ send-text -t id:$id resize-pane -x 35%
+  kitty @ send-key -t id:$id enter
+  kitty @ send-text -t id:$id aider --watch-files
+  kitty @ send-key -t id:$id enter
+else
+  kitty @ kitten notify "Aider" "Aider必须在tmux中启动!"
+fi

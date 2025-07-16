@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 actions=$(cat <<-EOS
+Aider              ,remote_control_script kitty_aider
 SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
 SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +ScratchClip
@@ -18,7 +19,6 @@ MRU                ,launch --type=tab nvim -c "lua vim.fn.feedkeys(' r')"
 Tab new            ,new_tab
 Window new         ,new_window
 Reload             ,load_config_file
-TODO               ,launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
 WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
 WIKI search        ,launch --type=overlay --title=Wiki kitty_wiki
 EOS)
