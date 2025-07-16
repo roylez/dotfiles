@@ -5,6 +5,7 @@ SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
 SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +ScratchClip
 Chat               ,launch --type=tab --title AIChat aichat
+WIKI chat          ,launch --type=tab --title AIChat aichat --rag wiki
 CHIRP DOC          ,launch --type=overlay --title=CHIRP kitty_chirp
 EMAIL              ,launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
 Edit Config        ,edit_config_file
@@ -12,14 +13,14 @@ Emoji              ,input_unicode_character
 Env Vars           ,show_kitty_env_vars
 Files              ,launch --type=overlay zsh -ic "lf ~/Downloads"
 Fullscreen         ,toggle_fullscreen
-Kitty Shell        ,kitty_shell window
+Kitty shell        ,kitty_shell window
 MRU                ,launch --type=tab nvim -c "lua vim.fn.feedkeys(' r')"
 Tab new            ,new_tab
 Window new         ,new_window
 Reload             ,load_config_file
 TODO               ,launch_tab TASKPAPER nvim "~/Documents/TODO.taskpaper"
-Zettle new         ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
-Zettle search      ,launch --type=overlay --title=Wiki kitty_wiki
+WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
+WIKI search        ,launch --type=overlay --title=Wiki kitty_wiki
 EOS)
 
 cmd=$(echo "$actions" | tr , "\t"  |\
