@@ -24,8 +24,9 @@ read_title() {
         | cut -d" " -f2- \
         | fzf-tmux -p --prompt '標題> '
     )
+    echo -ne "\e[u\e[1A"
+    echo $title
   fi
-  echo -ne "\e[u\e[1A"
 }
 
 read_amount() {
@@ -40,6 +41,48 @@ read_date() {
 }
 
 date=${date:-$DEFAULT_DATE}
+
+create_next_entry() {
+  read_title
+
+  echo -n "請選擇消費賬戶：         "
+  account1=$(ledger accounts --count expenses and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
+  echo $account1
+
+  echo -n "請選擇支出賬戶：         "
+  account2=$(ledger accounts --count \( assets or liabilities \) and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
+  echo $account2
+
+  read_amount
+
+  echo
+
+  draft=$(ledger entry -- "$date" "$title" "$account1" "\$ $amount" "$account2")
+
+  if [ -n "$draft" ]; then
+    echo 建立模板如下：
+    echo
+    echo -e "\e[1m$draft\e[m"
+    echo
+
+    read -n 1 -p "確認添加？[Y|n] " create
+    case $create in
+      [yY] )
+        echo -e "\n$draft" >> "$ledger_file"
+        echo -e "\n添加成功"
+        ;;
+      "" )
+        echo -e "\n$draft" >> "$ledger_file"
+        echo "添加成功"
+        ;;
+      * )
+        echo -e "\n放棄添加"
+        ;;
+    esac
+  else
+    echo "輸入有誤"
+  fi
+}
 
 while true; do
   read -p "當前日期 $date，添加新紀錄？ [Y|e|n|MM.DD] " response
@@ -56,90 +99,11 @@ while true; do
     [01][0-9].[0-3][0-9] | [01][0-9]-[0-3][0-9] )
       date=$response
 
-      read_amount
-
-      read_title
-      echo $title
-
-      echo -n "請選擇消費賬戶：         "
-      account1=$(ledger accounts --count expenses |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-      echo $account1
-
-      echo -n "請選擇支出賬戶：         "
-      account2=$(ledger accounts --count assets liabilities |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-      echo $account2
-
-      echo
-      draft=$(ledger xact -- "$date" "$title" "$account1" "$amount" "$account2")
-      date=$(echo $draft |cut -d" " -f1)
-
-      if [ -n "$draft" ]; then
-        echo 建立模板如下：
-        echo
-        echo -e "\e[1m$draft\e[m"
-        echo
-
-        read -n 1 -p "確認添加？[Y|n] " create
-        case $create in
-          [yY] ) 
-            echo -e "\n$draft" >> "$ledger_file"
-            echo -e "\n添加成功"
-            ;;
-          "" ) 
-            echo -e "\n$draft" >> "$ledger_file"
-            echo "添加成功"
-            ;;
-          * )
-            echo -e "\n放棄添加"
-            ;;
-        esac
-      else
-        echo "輸入有誤"
-      fi
+      create_next_entry
       ;;
 
     [yY] | "" )
-
-      read_amount
-
-      read_title
-      echo $title
-
-      echo -n "請選擇消費賬戶：         "
-      account1=$(ledger accounts --count expenses |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-      echo $account1
-
-      echo -n "請選擇支出賬戶：         "
-      account2=$(ledger accounts --count assets liabilities |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-      echo $account2
-
-      echo
-      draft=$(ledger xact -- "$date" "$title" "$account1" "$amount" "$account2")
-      date=$(echo $draft |cut -d" " -f1)
-
-      if [ -n "$draft" ]; then
-        echo 建立模板如下：
-        echo
-        echo -e "\e[1m$draft\e[m"
-        echo
-
-        read -n 1 -p "確認添加？[Y|n] " create
-        case $create in
-          [yY] ) 
-            echo -e "\n$draft" >> "$ledger_file"
-            echo -e "\n添加成功"
-            ;;
-          "" ) 
-            echo -e "\n$draft" >> "$ledger_file"
-            echo "添加成功"
-            ;;
-          * )
-            echo -e "\n放棄添加"
-            ;;
-        esac
-      else
-        echo "輸入有誤"
-      fi
+      create_next_entry
       ;;
 
     * )
