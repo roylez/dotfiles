@@ -106,7 +106,9 @@ export LESS_TERMCAP_ue=$'\e[m'          #end underlining
 # add Intel Compiler environment variables
 #source /opt/intel/fc/9.1.036/bin/ifortvars.sh
 #source $HOME/.context_env /home/roylez/soft/ConTeXt/tex
-if (command -v vim &>/dev/null ); then
+if (command -v nvim &>/dev/null); then
+    export EDITOR=nvim VISUAL=nvim
+elif (command -v vim &>/dev/null); then
     export EDITOR=vim VISUAL=vim
 else
     export EDITOR=vi VISUAL=vi

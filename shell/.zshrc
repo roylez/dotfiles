@@ -424,13 +424,13 @@ bindkey -M viins "" history-beginning-search-forward-end
 bindkey '[1;5D' backward-word     # C-left
 bindkey '[1;5C' forward-word      # C-right
 
-autoload -U edit-command-line
-zle -N      edit-command-line
-bindkey '\ee' edit-command-line
-
-autoload -Uz copy-earlier-word
+autoload -Uz edit-command-line copy-earlier-word
+zle -N edit-command-line
+bindkey '\ee'  edit-command-line
+bindkey '' edit-command-line
 zle -N copy-earlier-word
 bindkey '\em' copy-earlier-word
+
 # }}}
 
 # 自定义widget {{{
