@@ -27,10 +27,10 @@ return {
 
   {
     'junegunn/vim-easy-align',
-    config = function()
-      vim.keymap.set({'n'}, 'ga', '<Plug>(EasyAlign)')
-      vim.keymap.set({'x'}, 'a',  '<Plug>(EasyAlign)')
-    end
-  },
+    keys = {
+      { 'ga', '<Plug>(EasyAlign)', desc="Align" },
+      { '<leader>a',  '<Plug>(EasyAlign)', mode='x', desc="Align" }
+    }
+  }
 
 }

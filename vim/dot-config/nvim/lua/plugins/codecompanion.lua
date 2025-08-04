@@ -19,11 +19,9 @@ local prompt_library = {
 
           Also beware to make your response follow these tone requirements:
 
-          *   **Tone:** Direct and somewhat critical, but still professional.
+          *   **Feel:** No language or vocabulary that would make the output feel like AI generated.
           *   **Sentence Length:** A mix of short and medium-length sentences.
-          *   **Vocabulary:** Technical but not overly complex; avoids jargon where possible.
-          *   **Level of Detail:** Focused on the specific issue, avoids broad explanations.
-          *   **Perspective:** Takes the perspective of an expert providing feedback or guidance.
+          *   **Vocabulary:** No jargon and as easy as day-to-day spoken language.
 
           The text is here
 
@@ -106,7 +104,7 @@ return {
     wk.add({
       nowait=true, remap=false, mode={ 'n', 'v' },
       {'<leader>c', ':CodeCompanionChat toggle<CR>', desc="AI Chat" },
-      {'<leader>a', ':CodeCompanionActions<CR>',     desc="AI Actions"},
+      {'<leader>A', ':CodeCompanionActions<CR>',     desc="AI Actions"},
       {'<leader>W', ':CodeCompanion /rewrite<CR>',   desc="AI rewrite"},
     })
   end
