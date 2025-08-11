@@ -39,7 +39,7 @@ return {
     'echasnovski/mini.misc',
     config = function()
       require('mini.misc').setup()
-      MiniMisc.setup_auto_root({".git", "mix.exs", "Makefile"})
+      MiniMisc.setup_auto_root({".git", "Makefile"})
     end
   },
 

@@ -24,8 +24,8 @@ snippet salary Salary Payment
 
 snippet reimbursable Expensify items
   20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} $4
-      Liabilities:Reimbursable      $ $5
-      Assets:Spend
+    Liabilities:Reimbursable      $ $5
+    Assets:Spend
 
 snippet interest Interest
   ${1:`!lua os.date('%Y-%m-01')`} Interest
@@ -48,14 +48,14 @@ snippet tra Travel
 
 snippet med Medicare
   20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} Medicare
-      Expenses:Health                         $ -$4
-      Assets:Spend
+    Expenses:Health                         $ -$4
+    Assets:Spend
 
 snippet sup super rebalancing
   20${1:`!lua os.date('%y')`}-06-30 Australian Retirement Trust
-      Investment:Superannuation:Roy           = $ $2
-      Equity:Super:Roy
+    Investment:Superannuation:Roy           = $ $2
+    Equity:Super:Roy
 
   20${1}-06-30 Australia Super
-      Investment:Superannuation:Kimy           = $ $3
-      Equity:Super:Kimy
+    Investment:Superannuation:Kimy           = $ $3
+    Equity:Super:Kimy
