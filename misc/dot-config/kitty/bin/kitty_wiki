@@ -9,6 +9,6 @@ fzf-tmux \
   --no-mouse \
   --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}.md" \
   --bind "ctrl-c:execute(cat $wiki_dir/{1}.md|pbcopy && kitten notify Zwiki '已复制「{1}.md」')" \
-  --bind "enter:become(nvim $wiki_dir/{1}.md)" \
-  --bind "tab:become(nvim +ZwikiNew +'silent norm \"+P')" \
+  --bind "enter:execute(nvim $wiki_dir/{1}.md)" \
+  --bind "tab:execute(nvim +ZwikiNew +'silent norm \"+P')" \
   --header "[Ctrl-C] copy | [ENTER] edit | [TAB] new "

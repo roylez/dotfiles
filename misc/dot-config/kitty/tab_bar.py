@@ -56,7 +56,7 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
     while True:
         if not cells:
             return
-        padding = screen.columns - screen.cursor.x - sum(len(" ".join([c.get("icon", ""), c["text"]])) + 2 for c in cells)
+        padding = screen.columns - screen.cursor.x - sum(len(" ".join([c.get("icon", ""), c.get("text", "")])) + 2 for c in cells)
         if padding >= 0:
             break
         cells = cells[1:]
@@ -71,9 +71,7 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
             screen.cursor.fg = as_rgb(int(fg))
             screen.draw(f" {icon} ")
         screen.cursor.fg = tab_bg
-        text = c["text"]
-        screen.draw(f"{text} ")
-
+        screen.draw(f"{c.get("text", "")} ")
 
 def create_cells():
     cells = [
@@ -111,6 +109,9 @@ def get_email(type, color = "#e76f51"):
         return { "icon": config['icon'] + " ", "color": color, "text": out }
     else:
         return None
+
+def get_layout():
+    return { "icon": " ", "color": "#669bbc" }
 
 def _redraw_tab_bar(timer_id):
     for tm in get_boss().all_tab_managers:

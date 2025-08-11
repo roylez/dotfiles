@@ -20,7 +20,7 @@ Tab new            ,new_tab
 Window new         ,new_window
 Reload             ,load_config_file
 WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
-WIKI search        ,launch --type=overlay --title=Wiki kitty_wiki
+WIKI               ,launch -m index:1 --title=WIKI kitty_wiki
 EOS)
 
 cmd=$(echo "$actions" | tr , "\t"  |\
@@ -28,4 +28,4 @@ cmd=$(echo "$actions" | tr , "\t"  |\
   sed "s=.*\t==g"
 )
 
-kitty @ action $cmd
+kitty @ $cmd

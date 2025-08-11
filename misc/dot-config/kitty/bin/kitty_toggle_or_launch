@@ -1,11 +1,20 @@
 #!/bin/bash
 #
 
-TITLE=$1
+input=$1
 shift
-
-if (kitten @ ls -t title:${TITLE} &>/dev/null); then
-  kitten @ action toggle_tab title:${TITLE}
+if [[ "$input" == *":"* ]]; then
+  IFS=':' read -r index title <<< "$input"
 else
-  kitten @ launch --type=tab --tab-title=${TITLE} "$@"
+  index=""
+  title="$input"
+fi
+
+if (kitten @ ls -m title:${title} &>/dev/null); then
+  kitten @ focus-window -m title:${title}
+elif [[ -n $index ]]; then
+  kitten @ launch -m index:$((index-1)) --title=${title} "$@"
+  kitten @ focus-window -m title:${title}
+else
+  kitten @ launch --type=tab --title=${title} "$@"
 fi
