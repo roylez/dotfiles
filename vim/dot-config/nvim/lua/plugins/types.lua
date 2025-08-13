@@ -4,17 +4,7 @@ return {
 
   { 'vim-crystal/vim-crystal', ft = 'crystal' },
 
-  {
-    'ledger/vim-ledger', ft = 'ledger',
-    config = function()
-      vim.cmd [[
-        autocmd FileType ledger setlocal fdm=indent foldlevel=0 shiftwidth=4
-        autocmd FileType ledger nnoremap j jzz
-        autocmd FileType ledger nnoremap k kzz
-        autocmd FileType ledger nnoremap G Gzz
-      ]]
-    end
-  },
+  { 'ledger/vim-ledger',       ft = 'ledger' },
 
   {
     'elixir-editors/vim-elixir',
@@ -28,16 +18,17 @@ return {
   },
 
   {
-    'evanleck/vim-svelte', ft = 'svelte',
-    dependencies = {
-      'othree/html5.vim',
-      'pangloss/vim-javascript'
-    }
-  },
-
-  {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "codecompanion" }
+    ft = { "markdown", "codecompanion" },
+    opts = {
+      code = {
+          width = 'block',
+          min_width = 45,
+          left_pad = 4,
+          language_pad = 4,
+      },
+      heading = { border = true, border_virtual = true, },
+    }
   },
 
 }

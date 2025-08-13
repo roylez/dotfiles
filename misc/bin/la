@@ -15,22 +15,18 @@ create_transaction() {
 }
 
 read_title() {
-  echo -ne "請輸入標題，回車搜索：   \e[s"
-  read -r title
-  if [ -z $title ] ; then
+  while [[ -z $title ]] ; do
+    echo -ne "請輸入標題，回車搜索：   \e[s"
+    read -r title
     title=$(
       awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $LEDGER_ROOT/data/*.ledger \
         | sort -nr \
         | cut -d" " -f2- \
         | fzf-tmux -p --prompt '標題> '
     )
-    echo -ne "\e[u\e[1A"
-    echo $title
-  fi
-}
-
-read_amount() {
-  read -r -p "請輸入金額：             " amount
+  done
+  echo -ne "\e[u\e[1A"
+  echo $title
 }
 
 read_date() {
@@ -43,17 +39,33 @@ read_date() {
 date=${date:-$DEFAULT_DATE}
 
 create_next_entry() {
+  local account1 account2 amount title
+
   read_title
 
-  echo -n "請選擇消費賬戶：         "
-  account1=$(ledger accounts --count expenses and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-  echo $account1
+  while [[ -z "$account1" ]]; do
+    echo -n "請選擇消費賬戶：         "
+    account1=$(ledger accounts --count expenses and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --header '[CTRL-C] abort' --bind 'ctrl-c:become(exit 99)' --prompt '賬戶> ')
+    case $? in
+      99)  return ;;
+      130) echo "輸入有誤，請重試" ;;
+      0)   echo $account1 ;;
+    esac
+  done
 
-  echo -n "請選擇支出賬戶：         "
-  account2=$(ledger accounts --count \( assets or liabilities \) and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
-  echo $account2
+  while [[ -z "$account2" ]]; do
+    echo -n "請選擇支出賬戶：         "
+    account2=$(ledger accounts --count \( assets or liabilities \) and @"$title" |sort -nr|cut -d" " -f2- |fzf-tmux +s -p --prompt '賬戶> ')
+    case $? in
+      99)  return ;;
+      130) echo "輸入有誤，請重試" ;;
+      0)   echo $account1
+    esac
+  done
 
-  read_amount
+  while [[ -z "$amount" ]]; do
+    read -r -p "請輸入金額：             " amount
+  done
 
   echo
 
