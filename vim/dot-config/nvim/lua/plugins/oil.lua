@@ -1,7 +1,7 @@
 return {
   'stevearc/oil.nvim',
   lazy = false,
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+  dependencies = { "echasnovski/mini.icons" },
   keys = {
     { "-",  "<cmd>Oil --float<CR>", { desc = "Explore parent dir" } },
   },

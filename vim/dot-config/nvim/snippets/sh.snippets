@@ -1,0 +1,14 @@
+snippet optparse "Option Parse"
+  ARGS=()
+  while [[ "$#" -gt 0 ]]; do
+      case \$1 in
+        -t|--target) target="\$2"; shift ;;
+        -u|--uglify) uglify=1 ;;
+        *) ARGS+=("\$1") ;;
+      esac
+      shift
+  done
+  set -- "${ARGS[@]}" # restore positional parameters
+
+  echo "Where to deploy: $target"
+  echo "Should uglify  : $uglify"

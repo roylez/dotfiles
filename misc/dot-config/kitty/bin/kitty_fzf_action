@@ -28,4 +28,4 @@ cmd=$(echo "$actions" | tr , "\t"  |\
   sed "s=.*\t==g"
 )
 
-kitty @ $cmd
+kitty @ action $cmd

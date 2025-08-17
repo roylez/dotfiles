@@ -89,7 +89,7 @@ STICKY 01;38;05;254;48;05;21	# dir with the sticky bit set (+t) and not other-wr
 
 # This is for files with execute permission:
 EXEC 01;38;05;46
-MULTIHARDLINK 04
+MULTIHARDLINK 04;01;38;05;51
 
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.

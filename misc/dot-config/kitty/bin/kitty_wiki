@@ -11,4 +11,5 @@ fzf-tmux \
   --bind "ctrl-c:execute(cat $wiki_dir/{1}.md|pbcopy && kitten notify Zwiki '已复制「{1}.md」')" \
   --bind "enter:execute(nvim $wiki_dir/{1}.md)" \
   --bind "tab:execute(nvim +ZwikiNew +'silent norm \"+P')" \
-  --header "[Ctrl-C] copy | [ENTER] edit | [TAB] new "
+  --bind "esc:clear-query" \
+  --header "[CTRL-C] copy | [ENTER] edit | [TAB] new | [ESC] clear | [CTRL-D] exit"

@@ -72,4 +72,7 @@ return {
     opts = { symbol = "·" }
   },
 
+  -- icons
+  { 'echasnovski/mini.icons' }
+
 }

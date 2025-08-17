@@ -70,7 +70,7 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
             fg = to_color(c.get("color")) if c.get("color") else tab_fg
             screen.cursor.fg = as_rgb(int(fg))
             screen.draw(f" {icon} ")
-        screen.cursor.fg = tab_bg
+        screen.cursor.fg = as_rgb(int(to_color("#778da9")))
         screen.draw(f"{c.get("text", "")} ")
 
 def create_cells():
