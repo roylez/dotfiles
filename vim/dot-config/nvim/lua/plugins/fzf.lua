@@ -1,7 +1,6 @@
 return {
   "ibhagwan/fzf-lua",
   dependencies = {
-    'dcampos/nvim-snippy',
     "echasnovski/mini.icons",
   },
   config = function()

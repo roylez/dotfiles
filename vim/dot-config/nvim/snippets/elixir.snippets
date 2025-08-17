@@ -9,7 +9,7 @@ snippet sup "Supervisor"
     def init(_) do
 
       children = [
-	$2
+        ${2}
       ]
 
       Supervisor.init(children, strategy: :one_for_one)
@@ -27,9 +27,9 @@ snippet api-sup "API supervisor backed by Tesla and RESTAgent"
 
     def init(_) do
       children = [
-	_finch(),
-	RESTAgent,
-	${0}
+        _finch(),
+        RESTAgent,
+        ${0}
       ] ++ mattermost
 
       Supervisor.init(children, strategy: :one_for_one)
@@ -37,26 +37,26 @@ snippet api-sup "API supervisor backed by Tesla and RESTAgent"
 
     defp _finch() do
       pools =
-	case System.get_env("HTTP_PROXY") do
-	  "http" <> _ = url ->
-	    %URI{scheme: scheme, host: host, port: port} = URI.parse(url)
-	    opts = [proxy: {String.to_atom(scheme), host, port, []}]
+        case System.get_env("HTTP_PROXY") do
+          "http" <> _ = url ->
+            %URI{scheme: scheme, host: host, port: port} = URI.parse(url)
+            opts = [proxy: {String.to_atom(scheme), host, port, []}]
 
-	    no_proxy_pools =
-	      (System.get_env("NO_PROXY") || "")
-	      |> String.split(~r/\s*,\s*/)
-	      |> Enum.reject(&(&1 == ""))
-	      |> Enum.flat_map(fn host -> [ { "https://#{host}", [size: 3] }, { "http://#{host}", [size: 3] } ] end)
-	      |> Enum.into(%{})
+            no_proxy_pools =
+              (System.get_env("NO_PROXY") || "")
+              |> String.split(~r/\s*,\s*/)
+              |> Enum.reject(&(&1 == ""))
+              |> Enum.flat_map(fn host -> [ { "https://#{host}", [size: 3] }, { "http://#{host}", [size: 3] } ] end)
+              |> Enum.into(%{})
 
-	    base_pools = %{default: [size: 10, conn_opts: opts]}
-	    Map.merge(base_pools, no_proxy_pools)
+            base_pools = %{default: [size: 10, conn_opts: opts]}
+            Map.merge(base_pools, no_proxy_pools)
 
-	  _ ->
-	    %{default: [size: 10]}
-	end
+          _ ->
+            %{default: [size: 10]}
+        end
 
-      {Finch, name: ${1:Module}.Finch, pools: pools}
+      {Finch, name: $1.Finch, pools: pools}
     end
 
   end
