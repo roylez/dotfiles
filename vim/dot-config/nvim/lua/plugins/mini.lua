@@ -73,6 +73,13 @@ return {
   },
 
   -- icons
-  { 'echasnovski/mini.icons' }
+  {
+    'echasnovski/mini.icons',
+    opts = {
+      lsp = {
+        ripgrep = { glyph = '', hl = 'MiniIconsGreen'  }
+      }
+    },
+  }
 
 }

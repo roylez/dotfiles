@@ -1,7 +1,10 @@
 return {
   'saghen/blink.cmp',
   version = '1.*',
-  dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
+  dependencies = {
+    { 'L3MON4D3/LuaSnip', version = 'v2.*' },
+    "mikavilpas/blink-ripgrep.nvim",
+  },
 
   opts = {
     -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
@@ -62,7 +65,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'snippets', 'path', 'buffer' },
+      default = { 'snippets', 'path', 'buffer', 'ripgrep' },
       -- default = { 'snippets', 'lsp', 'path', 'buffer' },
       providers = {
         -- include all buffers instead of just visible ones
@@ -73,8 +76,12 @@ return {
                 function(bufnr) return vim.bo[bufnr].buftype == '' end,
                 vim.api.nvim_list_bufs())
             end
-          }
-        }
+          },
+        },
+        ripgrep = {
+          module = "blink-ripgrep",
+          name = "Ripgrep",
+        },
       },
     },
 
