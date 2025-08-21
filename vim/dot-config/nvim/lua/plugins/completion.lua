@@ -4,6 +4,7 @@ return {
   dependencies = {
     { 'L3MON4D3/LuaSnip', version = 'v2.*' },
     "mikavilpas/blink-ripgrep.nvim",
+    "xzbdmw/colorful-menu.nvim",
   },
 
   opts = {
@@ -33,6 +34,7 @@ return {
     completion = {
       documentation = { auto_show = true },
       menu = {
+        border = 'single' ,
         draw = {
           columns = { { 'kind_icon', 'label', 'label_description', gap = 2 } },
           components = {
@@ -57,6 +59,10 @@ return {
             item_idx = {
               text = function(ctx) return ctx.idx == 10 and '0' or ctx.idx >= 10 and ' ' or tostring(ctx.idx) end,
             },
+            label = {
+              text      = function(ctx) return require("colorful-menu").blink_components_text(ctx) end,
+              highlight = function(ctx) return require("colorful-menu").blink_components_highlight(ctx) end,
+            },
           }
         }
       }
@@ -65,7 +71,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'snippets', 'path', 'buffer', 'ripgrep' },
+      default = { 'snippets', 'buffer', 'lsp', 'path' },
       -- default = { 'snippets', 'lsp', 'path', 'buffer' },
       providers = {
         -- include all buffers instead of just visible ones
@@ -86,6 +92,8 @@ return {
     },
 
     fuzzy = { implementation = "prefer_rust" },
+
+    signature = { window = { border = 'single' } },
   },
   opts_extend = { "sources.default" }
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
 actions=$(cat <<-EOS
-SCRATCH            ,launch --type=tab --tab-title SCRATCH nvim +Scratch +start
+SCRATCH            ,launch --type=tab --title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
-SCRATCH clipbarod  ,launch --type=tab --tab-title SCRATCH nvim +ScratchClip
+SCRATCH clipbarod  ,launch --type=tab --title SCRATCH nvim +ScratchClip
 Aider              ,remote_control_script kitty_aider
 Chat               ,launch --type=tab --title AIChat aichat
 WIKI chat          ,launch --type=tab --title AIChat aichat --rag wiki

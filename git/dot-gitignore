@@ -35,3 +35,4 @@ vendor
 .unison.*tmp
 CONVENTIONS.md
 .aider*
+AGENTS.md

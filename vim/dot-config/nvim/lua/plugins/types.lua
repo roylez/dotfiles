@@ -30,7 +30,7 @@ return {
       heading = { border = true, border_virtual = true, },
       checkbox = {
         custom = {
-          todo   = { raw = '[+]', rendered = '󰥔 ', highlight = 'RenderMarkdownTodo',      scope_highlight = nil },
+          todo   = { raw = '[+]', rendered = '󰥔 ', highlight = 'RenderMarkdownWarning',   scope_highlight = nil },
           cancel = { raw = '[-]', rendered = '󰜺 ', highlight = 'RenderMarkdownUnchecked', scope_highlight = nil },
         },
       }

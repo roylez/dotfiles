@@ -1,61 +1,49 @@
 # snippet salary Salary Payment
-#   ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
-#     Assets:CBA
-#     Income:Salary                    $ -$3
-#     Assets:Smile                     $ $4
-#     Distribution:Kimy                ( $ ${5:$4/4} )
-#     Distribution:Roy                 ( $ $5 )
-#     Assets:Spend                     $ $6
-#     Assets:Firefighter               $ $7
-#     Liabilities:Reimbursable         $ 0
-#     Expenses:Service:Banking         $ 0
-
-snippet salary Salary Payment
-  ${1:`!lua os.date('%Y-%m-%d')`} ${2:Canonical}
-    Assets:CBA
-    Income:Salary                    $ -$3
-    Liabilities:Reimbursable         $ 0
-    Assets:Smile                     $ $4
-    Distribution:Kimy                ( $ ${4/\d\+/\=submatch(0)*0.25/} )
-    Distribution:Roy                 ( $ ${4/\d\+/\=submatch(0)*0.25/} )
-    Assets:Spend                     $ $5
-    Assets:Firefighter               ( $ ${4/\d\+/\=submatch(0)*8.5/} - $ $5 )
-    Expenses:Service:Banking         $ 0
+#   ${1:`strftime('%Y-%m-%d')`} ${2:Canonical}
+#       Assets:CBA
+#       Income:Salary                    $ -$3
+#       Liabilities:Reimbursable         $ 0
+#       Assets:Smile                     $ $4
+#       Distribution:Kimy                ( $ ${4/\d\+/\=submatch(0)*0.25/} )
+#       Distribution:Roy                 ( $ ${4/\d\+/\=submatch(0)*0.25/} )
+#       Assets:Spend                     $ $5
+#       Assets:Firefighter               ( $ ${4/\d\+/\=submatch(0)*8.5/} - $ $5 )
+#       Expenses:Service:Banking         $ 0
 
 snippet reimbursable Expensify items
-  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} $4
-    Liabilities:Reimbursable      $ $5
-    Assets:Spend
+  20${1:`strftime('%y')`}-${2:`strftime('%m')`}-${3:`strftime('%d')`} $4
+      Liabilities:Reimbursable      $ $5
+      Assets:Spend
 
 snippet interest Interest
-  ${1:`!lua os.date('%Y-%m-01')`} Interest
-    Assets:Mojo            $ $2
-    Assets:Smile           $ $3
-    Assets:Firefighter     $ $4
-    Assets:Spend           $ $5
-    Investment:Cash        $ 0
-    Income:Interest
+  ${1:`strftime('%Y-%m-01')`} Interest
+      Assets:Mojo            $ $2
+      Assets:Smile           $ $3
+      Assets:Firefighter     $ $4
+      Assets:Spend           $ $5
+      Investment:Cash        $ 0
+      Income:Interest
 
 snippet exp Expenses
-  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
-    Expenses:${5:Grocery}                         $ $6
-    Assets:Spend
+  20${1:`strftime('%y')`}-${2:`strftime('%m')`}-${3:`strftime('%d')`} ${4:Title}
+      Expenses:${5:Grocery}                         $ $6
+      Assets:Spend
 
 snippet tra Travel
-  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} ${4:Title}
-    Travel:${5:Destination}                         $ $6
-    Assets:Smile
+  20${1:`strftime('%y')`}-${2:`strftime('%m')`}-${3:`strftime('%d')`} ${4:Title}
+      Travel:${5:Destination}                         $ $6
+      Assets:Smile
 
 snippet med Medicare
-  20${1:`!lua os.date('%y')`}-${2:`!lua os.date('%m')`}-${3:`!lua os.date('%d')`} Medicare
-    Expenses:Health                         $ -$4
-    Assets:Spend
+  20${1:`!lua os.date('%y')`}-${2:`strftime('%m')`}-${3:`strftime('%d')`} Medicare
+      Expenses:Health                         $ -$4
+      Assets:Spend
 
 snippet sup super rebalancing
-  20${1:`!lua os.date('%y')`}-06-30 Australian Retirement Trust
-    Investment:Superannuation:Roy           = $ $2
-    Equity:Super:Roy
+  20${1:`strftime('%y')`}-06-30 Australian Retirement Trust
+      Investment:Superannuation:Roy           = $ $2
+      Equity:Super:Roy
 
   20${1}-06-30 Australia Super
-    Investment:Superannuation:Kimy           = $ $3
-    Equity:Super:Kimy
+      Investment:Superannuation:Kimy           = $ $3
+      Equity:Super:Kimy

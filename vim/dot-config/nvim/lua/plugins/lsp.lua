@@ -1,10 +1,13 @@
 return {
+  {
   "neovim/nvim-lspconfig",
   dependencies = { 'saghen/blink.cmp' },
   opts = {
     servers = {
-      elixirls = {
-        cmd = { os.getenv("HOME") .. "/workspace/3.resources/elixir-ls/language_server.sh" },
+      lexical = {
+        cmd = { os.getenv("HOME") .. "/workspace/3.resources/lexical/bin/start_lexical.sh" },
+        filetypes = { "elixir", "eelixir", "heex" },
+        root_markers = { "mix.exs", ".git" },
       }
     }
   },
@@ -17,4 +20,15 @@ return {
       lspconfig[server].setup(config)
     end
   end
+  },
+
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy", -- Or `LspAttach`
+    priority = 1000, -- needs to be loaded in first
+    config = function()
+      require('tiny-inline-diagnostic').setup()
+      vim.diagnostic.config({ virtual_text = false })
+    end
+  }
 }

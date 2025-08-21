@@ -1,3 +1,4 @@
 --date-format %Y-%m-%d
 --wide
 --no-pager
+--exchange $

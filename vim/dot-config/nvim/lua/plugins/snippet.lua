@@ -5,6 +5,7 @@ return {
   dependencies = { "ibhagwan/fzf-lua" },
   config = function()
     require("luasnip.loaders.from_snipmate").lazy_load()
+    require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/snippets"})
 
     vim.cmd [[
       command! LuaSnipEdit :lua require("luasnip.loaders").edit_snippet_files()

@@ -60,3 +60,32 @@ snippet api-sup "API supervisor backed by Tesla and RESTAgent"
     end
 
   end
+
+snippet task_supervisor "Task Supervisor"
+  defmodule ${1:Module}.Task do
+    def child_spec(_) do
+      Supervisor.child_spec({Task.Supervisor, name: $1.Task}, [])
+    end
+
+    def async(fun, opts \\\\ []) do
+      Task.Supervisor.async_nolink(__MODULE__, fun, opts)
+    end
+
+    def async(module, fun, args, opts \\\\ []) do
+      Task.Supervisor.async_nolink(__MODULE__, module, fun, args, opts)
+    end
+  end
+
+
+snippet starter "Starter tasks in supervision tree"
+  defmodule ${1:Module}.Starter do
+    use Task, restart: :transient
+
+    def start_link(arg) do
+      Task.start_link(__MODULE__, :run, [arg])
+    end
+
+    def run(arg) do
+      $0
+    end
+  end

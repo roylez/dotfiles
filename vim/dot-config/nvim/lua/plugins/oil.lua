@@ -8,7 +8,8 @@ return {
   opts = {
     default_file_explorer = true,
     keymaps = {
-      ["q"] = { "actions.close", mode = "n" },
+      ["q"]           = { "actions.close",  mode = "n" },
+      ["<Backspace>"] = { "actions.parent", mode = "n" },
     }
   },
 }
