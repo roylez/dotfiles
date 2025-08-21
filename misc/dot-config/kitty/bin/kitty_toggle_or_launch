@@ -11,7 +11,14 @@ esac; done
 
 set -- "${ARGS[@]}"
 
-if (kitten @ ls ${to} -m title:${title} &>/dev/null); then
+current_title=$(kitty @ ls ${to} -t recent:0 |jq -r '.[0].tabs[0].title')
+
+echo $current_title
+echo $title
+
+if [[ $current_title = "$title" ]]; then
+  kitten @ focus-tab ${to} -m recent:1
+elif (kitten @ ls ${to} -m title:${title} &>/dev/null); then
   kitten @ focus-window ${to} -m title:${title}
 elif [[ -n $tab_index ]]; then
   kitten @ launch ${to} -m index:$tab_index --title=${title} "${ARGS[@]}"

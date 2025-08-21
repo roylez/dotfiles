@@ -5,8 +5,8 @@ return {
     opts = {
       mappings = {
         comment = 'gc',
-        comment_line = '<F9>',
-        comment_visual = '<F9>',
+        comment_line = 'gc',
+        comment_visual = 'gc',
         text_object = 'gc'
       }
     }
