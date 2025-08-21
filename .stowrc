@@ -1,1 +1,1 @@
---dotfiles -v -t ~
+--dotfiles -v -t ~ --ignore=lazy-lock.json --ignore=.add.\*
