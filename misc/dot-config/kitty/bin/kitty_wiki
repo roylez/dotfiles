@@ -12,4 +12,4 @@ fzf-tmux \
   --bind "enter:execute(nvim $wiki_dir/{1}.md)" \
   --bind "tab:execute(nvim +ZwikiNew +'silent norm \"+P')" \
   --bind "esc:clear-query" \
-  --header "[CTRL-C] copy | [ENTER] edit | [TAB] new | [ESC] clear | [CTRL-D] exit"
+  --header "[ENTER] edit | [TAB] new | [ESC] clear | [CTRL-C] copy | [CTRL-D] exit"

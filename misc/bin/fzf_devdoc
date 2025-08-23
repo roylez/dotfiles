@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# List all pages from a docset, start `fzf`, search for a page and open it in
+# `less`.
+
+set -eu
+
+DEDOC="$(which dedoc 2>/dev/null)"
+
+if test -z "$DEDOC"; then
+  echo 'ERROR: Please make sure `dedoc` is available in $PATH.' >&2
+  exit 1
+fi
+
+DOCSET="elixir~1.18"
+
+# Make sure the docset we need is installed. Command result substitution below
+# doesn't catch errors, so test it manually.
+"$DEDOC" ls -l --exists="$DOCSET" || exit 1
+
+unset FZF_DEFAULT_OPTS
+
+"$DEDOC" -c ss "$DOCSET" --porcelain |\
+  fzf-tmux \
+  --ansi \
+  --prompt 'ELIXIR DOC > ' \
+  --no-mouse \
+  --bind "enter:execute("$DEDOC" -c open "$DOCSET" "{1}" |less -R )" \
+  --bind "esc:clear-query" \
+  --header "[ESC] clear | [CTRL-D] exit"

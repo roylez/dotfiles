@@ -6,6 +6,7 @@ while [[ "$#" -gt 0 ]]; do case $1 in
     --tab)    tab_index=$2 ; shift 2 ;;
     --to)     to="--to $2" ; shift 2 ;;
     --title)  title="$2"   ; shift 2 ;;
+    --color)  color="--color $2"; shift 2 ;;
     *)        ARGS+=("$1") ; shift ;;
 esac; done
 
@@ -21,8 +22,8 @@ if [[ $current_title = "$title" ]]; then
 elif (kitten @ ls ${to} -m title:${title} &>/dev/null); then
   kitten @ focus-window ${to} -m title:${title}
 elif [[ -n $tab_index ]]; then
-  kitten @ launch ${to} -m index:$tab_index --title=${title} "${ARGS[@]}"
+  kitten @ launch ${to} ${color} -m index:$tab_index --title=${title} "${ARGS[@]}"
   kitten @ focus-window ${to} -m title:${title}
 else
-  kitten @ launch ${to} --type=tab --title=${title} "${ARGS[@]}"
+  kitten @ launch ${to} ${color} --type=tab --title=${title} "${ARGS[@]}"
 fi
