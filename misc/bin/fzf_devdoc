@@ -25,6 +25,6 @@ unset FZF_DEFAULT_OPTS
   --ansi \
   --prompt 'ELIXIR DOC > ' \
   --no-mouse \
-  --bind "enter:execute("$DEDOC" -c open "$DOCSET" "{1}" |less -R )" \
+  --bind "enter:execute("$DEDOC" -c open -c $(tput cols) "$DOCSET" "{1}" |less -R )" \
   --bind "esc:clear-query" \
   --header "[ESC] clear | [CTRL-D] exit"
