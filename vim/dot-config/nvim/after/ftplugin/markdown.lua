@@ -19,8 +19,7 @@ function toggle_todo()
   elseif current_line:find("%- %[ %] ", 1) then
     new_line = string.gsub(current_line, "%- %[ %] ", "- [X] ", 1)
   else
-    local first_idx = string.len(current_line) - string.len(ltrim(current_line))
-    new_line = string.insert(current_line, "- [ ] ", first_idx)
+    new_line = string.gsub(current_line, "^%-?%s*", "- [ ] ", 1)
   end
 
   vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})
@@ -28,4 +27,3 @@ end
 
 vim.cmd [[ setlocal comments=n:> textwidth=0 wrapmargin=2 fo=croqnmB1 ]]
 vim.keymap.set("n", "tt", toggle_todo, { buffer = true, desc="Toggle DONE" })
-

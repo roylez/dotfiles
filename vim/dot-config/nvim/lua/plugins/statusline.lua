@@ -24,6 +24,20 @@ local mode = {
   end,
 }
 
+local encoding = { "encoding",
+  fmt = function(s)
+    local ret, _ = s:gsub("^utf%-8$", "")
+    return ret
+  end
+}
+
+local fileformat = { "fileformat",
+  fmt = function(s)
+    local ret, _ = s:gsub("^unix$", "")
+    return ret
+  end
+}
+
 local function codecompanion_adapter_name()
   local chat = require("codecompanion").buf_get_chat(vim.api.nvim_get_current_buf())
   return chat and " " .. chat.adapter.formatted_name or nil
@@ -70,7 +84,7 @@ local codecompanion_extension = {
 
 return {
   'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  -- dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     options = {
       -- theme = 'dracula',
@@ -80,7 +94,8 @@ return {
       icons_enabled = false,
     },
     sections = {
-      lualine_a = { mode }
+      lualine_a = { mode },
+      lualine_x = { encoding, fileformat, 'filetype'},
     },
     extensions = {
       'oil',

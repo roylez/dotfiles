@@ -31,6 +31,8 @@ return {
       { 'ga', '<Plug>(EasyAlign)', desc="Align" },
       { '<leader>a',  '<Plug>(EasyAlign)', mode='x', desc="Align" }
     }
-  }
+  },
+
+  'lewis6991/gitsigns.nvim',
 
 }

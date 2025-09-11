@@ -46,31 +46,43 @@ local opts = {
     log_level = "DEBUG",
   },
   adapters = {
-    opts = { show_defaults = false },
-    openrouter = function()
-      return require("codecompanion.adapters").extend("openai_compatible", {
-        env = {
-          url = "https://openrouter.ai/api",
-          api_key = "OPENROUTER_API_KEY",
-          chat_url = "/v1/chat/completions",
-        },
-        schema = {
-          model = {
-            default = "google/gemini-2.0-flash-001",
+    http = {
+      opts = { show_defaults = false },
+      openrouter = function()
+        return require("codecompanion.adapters").extend("openai_compatible", {
+          env = {
+            url = "https://openrouter.ai/api",
+            api_key = "OPENROUTER_API_KEY",
+            chat_url = "/v1/chat/completions",
           },
-        },
-      })
-    end
+          schema = {
+            model = {
+              default = "google/gemini-2.0-flash-001",
+            },
+          },
+        })
+      end
+    },
   },
   strategies = {
     chat   = { adapter = "openrouter", model = "anthropic/claude-3.5-sonnet" },
-    inline = { adapter = "openrouter", model = "google/gemini-2.0-flash-001" },
+    inline = {
+      adapter = "openrouter", model = "google/gemini-2.0-flash-001",
+      keymaps = {
+        accept_change = {
+          modes = { n = "ga" }, -- Remember this as DiffAccept
+        },
+        reject_change = {
+          modes = { n = "gr" }, -- Remember this as DiffReject
+        },
+      }
+    },
   },
   display = {
     chat = {
       window = { position = "right" },
     },
-    -- diff = { provider = 'mini_diff' }
+    diff = { provider = 'inline' }
   },
   prompt_library = prompt_library
 }

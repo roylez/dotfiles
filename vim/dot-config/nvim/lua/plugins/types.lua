@@ -19,7 +19,7 @@ return {
 
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "codecompanion" },
+    ft = { "markdown", "codecompanion", "yaml" },
     opts = {
       code = {
           width = 'block',
@@ -27,13 +27,15 @@ return {
           left_pad = 4,
           language_pad = 4,
       },
-      heading = { border = true, border_virtual = true, },
+      heading = {
+        border = true, border_virtual = true,
+      },
       checkbox = {
         custom = {
           todo   = { raw = '[+]', rendered = '󰥔 ', highlight = 'RenderMarkdownWarning',   scope_highlight = nil },
           cancel = { raw = '[-]', rendered = '󰜺 ', highlight = 'RenderMarkdownUnchecked', scope_highlight = nil },
         },
-      }
+      },
     }
   },
 
