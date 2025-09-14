@@ -24,20 +24,6 @@ local mode = {
   end,
 }
 
-local encoding = { "encoding",
-  fmt = function(s)
-    local ret, _ = s:gsub("^utf%-8$", "")
-    return ret
-  end
-}
-
-local fileformat = { "fileformat",
-  fmt = function(s)
-    local ret, _ = s:gsub("^unix$", "")
-    return ret
-  end
-}
-
 local function codecompanion_adapter_name()
   local chat = require("codecompanion").buf_get_chat(vim.api.nvim_get_current_buf())
   return chat and " " .. chat.adapter.formatted_name or nil
@@ -51,33 +37,19 @@ end
 local codecompanion_extension = {
   filetypes = { "codecompanion" },
   sections = {
-    lualine_a = {
-      mode,
-    },
-    lualine_b = {
-      codecompanion_adapter_name,
-    },
-    lualine_c = {
-      codecompanion_current_model_name,
-    },
+    lualine_a = { mode, },
+    lualine_b = { codecompanion_adapter_name, },
+    lualine_c = { codecompanion_current_model_name, },
     lualine_x = {},
-    lualine_y = {
-      "progress",
-    },
-    lualine_z = {
-      "location",
-    },
+    lualine_y = { "progress", },
+    lualine_z = { "location", },
   },
   inactive_sections = {
     lualine_a = {},
-    lualine_b = {
-      codecompanion_adapter_name,
-    },
+    lualine_b = { codecompanion_adapter_name, },
     lualine_c = {},
     lualine_x = {},
-    lualine_y = {
-      "progress",
-    },
+    lualine_y = { "progress", },
     lualine_z = {},
   },
 }
@@ -95,7 +67,6 @@ return {
     },
     sections = {
       lualine_a = { mode },
-      lualine_x = { encoding, fileformat, 'filetype'},
     },
     extensions = {
       'oil',

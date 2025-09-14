@@ -598,7 +598,7 @@ if ( _has fzf ); then
     zle reset-prompt
   }
 
-  fzf-view-file() {
+  fzf-file() {
     setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
     zle reset-prompt
 
@@ -607,27 +607,58 @@ if ( _has fzf ); then
       fzf-tmux -p 70%,70% -q "$*" \
       --prompt 'FILES > ' \
       --bind "ctrl-/:toggle-preview" \
+      --bind "ctrl-o:become(echo e:{1})" \
       --preview-window 'right,50%,border-left,nohidden' \
       --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
-      --header "[ENTER] view | [C-/] toggle preview ")
+      --header "[ENTER] view | [C-O] edit | [C-/] toggle preview")
 
-    if [ -n "$result" ]; then
+    if [[ "$result" == e:* ]]; then
+      LBUFFER="${EDITOR:-vim} \"${result#e:}\""
+      zle accept-line
+    elif [ -f "$result" ]; then
       cmd="${PAGER:-less}"
       if ( _has lnav ) && [[ "$result" = *log* ]]; then
         cmd="lnav -R"
       fi
       LBUFFER="$cmd \"$result\""
       zle accept-line
+    elif [ -d "$result" ]; then
+      cd "$result"
+      zle reset-prompt
+    fi
+  }
+
+  fzf-ssh() {
+    setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
+    zle reset-prompt
+
+    local config=~/.ssh/config
+
+    result=$(cat ${config} |awk '/^Host *[^*]*$/ {print $2}' |\
+      fzf-tmux -p 70%,70% -q "$*" \
+      --prompt 'SSH > ' \
+      --preview "awk -v RS= '/^Host *{1}'\$'/' ${config}" \
+      --preview-window default \
+      --bind "enter:become(echo ssh {1})" \
+      --bind "alt-backspace:execute-silent(sed -i '/Host *{1}\$/,/^\\s*\$/d' ${config})+reload(cat ${config} | awk '/^Host *[^*]*\$/ {print \$2}')" \
+      --bind "ctrl-o:become(echo ${EDITOR} ${config})" \
+      --header "[ENTER] connect | [C-O] edit ${config} [A-BACKSPACE] delete")
+
+    if [ -n "$result" ]; then
+      LBUFFER=$result
+      zle accept-line
     fi
   }
 
   zle -N fzf-completion
   zle -N fzf-history-complete
-  zle -N fzf-view-file
-  bindkey '\ef' fzf-completion
+  zle -N fzf-file
+  zle -N fzf-ssh
+  bindkey '\e\t' fzf-completion
   bindkey '' fzf-history-complete
   bindkey '\er' fzf-history-complete
-  bindkey '\el' fzf-view-file
+  bindkey '\ef' fzf-file
+  bindkey '\ec' fzf-ssh
   # }}}
 
 fi
