@@ -2,7 +2,7 @@
 # vim:fdm=marker
 
 # 如果需要調試加載時間問題，啟動後運行 zprof  {{{
-zmodload zsh/zprof
+# zmodload zsh/zprof
 # }}}
 
 # 预配置 {{{
@@ -521,7 +521,7 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 if ( _has fzf ); then
   # dirty hack for ubuntu/debian
   ( _has fd ) && FD_EXECUTABLE=fd || FD_EXECUTABLE=fdfind
-  export FZF_DEFAULT_COMMAND="$FD_EXECUTABLE --type f"
+  export FZF_DEFAULT_COMMAND="$FD_EXECUTABLE --type f --no-ignore-vcs"
   # molokai themed
   if [[ $- == *i* ]]; then
     # only set default opts when in interactive shell
@@ -531,7 +531,10 @@ if ( _has fzf ); then
     --info=inline
     --layout=reverse
     --height=40%
-    --color fg:252,bg:233,hl:210,fg+:252,bg+:235,hl+:196,info:144,prompt:161,spinner:135,pointer:135,marker:118,border:46
+    --color=bg+:#363A4F,bg:#24273A,spinner:#F4DBD6,hl:#ED8796
+    --color=fg:#CAD3F5,info:#C6A0F6,pointer:#F4DBD6
+    --color=marker:#B7BDF8,fg+:#CAD3F5,prompt:#C6A0F6,hl+:#ED8796
+    --color=border:#6E738D,label:#CAD3F5
     --border=sharp
     --preview-window=:hidden
     --bind '?:toggle-preview'
@@ -602,15 +605,20 @@ if ( _has fzf ); then
     setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
     zle reset-prompt
 
+    search_command="$FD_EXECUTABLE --no-ignore-vcs ."
+
     cmd="${PAGER:-less}"
-    result=$($FD_EXECUTABLE . 2>/dev/null |\
+    [[ -n .fzf-file-cache*(#q.m-1) ]] || ${search_command} 2>/dev/null > .fzf-file-cache
+
+    result=$(cat .fzf-file-cache |\
       fzf-tmux -p 70%,70% -q "$*" \
       --prompt 'FILES > ' \
-      --bind "ctrl-/:toggle-preview" \
+      --bind "?:toggle-preview" \
       --bind "ctrl-o:become(echo e:{1})" \
+      --bind "ctrl-r:execute-silent(${search_command} 2>/dev/null > .fzf-file-cache)+reload(cat .fzf-file-cache)" \
       --preview-window 'right,50%,border-left,nohidden' \
       --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
-      --header "[ENTER] view | [C-O] edit | [C-/] toggle preview")
+      --header "[ENTER] view | [C-O] edit | [C-R] reload | [?] preview")
 
     if [[ "$result" == e:* ]]; then
       LBUFFER="${EDITOR:-vim} \"${result#e:}\""
@@ -640,7 +648,7 @@ if ( _has fzf ); then
       --preview "awk -v RS= '/^Host *{1}'\$'/' ${config}" \
       --preview-window default \
       --bind "enter:become(echo ssh {1})" \
-      --bind "alt-backspace:execute-silent(sed -i '/Host *{1}\$/,/^\\s*\$/d' ${config})+reload(cat ${config} | awk '/^Host *[^*]*\$/ {print \$2}')" \
+      --bind "alt-bs:execute-silent(sed -i '/Host *{1}\$/,/^\\s*\$/d' ${config})+reload(cat ${config} | awk '/^Host *[^*]*\$/ {print \$2}')" \
       --bind "ctrl-o:become(echo ${EDITOR} ${config})" \
       --header "[ENTER] connect | [C-O] edit ${config} [A-BACKSPACE] delete")
 
@@ -742,5 +750,6 @@ autoload -Uz compinit
 
 # }}}
 
-
 export PATH="$PATH:$HOME/.local/bin"
+
+# zprof

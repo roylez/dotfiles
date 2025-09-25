@@ -1,0 +1,22 @@
+snippet oneshot
+  [Unit]
+  Description=${1:Description}
+
+  [Service]
+  Type=oneshot
+  ExecStart=${2:Command}
+
+  [Install]
+  WantedBy=default.target
+
+snippet timer
+  [Unit]
+  Description=${1:Description}
+
+  [Timer]
+  OnBootSec=2m
+  OnUnitInactiveSec=7m
+  Unit=${2:service}.service
+
+  [Install]
+  WantedBy=timers.target
