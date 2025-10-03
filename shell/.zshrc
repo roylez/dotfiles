@@ -6,7 +6,7 @@
 # }}}
 
 # 预配置 {{{
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
@@ -517,6 +517,12 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # }}}
 
 # 其他额外软件 {{{
+# devbox {{{
+if ( _has devbox ); then
+  eval "$(devbox global shellenv --init-hook)"
+fi
+# }}}
+
 # FZF and friend, esc f to fzf for current command {{{
 if ( _has fzf ); then
   # dirty hack for ubuntu/debian
@@ -602,13 +608,15 @@ if ( _has fzf ); then
   }
 
   fzf-file() {
-    setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
+    setopt localtraps noshwordsplit noksh_arrays noposixbuiltins extended_glob
     zle reset-prompt
 
     search_command="$FD_EXECUTABLE --no-ignore-vcs ."
 
     cmd="${PAGER:-less}"
-    [[ -n .fzf-file-cache*(#q.m-1) ]] || ${search_command} 2>/dev/null > .fzf-file-cache
+    if [[ -z .fzf-file-cache*(#q.m-1L+1) ]]; then
+      ${(z)search_command} 2>/dev/null > .fzf-file-cache
+    fi
 
     result=$(cat .fzf-file-cache |\
       fzf-tmux -p 70%,70% -q "$*" \
@@ -691,13 +699,6 @@ if ( _has kubectl ); then
 fi
 # }}}
 
-# {{{ ASDF
-if [[ -d "$HOME/.asdf/shims" ]]; then
-  export PATH="$HOME/.asdf/shims:$PATH"
-  fpath=($HOME/.asdf/completions $fpath)
-fi
-# }}}
-
 # docker {{{
 if ( _has docker ); then
   alias d=docker
@@ -749,7 +750,5 @@ autoload -Uz compinit
 [[ -f $HOME/.zshrc.local ]]          && source $HOME/.zshrc.local
 
 # }}}
-
-export PATH="$PATH:$HOME/.local/bin"
 
 # zprof

@@ -28,29 +28,11 @@ set mask="!^\\.[^.]"
 set arrow_cursor
 
 set postponed=~/.mutt/templates
-# ---------------------color theme-----------------------------------
-# source "~/.mutt/muttrc.color`tput colors`"
-source "~/.mutt/muttrc.color8"
 
-source ~/.mutt/account/icloud
-
-# use tab to switch between accounts, inspired by
-#  https://marlam.de/msmtp/msmtp.html#Using-msmtp-with-Mutt
-# macro generic \Cx& ":macro index \\t \\Cx"
-# macro index <tab> "\Cx0"    # default change to account 1, this will be redefined once pressed
-# macro generic \Cx0 ":source ~/.mutt/account/gmail\"\n\Cx&1\"<enter><change-folder>!<enter>"
-# macro generic \Cx1 ":source ~/.mutt/account/work\"\n\Cx&2\"<enter><change-folder>!<enter>"
-# macro generic \Cx2 ":source ~/.mutt/account/icloud\"\n\Cx&0\"<enter><change-folder>!<enter>"
-
-# Use as from the address mail was sent to
-# You'd have to define $alternates for this
-# set reverse_name
-
-# get notified if new mail arrived in inbox
-mailboxes ! =inbox
+source "~/.mutt/muttrc.color`tput colors`"
 
 set quit=yes
-#move mail from spool to mailbox when quiting ?
+#move mail from spool to mailbox when quiting ? spool is inbox and there is no need to move
 set move=no
 #urgent notification trigger
 set beep_new=yes
@@ -70,7 +52,6 @@ set mailcap_path=~/.mutt/mailcap_`uname -s|tr '[:upper:]' '[:lower:]'`
 set display_filter='grep -v "\\[-- Autoview using"'
 # this may fix some long url problems in html emails
 set pipe_decode=yes
-
 
 # 回信时是否包含原文。
 set include=yes
@@ -189,14 +170,10 @@ set query_command = "~/.mutt/bin/query_contact"
 folder-hook . set trash="=trash"
 folder-hook trash$ unset trash
 
-#bogofilter
-# macro index S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
-# macro pager S "|bogofilter -s\n<save-message>=spam/\n"  "Learn as spam and save to junk"
-# macro index H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham and save"
-# macro pager H "|bogofilter -n\n<save-message>=inbox/\n"          "Learn as ham and save"
-
 #urlview
 macro pager \cu "|urlview \n"
+
+source ~/.mutt/account/icloud
 
 #identity selection
 #alias identity_1        Roy Zuo     <xxx@gmail.com>
@@ -233,6 +210,11 @@ bind index .  noop
 macro index .a '<change-folder>?<change-dir><enter>oa2<enter><enter>'
 macro index .i '<change-folder>?<change-dir><enter>oa3<enter><enter>'
 macro index .. '<change-folder>?<change-dir><enter>oa3<enter><enter>'
+
+# sidebar operations
+bind index,pager \CP sidebar-prev       # Ctrl-Shift-P - Previous Mailbox
+bind index,pager \CN sidebar-next       # Ctrl-Shift-N - Next Mailbox
+bind index,pager \CO sidebar-open       # Ctrl-Shift-O - Open Highlighted Mailbox
 
 #macro   index,alias   A   "!$EDITOR ~/.mutt.alias\n:source ~/.mutt.alias\n"
 # ---------------------GnuPG stuff-----------------------------------
