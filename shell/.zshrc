@@ -621,18 +621,19 @@ if ( _has fzf ); then
     result=$(cat .fzf-file-cache |\
       fzf-tmux -p 70%,70% -q "$*" \
       --prompt 'FILES > ' \
+      --preview-window 'right,50%,border-left,nohidden' \
+      --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
       --bind "?:toggle-preview" \
       --bind "ctrl-o:become(echo e:{1})" \
       --bind "ctrl-r:execute-silent(${search_command} 2>/dev/null > .fzf-file-cache)+reload(cat .fzf-file-cache)" \
-      --preview-window 'right,50%,border-left,nohidden' \
-      --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
-      --header "[ENTER] view | [C-O] edit | [C-R] reload | [?] preview")
+      --bind "esc:clear-query" \
+      --bind "tab:execute([[ -f {1} ]] && $cmd {1})" \
+      --header "[CR] open [TAB] view [C-O] edit [C-R] reload [C-D] exit")
 
     if [[ "$result" == e:* ]]; then
       LBUFFER="${EDITOR:-vim} \"${result#e:}\""
       zle accept-line
     elif [ -f "$result" ]; then
-      cmd="${PAGER:-less}"
       if ( _has lnav ) && [[ "$result" = *log* ]]; then
         cmd="lnav -R"
       fi
