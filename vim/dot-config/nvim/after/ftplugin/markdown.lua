@@ -18,8 +18,10 @@ function toggle_todo()
     new_line = string.gsub(current_line, "%- %[X%] ", '', 1)
   elseif current_line:find("%- %[ %] ", 1) then
     new_line = string.gsub(current_line, "%- %[ %] ", "- [X] ", 1)
+  elseif current_line:find("^%s*%- ") then
+    new_line = string.gsub(current_line, "%- ", "- [ ] ", 1)
   else
-    new_line = string.gsub(current_line, "^%-?%s*", "- [ ] ", 1)
+    new_line = string.gsub(current_line, "^(%s*)", "%1- [ ] ", 1)
   end
 
   vim.api.nvim_buf_set_lines(0, row-1, row, true, {new_line})

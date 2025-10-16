@@ -14,9 +14,6 @@ set -- "${ARGS[@]}"
 
 current_title=$(kitty @ ls ${to} -t recent:0 |jq -r '.[0].tabs[0].title')
 
-echo $current_title
-echo $title
-
 if [[ $current_title = "$title" ]]; then
   kitten @ focus-tab ${to} -m recent:1
 elif (kitten @ ls ${to} -m title:${title} &>/dev/null); then

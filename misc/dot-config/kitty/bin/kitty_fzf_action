@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+unset FZF_DEFAULT_OPTS
 
 actions=$(cat <<-EOS
 SCRATCH            ,launch --type=tab --title SCRATCH nvim +Scratch +start
@@ -21,11 +23,12 @@ Window new         ,new_window
 Reload             ,load_config_file
 WIKI new           ,launch --type=tab --tab-title Zettle nvim +ZwikiNew +silent\!\ norm\ \"+P
 WIKI               ,launch -m index:1 --title=WIKI kitty_wiki
-EOS)
+EOS
+)
 
 cmd=$(echo "$actions" | tr , "\t"  |\
   fzf --prompt="RUN ACTION> " --keep-right --layout=reverse -d$'\t' |\
   sed "s=.*\t==g"
 )
 
-kitty @ action $cmd
+kitty @ action ${cmd}
