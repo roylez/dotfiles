@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 windows=$(kitty @ ls -m 'not state:self ' | jq -r '
     .[]
