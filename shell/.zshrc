@@ -16,17 +16,23 @@ if [[  "$-" != *i* ]]; then return 0; fi
 # disable flow controll so that ctl-s does not freeze terminal and you don't
 # have to ctrl-q to reenable it
 stty -ixon
+
+#check if a binary exists in path
+_has() {[[ -n ${commands[$1]} ]]}
 # }}}
 
 # 定义颜色 {{{
-if [[ "$TERM" = *(256color|kitty|tmux) && -f $HOME/.lscolor256 ]]; then
-  #use prefefined colors
-  eval $(dircolors -b $HOME/.lscolor256)
-  use_256color=1
+if [[ "$TERM" = *(256color|kitty|tmux) ]]; then
+  color_mode=24
 else
-  [[ -f $HOME/.lscolor ]] && eval $(dircolors -b $HOME/.lscolor)
+  color_mode=8
 fi
 
+if (_has vivid); then
+  export LS_COLORS="$(vivid -m ${color_mode}-bit generate one-dark)"
+else
+  eval $(dircolors -b $HOME/.lscolor${color_mode})
+fi
 #}}}
 
 # 设置参数 {{{
@@ -122,7 +128,7 @@ fi
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'
 zmodload -i zsh/complist        # for menu-list completion
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" "ma=${${use_256color+1;7;38;5;143}:-1;7;33}"
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 #ignore list in completion
 zstyle ':completion:*' ignore-parents parent pwd directory
 #menu selection in completion
@@ -257,9 +263,6 @@ alias forget='unset HISTFILE'
 
 #calculator
 calc()  { awk "BEGIN{ print $* }" ; }
-
-#check if a binary exists in path
-_has() {[[ -n ${commands[$1]} ]]}
 
 #check if is a local shell
 _is_local() { [[ -z "$SSH_TTY" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
