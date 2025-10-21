@@ -10,6 +10,7 @@ Aider              ,remote_control_script kitty_aider
 Chat               ,launch --type=tab --title AIChat aichat
 WIKI chat          ,launch --type=tab --title AIChat aichat --rag wiki
 CHIRP DOC          ,launch --type=overlay --title=CHIRP kitty_chirp
+Debug Config       ,debug_config
 EMAIL              ,launch_tab MUTT ssh -t limbo zsh -ic \'neomutt -F .mutt/muttrc -F .mutt/account/work\'
 Edit Config        ,edit_config_file
 Emoji              ,input_unicode_character
