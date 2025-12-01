@@ -31,6 +31,7 @@ cmd open ${{
     application/x-7z*) lf -remote "send $id untar" ;;
     application/*zip:*) lf -remote "send $id untar" ;;
     application/x-rar:*) lf -remote "send $id untar" ;;
+    image/*) feh -F "$f" "$PWD";;
     *) $OPENER "$f";;
   esac
 }}

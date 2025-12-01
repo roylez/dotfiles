@@ -1,25 +1,41 @@
 return {
   {
-  "neovim/nvim-lspconfig",
-  dependencies = { 'saghen/blink.cmp' },
-  opts = {
-    servers = {
-      lexical = {
-        cmd = { os.getenv("HOME") .. "/workspace/3.resources/lexical/bin/start_lexical.sh" },
-        filetypes = { "elixir", "eelixir", "heex" },
-        root_markers = { "mix.exs", ".git" },
-      }
-    }
+    "williamboman/mason.nvim",
+    opts = {}
   },
-  config = function(_, opts)
-    local lspconfig = require("lspconfig")
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-    for server, config in pairs(opts.servers) do
-      config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
-      lspconfig[server].setup(config)
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = {}
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = { 'saghen/blink.cmp' },
+    opts = {
+      servers = {
+        lexical = {
+          filetypes = { "elixir", "eelixir", "heex" },
+          root_markers = { "mix.exs", ".git" },
+        },
+        tinymist = {
+          single_file_support = true,
+          settings = {
+            exportPdf = "onSave",
+          },
+        }
+      }
+    },
+
+    config = function(_, opts)
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      for server, config in pairs(opts.servers) do
+        config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+        vim.lsp.config(server, config)
+        vim.lsp.enable(server)
+      end
     end
-  end
   },
 
   {
@@ -30,5 +46,12 @@ return {
       require('tiny-inline-diagnostic').setup()
       vim.diagnostic.config({ virtual_text = false })
     end
+  },
+
+  {
+    "chomosuke/typst-preview.nvim",
+    ft = "typst",
+    version = "1.*",
+    build = function() require "typst-preview".update() end,
   }
 }

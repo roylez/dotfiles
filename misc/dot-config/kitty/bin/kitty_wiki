@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env zsh
+#
+setopt extendedglob
 
 wiki_dir=$HOME/wiki
 
 unset FZF_DEFAULT_OPTS
 
-gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md | \
+gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md(oa) | \
 fzf-tmux \
   --prompt 'WIKI > ' \
   -q "$*" \
