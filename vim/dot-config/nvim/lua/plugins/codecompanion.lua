@@ -1,5 +1,3 @@
-local keys_file = os.getenv("HOME") .. '/.keys'
-
 local prompt_library = {
   ["Support Rewrite"] = {
     strategy = 'inline',
@@ -44,6 +42,7 @@ local prompt_library = {
 local opts = {
   opts = {
     log_level = "DEBUG",
+    ignore_warnings = true
   },
   adapters = {
     http = {
@@ -99,17 +98,9 @@ return {
     "folke/which-key.nvim",
   },
 
-  enabled = function()
-    return require('util').is_file( keys_file )
-  end,
+  enabled = require('util').has_keys,
 
   config = function()
-    local keys = vim.json.decode(require('util').read_file(keys_file))
-
-    for k, v in pairs(keys) do
-      vim.env[ string.upper(k) .. '_API_KEY' ] = v
-    end
-
     require("codecompanion").setup(opts)
 
     local wk = require('which-key')

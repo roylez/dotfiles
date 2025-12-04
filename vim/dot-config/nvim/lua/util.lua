@@ -1,4 +1,5 @@
 local M={}
+local keys_file = os.getenv("HOME") .. '/.keys'
 
 -- preserve cusror location for after some vim commands
 M.preserve = function(arguments)
@@ -31,6 +32,20 @@ M.is_dir = function(name)
     return result == nil
   else
     return false
+  end
+end
+
+-- test if api keys exists
+M.has_keys = function()
+  return M.is_file( keys_file )
+end
+
+-- load keys to env
+M.load_keys = function()
+  local keys = vim.json.decode(require('util').read_file(keys_file))
+
+  for k, v in pairs(keys) do
+    vim.env[ string.upper(k) .. '_API_KEY' ] = v
   end
 end
 

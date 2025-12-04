@@ -12,6 +12,13 @@ nmap gX :lua vim.ui.open(vim.fn.expand("%"))<CR>
 
 ]])
 
+--- {{{ load API keys
+local util = require('util')
+if util.has_keys() then
+  util.load_keys()
+end
+--- }}}
+
 --- {{{ Lazy.nvim
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 

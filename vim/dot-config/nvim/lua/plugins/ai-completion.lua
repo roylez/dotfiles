@@ -1,6 +1,6 @@
 return {
   'milanglacier/minuet-ai.nvim',
-  enabled = function() return os.getenv("OPENROUTER_API_KEY") end,
+  enabled = require('util').has_keys,
   opts = {
     provider = "openai_compatible",
     request_timeout = 2.5,
@@ -17,8 +17,7 @@ return {
         name = "OpenRouter",
         end_point = "https://openrouter.ai/api/v1/chat/completions",
         api_key = "OPENROUTER_API_KEY", -- point to your environment variable name
-        model = "qwen/qwen3-coder",
-        -- model = "google/gemini-2.5-flash-lite",
+        model = "google/gemini-2.5-flash",
         -- model = "openai/gpt-4o-mini",
         stream = true,
         optional = {
