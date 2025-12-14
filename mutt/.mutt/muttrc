@@ -24,13 +24,6 @@ unset sig_dashes
 set mbox_type=Maildir
 set maildir_trash=yes
 set mask="!^\\.[^.]"
-
-set arrow_cursor
-
-set postponed=~/.mutt/templates
-
-source "~/.mutt/muttrc.color`tput colors`"
-
 set quit=yes
 #move mail from spool to mailbox when quiting ? spool is inbox and there is no need to move
 set move=no
@@ -41,6 +34,14 @@ set check_new=yes
 set recall=no
 #how many seconds to wait for user inputs before continuing with background jobs
 set timeout=15
+# periodically caculate mailbox stats when polling. required for %n in status bar
+set mail_check_stats
+
+set arrow_cursor
+
+set postponed=~/.mutt/templates
+
+source "~/.mutt/muttrc.color`tput colors`"
 
 #preferred file type order when viewing multipart/alternative emails
 unalternative_order *

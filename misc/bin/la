@@ -21,7 +21,7 @@ read_title() {
       awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $LEDGER_ROOT/data/*.ledger \
         | sort -nr \
         | cut -d" " -f2- \
-        | fzf-tmux -p --prompt '標題> '
+        | fzf --prompt '標題> '
     )
   done
   echo -ne "\e[u\e[1A"
@@ -46,7 +46,7 @@ create_next_entry() {
       awk '/^2[0-9]{3}-/ {$1=""; if ($2=="*") {$2=""}; gsub("^ +", ""); a[$0]++} END {for(i in a) {print a[i], i}}' $LEDGER_ROOT/data/*.ledger \
         | sort -nr \
         | cut -d" " -f2- \
-        | fzf-tmux +s -p --header '[CTRL-C] abort' --bind 'ctrl-c:become(exit 99)' --prompt '標題> '
+        | fzf +s --header '[CTRL-C] abort' --bind 'ctrl-c:become(exit 99)' --prompt '標題> '
     )
     case $? in
       99)  return ;;
@@ -62,7 +62,7 @@ create_next_entry() {
         |grep -v '<' \
         |sort -nr \
         |cut -d" " -f2- \
-        |fzf-tmux +s -p --header '[CTRL-C] abort' --bind 'ctrl-c:become(exit 99)' --prompt '賬戶> '
+        |fzf +s --header '[CTRL-C] abort' --bind 'ctrl-c:become(exit 99)' --prompt '賬戶> '
       )
     case $? in
       99)  return ;;
@@ -78,7 +78,7 @@ create_next_entry() {
         |grep -v '<' \
         |sort -nr \
         |cut -d" " -f2- \
-        |fzf-tmux +s -p --prompt '賬戶> '
+        |fzf +s --prompt '賬戶> '
       )
     case $? in
       99)  return ;;

@@ -296,6 +296,8 @@ _pwd_color_preexec() { __PROMPT_PWD="%F{magenta}%~%f" }
 # active command as title in terminals
 if _is_local || [ -n "$TMUX" ]; then
   local title_host=""
+elif [ -n "${ZMX_SESSION}" ]; then
+  local title_host="@${ZMX_SESSION}: "
 else
   local title_host="@${HOST}: "
 fi
@@ -308,7 +310,7 @@ esac
 
 #set screen/tmux title if not connected remotely
 #if [ "$STY" != "" ]; then
-_tmux_precmd() {
+_title_precmd() {
   #a bell, urgent notification trigger
   #echo -ne '\a'
   #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
@@ -316,7 +318,7 @@ _tmux_precmd() {
   echo -ne '\033[?17;0;127c'
 }
 
-_tmux_preexec() {
+_title_preexec() {
   local -a cmd; cmd=(${(z)1})
   executable=$cmd[1]
   case $executable:t in
@@ -347,10 +349,10 @@ _reset_cursor() { printf "\e[6 q" }
 #{{{define magic function arrays
 # typeset -ga preexec_functions precmd_functions chpwd_functions
 autoload -Uz add-zsh-hook
-add-zsh-hook precmd  _tmux_precmd
+add-zsh-hook precmd  _title_precmd
 add-zsh-hook precmd  vcs_info
 add-zsh-hook precmd  _reset_cursor
-add-zsh-hook preexec _tmux_preexec
+add-zsh-hook preexec _title_preexec
 add-zsh-hook preexec _pwd_color_preexec
 add-zsh-hook chpwd   _pwd_color_chpwd
 add-zsh-hook chpwd   vcs_info
@@ -385,8 +387,13 @@ function +vi-git-misc-n-abbr-master() {
     hook_com[misc]+=${(j:/:)gitstatus}
 
     # change branch name display to M for master and use revision when it is easier
-    hook_com[branch]=${hook_com[branch]/#%(master|main)/M}
-    [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
+    # If a .jj directory exists (indicating a jujutsu repo), display 'JJ' as branch
+    if [[ -d .jj ]]; then
+      hook_com[branch]=JJ
+    else
+      hook_com[branch]=${hook_com[branch]/#%(master|main)/M}
+      [[ "${hook_com[branch]}" == *\~?? ]] && hook_com[branch]=${${hook_com[revision]}[1,6]}
+    fi
 }
 
 if _is_local; then
@@ -719,12 +726,6 @@ if ( _has nvim ); then
     alias vim='nvim'
 else
     export EDITOR='vim' VISUAL='vim' SUDO_EDITOR='vim'
-fi
-# }}}
-
-# kitty ssh {{{
-if ( _has kitten ) && _is_local; then
-    alias ssh='kitten ssh'
 fi
 # }}}
 

@@ -32,8 +32,8 @@ return {
       },
       checkbox = {
         custom = {
-          todo   = { raw = '[+]', rendered = '󰥔 ', highlight = 'RenderMarkdownWarning',   scope_highlight = nil },
-          cancel = { raw = '[-]', rendered = '󰜺 ', highlight = 'RenderMarkdownUnchecked', scope_highlight = nil },
+          todo   = { raw = '[>]', rendered = ' ', highlight = 'DiagnosticWarn' },
+          cancel = { raw = '[-]', rendered = ' ', highlight = 'DiagnosticError' },
         },
       },
     }

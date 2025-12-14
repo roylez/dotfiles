@@ -40,9 +40,9 @@ local prompt_library = {
 }
 
 local opts = {
+  ignore_warnings = true,
   opts = {
     log_level = "DEBUG",
-    ignore_warnings = true
   },
   adapters = {
     http = {
