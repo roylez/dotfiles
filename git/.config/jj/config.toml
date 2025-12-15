@@ -6,6 +6,7 @@ init = ["git", "init"]
 push = ["git", "push"]
 pull = ["git", "fetch"]
 s = ["status"]
+move = ["bookmark", "move", "--allow-backwards"]
 
 [user]
 
