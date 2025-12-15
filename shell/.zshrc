@@ -19,6 +19,10 @@ stty -ixon
 
 #check if a binary exists in path
 _has() {[[ -n ${commands[$1]} ]]}
+
+#check if a function exits
+_has_func() { (( $+functions[$1] )); }
+
 # }}}
 
 # 定义颜色 {{{
@@ -349,13 +353,39 @@ _reset_cursor() { printf "\e[6 q" }
 #{{{define magic function arrays
 # typeset -ga preexec_functions precmd_functions chpwd_functions
 autoload -Uz add-zsh-hook
+
 add-zsh-hook precmd  _title_precmd
-add-zsh-hook precmd  vcs_info
 add-zsh-hook precmd  _reset_cursor
 add-zsh-hook preexec _title_preexec
 add-zsh-hook preexec _pwd_color_preexec
 add-zsh-hook chpwd   _pwd_color_chpwd
-add-zsh-hook chpwd   vcs_info
+
+if (_has_func async_start_worker); then
+  async_start_worker vcs_info
+  async_register_callback vcs_info _vcs_info_done
+
+  _async_vcs_info() {
+    cd -q $1
+    vcs_info
+    print ${vcs_info_msg_0_}
+  }
+
+  _vcs_info_done() {
+    local stdout=$3
+    vcs_info_msg_0_=$stdout
+    zle reset-prompt
+  }
+
+  _vcs_info() {
+    async_flush_jobs vcs_info
+    async_job vcs_info _async_vcs_info $PWD
+  }
+  add-zsh-hook precmd _vcs_info
+  add-zsh-hook chpwd  _vcs_info
+else
+  add-zsh-hook precmd  vcs_info
+  add-zsh-hook chpwd   vcs_info
+fi
 #}}}
 
 # }}}
