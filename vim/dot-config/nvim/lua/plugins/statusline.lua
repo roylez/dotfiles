@@ -24,35 +24,21 @@ local mode = {
   end,
 }
 
-local function codecompanion_adapter_name()
-  local chat = require("codecompanion").buf_get_chat(vim.api.nvim_get_current_buf())
-  return chat and " " .. chat.adapter.formatted_name or nil
-end
-
-local function codecompanion_current_model_name()
-  local chat = require("codecompanion").buf_get_chat(vim.api.nvim_get_current_buf())
-  return chat and chat.settings.model or nil
-end
-
-local codecompanion_extension = {
-  filetypes = { "codecompanion" },
-  sections = {
-    lualine_a = { mode, },
-    lualine_b = { codecompanion_adapter_name, },
-    lualine_c = { codecompanion_current_model_name, },
-    lualine_x = {},
-    lualine_y = { "progress", },
-    lualine_z = { "location", },
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = { codecompanion_adapter_name, },
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = { "progress", },
-    lualine_z = {},
-  },
+local encoding = {
+  "encoding",
+  fmt = function(s) return s == "utf-8" or s end
 }
+
+local fileformat = {
+  "fileformat",
+  fmt = function(s) return s == "unix" or s end
+}
+
+-- define function and formatting of the information
+local function parrot_model()
+  local status_info = require("parrot.config").get_status_info()
+  return status_info.model
+end
 
 return {
   'nvim-lualine/lualine.nvim',
@@ -67,11 +53,12 @@ return {
     },
     sections = {
       lualine_a = { mode },
+      lualine_b = { "diff", "diagnostics" },
+      lualine_x = { encoding, fileformat, "filetype" },
     },
     extensions = {
       'oil',
-      'quickfix',
-      codecompanion_extension,
+      'quickfix'
     }
   }
 }
