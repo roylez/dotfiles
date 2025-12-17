@@ -6,7 +6,7 @@ return {
   },
   enabled = require('util').has_keys,
   keys = {
-    {'<leader>W', '<cmd>PrtRewrite ProofReader<CR>',  mode="v",  desc="AI rewrite"}
+    {'<leader>W', ':PrtRewrite ProofReader<CR>',  mode="v",  desc="AI rewrite"}
   },
   opts = {
     providers = {
@@ -16,7 +16,7 @@ return {
         api_key = os.getenv "OPENROUTER_API_KEY",
         endpoint = "https://openrouter.ai/api/v1/chat/completions",
         models = {
-          "google/gemini-2.0-flash-001",
+          "google/gemini-2.5-flash",
         }
       }
     }

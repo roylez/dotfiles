@@ -88,6 +88,9 @@ set expandtab shiftwidth=2 softtabstop=2 tabstop=8
 set textwidth=100	" wrap text for 78 letters
 " set relativenumber number
 
+" do not append \n at the end of a file
+set nofixeol
+
 set hidden              " hide instead of abandon buffer
 set wrap
 map Q gq
