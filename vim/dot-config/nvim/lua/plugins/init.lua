@@ -19,7 +19,10 @@ return {
     end
   },
 
-  'tpope/vim-fugitive',
+  {
+    'NicolasGB/jj.nvim',
+    opts = {}
+  },
 
   'tpope/vim-endwise',
 

@@ -266,7 +266,7 @@ alias forget='unset HISTFILE'
 }
 
 #calculator
-calc()  { awk "BEGIN{ print $* }" ; }
+calc()  { gawk -M -v PREC=100 -v OFMT='%.10g' "BEGIN{ print $* }" }
 
 #check if is a local shell
 _is_local() { [[ -z "$SSH_TTY" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
@@ -589,12 +589,12 @@ if ( _has fzf ); then
 
   # search history with fzf
   _fzf_history() {
-    builtin fc -l -r -n 1 | fzf-tmux -p --prompt 'HISTORY > ' -e -q "$*"
+    builtin fc -l -r -n 1 | fzf --prompt 'HISTORY > ' -e -q "$*"
   }
   # A completion fallback if something more specific isn't available.
   function _fzf_generic_find() {
     local cmd="$1"; shift 1
-    $FD_EXECUTABLE . 2>/dev/null | fzf-tmux -p --prompt 'FILES > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
+    $FD_EXECUTABLE . 2>/dev/null | fzf --prompt 'FILES > ' -q "$*" | xargs printf '%s %s\n' "$cmd"
   }
 
   # {{{ custom command completion with fzf, idea from whiteinge/dotfiles
@@ -658,7 +658,7 @@ if ( _has fzf ); then
     fi
 
     result=$(cat .fzf-file-cache |\
-      fzf-tmux -p 70%,70% -q "$*" \
+      fzf -q "$*" \
       --prompt 'FILES > ' \
       --preview-window 'right,50%,border-left,nohidden' \
       --preview '[[ -d {1} ]] && ls -lh --color=yes {1} || bat --style=plain --color=always {1}' \
@@ -691,7 +691,7 @@ if ( _has fzf ); then
     local config=~/.ssh/config
 
     result=$(cat ${config} |awk '/^Host *[^*]*$/ {print $2}' |\
-      fzf-tmux -p 70%,70% -q "$*" \
+      fzf -q "$*" \
       --prompt 'SSH > ' \
       --preview "awk -v RS= '/^Host *{1}'\$'/' ${config}" \
       --preview-window default \
