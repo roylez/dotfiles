@@ -79,13 +79,26 @@ def create_cells():
         get_email('work', '#a98467'),
         get_email('gmail'),
         get_email('icloud'),
+        get_alarm(),
         get_time(),
         get_date(),
     ]
     return [c for c in cells if c is not None]
 
+def get_alarm():
+    out = subprocess.getoutput(CONFIG['alarm']['command'])
+    if out > "00:30":
+        return { "icon": " ", "color": "#06d6a0" , "text": out }
+    elif out > "00:05":
+        return { "icon": " ", "color": "#ffd166" , "text": out }
+    elif len(out) > 0:
+        return { "icon": "󰺁 ", "color": "#ef476f" , "text": out }
+    else:
+        return None
+
 def get_time():
     now = datetime.datetime.now().strftime("%H:%M")
+    out = subprocess.getoutput(CONFIG['todo']['command'])
     return { "icon": " ", "color": "#669bbc", "text": now }
 
 def get_date():
