@@ -38,4 +38,8 @@ return {
 
   'lewis6991/gitsigns.nvim',
 
+  {
+    "knubie/vim-kitty-navigator",
+    build = "cp ./*.py ~/.config/kitty/",
+  }
 }

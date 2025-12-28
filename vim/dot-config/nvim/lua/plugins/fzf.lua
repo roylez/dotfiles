@@ -6,7 +6,14 @@ return {
   config = function()
     local fzf = require("fzf-lua")
 
-    fzf.setup({ "fzf-native" })
+    fzf.setup({ "fzf-native",
+      keymap = {
+        fzf = {
+          -- send all to quickfix
+          ["ctrl-q"] = "select-all+accept",
+        }
+      }
+    })
 
     fzf.register_ui_select()
 
