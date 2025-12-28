@@ -5,6 +5,7 @@ return {
   },
   config = function()
     local fzf = require("fzf-lua")
+    local actions = require("fzf-lua.actions")
 
     fzf.setup({ "fzf-native",
       keymap = {
@@ -17,13 +18,13 @@ return {
 
     fzf.register_ui_select()
 
-    local actions = require("fzf-lua.actions")
-
-    vim.keymap.set('n', '<leader>/', fzf.live_grep, { silent = true, desc = 'Search with Rg' })
-    vim.keymap.set('n', '<leader>b', fzf.buffers,   { silent = true, desc = 'Search Buffers' })
-    vim.keymap.set('n', '<leader>f', fzf.files,     { silent = true, desc = 'Search Files' })
-    vim.keymap.set('n', '<leader>r', fzf.oldfiles,  { silent = true, desc = 'Search MRU' })
-    vim.keymap.set('n', '<leader>u', fzf.resume,    { silent = true, desc = 'Resume' })
+    vim.keymap.set('n', '<leader>/',
+      function() fzf.live_grep({ header = '[c-q] QuickFix | [c-g] Fuzzy' }) end,
+      { silent = true, desc = '[FZF] rg'})
+    vim.keymap.set('n', '<leader>b', fzf.buffers,   { silent = true, desc = '[FZF] buffers' })
+    vim.keymap.set('n', '<leader>f', fzf.files,     { silent = true, desc = '[FZF] files' })
+    vim.keymap.set('n', '<leader>r', fzf.oldfiles,  { silent = true, desc = '[FZF] MRU' })
+    vim.keymap.set('n', '<leader>.', fzf.resume,    { silent = true, desc = '[FZF] RESUME' })
 
     local keyset={}
     local n=0
@@ -45,7 +46,7 @@ return {
           end
         }
       })
-    end, { silent = true, desc = 'Search ...' })
+    end, { silent = true, desc = '[FZF] ...' })
 
   end
 }
