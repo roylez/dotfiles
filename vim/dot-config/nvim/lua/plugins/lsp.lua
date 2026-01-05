@@ -15,6 +15,7 @@ return {
     opts = {
       servers = {
         lexical = {
+          cmd = { '~/.local/share/nvim/mason/bin/expert', '--stdio' },
           filetypes = { "elixir", "eelixir", "heex" },
           root_markers = { "mix.exs", ".git" },
         },
@@ -51,6 +52,9 @@ return {
   {
     "chomosuke/typst-preview.nvim",
     ft = "typst",
+    keys = {
+      {'<leader>P', ':TypstPreview<CR>',  mode="n", desc="[TYPST] Preview"}
+    },
     version = "1.*",
     build = function() require "typst-preview".update() end,
   }

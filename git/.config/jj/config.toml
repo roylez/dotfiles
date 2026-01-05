@@ -16,3 +16,11 @@ email = "me@roylez.info"
 [ui]
 default-command = "log"
 
+[[--scope]]
+--when.commands = ["diff", "show"]
+
+[--scope.ui]
+# https://github.com/jj-vcs/jj/blob/v0.25.0/docs/config.md#processing-contents-to-be-paged
+pager = "delta"
+# NOTE: this is required when using `delta` as a pager
+diff-formatter = ":git"

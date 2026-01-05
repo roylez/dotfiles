@@ -6,7 +6,7 @@
 # }}}
 
 # 预配置 {{{
-export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.local/bin:${ASDF_DATA_DIR:-$HOME/.asdf}/shims:/usr/local/bin:$PATH"
 
 [[ -f $HOME/.zshrc.pre ]] && source $HOME/.zshrc.pre
 
@@ -181,7 +181,11 @@ SAVEHIST=40000
 # ignore some commands
 HISTORY_IGNORE="(l[ls] *|less *|z *|cd *|pwd|rm *|exit|[bf]g|jobs)"
 
-export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: '
+case $(sudo --version 2>&1) in
+  sudo-rs*) export SUDO_PROMPT=$'\e[33m%p\e[m' ;;
+    *)      export SUDO_PROMPT=$'[\e[31;5msudo\e[m] password for \e[33m%p\e[m: ' ;;
+esac
+
 export INPUTRC=$HOME/.inputrc
 
 export LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
@@ -199,9 +203,6 @@ export GROFF_NO_SGR=1
 
 # RG conf
 export RIPGREP_CONFIG_PATH=~/.ripgreprc
-
-#for alias to be used when sudo, man bash
-alias sudo='sudo '
 
 # alias and listing colors
 alias -g A="|awk"
@@ -248,6 +249,23 @@ alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 
 alias forget='unset HISTFILE'
 
+# use local editor instead of running editor command as root
+sudo() {
+  if [[ $# -eq 0 ]]; then
+    command sudo su -
+    return
+  fi
+  local first_arg="$1"
+  shift
+  case "$first_arg" in
+    vi|vim|nvim|nano|emacs|nano|joe|micro)
+      command sudo -e "$@"
+      ;;
+    *)
+      command sudo "$first_arg" "$@"
+      ;;
+  esac
+}
 # }}}
 
 # 自定义函数 {{{
@@ -556,10 +574,6 @@ bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # }}}
 
 # 其他额外软件 {{{
-# devbox {{{
-if ( _has devbox ); then
-  eval "$(devbox global shellenv --init-hook)"
-fi
 # }}}
 
 # FZF and friend, esc f to fzf for current command {{{
@@ -752,10 +766,11 @@ fi
 
 # vim / nvim {{{
 if ( _has nvim ); then
-    export EDITOR='nvim' VISUAL='nvim' SUDO_EDITOR='nvim'
-    alias vim='nvim'
+   vim_cmd=`which nvim`
+    export EDITOR=$vim_cmd VISUAL=$vim_cmd SUDO_EDITOR=$vim_cmd
+    alias vim=$vim_cmd
 else
-    export EDITOR='vim' VISUAL='vim' SUDO_EDITOR='vim'
+    export EDITOR=$vim_cmd VISUAL=$vim_cmd SUDO_EDITOR=$vim_cmd
 fi
 # }}}
 
