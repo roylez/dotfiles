@@ -769,6 +769,7 @@ if ( _has nvim ); then
    vim_cmd=`which nvim`
     export EDITOR=$vim_cmd VISUAL=$vim_cmd SUDO_EDITOR=$vim_cmd
     alias vim=$vim_cmd
+    alias vi=$vim_cmd
 else
     export EDITOR=$vim_cmd VISUAL=$vim_cmd SUDO_EDITOR=$vim_cmd
 fi

@@ -36,8 +36,14 @@ vendor
 CONVENTIONS.md
 .aider*
 AGENTS.md
+.constitution.md
+CLAUDE.md
 .fzf-file-cache
 devbox.*
 .serena
 .codanna
 .fastembed_cache
+.beans
+.beans.yml
+.claude/
+
