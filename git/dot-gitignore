@@ -46,4 +46,4 @@ devbox.*
 .beans
 .beans.yml
 .claude/
-
+.aider.*
