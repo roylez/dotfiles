@@ -249,23 +249,6 @@ alias gfw="ssh -C2g -o ServerAliveInterval=60 -D 7070"
 
 alias forget='unset HISTFILE'
 
-# use local editor instead of running editor command as root
-sudo() {
-  if [[ $# -eq 0 ]]; then
-    command sudo su -
-    return
-  fi
-  local first_arg="$1"
-  shift
-  case "$first_arg" in
-    vi|vim|nvim|nano|emacs|nano|joe|micro)
-      command sudo -e "$@"
-      ;;
-    *)
-      command sudo "$first_arg" "$@"
-      ;;
-  esac
-}
 # }}}
 
 # 自定义函数 {{{
@@ -569,6 +552,42 @@ zle -N dumb-cd
 bindkey "\t" dumb-cd #将上面的功能绑定到 TAB 键
 # }}}
 
+# {{{ command rewrites when accepting line
+enter-rewrite() {
+  if [[ -n "$BUFFER" || "$CONTEXT" != start ]]; then
+    # REWRITES: Parse (now non-empty) BUFFER and apply case-based rules
+    local words=(${(z)BUFFER})  # Split into words (handles whitespace/quoting)
+    case "${words[1]}" in
+      (vi|vim|nvim|neovim)
+        if [[ ${words[2]} == '.envrc' ]] && (( $+commands[direnv] )); then
+          BUFFER='direnv edit'
+        fi
+        ;;
+      sudo)
+        if (( $#words >= 3 )) && [[ ${words[2]} =~ '^(vi|vim|nvim|neovim)$' ]]; then
+          BUFFER="sudo -e ${(qq)words[3,-1]}"
+        fi
+        ;;
+    esac
+  else
+    # needs to be before git to handle colocated repositories
+    if (( $+commands[jj] )) && [[ -d .jj ]]; then
+      BUFFER="jj log --no-pager"
+    elif (( $+commands[git] )) && [[ -d .git ]]; then
+      BUFFER="git status"
+    else
+      BUFFER="ls -l"
+    fi
+  fi
+}
+
+function _enter-rewrite_accept-line() {
+  enter-rewrite
+  zle .accept-line
+}
+
+zle -N accept-line _enter-rewrite_accept-line
+# }}}
 # }}}
 
 # }}}

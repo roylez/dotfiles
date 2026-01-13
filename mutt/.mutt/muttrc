@@ -136,7 +136,7 @@ set wait_key=no
 set confirm_append=no
 # 是否把邮件头也放在编辑器里可以修改？
 set edit_headers=yes
-set auto_edit=yes
+set auto_edit=no
 # 当你在用 pager 看信件时，在 index 留出多少行显示邮件列表？
 set pager_index_lines=4
 # 如果翻到最后，再按往下翻也不会翻到下一封信件

@@ -64,12 +64,20 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
     if padding: screen.draw(" " * padding)
 
     for c in cells:
-        screen.cursor.bg = default_bg
         icon = c.get("icon")
+        screen.draw(" ")
         if icon:
             fg = to_color(c.get("color")) if c.get("color") else tab_fg
-            screen.cursor.fg = as_rgb(int(fg))
-            screen.draw(f" {icon} ")
+            screen.cursor.blink = c.get("blink")
+            if not c.get("inverse"):
+                screen.cursor.bg = default_bg
+                screen.cursor.fg = as_rgb(int(fg))
+            else:
+                screen.cursor.fg = default_bg
+                screen.cursor.bg = as_rgb(int(fg))
+            screen.draw(icon)
+        screen.cursor.bg = default_bg
+        screen.draw(" ")
         screen.cursor.fg = as_rgb(int(to_color("#778da9")))
         screen.draw(f"{c.get("text", "")} ")
 
@@ -90,9 +98,9 @@ def get_alarm():
     if out > "00:30":
         return { "icon": " ", "color": "#06d6a0" , "text": out }
     elif out > "00:05":
-        return { "icon": " ", "color": "#ffd166" , "text": out }
+        return { "icon": " ", "color": "#ffd166" , "text": out, "inverse": True }
     elif len(out) > 0:
-        return { "icon": "󰺁 ", "color": "#ef476f" , "text": out }
+        return { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
     else:
         return None
 
