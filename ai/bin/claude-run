@@ -1,0 +1,4 @@
+#!/bin/bash
+instructions_file="$1"
+prompt=$(cat "$instructions_file")
+claude --strict-mcp-config -p "$prompt"

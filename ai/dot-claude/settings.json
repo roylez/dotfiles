@@ -6,7 +6,34 @@
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7",
     "API_TIMEOUT_MS": "3000000"
   },
-  "enabledPlugins": {
-    "superpowers@superpowers-marketplace": true
+  "permissions": {
+    "allow": [
+      "mcp__serena__*",
+      "mcp__context7__*",
+      "Skill(superpowers:*)",
+      "WebSearch",
+      "Bash(elixir:*)",
+      "Bash(mix *)",
+      "Bash(cat:*)",
+      "Bash(git *:*)",
+      "Bash(timeout:*)",
+      "Bash(grep:*)",
+      "Bash(docker build:*)",
+      "Bash(docker images:*)"
+    ]
+  },
+  "enabledPlugins": {},
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "network": {
+      "allowUnixSockets": [
+        "/var/run/docker.sock"
+      ],
+      "allowLocalBinding": true
+    },
+    "excludedCommands": [
+      "docker"
+    ]
   }
 }
