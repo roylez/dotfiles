@@ -1,0 +1,398 @@
+#!/usr/bin/env bash
+
+# today-sync-daemon - Sync today's section between TODAY.md and TODO.md
+# Monitors both files with inotify and keeps current day's content in sync
+
+set -euo pipefail
+
+# ==============================================================================
+# CONFIGURATION
+# ==============================================================================
+
+TODAY_FILE="$HOME/Documents/TODAY.md"
+TODO_FILE="$HOME/wiki/TODO.md"
+STATE_DIR="$HOME/.local/state"
+STATE_FILE="$STATE_DIR/today-sync-state"
+LOG_FILE="$STATE_DIR/today-sync.log"
+SENTINEL_FILE="/tmp/today-sync-running"
+SENTINEL_TIMEOUT=60  # seconds
+DEBOUNCE_DELAY=0.5  # seconds
+
+LOCAL_DOCS="$HOME/Documents"
+
+# ==============================================================================
+# LOGGING
+# ==============================================================================
+
+log() {
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "[$timestamp] $*" | tee -a "$LOG_FILE"
+}
+
+log_error() {
+    log "ERROR: $*" >&2
+}
+
+# ==============================================================================
+# INITIALIZATION
+# ==============================================================================
+
+ensure_state_dir() {
+    if [[ ! -d "$STATE_DIR" ]]; then
+        mkdir -p "$STATE_DIR"
+        log "Created state directory: $STATE_DIR"
+    fi
+}
+
+initialize_files() {
+    local today_date
+    today_date=$(date '+%Y-%m-%d')
+
+    # Create TODAY.md if missing
+    if [[ ! -f "$TODAY_FILE" ]]; then
+        local today_section
+        today_section=$(extract_today_section_from_file "$TODO_FILE" "$today_date")
+        if [[ -n "$today_section" ]]; then
+            echo "$today_section" > "$TODAY_FILE"
+            log "Created TODAY.md from existing TODO.md entry"
+        else
+            echo "## $today_date" > "$TODAY_FILE"
+            log "Created TODAY.md with new date header"
+        fi
+    fi
+
+    # Create TODO.md if missing
+    if [[ ! -f "$TODO_FILE" ]]; then
+        {
+            echo "## INBOX"
+            echo ""
+            extract_today_section_from_file "$TODAY_FILE" "$today_date"
+        } > "$TODO_FILE"
+        log "Created TODO.md with INBOX and today's section"
+    fi
+}
+
+# ==============================================================================
+# AWK FUNCTIONS
+# ==============================================================================
+
+# Extract today's section from a file
+# Usage: extract_today_section_from_file <file> <date>
+extract_today_section_from_file() {
+    local file="$1"
+    local date="$2"
+
+    if [[ ! -f "$file" ]]; then
+        return
+    fi
+
+    # Match "## YYYY-MM-DD" anywhere in the header line
+    awk -v target_date="$date" '
+        BEGIN { in_today = 0; found = 0; header = "" }
+        /^## [0-9]{4}-[0-9]{2}-[0-9]{2}/ {
+            if ($0 ~ target_date) {
+                in_today = 1
+                found = 1
+                header = $0
+                next
+            } else if (in_today) {
+                # We reached the next date section
+                exit
+            }
+        }
+        in_today {
+            if (length(header) > 0) {
+                print header
+                header = ""
+            }
+            print
+        }
+    ' "$file"
+}
+
+# Update today's section in a file
+# Usage: update_today_section_in_file <file> <date> <new_section>
+update_today_section_in_file() {
+    local file="$1"
+    local date="$2"
+    local new_section="$3"
+
+    if [[ ! -f "$file" ]]; then
+        echo "$new_section"
+        return
+    fi
+
+    awk -v target_date="$date" -v new_content="$new_section" '
+        BEGIN { in_today = 0; printed = 0; need_blank = 0 }
+        /^## [0-9]{4}-[0-9]{2}-[0-9]{2}/ {
+            if ($0 ~ target_date) {
+                # Found today section, replace it
+                if (need_blank) print ""
+                print new_content
+                in_today = 1
+                printed = 1
+                # Add blank line after new content
+                print ""
+                next
+            } else if (in_today) {
+                # Exiting todays section, next date begins
+                in_today = 0
+            }
+        }
+        !in_today { print; need_blank = 1 }
+        END {
+            # Todays section was not found, append it
+            if (!printed) {
+                if (NR > 0) print ""
+                print new_content
+            }
+        }
+    ' "$file"
+}
+
+# ==============================================================================
+# SENTINEL MANAGEMENT
+# ==============================================================================
+
+sentinel_exists() {
+    if [[ -f "$SENTINEL_FILE" ]]; then
+        # Check if sentinel is stale
+        local sentinel_age
+        sentinel_age=$(($(date +%s) - $(stat -c %Y "$SENTINEL_FILE" 2>/dev/null || echo 0)))
+        if [[ $sentinel_age -gt $SENTINEL_TIMEOUT ]]; then
+            rm -f "$SENTINEL_FILE"
+            return 1
+        fi
+        return 0
+    fi
+    return 1
+}
+
+create_sentinel() {
+    (
+        flock -x 200
+        echo "$$" > "$SENTINEL_FILE"
+    ) 200>"$SENTINEL_FILE"
+}
+
+remove_sentinel() {
+    rm -f "$SENTINEL_FILE"
+}
+
+cleanup_on_exit() {
+    remove_sentinel
+    log "Daemon stopped"
+}
+
+trap cleanup_on_exit EXIT INT TERM
+
+# ==============================================================================
+# STATE MANAGEMENT
+# ==============================================================================
+
+get_stored_hash() {
+    if [[ -f "$STATE_FILE" ]]; then
+        grep '^last_synced_hash=' "$STATE_FILE" 2>/dev/null | cut -d'=' -f2
+    fi
+}
+
+store_hash() {
+    local hash="$1"
+    local source="$2"
+    local timestamp
+    timestamp=$(date -Iseconds)
+
+    cat > "$STATE_FILE" <<EOF
+last_synced_hash=$hash
+last_sync_time=$timestamp
+last_synced_from=$source
+EOF
+}
+
+compute_hash() {
+    local content="$1"
+    echo -n "$content" | sha256sum | cut -d' ' -f1
+}
+
+# ==============================================================================
+# FILE OPERATIONS
+# ==============================================================================
+
+get_today_section() {
+    local file="$1"
+    local date
+    date=$(date '+%Y-%m-%d')
+    extract_today_section_from_file "$file" "$date"
+}
+
+update_file() {
+    local file="$1"
+    local content="$2"
+    local temp_file
+    temp_file="${file}.tmp.$$"
+
+    echo "$content" > "$temp_file"
+    mv "$temp_file" "$file"
+}
+
+equalize_mtimes() {
+    local now
+    now=$(date +%s)
+    touch -d "@$now" "$TODAY_FILE" "$TODO_FILE"
+}
+
+get_file_mtime() {
+    stat -c %Y "$1" 2>/dev/null || echo 0
+}
+
+# ==============================================================================
+# SYNC LOGIC
+# ==============================================================================
+
+sync_today_sections() {
+    # Skip if sentinel exists (we caused this event)
+    if sentinel_exists; then
+        return
+    fi
+
+    create_sentinel
+
+    local today_mtime todo_mtime newer_file other_file
+    today_mtime=$(get_file_mtime "$TODAY_FILE")
+    todo_mtime=$(get_file_mtime "$TODO_FILE")
+
+    # Get today's section from both files for comparison
+    local today_section todo_section
+    local today_hash todo_section_hash stored_hash
+
+    today_section=$(get_today_section "$TODAY_FILE")
+    todo_section=$(get_today_section "$TODO_FILE")
+
+    if [[ -z "$today_section" ]] && [[ -z "$todo_section" ]]; then
+        log_error "No today section found in either file"
+        remove_sentinel
+        return 1
+    fi
+
+    # Compute hashes
+    today_hash=$(compute_hash "$today_section")
+    todo_section_hash=$(compute_hash "$todo_section")
+    stored_hash=$(get_stored_hash)
+
+    # Determine source file:
+    # 1. If one hash differs from stored and other matches, the differing one is the source
+    # 2. If both differ from stored, prefer the newer by mtime
+    # 3. If both match stored, no sync needed
+    if [[ "$today_hash" == "$stored_hash" ]] && [[ "$todo_section_hash" == "$stored_hash" ]]; then
+        # No change in either file
+        remove_sentinel
+        return 0
+    elif [[ "$today_hash" != "$stored_hash" ]] && [[ "$todo_section_hash" == "$stored_hash" ]]; then
+        # Only TODAY.md changed
+        newer_file="$TODAY_FILE"
+        other_file="$TODO_FILE"
+    elif [[ "$todo_section_hash" != "$stored_hash" ]] && [[ "$today_hash" == "$stored_hash" ]]; then
+        # Only TODO.md changed
+        newer_file="$TODO_FILE"
+        other_file="$TODAY_FILE"
+    else
+        # Both changed - use mtime as tiebreaker
+        if [[ $today_mtime -ge $todo_mtime ]]; then
+            newer_file="$TODAY_FILE"
+            other_file="$TODO_FILE"
+        else
+            newer_file="$TODO_FILE"
+            other_file="$TODAY_FILE"
+        fi
+    fi
+
+    # Get today's section from source file
+    local section
+    section=$(get_today_section "$newer_file")
+
+    if [[ -z "$section" ]]; then
+        log_error "No today section found in $newer_file"
+        remove_sentinel
+        return 1
+    fi
+
+    # Check if content actually changed
+    local current_hash
+    current_hash=$(compute_hash "$section")
+    local stored_hash
+    stored_hash=$(get_stored_hash)
+
+    if [[ "$current_hash" == "$stored_hash" ]]; then
+        # No actual content change
+        remove_sentinel
+        return 0
+    fi
+
+    # Update the other file
+    # For TODO.md, we must preserve other sections (INBOX, historical entries)
+    # For TODAY.md, we replace the entire content
+    local date
+    date=$(date '+%Y-%m-%d')
+    if [[ "$other_file" == "$TODO_FILE" ]]; then
+        local updated
+        updated=$(update_today_section_in_file "$other_file" "$date" "$section")
+        # Only write if content actually changed
+        if [[ "$updated" != "$(cat "$other_file")" ]]; then
+            echo "$updated" > "$other_file"
+        fi
+    else
+        # Only write if content actually changed
+        if [[ "$section" != "$(cat "$other_file")" ]]; then
+            update_file "$other_file" "$section"
+        fi
+    fi
+
+    # Store new hash
+    store_hash "$current_hash" "$newer_file"
+
+    remove_sentinel
+}
+
+# ==============================================================================
+# DAEMON
+# ==============================================================================
+
+main() {
+    ensure_state_dir
+
+    # Clean up stale sentinel
+    if [[ -f "$SENTINEL_FILE" ]]; then
+        local sentinel_age
+        sentinel_age=$(($(date +%s) - $(stat -c %Y "$SENTINEL_FILE" 2>/dev/null || echo 0)))
+        if [[ $sentinel_age -gt $SENTINEL_TIMEOUT ]]; then
+            rm -f "$SENTINEL_FILE"
+            log "Cleaned up stale sentinel"
+        fi
+    fi
+
+    # Initialize files if needed
+    initialize_files
+
+    # Check for inotifywait
+    if ! command -v inotifywait &>/dev/null; then
+        log_error "inotifywait not found. Please install inotify-tools"
+        exit 1
+    fi
+
+    # Main inotify loop
+    local last_sync=0
+    inotifywait -m -e modify "$TODAY_FILE" "$TODO_FILE" 2>/dev/null | while read -r directory event filename; do
+        local now
+        now=$(date +%s)
+
+        # Debounce: only sync if enough time has passed
+        if [[ $((now - last_sync)) -ge 1 ]]; then
+            sleep "$DEBOUNCE_DELAY"
+            sync_today_sections || true
+            last_sync=$now
+        fi
+    done
+}
+
+main "$@"

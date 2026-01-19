@@ -592,8 +592,24 @@ zle -N accept-line _enter-rewrite_accept-line
 
 # }}}
 
-# 其他额外软件 {{{
+# {{{ 启用补全，清理变量
+typeset -U PATH
+
+# https://gist.github.com/ctechols/ca1035271ad134841284
+# On slow systems, checking the cached .zcompdump file to see if it must be
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts
+# it to once a day.  It should be pasted into your own completion file.
+#
+# The globbing is a little complicated here:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
+autoload -Uz compinit
+[[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
 # }}}
+
+# 其他额外软件 {{{
 
 # FZF and friend, esc f to fzf for current command {{{
 if ( _has fzf ); then
@@ -765,6 +781,12 @@ if ( _has direnv ); then
 fi
 # }}}
 
+# jujuts {{{
+if ( _has jj ); then
+  source <(jj util completion zsh)
+fi
+# }}}
+
 # kubernet {{{
 if ( _has kubectl ); then
   # run: kubectl completion zsh > ~/.zfunctions/_kubectl
@@ -794,23 +816,6 @@ else
 fi
 # }}}
 
-# }}}
-
-# {{{ 启用补全，清理变量
-typeset -U PATH
-
-# https://gist.github.com/ctechols/ca1035271ad134841284
-# On slow systems, checking the cached .zcompdump file to see if it must be
-# regenerated adds a noticable delay to zsh startup.  This little hack restricts
-# it to once a day.  It should be pasted into your own completion file.
-#
-# The globbing is a little complicated here:
-# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
-# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
-# - '.' matches "regular files"
-# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
-autoload -Uz compinit
-[[ -n $HOME/.zcompdump(#qN.mh+24) ]] && compinit || compinit -C
 # }}}
 
 # 读入其他配置 {{{
