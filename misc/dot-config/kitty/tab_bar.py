@@ -1,15 +1,14 @@
 import datetime
-import json
 import subprocess
 import os
-from collections import defaultdict
+import time
 from configparser import ConfigParser
 
 CONFIG = ConfigParser()
 CONFIG.read(os.path.expanduser("~/.config/kitty/tab_bar.ini"))
 
 from kitty.boss import get_boss
-from kitty.fast_data_types import Screen, add_timer, get_options
+from kitty.fast_data_types import Screen, add_timer
 from kitty.rgb import to_color
 from kitty.tab_bar import (
     DrawData,
@@ -22,6 +21,19 @@ from kitty.tab_bar import (
 )
 
 timer_id = None
+
+# Cache for expensive subprocess calls with lazy refresh
+_cached_data = {
+    'alarm': {'value': None, 'timestamp': 0, 'ttl': 60},
+    'email_work': {'value': None, 'timestamp': 0, 'ttl': 300},
+    'email_gmail': {'value': None, 'timestamp': 0, 'ttl': 300},
+    'email_icloud': {'value': None, 'timestamp': 0, 'ttl': 300},
+}
+
+def _is_stale(key):
+    """Check if cache entry is stale or empty."""
+    entry = _cached_data[key]
+    return entry['value'] is None or (time.time() - entry['timestamp']) > entry['ttl']
 
 def draw_tab(
     draw_data: DrawData,
@@ -94,15 +106,24 @@ def create_cells():
     return [c for c in cells if c is not None]
 
 def get_alarm():
+    if _is_stale('alarm'):
+        add_timer(_refresh_alarm, 0.1, False)
+    return _cached_data['alarm']['value']
+
+def _refresh_alarm(timer_id):
+    """Background fetch for alarm data."""
     out = subprocess.getoutput(CONFIG['alarm']['command'])
     if out > "00:30":
-        return { "icon": " ", "color": "#06d6a0" , "text": out }
+        result = { "icon": " ", "color": "#06d6a0" , "text": out }
     elif out > "00:05":
-        return { "icon": " ", "color": "#ffd166" , "text": out, "inverse": True }
+        result = { "icon": " ", "color": "#ffd166" , "text": out, "inverse": True }
     elif len(out) > 0:
-        return { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
+        result = { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
     else:
-        return None
+        result = None
+    _cached_data['alarm']['value'] = result
+    _cached_data['alarm']['timestamp'] = time.time()
+    _redraw_tab_bar(None)
 
 def get_time():
     now = datetime.datetime.now().strftime("%H:%M")
@@ -116,23 +137,24 @@ def get_date():
     else:
         return { "icon": "󰧓 ", "color": "#f2e8cf", "text": today.strftime("%b %d") }
 
-def get_todo():
-    out = subprocess.getoutput(CONFIG['todo']['command'])
-    if len(out) > 0:
-        return { "icon": " ", "color": "#d62828", "text": out }
-    else:
-        return None
-
 def get_email(type, color = "#e76f51"):
+    cache_key = f'email_{type}'
+    if _is_stale(cache_key):
+        add_timer(lambda t: _refresh_email(t, type, color), 0.1, False)
+    return _cached_data[cache_key]['value']
+
+def _refresh_email(timer_id, type, color):
+    """Background fetch for email count."""
     config = CONFIG[f'mail.{type}']
     out = subprocess.getoutput(config['command'])
     if out != '0':
-        return { "icon": config['icon'] + " ", "color": color, "text": out }
+        result = { "icon": config['icon'] + " ", "color": color, "text": out }
     else:
-        return None
-
-def get_layout():
-    return { "icon": " ", "color": "#669bbc" }
+        result = None
+    cache_key = f'email_{type}'
+    _cached_data[cache_key]['value'] = result
+    _cached_data[cache_key]['timestamp'] = time.time()
+    _redraw_tab_bar(None)
 
 def _redraw_tab_bar(timer_id):
     for tm in get_boss().all_tab_managers:
