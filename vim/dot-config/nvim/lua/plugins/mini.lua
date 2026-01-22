@@ -31,6 +31,16 @@ return {
         "<cmd>lua MiniJump2d.start(MiniJump2d.builtin_opts.single_character)<CR>",
         { desc = "Jump anywhere" }
       )
+
+      -- Disable jump2d in quickfix buffers
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function()
+          if vim.bo.buftype == "quickfix" then
+            -- Override the global keymap in quickfix
+            vim.keymap.set({ "n", "o", "x" }, "<CR>", "<CR>", { buffer = 0 })
+          end
+        end,
+      })
     end
   },
 

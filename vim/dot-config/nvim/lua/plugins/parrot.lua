@@ -8,6 +8,7 @@ return {
   keys = {
     {'<leader>W', ':PrtRewrite ProofReader<CR>',  mode="v",  desc="AI rewrite"}
   },
+  ft = { 'markdown', 'markdown.scratch', 'mail' },
   opts = {
     providers = {
       openrouter = {
