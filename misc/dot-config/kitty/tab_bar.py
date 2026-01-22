@@ -21,6 +21,7 @@ from kitty.tab_bar import (
 )
 
 timer_id = None
+_cached_cells = None  # Cache for rendered cells
 
 # Cache for expensive subprocess calls with lazy refresh
 _cached_data = {
@@ -35,6 +36,48 @@ def _is_stale(key):
     entry = _cached_data[key]
     return entry['value'] is None or (time.time() - entry['timestamp']) > entry['ttl']
 
+def _refresh_cached_cells(timer_id):
+    """Refresh cached cells periodically."""
+    global _cached_cells
+    new_cells = create_cells()
+    if new_cells != _cached_cells:
+        _cached_cells = new_cells
+
+def _draw_right_status_cached(draw_data: DrawData, screen: Screen, cells):
+    """Draw right status from cached cells."""
+    draw_attributed_string(Formatter.reset, screen)
+    default_bg = as_rgb(int(draw_data.default_bg))
+    tab_fg = as_rgb(int(draw_data.inactive_fg))
+    cells = list(cells)
+
+    while True:
+        if not cells:
+            return
+        padding = screen.columns - screen.cursor.x - sum(len(" ".join([c.get("icon", ""), c.get("text", "")])) + 2 for c in cells)
+        if padding >= 0:
+            break
+        cells = cells[1:]
+
+    if padding: screen.draw(" " * padding)
+
+    for c in cells:
+        icon = c.get("icon")
+        screen.draw(" ")
+        if icon:
+            fg = to_color(c.get("color")) if c.get("color") else tab_fg
+            screen.cursor.blink = c.get("blink")
+            if not c.get("inverse"):
+                screen.cursor.bg = default_bg
+                screen.cursor.fg = as_rgb(int(fg))
+            else:
+                screen.cursor.fg = default_bg
+                screen.cursor.bg = as_rgb(int(fg))
+            screen.draw(icon)
+        screen.cursor.bg = default_bg
+        screen.draw(" ")
+        screen.cursor.fg = as_rgb(int(to_color("#778da9")))
+        screen.draw(f"{c.get('text', '')} ")
+
 def draw_tab(
     draw_data: DrawData,
     screen: Screen,
@@ -45,14 +88,16 @@ def draw_tab(
     is_last: bool,
     extra_data: ExtraData,
 ) -> int:
-    global timer_id
+    global timer_id, _cached_cells
 
     if timer_id is None:
         timer_id = add_timer(_redraw_tab_bar, 2.0, True)
+        add_timer(_refresh_cached_cells, 1.0, True)
     draw_tab_with_powerline(
         draw_data, screen, tab, before, max_title_length, index, is_last, extra_data
     )
-    if is_last: draw_right_status(draw_data, screen)
+    if is_last and _cached_cells:
+        _draw_right_status_cached(draw_data, screen, _cached_cells)
     return screen.cursor.x
 
 def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
