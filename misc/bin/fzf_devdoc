@@ -21,7 +21,7 @@ DOCSET="elixir~1.18"
 unset FZF_DEFAULT_OPTS
 
 "$DEDOC" -c ss "$DOCSET" --porcelain |\
-  fzf-tmux \
+  fzf \
   --ansi \
   --prompt 'ELIXIR DOC > ' \
   --no-mouse \

@@ -318,9 +318,7 @@ esac
 _title_precmd() {
   #a bell, urgent notification trigger
   #echo -ne '\a'
-  #title "`print -Pn "%~" | sed "s:\([~/][^/]*\)/.*/:\1...:"`" "$TERM $PWD"
   title "`print -Pn "%~" |sed "s:\([~/][^/]*\)/.*/:\1..:;s:\([^-]*-[^-]*\)-.*:\1:"`"
-  echo -ne '\033[?17;0;127c'
 }
 
 _title_preexec() {

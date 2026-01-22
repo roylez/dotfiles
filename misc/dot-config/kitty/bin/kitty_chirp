@@ -4,7 +4,7 @@ dir=$HOME/workspace/3.resources/se-docs/docs
 
 fd -e md --exclude template.md --exclude index.md . $dir |\
   sed "s:/\([^/]*.md\):\\t\1:;s:^${dir}/::" |\
-  fzf-tmux \
+  fzf \
     --prompt 'DOC> ' \
     -q "$*" \
     --no-mouse \

@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
 
 cmd="$1"; shift 1
-ps -ef | sed 1d | fzf-tmux -p --prompt 'KILL > ' -n 7.. -q "$*" \
+ps -ef | sed 1d | fzf --prompt 'KILL > ' -n 7.. -q "$*" \
       | awk -v cmd="$cmd" '{ print cmd, $2 }'
