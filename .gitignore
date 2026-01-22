@@ -1,0 +1,10 @@
+mutt/.mutt/account.*
+mutt/.mutt/contacts
+mutt/.mutt/sign*
+scratch.snippets
+lazy-lock.json
+spell
+mail.snippets
+vim/dot-config/nvim/snippets/scratch
+nvim_undo
+.worktrees
