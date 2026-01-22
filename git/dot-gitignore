@@ -47,3 +47,4 @@ devbox.*
 .beans.yml
 .claude/
 .aider.*
+.worktrees/
