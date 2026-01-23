@@ -215,6 +215,15 @@ compute_hash() {
     echo -n "$content" | sha256sum | cut -d' ' -f1
 }
 
+get_last_sync_date() {
+    if [[ -f "$STATE_FILE" ]]; then
+        local last_sync_time
+        last_sync_time=$(grep '^last_sync_time=' "$STATE_FILE" 2>/dev/null | cut -d'=' -f2)
+        # Extract date portion: 2025-01-23 from 2025-01-23T14:30:45+00:00
+        echo "${last_sync_time%%T*}"
+    fi
+}
+
 # ==============================================================================
 # FILE OPERATIONS
 # ==============================================================================
@@ -244,6 +253,53 @@ equalize_mtimes() {
 
 get_file_mtime() {
     stat -c %Y "$1" 2>/dev/null || echo 0
+}
+
+# ==============================================================================
+# DATE ROLLOVER
+# ==============================================================================
+
+handle_date_rollover() {
+    local last_sync_date current_date
+    last_sync_date=$(get_last_sync_date)
+    current_date=$(date '+%Y-%m-%d')
+
+    # Initialize on first run
+    if [[ -z "$last_sync_date" ]]; then
+        return 0
+    fi
+
+    # Check if date has changed
+    if [[ "$last_sync_date" == "$current_date" ]]; then
+        return 0
+    fi
+
+    log "Date rolled over from $last_sync_date to $current_date"
+
+    # Check if TODO.md has the new date section
+    local new_section
+    new_section=$(extract_today_section_from_file "$TODO_FILE" "$current_date")
+
+    if [[ -n "$new_section" ]]; then
+        log "Using existing TODO.md section for $current_date"
+    else
+        log "Creating new section for $current_date"
+        new_section="## $current_date"
+        # Add empty section to TODO.md
+        local updated
+        updated=$(update_today_section_in_file "$TODO_FILE" "$current_date" "$new_section")
+        echo "$updated" > "$TODO_FILE"
+    fi
+
+    # Update TODAY.md with the new section
+    update_file "$TODAY_FILE" "$new_section"
+
+    # Update state with new hash
+    local new_hash
+    new_hash=$(compute_hash "$new_section")
+    store_hash "$new_hash" "rollover"
+
+    log "Date rollover complete"
 }
 
 # ==============================================================================
@@ -379,6 +435,14 @@ main() {
         log_error "inotifywait not found. Please install inotify-tools"
         exit 1
     fi
+
+    # Start background date checker
+    (
+        while true; do
+            sleep 60
+            handle_date_rollover || true
+        done
+    ) &
 
     # Main inotify loop
     local last_sync=0
