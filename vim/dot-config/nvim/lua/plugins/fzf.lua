@@ -25,6 +25,7 @@ return {
     vim.keymap.set('n', '<leader>f', fzf.files,     { silent = true, desc = '[FZF] files' })
     vim.keymap.set('n', '<leader>r', fzf.oldfiles,  { silent = true, desc = '[FZF] MRU' })
     vim.keymap.set('n', '<leader>.', fzf.resume,    { silent = true, desc = '[FZF] RESUME' })
+    vim.keymap.set('n', '<leader>q', fzf.quickfix,  { silent = true, desc = '[FZF] quickfix' })
 
     local keyset={}
     local n=0
