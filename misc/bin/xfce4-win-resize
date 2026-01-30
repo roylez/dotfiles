@@ -1,0 +1,71 @@
+#!/bin/bash
+# xfce_win_resize.sh
+# 调整 XFCE4 当前窗口位置和大小
+
+set -x
+
+WINDOW_ID=$(xdotool getactivewindow)
+MODE=${1:-full}
+
+# 获取可用工作区
+WORKAREA=$(xprop -root _NET_WORKAREA | grep -oP 'NET_WORKAREA\(CARDINAL\) = \K.*' | tr -d ',')
+WORK_X=$(echo $WORKAREA | awk '{print $1}')
+WORK_Y=$(echo $WORKAREA | awk '{print $2}')
+WORK_WIDTH=$(echo $WORKAREA | awk '{print $3}')
+WORK_HEIGHT=$(echo $WORKAREA | awk '{print $4}')
+
+# 获取窗口装饰尺寸
+FRAME=$(xprop -id $WINDOW_ID _NET_FRAME_EXTENTS 2>/dev/null | grep -oP '= \K.*')
+if [ -n "$FRAME" ]; then
+    FRAME_TOP=$(echo $FRAME | tr -d ',' | awk '{print $3}')
+    FRAME_BOTTOM=$(echo $FRAME | tr -d ',' | awk '{print $4}')
+    FRAME_LEFT=$(echo $FRAME | tr -d ',' | awk '{print $1}')
+    FRAME_RIGHT=$(echo $FRAME | tr -d ',' | awk '{print $2}')
+else
+    FRAME_TOP=29
+    FRAME_BOTTOM=5
+    FRAME_LEFT=5
+    FRAME_RIGHT=5
+fi
+
+# 根据模式计算目标位置和尺寸
+case $MODE in
+    full)
+        TARGET_X=$WORK_X
+        TARGET_Y=$WORK_Y
+        TARGET_WIDTH=$WORK_WIDTH
+        TARGET_HEIGHT=$((WORK_HEIGHT - FRAME_TOP - FRAME_BOTTOM))
+        ;;
+    left)
+        TARGET_X=$WORK_X
+        TARGET_Y=$WORK_Y
+        TARGET_WIDTH=$((WORK_WIDTH / 2 - FRAME_LEFT))
+        TARGET_HEIGHT=$((WORK_HEIGHT - FRAME_TOP - FRAME_BOTTOM))
+        ;;
+    right)
+        TARGET_X=$((WORK_X + WORK_WIDTH / 2))
+        TARGET_Y=$WORK_Y
+        TARGET_WIDTH=$((WORK_WIDTH / 2 - FRAME_RIGHT))
+        TARGET_HEIGHT=$((WORK_HEIGHT - FRAME_TOP - FRAME_BOTTOM))
+        ;;
+    top)
+        TARGET_X=$WORK_X
+        TARGET_Y=$WORK_Y
+        TARGET_WIDTH=$WORK_WIDTH
+        TARGET_HEIGHT=$((WORK_HEIGHT / 2 - FRAME_TOP))
+        ;;
+    bottom)
+        TARGET_X=$WORK_X
+        TARGET_Y=$((WORK_Y + WORK_HEIGHT / 2))
+        TARGET_WIDTH=$WORK_WIDTH
+        TARGET_HEIGHT=$((WORK_HEIGHT / 2 - FRAME_BOTTOM))
+        ;;
+    *)
+        echo "Usage: $0 {full|left|right|top|bottom}"
+        exit 1
+        ;;
+esac
+
+# 移动并调整窗口
+xdotool windowmove $WINDOW_ID $TARGET_X $TARGET_Y
+xdotool windowsize $WINDOW_ID $TARGET_WIDTH $TARGET_HEIGHT

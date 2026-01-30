@@ -49,9 +49,9 @@ _cached_cells = None  # Cache for rendered cells
 # Cache for expensive subprocess calls with lazy refresh
 _cached_data: dict[str, CacheEntry] = {
     'alarm': CacheEntry(ttl=60),
-    'email_work': CacheEntry(ttl=300),
-    'email_gmail': CacheEntry(ttl=300),
-    'email_icloud': CacheEntry(ttl=300),
+    'email_work': CacheEntry(ttl=60),
+    'email_gmail': CacheEntry(ttl=60),
+    'email_icloud': CacheEntry(ttl=60),
 }
 
 def _should_refresh(key: str) -> bool:
@@ -229,8 +229,7 @@ def _refresh_email(timer_id, type: str, color: str) -> None:
     """Background fetch for email count."""
     section = f'mail.{type}'
     command = _get_config(section, 'command')
-    if not command:
-        return
+    if not command: return
     icon = _get_config(section, 'icon', '?')
     out = subprocess.getoutput(command)
     if out != '0':

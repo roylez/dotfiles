@@ -13,7 +13,6 @@ TODAY_FILE="$HOME/Documents/TODAY.md"
 TODO_FILE="$HOME/wiki/TODO.md"
 STATE_DIR="$HOME/.local/state"
 STATE_FILE="$STATE_DIR/today-sync-state"
-LOG_FILE="$STATE_DIR/today-sync.log"
 SENTINEL_FILE="/tmp/today-sync-running"
 SENTINEL_TIMEOUT=60  # seconds
 DEBOUNCE_DELAY=0.5  # seconds
@@ -27,7 +26,7 @@ LOCAL_DOCS="$HOME/Documents"
 log() {
     local timestamp
     timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] $*" | tee -a "$LOG_FILE"
+    echo "[$timestamp] $*"
 }
 
 log_error() {
@@ -48,6 +47,7 @@ ensure_state_dir() {
 initialize_files() {
     local today_date
     today_date=$(date '+%Y-%m-%d')
+    today_week=$(date '+%U')
 
     # Create TODAY.md if missing
     if [[ ! -f "$TODAY_FILE" ]]; then
@@ -57,7 +57,7 @@ initialize_files() {
             echo "$today_section" > "$TODAY_FILE"
             log "Created TODAY.md from existing TODO.md entry"
         else
-            echo "## $today_date" > "$TODAY_FILE"
+            echo "## $today_date - Week ${today_week}" > "$TODAY_FILE"
             log "Created TODAY.md with new date header"
         fi
     fi

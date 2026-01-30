@@ -16,6 +16,7 @@ return {
   -- https://github.com/echasnovski/mini.nvim/discussions/1033
   {
     'echasnovski/mini.jump2d',
+    lazy = false,
     config = function()
       require("mini.jump2d").setup({
         labels = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
