@@ -57,10 +57,31 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
       local time = os.date "%I:%M %p"
 
       -- print nice colored msg
-      vim.api.nvim_echo({ { "󰄳", "LazyProgressDone" }, { " file autosaved at " .. time } }, false, {})
+      vim.api.nvim_echo({ { "󰆓  ", "LazyProgressDone" }, { " file autosaved at " .. time } }, false, {})
 
       clear_cmdarea()
     end
+  end,
+})
+--- }}}
+
+--- {{{ goto today's heading in TODO.md
+local function goto_today_heading()
+  local today = os.date("%Y-%m-%d")
+  local search_pattern = "^## " .. today
+
+  -- Search from cursor position, wrapping if needed
+  vim.fn.search(search_pattern, "w")
+end
+
+vim.api.nvim_create_autocmd("BufRead", {
+  pattern = "TODO.md",
+  callback = function()
+    -- Buffer-local mapping for 'g ' (g followed by space)
+    vim.keymap.set('n', 'g ', goto_today_heading, {
+      buffer = true,
+      desc = "Go to TODAY"
+    })
   end,
 })
 --- }}}
