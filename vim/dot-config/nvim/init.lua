@@ -78,7 +78,7 @@ vim.api.nvim_create_autocmd("BufRead", {
   pattern = "TODO.md",
   callback = function()
     -- Buffer-local mapping for 'g ' (g followed by space)
-    vim.keymap.set('n', 'g ', goto_today_heading, {
+    vim.keymap.set('n', '  ', goto_today_heading, {
       buffer = true,
       desc = "Go to TODAY"
     })
