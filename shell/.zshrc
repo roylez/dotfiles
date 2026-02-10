@@ -416,8 +416,8 @@ function +vi-git-misc-n-abbr-master() {
     hook_com[misc]+=${(j:/:)gitstatus}
 
     # change branch name display to M for master and use revision when it is easier
-    # If a .jj directory exists (indicating a jujutsu repo), display 'JJ' as branch
-    if [[ -d .jj ]]; then
+    # If in a jujutsu repo, display 'JJ' as branch
+    if ( _has jj ) && jj root &>/dev/null; then
       hook_com[branch]=JJ
     else
       hook_com[branch]=${hook_com[branch]/#%(master|main)/M}
@@ -569,9 +569,9 @@ enter-rewrite() {
     esac
   else
     # needs to be before git to handle colocated repositories
-    if (( $+commands[jj] )) && [[ -d .jj ]]; then
+    if (( $+commands[jj] )) && jj root &>/dev/null; then
       BUFFER="jj log --no-pager"
-    elif (( $+commands[git] )) && [[ -d .git ]]; then
+    elif (( $+commands[git] )) && git rev-parse --is-inside-work-tree &>/dev/null; then
       BUFFER="git status"
     else
       BUFFER="ls -l"

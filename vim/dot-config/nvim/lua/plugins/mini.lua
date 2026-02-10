@@ -4,10 +4,10 @@ return {
     'echasnovski/mini.comment',
     opts = {
       mappings = {
-        comment = 'gc',
-        comment_line = 'gc',
-        comment_visual = 'gc',
-        text_object = 'gc'
+        comment = '<leader>c',
+        comment_line = '<leader>c',
+        comment_visual = '<leader>c',
+        text_object = '<leader>c'
       }
     }
   },

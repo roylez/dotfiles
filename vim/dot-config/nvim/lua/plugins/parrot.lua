@@ -12,7 +12,6 @@ return {
   opts = {
     providers = {
       openrouter = {
-        style = "openai",
         name = "openrouter",
         api_key = os.getenv "OPENROUTER_API_KEY",
         endpoint = "https://openrouter.ai/api/v1/chat/completions",
@@ -20,7 +19,7 @@ return {
           "z-ai/glm-4.5-air:free",
           "google/gemini-2.5-flash",
         }
-      }
+      },
     }
   }
 }
