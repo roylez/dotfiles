@@ -203,9 +203,32 @@ def _refresh_alarm(timer_id):
     _redraw_tab_bar(None)
 
 def get_time() -> dict:
-    """Get current time cell."""
-    now = datetime.datetime.now().strftime("%H:%M")
-    return {"icon": " ", "color": "#669bbc", "text": now}
+    """Get current time cell with clock icon showing the hour."""
+    now = datetime.datetime.now()
+    time_str = now.strftime("%H:%M")
+
+    # Map hour (12-hour format) to nerd font clock icon
+    hour_icons = {
+        1: "󱑋 ",   # nf-md-clock_time_one_outline
+        2: "󱑌 ",   # nf-md-clock_time_two_outline
+        3: "󱑍 ",   # nf-md-clock_time_three_outline
+        4: "󱑎 ",   # nf-md-clock_time_four_outline
+        5: "󱑏 ",   # nf-md-clock_time_five_outline
+        6: "󱑐 ",   # nf-md-clock_time_six_outline
+        7: "󱑑 ",   # nf-md-clock_time_seven_outline
+        8: "󱑒 ",   # nf-md-clock_time_eight_outline
+        9: "󱑓 ",   # nf-md-clock_time_nine_outline
+        10: "󱑔 ",  # nf-md-clock_time_ten_outline
+        11: "󱑕 ",  # nf-md-clock_time_eleven_outline
+        12: "󱑖 ",  # nf-md-clock_time_twelve_outline
+    }
+
+    hour_12 = now.hour % 12
+    if hour_12 == 0:
+        hour_12 = 12
+
+    icon = hour_icons.get(hour_12, "󰥒 ")
+    return {"icon": icon, "color": "#669bbc", "text": time_str}
 
 
 def get_date() -> dict:
