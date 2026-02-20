@@ -66,6 +66,21 @@ initialize_files() {
     local today_week
     today_week=$(get_week_number)
 
+    # Ensure parent directories exist
+    local today_dir todo_dir
+    today_dir=$(dirname "$TODAY_FILE")
+    todo_dir=$(dirname "$TODO_FILE")
+    
+    if [[ ! -d "$today_dir" ]]; then
+        mkdir -p "$today_dir"
+        log "Created directory: $today_dir"
+    fi
+    
+    if [[ ! -d "$todo_dir" ]]; then
+        mkdir -p "$todo_dir"
+        log "Created directory: $todo_dir"
+    fi
+
     # Create TODAY.md if missing
     if [[ ! -f "$TODAY_FILE" ]]; then
         local today_section
@@ -247,6 +262,22 @@ get_file_mtime() {
     stat -c %Y "$1" 2>/dev/null || echo 0
 }
 
+# Safely read file with retries (handles temporary Dropbox sync issues)
+safe_read_file() {
+    local file="$1"
+    local max_attempts=3
+    local attempt=0
+    
+    while [[ $attempt -lt $max_attempts ]]; do
+        if [[ -f "$file" ]] && [[ -r "$file" ]]; then
+            cat "$file" 2>/dev/null && return 0
+        fi
+        ((attempt++))
+        [[ $attempt -lt $max_attempts ]] && sleep 0.1
+    done
+    return 1
+}
+
 # Check if section has content beyond just the header
 section_has_content() {
     local section="$1"
@@ -278,6 +309,9 @@ handle_date_rollover() {
     else
         log "Creating new section for $current_date"
         new_section="## $current_date"
+        local updated_week
+        updated_week=$(get_week_number)
+        new_section="## $current_date - Week ${updated_week}"
         local updated
         updated=$(update_today_section_in_file "$TODO_FILE" "$current_date" "$new_section")
         echo "$updated" > "$TODO_FILE"
@@ -420,10 +454,14 @@ sync_today_sections() {
         # Preserve other sections in TODO.md
         local updated
         updated=$(update_today_section_in_file "$target_file" "$today_date" "$section")
-        [[ "$updated" != "$(cat "$target_file")" ]] && echo "$updated" > "$target_file"
+        local current_content
+        current_content=$(safe_read_file "$target_file")
+        [[ "$updated" != "$current_content" ]] && echo "$updated" > "$target_file"
     else
         # Replace entire TODAY.md
-        [[ "$section" != "$(cat "$target_file")" ]] && update_file "$target_file" "$section"
+        local current_content
+        current_content=$(safe_read_file "$target_file")
+        [[ "$section" != "$current_content" ]] && update_file "$target_file" "$section"
     fi
 
     # Store new hash
