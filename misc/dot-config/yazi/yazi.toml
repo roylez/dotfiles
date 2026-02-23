@@ -1,0 +1,12 @@
+[opener]
+play = [
+  { run = "mpv --fs %s", orphan = true, for = "unix" }
+]
+image-view = [
+  { run = "feh --image-bg '#7AAACE' --fullscreen --start-at %s ./", for = "linux" }
+]
+
+[open]
+prepend_rules = [
+  { mime = 'image/*', use = 'image-view' }
+]
