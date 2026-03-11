@@ -58,7 +58,7 @@ create_next_entry() {
   while [[ -z "$account1" ]]; do
     echo -n "請選擇消費賬戶：  "
     account1=$(
-      ledger accounts --count expenses and @"$title" \
+      ledger accounts --count \(expenses or travel \) and @/"$title"/ \
         |grep -v '<' \
         |sort -nr \
         |cut -d" " -f2- \
@@ -74,7 +74,7 @@ create_next_entry() {
   while [[ -z "$account2" ]]; do
     echo -n "請選擇支出賬戶：  "
     account2=$(
-      ledger accounts --count \( assets or liabilities \) and @"$title" \
+      ledger accounts --count \( assets or liabilities \) and @/"$title"/ \
         |grep -v '<' \
         |sort -nr \
         |cut -d" " -f2- \

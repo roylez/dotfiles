@@ -4,9 +4,9 @@ return {
     {
       f(function(_, _) return os.date("%Y-%m-%d ") end, {}),
       i(1, "Canonical"),
-      t({"", "    Assets:CBA"}),
+      t({"", "    Assets:CBA                    $ 0"}),
       t({"", "    Income:Salary                 $ -"}), i(2, "0"),
-      t({"", "    Liabilities:Reimbursable      $ "}), i(3, "0"),
+      t({"", "    Liabilities:Reimbursable      $ -"}), i(3, "0"),
       t({"", "    Assets:Smile                  $ "}), i(4, "0"),
       t({"", "    Distribution:Kimy             $ "}), f(function(args, _) return tostring(tonumber(args[1][1])/4) end, {4}),
       t({"", "    Distribution:Roy              $ "}), f(function(args, _) return tostring(tonumber(args[1][1])/4) end, {4}),

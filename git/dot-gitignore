@@ -48,3 +48,4 @@ devbox.*
 .claude/
 .aider.*
 .worktrees/
+.mcp.json

@@ -4,12 +4,22 @@ return {
   version = "v2.*",
   dependencies = { "ibhagwan/fzf-lua" },
   config = function()
+    local snippet_dir="~/.config/nvim/snippets"
     require("luasnip.loaders.from_snipmate").lazy_load()
-    require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/snippets"})
+    require("luasnip.loaders.from_lua").load({paths = snippet_dir})
 
-    vim.cmd [[
-      command! LuaSnipEdit :lua require("luasnip.loaders").edit_snippet_files()
-      ]]
+    vim.api.nvim_create_user_command("LuaSnipEdit", function()
+      require("luasnip.loaders").edit_snippet_files {
+        extend = function(ft, paths)
+          if #paths == 0 then
+            return {
+              { "$CONFIG/" .. ft .. ".snippets", string.format("%s/%s.snippets", snippet_dir, ft) }
+            }
+          end
+          return {}
+        end
+      }
+    end, {})
 
     vim.keymap.set(
       'i', ',,',

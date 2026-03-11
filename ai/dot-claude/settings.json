@@ -5,7 +5,8 @@
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.7",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7",
     "API_TIMEOUT_MS": "3000000",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
   },
   "permissions": {
     "allow": [
@@ -24,25 +25,7 @@
       "Bash(docker images:*)"
     ]
   },
-  "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "recall@recall-marketplace": true
-  },
-  "sandbox": {
-    "enabled": false,
-    "autoAllowBashIfSandboxed": true,
-    "network": {
-      "allowUnixSockets": [
-        "/var/run/docker.sock"
-      ],
-      "allowLocalBinding": true
-    },
-    "excludedCommands": [
-      "docker"
-    ]
-  },
+  "attribution": { "commit": "", "pr": "" },
   "hooks": {
     "SessionStart": [
       {
@@ -103,6 +86,32 @@
           }
         ]
       }
+    ]
+  },
+  "enabledPlugins": {
+    "serena@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "recall@recall-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": false,
+    "autoAllowBashIfSandboxed": true,
+    "network": {
+      "allowUnixSockets": [
+        "/var/run/docker.sock"
+      ],
+      "allowLocalBinding": true
+    },
+    "excludedCommands": [
+      "docker"
     ]
   }
 }
