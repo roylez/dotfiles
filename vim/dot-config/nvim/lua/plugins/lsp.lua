@@ -56,6 +56,6 @@ return {
       {'<leader>P', ':TypstPreview<CR>',  mode="n", desc="[TYPST] Preview"}
     },
     version = "1.*",
-    build = function() require "typst-preview".update() end,
+    opts = {}
   }
 }

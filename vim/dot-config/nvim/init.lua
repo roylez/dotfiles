@@ -19,6 +19,10 @@ if util.has_keys() then
 end
 --- }}}
 
+-- {{{ setting modes
+vim.g.neovim_mode = vim.env.NEOVIM_MODE or "default"
+-- }}}
+
 --- {{{ Lazy.nvim
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
@@ -99,4 +103,26 @@ local function toggle_quickfix()
 end
 
 vim.keymap.set('n', '<Leader>c', toggle_quickfix, { desc = "Toggle Quickfix Window" })
+--- }}}
+
+--- {{{ pager mode for kitty
+if vim.g.neovim_mode == "pager" then
+  vim.cmd [[
+    colorscheme vim
+    set eventignore=FileType
+    set readonly nolist nomodifiable nospell syntax=
+    set clipboard=unnamed,unnamedplus
+    set laststatus=0
+  ]]
+
+  vim.keymap.set({'n', 'v'}, 'q', [[<cmd>q!<cr>]])
+  vim.keymap.set({'n', 'v'}, 'y', [[y<cmd>q!<cr>]])
+
+  local b = vim.api.nvim_create_buf(false, true)
+  local chan = vim.api.nvim_open_term(b, {})
+  vim.api.nvim_chan_send(chan, table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), '\n'))
+  vim.api.nvim_win_set_buf(0, b)
+
+  vim.cmd.normal("G")
+end
 --- }}}
