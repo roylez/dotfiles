@@ -4,6 +4,16 @@ setopt extendedglob
 
 wiki_dir=$HOME/wiki
 
+if [[ $(uname) == Darwin ]]; then
+  clip_cmd=pbcopy
+elif command -v xclip &>/dev/null; then
+  clip_cmd='xclip -selection clipboard'
+elif command -v xsel &>/dev/null; then
+  clip_cmd='xsel --clipboard --input'
+else
+  clip_cmd=false
+fi
+
 unset FZF_DEFAULT_OPTS
 
 gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md(om) | \
@@ -12,7 +22,7 @@ fzf \
   -q "$*" \
   --no-mouse \
   --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}.md" \
-  --bind "ctrl-c:execute(cat $wiki_dir/{1}.md|pbcopy && kitten notify Zwiki '已复制「{1}.md」')" \
+  --bind "ctrl-c:execute(cat $wiki_dir/{1}.md|$clip_cmd && kitten notify -u critical -e 2 Zwiki '已复制「{1}.md」')" \
   --bind "enter:execute(nvim $wiki_dir/{1}.md)" \
   --bind "tab:execute(nvim +ZwikiNew +'silent norm \"+P')" \
   --bind "esc:clear-query" \

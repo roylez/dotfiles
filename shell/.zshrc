@@ -731,37 +731,13 @@ if ( _has fzf ); then
     fi
   }
 
-  fzf-ssh() {
-    setopt localtraps noshwordsplit noksh_arrays noposixbuiltins
-    zle reset-prompt
-
-    local config=~/.ssh/config
-
-    result=$(cat ${config} |awk '/^Host *[^*]*$/ {print $2}' |\
-      fzf -q "$*" \
-      --prompt 'SSH > ' \
-      --preview "awk -v RS= '/^Host *{1}'\$'/' ${config}" \
-      --preview-window default \
-      --bind "enter:become(echo ssh {1})" \
-      --bind "alt-bs:execute-silent(sed -i '/Host *{1}\$/,/^\\s*\$/d' ${config})+reload(cat ${config} | awk '/^Host *[^*]*\$/ {print \$2}')" \
-      --bind "ctrl-o:become(echo ${EDITOR} ${config})" \
-      --header "[ENTER] connect | [C-O] edit ${config} [A-BACKSPACE] delete")
-
-    if [ -n "$result" ]; then
-      LBUFFER=$result
-      zle accept-line
-    fi
-  }
-
   zle -N fzf-completion
   zle -N fzf-history-complete
   zle -N fzf-file
-  zle -N fzf-ssh
   bindkey '\e\t' fzf-completion
   bindkey '' fzf-history-complete
   bindkey '\er' fzf-history-complete
   bindkey '\ef' fzf-file
-  bindkey '\ec' fzf-ssh
   # }}}
 
 fi

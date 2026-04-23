@@ -5,6 +5,10 @@
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "mcp__serena__*",
@@ -23,7 +27,6 @@
       "Bash(docker images:*)"
     ]
   },
-  "attribution": { "commit": "", "pr": "" },
   "hooks": {
     "SessionStart": [
       {
@@ -89,13 +92,19 @@
   "enabledPlugins": {
     "serena@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
-    "recall@recall-marketplace": true
+    "mem0@mem0-plugins": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
       "source": {
         "source": "github",
         "repo": "anthropics/skills"
+      }
+    },
+    "mem0-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "mem0ai/mem0"
       }
     }
   },
