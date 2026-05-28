@@ -11,5 +11,5 @@ awk '/^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print $i }}' $config | so
   --preview-window default \
   --preview "awk -v RS= '/^Host (.* )*{1}/' ${config}" \
   --header "[ENTER] connect | [C-O] edit config" \
-  --bind "enter:become(kitten @ set-tab-title -m state:active '@{1}'; ssh {1})" \
+  --bind "enter:become(kitten @ set-window-title -m state:self '@{1}'; ssh {1})" \
   --bind "ctrl-o:execute(${EDITOR} ${config})"
