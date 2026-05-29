@@ -21,6 +21,7 @@ fzf \
   --prompt 'WIKI > ' \
   -q "$*" \
   --no-mouse \
+  --style full \
   --preview "bat -pp --color=always --theme=Coldark-Dark $wiki_dir/{1}.md" \
   --bind "ctrl-c:execute(cat $wiki_dir/{1}.md|$clip_cmd && kitten notify -u critical -e 2 Zwiki '已复制「{1}.md」')" \
   --bind "enter:execute(nvim $wiki_dir/{1}.md)" \

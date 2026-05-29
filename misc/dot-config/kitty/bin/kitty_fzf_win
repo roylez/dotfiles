@@ -1,61 +1,35 @@
 #!/usr/bin/env bash
 
-windows=$(kitty @ ls -m 'not state:self ' | jq -r '
+unset FZF_DEFAULT_OPTS
+
+function kitty_windows() {
+  kitty @ ls -m 'not state:self ' | jq -r '
     .[]
     | .id as $os_win_id
-    | .tabs[] += { tab_len: (.tabs|length) }
     | .tabs[]
     | .id as $tab_id
-    | .tab_len as $tab_len
-    | .windows[] += { tab_id: $tab_id, os_win_id: $os_win_id, win_len: (.windows|length), tab_len: $tab_len }
+    | .windows[] += { tab_id: $tab_id, os_win_id: $os_win_id }
     | .windows[]
-    | [.os_win_id, .tab_id, .id, .tab_len, .win_len, .title  ]
-    | @tsv
-    ' |\awk -F"\t" '
-      os_win == $1 && tab == $2 {j++}               # same os_win and same tab, only window changes
-      os_win == $1 && tab != $2 {j=1; i++; tab=$2}  # next tab
-      os_win != $1 {i=1; j=1; os_win=$1; tab=$2}    # next os_win
+    | [ .os_win_id , .tab_id , .id, .title  ]
+    | @tsv' |awk 'BEGIN {FS="\t"; OFS="\t"} { print "[WIN]", $4" ("$1"."$2"."$3")", "focus-window -m id:"$3 }'
+}
 
+function ssh_hosts() {
+  config=~/.ssh/config
+  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "launch --type=tab --tab-title=@"$i" ssh "$i }}' $config | sort -u
+}
 
-      {
-        printf $3"\t"
-        first_tab = i == 1
-        first_win = j == 1
-        last_tab = i == $4
-        last_win = j == $5
-      }
-
-      # os_win, print "─" for first tab first win
-      first_tab && first_win    { printf "─" }
-      !(first_tab && first_win) { printf " " }
-
-      # tab
-      first_tab && last_tab  && first_win     { printf "──" }
-      first_tab && last_tab  && !first_win     { printf "  " }
-      first_tab && !last_tab && first_win    { printf "┬─" }
-      first_tab && !last_tab && !first_win    { printf "│ " }
-      !first_tab && !last_tab && first_win   { printf "├─" }
-      !first_tab && last_tab && first_win    { printf "└─" }
-      !first_tab && !first_win    { printf "│ " }
-
-      # win
-      first_win && last_win      { printf "──" }   # single
-      first_win && !last_win     { printf "┬─" }   # first
-      !first_win && !last_win    { printf "├─" }   # middle
-      !first_win && last_win     { printf "└─" }   # last
-
-      {print "\t"$1":"$2"\t"$6}
-      ' | column -ts $'\t'
-    )
-
-window_id=$(fzf --prompt="CHOOSE WINDOW OR TAB> " --nth=1,4 --reverse <<< "${windows}" | awk '{ print $1 }')
-
-kitty_selector="id:${window_id}"
-
-kitty @ focus-window -m $kitty_selector
-
-title=$(kitty @ ls -m $kitty_selector |jq -r '.[0].tabs[0].title')
-
-if [[ "$title" = *tmux* ]]; then
-  kitty @ send-key -m $kitty_selector ctrl+a space
-fi
+{
+  kitty_windows &
+  ssh_hosts &
+  wait
+} |\
+  fzf --style full \
+    --delimiter "\t" \
+    --reverse \
+    --input-label "Switch/Connect" \
+    --with-nth 1,2 \
+    --nth 2 \
+    --preview "echo {3}" \
+    --preview-window down,10% \
+    --bind "enter:become(eval kitty @ {3})"
