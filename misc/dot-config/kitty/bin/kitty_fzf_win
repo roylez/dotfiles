@@ -11,16 +11,23 @@ function kitty_windows() {
     | .windows[] += { tab_id: $tab_id, os_win_id: $os_win_id }
     | .windows[]
     | [ .os_win_id , .tab_id , .id, .title  ]
-    | @tsv' |awk 'BEGIN {FS="\t"; OFS="\t"} { print "[WIN]", $4" ("$1"."$2"."$3")", "focus-window -m id:"$3 }'
+    | @tsv' |awk 'BEGIN {FS="\t"; OFS="\t"} { print "[WIN]", $4" ("$1"."$2"."$3")", "kitty @ focus-window -m id:"$3 }'
 }
 
 function ssh_hosts() {
   config=~/.ssh/config
-  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "launch --type=tab --tab-title=@"$i" ssh "$i }}' $config | sort -u
+  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --tab-title=@"$i" ssh "$i }}' $config | sort -u
+}
+
+function zmx_sessions() {
+  for i in Downloads claude; do
+    echo -e "[ZMX]\t${i}\tkitty_toggle_or_launch --title ':${i}' zmx attach ${i}"
+  done
 }
 
 {
   kitty_windows &
+  zmx_sessions &
   ssh_hosts &
   wait
 } |\
@@ -32,4 +39,4 @@ function ssh_hosts() {
     --nth 2 \
     --preview "echo {3}" \
     --preview-window down,10% \
-    --bind "enter:become(eval kitty @ {3})"
+    --bind "enter:become(eval {3})"

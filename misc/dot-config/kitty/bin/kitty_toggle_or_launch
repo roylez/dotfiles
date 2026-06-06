@@ -4,7 +4,6 @@
 ARGS=()
 while [[ "$#" -gt 0 ]]; do case $1 in
     --tab)    tab_index=$2 ;      shift 2 ;;
-    --to)     to="--to $2" ;      shift 2 ;;
     --title)  title="$2"   ;      shift 2 ;;
     --color)  color="--color $2"; shift 2 ;;
     *)        ARGS+=("$1") ;      shift ;;
@@ -12,15 +11,16 @@ esac; done
 
 set -- "${ARGS[@]}"
 
-current_title=$(kitty @ ls ${to} -t recent:0 |jq -r '.[0].tabs[0].title')
+current_title=$(kitty @ ls -t recent:0 |jq -r '.[0].tabs[0].title')
 
 if [[ $current_title = "$title" ]]; then
   exit 0
-elif (kitten @ ls ${to} -m title:${title} &>/dev/null); then
-  kitten @ focus-window ${to} -m title:${title}
+elif (kitten @ ls -m title:${title} &>/dev/null); then
+  echo kitten @ focus-window -m title:${title}
+  kitten @ focus-window -m title:${title}
 elif [[ -n $tab_index ]]; then
-  kitten @ launch ${to} ${color} -m index:$tab_index --title=${title} "${ARGS[@]}"
-  kitten @ focus-window ${to} -m title:${title}
+  kitten @ launch ${color} -m index:$tab_index --title=${title} "${ARGS[@]}"
+  kitten @ focus-window -m title:${title}
 else
-  kitten @ launch ${to} ${color} --type=tab --title=${title} "${ARGS[@]}"
+  kitten @ launch ${color} --type=tab --title=${title} "${ARGS[@]}"
 fi

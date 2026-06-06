@@ -74,7 +74,7 @@ create_next_entry() {
   while [[ -z "$account2" ]]; do
     echo -n "請選擇支出賬戶：  "
     account2=$(
-      ledger accounts --count \( assets or liabilities \) and @/"$title"/ \
+      ledger accounts -p 'from 5 years ago' --count \( assets or liabilities \) and @"$title" \
         |grep -v '<' \
         |sort -nr \
         |cut -d" " -f2- \
