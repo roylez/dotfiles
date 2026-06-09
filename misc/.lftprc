@@ -76,6 +76,11 @@ set xfer:max-redirections 10
 # set at-exit "bo a last"
 # open last
 
+set net:timeout 5
+set net:max-retries 20
+set net:reconnect-interval-base 5
+set mirror:parallel-transfer-count 10
+
 set file:charset "utf-8"
 
 ## Terminal strings to set titlebars for terminals that don't
