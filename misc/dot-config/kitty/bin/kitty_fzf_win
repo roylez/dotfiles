@@ -16,11 +16,11 @@ function kitty_windows() {
 
 function ssh_hosts() {
   config=~/.ssh/config
-  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --tab-title=@"$i" ssh "$i }}' $config | sort -u
+  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --location=after --tab-title=@"$i" ssh "$i }}' $config | sort -u
 }
 
 function zmx_sessions() {
-  for i in Downloads claude; do
+  for i in Downloads; do
     echo -e "[ZMX]\t${i}\tkitty_toggle_or_launch --title ':${i}' zmx attach ${i}"
   done
 }

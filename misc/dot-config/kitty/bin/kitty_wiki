@@ -16,7 +16,7 @@ fi
 
 unset FZF_DEFAULT_OPTS
 
-gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md(om) | \
+gawk 'FNR < 8 && /^title:\s+/ {$1=""; idx=split(FILENAME, parts, "/"); sub(/\.md/, "", parts[idx]); print parts[idx]"\t",$0; nextfile}' $wiki_dir/*.md(On) | \
 fzf \
   --prompt 'WIKI > ' \
   -q "$*" \

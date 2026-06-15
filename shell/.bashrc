@@ -124,3 +124,7 @@ fi
 
 
 export PATH="$PATH:$HOME/.local/bin"
+
+# peon-ping quick controls
+alias peon="bash /home/roy/.claude/hooks/peon-ping/peon.sh"
+[ -f /home/roy/.claude/hooks/peon-ping/completions.bash ] && source /home/roy/.claude/hooks/peon-ping/completions.bash

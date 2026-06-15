@@ -6,19 +6,17 @@ return {
   },
   enabled = require('util').has_keys,
   keys = {
-    {'<leader>W', ':PrtRewrite ProofReader<CR>',  mode="v",  desc="AI rewrite"}
+    {'<leader>W', ':PrtRewrite ProofReader<CR>',  mode="v",  desc="AI auto-rewrite"},
+    {'<leader>w', ':PrtRewrite ', mode='v', desc="AI rewrite"}
   },
   ft = { 'markdown', 'markdown.scratch', 'mail' },
   opts = {
     providers = {
-      openrouter = {
-        name = "openrouter",
-        api_key = os.getenv "OPENROUTER_API_KEY",
-        endpoint = "https://openrouter.ai/api/v1/chat/completions",
-        models = {
-          "z-ai/glm-4.5-air:free",
-          "google/gemini-2.5-flash",
-        }
+      litellm = {
+        name = "litellm",
+        api_key = os.getenv "LITELLM_API_KEY",
+        endpoint = "https://ai.roylez.info/chat/completions",
+        models = { "glm-5-turbo" }
       },
     }
   }
