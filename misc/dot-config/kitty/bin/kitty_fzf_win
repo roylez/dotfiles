@@ -15,8 +15,15 @@ function kitty_windows() {
 }
 
 function ssh_hosts() {
-  config=~/.ssh/config
-  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --location=after --tab-title=@"$i" ssh "$i }}' $config | sort -u
+  local -a configs=(~/.ssh/config)
+  while IFS= read -r inc; do
+    inc="${inc/#\~/$HOME}"
+    [[ "$inc" != /* ]] && inc="$HOME/.ssh/$inc"
+    configs+=($inc)
+  done < <(awk '/^[Ii]nclude / {$1=""; sub(/^ +/, ""); print}' ~/.ssh/config 2>/dev/null)
+
+  awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --location=after --tab-title=@"$i" ssh "$i }}' \
+    "${configs[@]}" 2>/dev/null | sort -u
 }
 
 function zmx_sessions() {
