@@ -256,35 +256,24 @@ alias forget='unset HISTFILE'
 # 普通自定义函数 {{{
 #show 256 color tab
 256tab() {
-    for k in `seq 0 1`;do
-        for j in `seq $((16+k*18)) 36 $((196+k*18))`;do
-            for i in `seq $j $((j+17))`; do
-                printf "\e[01;$1;38;5;%sm%4s" $i $i;
-            done;echo;
-        done;
-    done; echo
-    for i in {234..255}; do printf "\e[01;$1;38;5;%sm%4s" $i  $i; done; echo
-}
+  for k in `seq 0 1`;do
+    for j in `seq $((16+k*18)) 36 $((196+k*18))`;do
+      for i in `seq $j $((j+17))`; do
+        printf "\e[01;$1;38;5;%sm%4s" $i $i;
+      done;echo;
+    done;
+  done; echo
+  for i in {234..255}; do printf "\e[01;$1;38;5;%sm%4s" $i  $i; done; echo
+  }
+
+# kernel module parameter helper
+modpara() { sudo grep -r . /sys/module/$1/parameters/ |awk -F/ '{print $NF}' }
 
 #calculator
 calc()  { gawk -M -v PREC=100 -v OFMT='%.10g' "BEGIN{ print $* }" }
 
 #check if is a local shell
 _is_local() { [[ -z "$SSH_TTY" && -z "$ET_VERSION" || -f ~/.tty.local ]] }
-
-#git directory/repo name
-git_repo() { basename $(git rev-parse --show-toplevel) }
-
-#recalculate track db gain with mp3gain
-(_has mp3gain) && id3gain() { find $* -type f -iregex ".*\(mp3\|ogg\|wma\)" -exec mp3gain -r -s i {} \; }
-
-#man page to pdf
-(_has ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
-
-#help command for builtins
-help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
-
-(_has ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
 
 # }}}
 
