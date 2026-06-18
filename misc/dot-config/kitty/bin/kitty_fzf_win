@@ -20,7 +20,7 @@ function ssh_hosts() {
     inc="${inc/#\~/$HOME}"
     [[ "$inc" != /* ]] && inc="$HOME/.ssh/$inc"
     configs+=($inc)
-  done < <(awk '/^[Ii]nclude / {$1=""; sub(/^ +/, ""); print}' ~/.ssh/config 2>/dev/null)
+  done < <(awk '/[Ii]nclude / {print $NF}' ~/.ssh/config 2>/dev/null)
 
   awk 'BEGIN {OFS="\t"} /^Host .*$/ {for(i=2;i<=NF;i++){ if($i !~ /[*?]/) print "[SSH]", $i, "kitty @ launch --type=tab --location=after --tab-title=@"$i" ssh "$i }}' \
     "${configs[@]}" 2>/dev/null | sort -u
