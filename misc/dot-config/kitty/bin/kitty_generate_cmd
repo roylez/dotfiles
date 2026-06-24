@@ -1,0 +1,17 @@
+#!/usr/bin/zsh -l
+#
+
+source ~/.litellm.sh
+
+# Capture screen text before modifying the command line
+screen=$(kitty @ get-text --extent=screen -m state:focused)
+
+# Show placeholder while generating
+kitty @ send-text -m state:focused "\x15🤖 thinking ..."
+
+cmd=$(echo "$screen" \
+  | claude -p "Based on the terminal output above, the last line is my request. Output ONLY the shell command to run. No explanation, no markdown fence.")
+
+# Replace placeholder with generated command
+kitty @ send-text -m state:focused "\x15${cmd}"
+
