@@ -1,4 +1,8 @@
 {
+  "statusLine": {
+    "type": "command",
+    "command": "/home/roy/.claude/statusline-command.sh"
+  },
   "env": {
     "API_TIMEOUT_MS": "3000000",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
@@ -14,7 +18,9 @@
       "mcp__serena__*",
       "mcp__plugin_serena_serena__*",
       "mcp__context7__*",
+      "mcp__mnemosyne__*",
       "Skill(superpowers:*)",
+      "Skill(distill)",
       "WebSearch",
       "Bash(elixir:*)",
       "Bash(mix *)",
@@ -24,7 +30,19 @@
       "Bash(timeout:*)",
       "Bash(grep:*)",
       "Bash(docker build:*)",
-      "Bash(docker images:*)"
+      "Bash(docker images:*)",
+      "Read(~/.claude/*)",
+      "Read(/home/roy/.claude/*)",
+      "Edit(~/.claude/*)",
+      "Edit(/home/roy/.claude/*)",
+      "Write(~/.claude/*)",
+      "Write(/home/roy/.claude/*)",
+      "Bash(ls ~/.claude/*)",
+      "Bash(ls /home/roy/.claude/*)",
+      "Bash(mkdir ~/.claude/*)",
+      "Bash(mkdir -p ~/.claude/*)",
+      "Bash(mkdir /home/roy/.claude/*)",
+      "Bash(mkdir -p /home/roy/.claude/*)"
     ]
   },
   "hooks": {
@@ -75,6 +93,17 @@
             "type": "command",
             "command": "/home/roy/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "You are a session distillation filter. Review the conversation so far. If this session produced useful knowledge (preferences, decisions, architectural insights, gotchas, corrections, or reusable workflows) AND has had at least 5 substantive exchanges, run /distill to persist them to long-term memory via Mnemosyne. If the session was trivial (simple questions, quick fixes, no new knowledge worth preserving), return {\"ok\": true} without distilling.",
+            "model": "sonnet",
+            "timeout": 180
           }
         ]
       }
@@ -171,6 +200,17 @@
             "type": "command",
             "command": "/home/roy/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Context is about to be compacted. Before it is lost, run /distill to extract and persist any useful knowledge from this session to long-term memory via Mnemosyne.",
+            "model": "sonnet",
+            "timeout": 120
           }
         ]
       }
