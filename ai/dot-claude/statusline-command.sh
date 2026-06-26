@@ -458,7 +458,8 @@ fi
 [ -n "$usage" ] && add "$usage"
 
 if [ -n "$cwd" ]; then
-    cwd_display="${cwd/#$HOME/~}"
+    _home="${HOME:-$(eval echo ~)}"
+    cwd_display="${cwd/#$_home/\~}"
     add "${dim}${cwd_display}${reset}"
 fi
 [ -n "$transcript_file" ] && add "${dim}${transcript_file}${reset}"
