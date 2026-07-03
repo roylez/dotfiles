@@ -5,7 +5,7 @@ return {
     preset = "helix",
     icons = {
       breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-      separator = "->", -- symbol used between a key and it's label
+      separator = " - ", -- symbol used between a key and it's label
       group = "+", -- symbol prepended to a group
     },
     layout = {
@@ -20,5 +20,6 @@ return {
   keys = {
     { '<leader>y', '"+y',  desc = 'Copy',  silent = true, mode = {'n', 'v'} },
     { '<leader>p', '"+p',  desc = 'Paste', silent = true, mode = {'n', 'v'} },
+    { '<leader>s', ':w<cr>', desc = 'Save', silent = true, mode = 'n' },
   }
 }
