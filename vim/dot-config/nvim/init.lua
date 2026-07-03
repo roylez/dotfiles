@@ -66,6 +66,25 @@ vim.api.nvim_create_autocmd("BufRead", {
 })
 --- }}}
 
+--  {{{ Auto handling of swap files
+vim.api.nvim_create_autocmd('SwapExists', {
+  callback = function()
+    local swap_info = vim.fn.swapinfo(vim.v.swapname)
+    if swap_info and swap_info.pid and swap_info.pid > 0 then
+      -- 检查拥有 swap 的进程是否还活着
+      local alive = vim.fn.system(
+        'kill -0 ' .. swap_info.pid .. ' 2>/dev/null && echo 1 || echo 0'
+      ):gsub('\n', '')
+      if alive == '0' then
+        vim.v.swapchoice = 'd' -- 进程已死，删除 swap 继续编辑
+        return
+      end
+    end
+    vim.v.swapchoice = 'e' -- 无法判断，直接编辑
+  end,
+})
+--- }}}
+
 --- {{{ quickfix toggling
 local function toggle_quickfix()
   local windows = vim.fn.getwininfo()

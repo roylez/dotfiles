@@ -88,6 +88,11 @@ return {
         ripgrep = { glyph = '', hl = 'MiniIconsGreen'  }
       }
     },
-  }
+  },
 
+  -- notification
+  {
+    'echasnovski/mini.notify',
+    opts = {},
+  }
 }

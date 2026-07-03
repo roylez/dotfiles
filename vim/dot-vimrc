@@ -146,7 +146,7 @@ set statusline=%<%h%m%r\ %f%=[%{&filetype},%{&fileencoding},%{&fileformat}]%k\ %
 set wildmode=longest:list,full
 "set cmdheight=2
 set matchtime=5
-set lazyredraw          " faster for macros
+set nolazyredraw        " noice.nvim does not like this
 set ttyfast             " better for xterm
 
 " make spell suggest faster
