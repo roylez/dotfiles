@@ -12,7 +12,7 @@
 [alias]
   a   = add
   b   = branch
-  c   = commit
+  c   = clone --depth=1
   d   = diff
   co  = checkout
   des = describe --tags

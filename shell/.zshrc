@@ -12,10 +12,8 @@ export PATH="$HOME/.local/bin:${ASDF_DATA_DIR:-$HOME/.asdf}/shims:/usr/local/bin
 
 # 如果不是交互shell就直接结束 (unix power tool, 2.11)
 if [[  "$-" != *i* ]]; then return 0; fi
+stty -ixon 2>/dev/null  # disable flow control (only in interactive shells)
 
-# disable flow controll so that ctl-s does not freeze terminal and you don't
-# have to ctrl-q to reenable it
-stty -ixon
 
 #check if a binary exists in path
 _has() {[[ -n ${commands[$1]} ]]}
@@ -71,7 +69,7 @@ setopt numeric_glob_sort        # when globbing numbered files, use real countin
 setopt prompt_subst             # prompt more dynamic, allow function in prompt
 setopt csh_null_glob
 setopt transient_rprompt        # make rprompt dissapear for previous commands
-setopt monitor                  # needed for job control
+# setopt monitor                  # enabled by default for interactive shells
 
 #remove / and . from WORDCHARS to allow alt-backspace to delete word
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
@@ -547,7 +545,7 @@ enter-rewrite() {
     case "${words[1]}" in
       (vi|vim|nvim|neovim)
         if [[ ${words[2]} == '.envrc' ]] && (( $+commands[direnv] )); then
-          BUFFER='direnv edit'
+          BUFFER='direnv edit .'
         fi
         ;;
       sudo)

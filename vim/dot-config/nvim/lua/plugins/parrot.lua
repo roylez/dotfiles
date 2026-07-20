@@ -14,7 +14,7 @@ return {
     providers = {
       litellm = {
         name = "litellm",
-        api_key = os.getenv "LITELLM_API_KEY",
+        api_key = os.getenv "LLMGATEWAY_API_KEY",
         endpoint = "https://ai.roylez.info/chat/completions",
         models = { "glm-5-turbo" }
       },

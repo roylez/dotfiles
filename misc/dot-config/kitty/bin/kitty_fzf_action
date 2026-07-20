@@ -6,7 +6,7 @@ actions=$(cat <<-EOS
 SCRATCH            ,launch --type=tab --title SCRATCH nvim +Scratch +start
 SCRATCH in split   ,launch --type=window --title SCRATCH nvim +Scratch +start
 SCRATCH clipbarod  ,launch --type=tab --title SCRATCH nvim +ScratchClip
-Aider              ,remote_control_script kitty_aider
+Key                ,launch --type=overlay --title=KEY kitten show-key -m kitty
 Chat               ,launch --type=tab --title AIChat aichat
 WIKI chat          ,launch --type=tab --title AIChat aichat --rag wiki
 CHIRP DOC          ,launch --type=overlay --title=CHIRP kitty_chirp
