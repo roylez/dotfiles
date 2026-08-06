@@ -1,9 +1,7 @@
 return {
   {
     'levouh/tint.nvim',
-    config = function()
-      require("tint").setup()
-    end
+    opts = {}
   },
 
   'mg979/vim-visual-multi',
@@ -19,11 +17,6 @@ return {
     end
   },
 
-  {
-    'NicolasGB/jj.nvim',
-    opts = {}
-  },
-
   'tpope/vim-endwise',
 
   'tpope/vim-repeat',
@@ -36,10 +29,5 @@ return {
     }
   },
 
-  'lewis6991/gitsigns.nvim',
-
-  {
-    "knubie/vim-kitty-navigator",
-    build = "cp ./*.py ~/.config/kitty/",
-  }
+  'lewis6991/gitsigns.nvim'
 }
