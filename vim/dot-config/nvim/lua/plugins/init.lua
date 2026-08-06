@@ -29,5 +29,13 @@ return {
     }
   },
 
-  'lewis6991/gitsigns.nvim'
+  'lewis6991/gitsigns.nvim',
+
+  {
+    "knubie/vim-kitty-navigator",
+    build = "cp ./*.py ~/.config/kitty/",
+    enabled = function()
+      return vim.fn.executable("kitty") == 1 and vim.fn.executable("kitten") == 1
+    end
+  }
 }
