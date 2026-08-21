@@ -13,7 +13,7 @@ return {
           language_pad = 4,
       },
       heading = {
-        border = true, border_virtual = true,
+        position = 'inline'
       },
       checkbox = {
         custom = {
