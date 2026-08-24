@@ -1,8 +1,6 @@
 #!/usr/bin/zsh -l
 #
 
-source ~/.litellm.sh
-
 # Capture screen text before modifying the command line
 screen=$(kitty @ get-text --extent=screen -m state:focused)
 
