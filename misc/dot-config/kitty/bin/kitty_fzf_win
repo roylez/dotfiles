@@ -27,8 +27,8 @@ function ssh_hosts() {
 }
 
 function zmx_sessions() {
-  for i in Downloads; do
-    echo -e "[ZMX]\t${i}\tkitty_toggle_or_launch --title ':${i}' zmx attach ${i}"
+  for i in Downloads OMP; do
+    echo -e "[ZMX]\t${i}\tkitty_toggle_or_launch --title ':${i}' --var zmx=${i} zmx attach ${i}"
   done
 }
 

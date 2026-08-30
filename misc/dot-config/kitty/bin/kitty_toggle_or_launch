@@ -16,11 +16,10 @@ current_title=$(kitty @ ls -t recent:0 |jq -r '.[0].tabs[0].title')
 if [[ $current_title = "$title" ]]; then
   exit 0
 elif (kitten @ ls -m title:${title} &>/dev/null); then
-  echo kitten @ focus-window -m title:${title}
   kitten @ focus-window -m title:${title}
 elif [[ -n $tab_index ]]; then
-  kitten @ launch ${color} -m index:$tab_index --title=${title} "${ARGS[@]}"
+  kitten @ launch ${color} -m index:$tab_index --title=${title} ${ARGS[@]}
   kitten @ focus-window -m title:${title}
 else
-  kitten @ launch ${color} --type=tab --title=${title} "${ARGS[@]}"
+  kitten @ launch ${color} --type=tab --title=${title} ${ARGS[@]}
 fi
