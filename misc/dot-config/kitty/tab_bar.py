@@ -1,13 +1,14 @@
 """Custom kitty tab bar with status indicators.
 
 Displays email counts, alarm status, time, and date in the tab bar.
-Uses lazy-refresh caching to avoid blocking on subprocess calls.
+Runs status commands in background threads with timeouts so the UI thread never blocks.
 """
 import datetime
 import subprocess
 import os
+import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 from configparser import ConfigParser
 
@@ -55,13 +56,18 @@ _cached_data: dict[str, CacheEntry] = {
 }
 
 def _should_refresh(key: str) -> bool:
-    """Check if cache entry is stale or empty and needs refresh.
-
-    Uses a lazy-refresh pattern: if stale, schedules a background timer
-    to fetch new data, but returns current (possibly stale) value immediately.
-    """
+    """Check if cache entry is older than its TTL."""
     entry = _cached_data[key]
-    return entry.value is None or (time.time() - entry.timestamp) > entry.ttl
+    return (time.time() - entry.timestamp) > entry.ttl
+
+
+def _run_command(command: str, timeout: int = 10) -> str:
+    """Run a command and return its stdout; empty string on failure or timeout."""
+    try:
+        out = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=timeout)
+        return out.stdout.strip()
+    except Exception:
+        return ""
 
 def _refresh_cached_cells(timer_id):
     """Refresh cached cells periodically."""
@@ -179,17 +185,18 @@ def create_cells() -> list[dict]:
 
 
 def get_alarm() -> dict | None:
-    """Get alarm status with lazy-refresh caching."""
+    """Get alarm status; stale entries refresh in a background thread."""
+    entry = _cached_data['alarm']
     if _should_refresh('alarm'):
-        add_timer(_refresh_alarm, 0.1, False)
-    return _cached_data['alarm'].value
+        entry.timestamp = time.time()
+        command = _get_config('alarm', 'command')
+        if command:
+            threading.Thread(target=_refresh_alarm, args=(entry, command), daemon=True).start()
+    return entry.value
 
-def _refresh_alarm(timer_id):
-    """Background fetch for alarm data."""
-    command = _get_config('alarm', 'command')
-    if not command:
-        return
-    out = subprocess.getoutput(command)
+def _refresh_alarm(entry: CacheEntry, command: str) -> None:
+    """Worker thread: fetch alarm time and store it in the cache."""
+    out = _run_command(command)
     if out > "00:30":
         result = { "icon": " ", "color": "#06d6a0" , "text": out }
     elif out > "00:05":
@@ -198,9 +205,7 @@ def _refresh_alarm(timer_id):
         result = { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
     else:
         result = None
-    _cached_data['alarm'].value = result
-    _cached_data['alarm'].timestamp = time.time()
-    _redraw_tab_bar(None)
+    entry.value = result
 
 def get_time() -> dict:
     """Get current time cell with clock icon showing the hour."""
@@ -241,28 +246,27 @@ def get_date() -> dict:
 
 
 def get_email(type: str, color: str = "#e76f51") -> dict | None:
-    """Get email count for given account type with lazy-refresh caching."""
+    """Get email count; stale entries refresh in a background thread."""
     cache_key = f'email_{type}'
+    entry = _cached_data[cache_key]
     if _should_refresh(cache_key):
-        add_timer(lambda t: _refresh_email(t, type, color), 0.1, False)
-    return _cached_data[cache_key].value
+        entry.timestamp = time.time()
+        section = f'mail.{type}'
+        command = _get_config(section, 'command')
+        if command:
+            icon = _get_config(section, 'icon', '?')
+            threading.Thread(target=_refresh_email, args=(entry, command, icon, color), daemon=True).start()
+    return entry.value
 
 
-def _refresh_email(timer_id, type: str, color: str) -> None:
-    """Background fetch for email count."""
-    section = f'mail.{type}'
-    command = _get_config(section, 'command')
-    if not command: return
-    icon = _get_config(section, 'icon', '?')
-    out = subprocess.getoutput(command)
-    if out != '0':
+def _refresh_email(entry: CacheEntry, command: str, icon: str, color: str) -> None:
+    """Worker thread: fetch email count and store it in the cache."""
+    out = _run_command(command)
+    if out and out != '0':
         result = {"icon": icon + " ", "color": color, "text": out}
     else:
         result = None
-    cache_key = f'email_{type}'
-    _cached_data[cache_key].value = result
-    _cached_data[cache_key].timestamp = time.time()
-    _redraw_tab_bar(None)
+    entry.value = result
 
 
 # ============================================================================

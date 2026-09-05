@@ -8,3 +8,4 @@ mail.snippets
 vim/dot-config/nvim/snippets/scratch
 nvim_undo
 .worktrees
+*.pyc
