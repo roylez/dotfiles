@@ -1,12 +1,11 @@
 """Custom kitty tab bar with status indicators.
 
 Displays email counts, alarm status, time, and date in the tab bar.
-Runs status commands in background threads with timeouts so the UI thread never blocks.
+Runs status commands as background subprocesses with timeouts so the UI thread never blocks.
 """
 import datetime
 import subprocess
 import os
-import threading
 import time
 from dataclasses import dataclass
 from typing import Any
@@ -61,13 +60,31 @@ def _should_refresh(key: str) -> bool:
     return (time.time() - entry.timestamp) > entry.ttl
 
 
-def _run_command(command: str, timeout: int = 10) -> str:
-    """Run a command and return its stdout; empty string on failure or timeout."""
+def _run_async(entry: CacheEntry, command: str, on_result, timeout: float = 10.0) -> None:
+    """Spawn command off-thread; store parsed result in entry when the child exits.
+
+    Uses kitty's native pattern (Popen + monitor_pid) — no Python threads, which
+    deadlock when started from a kitty timer callback.
+    """
     try:
-        out = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=timeout)
-        return out.stdout.strip()
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     except Exception:
-        return ""
+        return
+
+    def on_exit(exit_status, error):
+        try:
+            out = (proc.stdout.read() or "").strip() if error is None else ""
+            entry.value = on_result(out)
+        except Exception:
+            entry.value = None
+        _redraw_tab_bar(None)
+
+    get_boss().monitor_pid(proc.pid, on_exit)
+
+    def _kill_if_hung(timer_id):
+        if proc.poll() is None:
+            proc.kill()
+    add_timer(_kill_if_hung, timeout, False)
 
 def _refresh_cached_cells(timer_id):
     """Refresh cached cells periodically."""
@@ -166,10 +183,15 @@ def draw_tab(
         _draw_right_status_cached(draw_data, screen, _cached_cells)
     return screen.cursor.x
 
-
-# ============================================================================
-# Data Provider Functions
-# ============================================================================
+def get_alarm() -> dict | None:
+    """Get alarm status; stale entries refresh as a background subprocess."""
+    entry = _cached_data['alarm']
+    if _should_refresh('alarm'):
+        entry.timestamp = time.time()
+        command = _get_config('alarm', 'command')
+        if command:
+            _run_async(entry, command, _parse_alarm)
+    return entry.value
 
 def create_cells() -> list[dict]:
     """Create list of status cells to display in the tab bar."""
@@ -184,28 +206,25 @@ def create_cells() -> list[dict]:
     return [c for c in cells if c is not None]
 
 
+def _parse_alarm(out: str) -> dict | None:
+    if out > "00:30":
+        return { "icon": " ", "color": "#06d6a0" , "text": out }
+    if out > "00:05":
+        return { "icon": " ", "color": "#ffd166" , "text": out, "inverse": True }
+    if len(out) > 0:
+        return { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
+    return None
+
 def get_alarm() -> dict | None:
-    """Get alarm status; stale entries refresh in a background thread."""
+    """Get alarm status; stale entries refresh as a background subprocess."""
     entry = _cached_data['alarm']
     if _should_refresh('alarm'):
         entry.timestamp = time.time()
         command = _get_config('alarm', 'command')
         if command:
-            threading.Thread(target=_refresh_alarm, args=(entry, command), daemon=True).start()
+            _run_async(entry, command, _parse_alarm)
     return entry.value
 
-def _refresh_alarm(entry: CacheEntry, command: str) -> None:
-    """Worker thread: fetch alarm time and store it in the cache."""
-    out = _run_command(command)
-    if out > "00:30":
-        result = { "icon": " ", "color": "#06d6a0" , "text": out }
-    elif out > "00:05":
-        result = { "icon": " ", "color": "#ffd166" , "text": out, "inverse": True }
-    elif len(out) > 0:
-        result = { "icon": "󰺁 ", "color": "#ef476f" , "text": out, "inverse": True, "blink": True }
-    else:
-        result = None
-    entry.value = result
 
 def get_time() -> dict:
     """Get current time cell with clock icon showing the hour."""
@@ -246,7 +265,7 @@ def get_date() -> dict:
 
 
 def get_email(type: str, color: str = "#e76f51") -> dict | None:
-    """Get email count; stale entries refresh in a background thread."""
+    """Get email count; stale entries refresh as a background subprocess."""
     cache_key = f'email_{type}'
     entry = _cached_data[cache_key]
     if _should_refresh(cache_key):
@@ -255,18 +274,14 @@ def get_email(type: str, color: str = "#e76f51") -> dict | None:
         command = _get_config(section, 'command')
         if command:
             icon = _get_config(section, 'icon', '?')
-            threading.Thread(target=_refresh_email, args=(entry, command, icon, color), daemon=True).start()
+            _run_async(entry, command, lambda out: _parse_email(out, icon, color))
     return entry.value
 
 
-def _refresh_email(entry: CacheEntry, command: str, icon: str, color: str) -> None:
-    """Worker thread: fetch email count and store it in the cache."""
-    out = _run_command(command)
+def _parse_email(out: str, icon: str, color: str) -> dict | None:
     if out and out != '0':
-        result = {"icon": icon + " ", "color": color, "text": out}
-    else:
-        result = None
-    entry.value = result
+        return {"icon": icon + " ", "color": color, "text": out}
+    return None
 
 
 # ============================================================================
