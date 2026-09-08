@@ -16,7 +16,14 @@ return {
         name = "litellm",
         api_key = os.getenv "LLMGATEWAY_API_KEY",
         endpoint = "https://ai.roylez.info/chat/completions",
-        models = { "glm-5-turbo" }
+        models = { "glm-5.3-flash" },
+        headers = function(self)
+          return {
+            ["X-LiteLLM-Agent-Id"] = "ParrotNvim",
+            ["Content-Type"] = "application/json",
+            ["X-API-Key"] = self.api_key
+          }
+        end
       },
     }
   }
