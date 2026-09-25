@@ -18,21 +18,41 @@ run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
 desc = "Go to GIT root"
 
 [[mgr.prepend_keymap]]
-on = [ "m" ]
-run = "plugin bookmarks save"
-desc = "Save bookmark"
+on = [ "m", "a" ]
+run = "plugin yamb -- save"
+desc = "Add bookmark"
 
 [[mgr.prepend_keymap]]
-on = [ "'" ]
-run = "plugin bookmarks jump"
-desc = "Jump to a bookmark"
+on = [ "m", "g" ]
+run = "plugin yamb -- jump_by_key"
+desc = "Jump bookmark by key"
 
 [[mgr.prepend_keymap]]
-on = [ "b", "d" ]
-run = "plugin bookmarks delete"
-desc = "Delete a bookmark"
+on = [ "m", "G" ]
+run = "plugin yamb -- jump_by_fzf"
+desc = "Jump bookmark by fzf"
 
 [[mgr.prepend_keymap]]
-on = [ "b", "D" ]
-run = "plugin bookmarks delete_all"
+on = [ "m", "d" ]
+run = "plugin yamb -- delete_by_key"
+desc = "Delete bookmark by key"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "D" ]
+run = "plugin yamb -- delete_by_fzf"
+desc = "Delete bookmark by fzf"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "A" ]
+run = "plugin yamb -- delete_all"
 desc = "Delete all bookmarks"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "r" ]
+run = "plugin yamb -- rename_by_key"
+desc = "Rename bookmark by key"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "R" ]
+run = "plugin yamb -- rename_by_fzf"
+desc = "Rename bookmark by fzf"
