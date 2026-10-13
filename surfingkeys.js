@@ -45,6 +45,9 @@ api.mapkey('p', "Open the clipboard's URL in the current tab", function() {
     });
 });
 api.map('P', 'cc');
+api.mapkey('<Alt-p>', '#0enter ephemeral PassThrough mode to temporarily suppress SurfingKeys', function() {
+    Normal.passThrough(1500);
+});
 api.map('gi', 'i');
 // af dispatches a synthetic ctrl+shift+click, which Vivaldi binds to
 // "open in new window". Open the URL via the background instead.

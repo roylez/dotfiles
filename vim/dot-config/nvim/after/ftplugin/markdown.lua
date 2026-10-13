@@ -14,12 +14,12 @@ function toggle_todo()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   local new_line = ""
 
-  if current_line:find("%- %[X%] ", 1) then
-    new_line = string.gsub(current_line, "%- %[X%] ", '', 1)
-  elseif current_line:find("%- %[ %] ", 1) then
-    new_line = string.gsub(current_line, "%- %[ %] ", "- [X] ", 1)
-  elseif current_line:find("^%s*%- ") then
-    new_line = string.gsub(current_line, "%- ", "- [ ] ", 1)
+  if current_line:find("[-*] %[X%] ", 1) then
+    new_line = string.gsub(current_line, "([-*]) %[X%] ", "%1 ", 1)
+  elseif current_line:find("[-*] %[ %] ", 1) then
+    new_line = string.gsub(current_line, "([-*]) %[ %] ", "%1 [X] ", 1)
+  elseif current_line:find("^%s*[-*] ") then
+    new_line = string.gsub(current_line, "([-*]) ", "%1 [ ] ", 1)
   else
     new_line = string.gsub(current_line, "^(%s*)", "%1- [ ] ", 1)
   end

@@ -4,9 +4,9 @@ return {
 
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    enabled = function()
-      return vim.o.filetype == "markdown" and vim.fn.expand("%:t") ~= "TODO.md"
-    end,
+    -- enabled = function()
+    --   return vim.o.filetype == "markdown" and vim.fn.expand("%:t") ~= "TODO.md"
+    -- end,
     opts = {
       code = {
           width = 'block',
