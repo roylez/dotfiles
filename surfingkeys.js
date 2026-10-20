@@ -114,3 +114,7 @@ api.mapkey('[[', 'Go to previous forum post', function() {
 api.mapkey(']]', 'Go to next forum post', function() {
     jumpPost(1);
 });
+
+api.mapkey('ci', 'Download image', function() {
+    api.Hints.create('img', function(element) { chrome.downloads.download({url: element.src, conflictAction: 'uniquify'}); });
+});
