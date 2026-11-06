@@ -1,6 +1,6 @@
 [user]
   name = Roy Zuo
-  email = <me@roylez.info>
+  email = me@roylez.info
   signingkey = ~/.ssh/id_ed25519
 [color]  # Ensure we get color
   # Ensure we get color
@@ -78,3 +78,7 @@
   path = ~/.gitconfig.work
 [includeIf "hasconfig:remote.*.url:**/*@git.launchpad.net/**"]
   path = ~/.gitconfig.work
+[includeIf "hasconfig:remote.*.url:*opendev.org/*"]
+  path = ~/.gitconfig.work
+[gitreview]
+  username = roylez
