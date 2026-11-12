@@ -25,3 +25,8 @@ default-command = "log"
 pager = "delta"
 # NOTE: this is required when using `delta` as a pager
 diff-formatter = ":git"
+
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIER+S4SfCJZGI7liAGGtoAE254Q99tq7as+pV7unLFZa"

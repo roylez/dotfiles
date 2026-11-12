@@ -1,7 +1,7 @@
 [user]
   name = Roy Zuo
   email = me@roylez.info
-  signingkey = ~/.ssh/id_bitwarden.pub
+  signingkey = "key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIER+S4SfCJZGI7liAGGtoAE254Q99tq7as+pV7unLFZa"
 [color]  # Ensure we get color
   # Ensure we get color
   ui = always
