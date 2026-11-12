@@ -68,6 +68,8 @@
   hyperlinks = true
   hyperlinks-file-link-format = "file://{host}{path}#{line}"
   features = calochortus-lyallii
+[log]
+  showSignature = true
 [hub]
   protocol = ssh
 [include]

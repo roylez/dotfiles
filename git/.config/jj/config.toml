@@ -16,6 +16,7 @@ email = "me@roylez.info"
 
 [ui]
 default-command = "log"
+show-cryptographic-signatures = true
 
 [[--scope]]
 --when.commands = ["diff", "show"]
@@ -29,4 +30,8 @@ diff-formatter = ":git"
 [signing]
 behavior = "own"
 backend = "ssh"
+backends.ssh.allowed-signers = "~/.ssh/allowed_signers"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIER+S4SfCJZGI7liAGGtoAE254Q99tq7as+pV7unLFZa"
+
+[git]
+sign-on-push = true
