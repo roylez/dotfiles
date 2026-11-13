@@ -68,6 +68,7 @@
   hyperlinks = true
   hyperlinks-file-link-format = "file://{host}{path}#{line}"
   features = calochortus-lyallii
+  side-by-side = true
 [log]
   showSignature = true
 [hub]
