@@ -1,0 +1,11 @@
+#!/bin/bash
+# usage: key_layer default|NAV|WIN|NUM
+FIFO="/tmp/layer-icon.sh.pipe"
+[ -p "$FIFO" ] || exit 0
+
+case $1 in
+  blue|brown|green|grey|orange|red|violet|yellow) icon=emblem-colors-$1 ;;
+  *) icon=emblem-colors-white ;;
+esac
+
+echo "icon:${icon}" | timeout 0.1 tee "$FIFO" &> /dev/null
